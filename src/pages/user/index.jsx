@@ -8,9 +8,12 @@ import {
   split,
   useObservableAutoCallback,
   useAutoObservableEvent,
+  useObservableAutoState,
   pluck,
   isEmpty,
   beHasRowsPropNotEqual,
+  isArray,
+  join,
 } from '@/common/utils';
 import {
   IFormItem,
@@ -18,9 +21,10 @@ import {
   ISearchForm,
   IStatus,
   ITag,
-  IIF,
+  IModal,
   Permit,
   IFooterToolbar,
+  ILayout,
 } from '@/common/components';
 // import IGrid from '@/components/IGrid';
 // import ISearchForm from '@/components/ISearchForm';
@@ -28,7 +32,8 @@ import {
 // import ITag from '@/components/ITag';
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
-import { Form, Button, message } from 'antd';
+import { showDeleteConfirm } from '@/common/antd';
+import { Form, Button, Modal, message } from 'antd';
 import {
   concatMap,
   debounceTime,
@@ -36,12 +41,13 @@ import {
   exhaustMap,
   filter,
   map,
+  mergeMap,
   shareReplay,
   switchMap,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { of, zip } from 'rxjs';
+import { of, zip, EMPTY } from 'rxjs';
 // import { FooterToolbar } from '@ant-design/pro-layout';
 
 // //初始化角色,用户属性
@@ -139,11 +145,14 @@ export default (props) => {
   // const [selectedKeys, setSelectedKeys] = useState([]);
   const [dataSource, setDataSource] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useObservableAutoState(false);
   const [total, setTotal] = useState(0);
 
   const [disabledActive, setDisabledActive] = useState(true);
   const [disabledStop, setDisabledStop] = useState(true);
+
+  const [modalItem, setModalItem] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
   const ref = useRef();
 
   const refresh = () => ref.current.refresh();
@@ -167,9 +176,12 @@ export default (props) => {
   const [onActive] = useAutoObservableEvent(
     [
       tap(() => setLoading(true)),
-      filter(([keys]) => !isEmpty(keys)),
-      switchMap(([keys, ref]) => api.user.activeUser(keys)),
-      tap(() => refresh()),
+      filter((keys) => !isEmpty(keys)),
+      switchMap((keys) => api.user.activeUser(keys)),
+      tap(() => {
+        message.success('操作成功!');
+        refresh();
+      }),
     ],
     () => setLoading(false),
   );
@@ -177,13 +189,68 @@ export default (props) => {
   const [onStop] = useAutoObservableEvent(
     [
       tap(() => setLoading(true)),
-      filter((keys) => !isEmpty(keys)),
       switchMap((keys) => api.user.stopUser(keys)),
-      tap(() => refresh()),
+      tap(() => {
+        message.success('操作成功!');
+        refresh();
+      }),
     ],
     () => setLoading(false),
   );
 
+  const [onUnStop] = useAutoObservableEvent(
+    [
+      tap(() => setLoading(true)),
+      switchMap((keys) => api.user.unstopUser(keys)),
+      tap(() => {
+        message.success('操作成功!');
+        refresh();
+      }),
+    ],
+    () => setLoading(false),
+  );
+
+  const [onDelete] = useAutoObservableEvent(
+    [
+      tap(() => setLoading(true)),
+      switchMap((keys) => api.user.deleteUser(keys)),
+      tap(() => {
+        message.success('操作成功!');
+        refresh();
+      }),
+    ],
+    () => setLoading(false),
+  );
+
+  const [onDoubleClick] = useAutoObservableEvent([
+    switchMap((id) => api.user.getUser(id)),
+    map((data) => {
+      const user = data[0];
+      if (user && user.userTag) {
+        user.userTag = split(user.userTag);
+      }
+      return user;
+    }),
+    tap((data) => {
+      setModalVisible(true);
+      setModalItem(data);
+    }),
+  ]);
+
+  const [onSaveClick] = useAutoObservableEvent([
+    map((user) => {
+      if (isArray(user.userTag)) {
+        user.userTag = join(',', user.userTag);
+      }
+      return user;
+    }),
+    switchMap((user) => api.user.saveOrUpdateUser(user)),
+    tap(() => {
+      setModalVisible(false);
+      message.success('操作成功!');
+      refresh();
+    }),
+  ]);
   // const [onStop] = useObservableAutoCallback(
   //   (event) =>
   //     event.pipe(
@@ -207,8 +274,6 @@ export default (props) => {
   const search = (pageNo, pageSize) => {
     setSelectedKeys([]);
     setSearchLoading(true);
-    // setPageNo(pageNo);
-    // setPageSize(pageSize);
     let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
     api.user
       .searchUser(param)
@@ -260,7 +325,7 @@ export default (props) => {
         // pageSize={pageSize}
         total={total}
         onSelectedChanged={onChange}
-        // onDoubleClick={(data) => onDoubleClicked(data)}
+        onDoubleClick={(record) => onDoubleClick(record.id)}
         // onClick={(data) => onClicked(data)}
         clearSelect={searchLoading}
       />
@@ -287,6 +352,15 @@ export default (props) => {
           </Button>
         </Permit>
 
+        <Permit authority="user:delete">
+          <Button
+            type="danger"
+            key="delete"
+            onClick={() => showDeleteConfirm('确定删除选中的用户吗?', () => onDelete(selectedKeys))}
+          >
+            删除
+          </Button>
+        </Permit>
         {/* <Permit authority="user:unstop">
             <Button key="unstop" onClick={handleUnstop}>
               启用
@@ -314,6 +388,97 @@ export default (props) => {
           </Permit> */}
       </IFooterToolbar>
       {/* )} */}
+      <IModal
+        current={modalItem}
+        title={modalItem && modalItem.id ? '编辑用户' : '新建用户'}
+        width="800px"
+        visible={modalVisible}
+        onCancel={() => {
+          setModalVisible(false);
+        }}
+        onSubmit={(item) => onSaveClick(item)}
+      >
+        <IFormItem xtype="id" />
+        <ILayout type="hbox" spans="12 12">
+          <IFormItem
+            disabled={modalItem && modalItem.id}
+            name="userName"
+            label="账号"
+            xtype="input"
+            tooltip="最长为20位,保存后不可更改"
+            rules={[{ required: true, message: '请输入账号', max: 20 }]}
+          />
+        </ILayout>
+        <ILayout type="hbox" spans="12 12">
+          <IFormItem name="userRealCnName" label="中文名" xtype="input" required={true} max={20} />
+          <IFormItem name="userRealEnName" label="英文名" xtype="input" required={true} max={20} />
+        </ILayout>
+        <ILayout type="hbox" spans="24">
+          <IFormItem
+            name="userSex"
+            label="性别"
+            initialValue="男"
+            required={true}
+            options={[
+              {
+                label: '男',
+                value: '男',
+              },
+              {
+                label: '女',
+                value: '女',
+              },
+              {
+                label: '保密',
+                value: '保密',
+              },
+            ]}
+            xtype="radio"
+          />
+        </ILayout>
+        <ILayout type="hbox" spans="12 12">
+          <IFormItem
+            name="userMobile"
+            label="手机"
+            xtype="input"
+            required={true}
+            max={20}
+            regexp="/^1[3456789]d{9}$/"
+          />
+
+          <IFormItem
+            name="userEmail"
+            label="邮箱"
+            xtype="input"
+            tooltip="激活后密码将发送到该邮箱"
+            required={true}
+            max={50}
+            ruleType="email"
+          />
+        </ILayout>
+        {/* <ILayout type="hbox" spans="12 12">
+          <IFormItem name="qq" label="QQ" xtype="input" max={20} />
+        </ILayout> */}
+        <ILayout type="hbox" spans="24">
+          <IFormItem
+            name="userTag"
+            label="用户属性"
+            xtype="checkbox"
+            required={true}
+            ruleType="array"
+            options={userTags}
+          />
+        </ILayout>
+        <ILayout type="hbox" spans="24">
+          <IFormItem
+            name="note"
+            label="备注说明"
+            xtype="textarea"
+            max={100}
+            autoSize={{ minRows: 4, maxRows: 6 }}
+          />
+        </ILayout>
+      </IModal>
     </>
   );
 };

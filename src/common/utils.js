@@ -5,13 +5,14 @@ import { parse } from 'querystring';
 import * as _ from 'lodash';
 import produce from 'immer';
 
-import { tap } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import PubSub from 'pubsub-js';
 
 export { PubSub };
 import {
+  useRefFn,
   useObservable,
   useObservableCallback,
   useObservableState,
@@ -22,6 +23,7 @@ import {
 } from 'observable-hooks';
 
 export {
+  useRefFn,
   useObservable,
   useObservableCallback,
   useObservableState,
@@ -148,12 +150,12 @@ export const useObservableAutoCallback = (init, callback) => {
 // };
 //==========================================
 export const useObservableAutoLoadingEvent = (...operations) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useObservableAutoState(false);
   const [data, setData] = useState();
   const [trggerFn, callbackEvent] = useObservableCallback((event) =>
     event.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
+      // debounceTime(300),
+      // distinctUntilChanged(),
       tap(() => setLoading(true)),
       operations,
     ),
@@ -168,6 +170,14 @@ export const useObservableAutoLoadingEvent = (...operations) => {
     };
   }, []);
   return [trggerFn, loading, data, setData];
+};
+
+export const useObservableAutoState = (initState) => {
+  const state = initState || false;
+  const loadingSubject = useRefFn(() => new BehaviorSubject(state));
+  const loading = loadingSubject.current.getValue(); //useObservable(() => loading$);
+  const setLoading = (value) => loadingSubject.current.next(value);
+  return [loading, setLoading];
 };
 
 //==========================================
@@ -187,14 +197,15 @@ export const useAutoObservableEvent = (operators, callback) => {
   const [data, setData] = useState();
   let opArr = operators;
   if (!isArray(operators)) {
-    opArr = [doperators];
+    opArr = [operators];
   }
-  const [trggerFn, callbackEvent] = useObservableCallback((event) =>
-    event.pipe(debounceTime(300), distinctUntilChanged(), ...opArr),
-  );
+  const input$ = (event) => event.pipe(...opArr);
+  const [trggerFn, callbackEvent] = useObservableCallback(input$);
   useEffect(() => {
     const sub = callbackEvent.subscribe({ next: (result) => setData(result) });
     sub.add(() => {
+      // console.log(callback);
+      // console.log(isFunction(callback));
       if (callback && isFunction(callback)) {
         callback();
       }
@@ -202,7 +213,7 @@ export const useAutoObservableEvent = (operators, callback) => {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  }, [input$]);
   return [trggerFn, data, setData];
 };
 
@@ -355,6 +366,14 @@ export const pick = (arr, obj) => {
 export const isEmpty = (objOrArr) => {
   if (R.isNil(objOrArr)) return true;
   return R.isEmpty(objOrArr);
+};
+
+//==========================================
+// const arr = ['a','b','c']
+// join(arr) //=> 'a,b,c'
+//==========================================
+export const join = (x, arr) => {
+  return R.join(x, arr);
 };
 
 //==========================================

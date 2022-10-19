@@ -37,7 +37,10 @@ export default (props) => {
     displayName,
     displayValue,
     tag,
+    max,
+    ruleType,
     format,
+    tooltip,
     showTime,
     ...others
   } = props;
@@ -49,6 +52,16 @@ export default (props) => {
     let beFormItem = true;
     let item;
     switch (xtype) {
+      case 'id':
+        item = (
+          <Form.Item style={{ display: 'none' }}>
+            <Form.Item name="id" label="id">
+              <Input />
+            </Form.Item>
+          </Form.Item>
+        );
+        beFormItem = false;
+        break;
       case 'input':
         item = <Input readOnly={readOnly} {...others} />;
         break;
@@ -148,8 +161,17 @@ export default (props) => {
       <Form.Item
         name={name}
         label={label}
-        labelCol={labelWrap ? { span: 24 } : labelCol || { flex: '100px' }}
-        rules={[{ required: required || false, message: message, regexp: regexp || false }]}
+        labelCol={labelWrap ? { span: 24 } : labelCol || { flex: '80px' }}
+        tooltip={tooltip || false}
+        rules={[
+          {
+            required: required || false,
+            message: message,
+            max: max || false,
+            type: ruleType || false,
+            regexp: regexp || false,
+          },
+        ]}
       >
         {item}
       </Form.Item>

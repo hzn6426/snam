@@ -94,7 +94,7 @@ export default (props) => {
         )
       }
       width={modalWidth}
-      bodyStyle={props.bodyStyle || { height: modalHeight - 114, overflow: 'auto' }}
+      bodyStyle={props.bodyStyle || { height: modalHeight && modalHeight - 114, overflow: 'auto' }}
       className={props.className}
       style={{ paddingBottom: 0, maxWidth: clientWidth - 6 }}
       centered
@@ -176,6 +176,7 @@ export default (props) => {
         layout={props.layout || 'horizontal'}
         onValuesChange={unload}
         className="snam-form"
+        size={props.size}
       >
         {props.children}
       </Form>

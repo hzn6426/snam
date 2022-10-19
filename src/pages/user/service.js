@@ -1,4 +1,4 @@
-import { ipost, iput, iget, iupload, isearch, constant } from '@/common/utils';
+import { ipost, iput, iget, iupload, isearch, idelete, constant } from '@/common/utils';
 //登录
 export function login(params) {
   return ipost(constant.API_LOGIN, params);

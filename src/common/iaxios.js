@@ -3,7 +3,7 @@ import { message, notification } from 'antd';
 import { constant, has, isNil, forEach } from '@/common/utils';
 import objectAssign from 'object-assign';
 import { defer, from, lastValueFrom } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 // 创建 axios 实例
 const service = axios.create({
@@ -215,7 +215,10 @@ export const wrapObservable = (promise, ...args) => {
   return defer(() =>
     from(promise(...args)).pipe(
       filter((resp) => has(resp, 'code') && has(resp, 'data') && resp.code === 200),
-      map((resp) => resp.data),
+      map((resp) => {
+        console.log(resp);
+        return resp.data;
+      }),
     ),
   );
 };

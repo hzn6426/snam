@@ -6,10 +6,10 @@ export default (props) => {
   const span = {
     xs: 24,
     sm: 12,
-    md: 8,
+    md: 12,
     lg: 8,
-    xl: 6,
-    xxl: 4,
+    xl: 8,
+    xxl: 6,
   };
   const [ui, setUi] = useState([]);
   const renderUI = () => {
@@ -60,7 +60,7 @@ export default (props) => {
                 ? { span: columnSpans[index] }
                 : beSpan
                 ? { span: columnSpans[0] }
-                : { ...span })}
+                : span)}
               {...(columnFlexs && columnFlexs.length >= index + 1
                 ? { flex: columnFlexs[index] }
                 : beFlex
