@@ -20,13 +20,13 @@ export default (props) => {
       },
     });
   };
-
+  //changeDepartment(_item.key)
   const menu = (
     <>
       {groups.length > 0 && (
         <Menu>
           {groups.map((item) => (
-            <Menu.Item key={item.groupId} onClick={(_item) => changeDepartment(_item.key)}>
+            <Menu.Item key={item.groupId} onClick={(_item) => {}}>
               <ApartmentOutlined />
               {item.companyName ? `${item.companyName}-` : ''} {item.groupName}
             </Menu.Item>
@@ -37,7 +37,7 @@ export default (props) => {
   );
 
   useEffect(() => {
-    loadUserDepartment();
+    //loadUserDepartment();
   }, [groupName]);
 
   return (

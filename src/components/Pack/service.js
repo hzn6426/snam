@@ -17,7 +17,8 @@ export function listByKeyword(keyword) {
       return rmap(
         (item) => ({
           label: `${item.enName}`,
-          value: `${item.packEdi}`,
+          value: `${item.enName}`,
+          code: `${item.ediCode}`,
         }),
         theData,
       );

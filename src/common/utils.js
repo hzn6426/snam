@@ -3,7 +3,15 @@ import * as R from 'ramda';
 import objectAssign from 'object-assign';
 import { parse } from 'querystring';
 import * as _ from 'lodash';
-import produce from 'immer';
+import { produce } from 'immer';
+export { produce };
+import stringRandom from 'string-random';
+
+export { stringRandom };
+
+import md5 from 'js-md5';
+
+export { md5 };
 
 import { BehaviorSubject, tap } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -11,6 +19,11 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import PubSub from 'pubsub-js';
 
 export { PubSub };
+
+import moment from 'moment';
+
+export { moment };
+
 import {
   useRefFn,
   useObservable,
@@ -95,6 +108,11 @@ export const isNil = (data) => {
   return _.isNil(data);
 };
 
+
+export const cloneDeep = (data) => {
+  return _.cloneDeep(data);
+}
+
 //==========================================
 // const App = (props) => {
 //   const [onChange, value] = useObservableAutoCallback((event$) =>
@@ -150,7 +168,7 @@ export const useObservableAutoCallback = (init, callback) => {
 // };
 //==========================================
 export const useObservableAutoLoadingEvent = (...operations) => {
-  const [loading, setLoading] = useObservableAutoState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState();
   const [trggerFn, callbackEvent] = useObservableCallback((event) =>
     event.pipe(
@@ -158,6 +176,7 @@ export const useObservableAutoLoadingEvent = (...operations) => {
       // distinctUntilChanged(),
       tap(() => setLoading(true)),
       operations,
+      shareReplay(1),
     ),
   );
   useEffect(() => {
@@ -172,13 +191,29 @@ export const useObservableAutoLoadingEvent = (...operations) => {
   return [trggerFn, loading, data, setData];
 };
 
-export const useObservableAutoState = (initState) => {
-  const state = initState || false;
-  const loadingSubject = useRefFn(() => new BehaviorSubject(state));
-  const loading = loadingSubject.current.getValue(); //useObservable(() => loading$);
-  const setLoading = (value) => loadingSubject.current.next(value);
-  return [loading, setLoading];
-};
+// export const useObservableAutoState = (initState) => {
+//   const [loadingState, setLoadingState] = useState(initState);
+//   const state = initState || false;
+//   const loadingSubject = useRefFn(() => new BehaviorSubject(state));
+
+//   const setLoading = (value) => {
+//     loadingSubject.current.next(value);
+//   };
+//   useEffect(() => {
+//     const subscription = loadingSubject.current.subscribe({
+//       next: (data) => {
+//         console.log(data);
+//         setLoadingState(data);
+//       },
+//     });
+//     return () => {
+//       if (subscription) {
+//         subscription.unsubscribe();
+//       }
+//     };
+//   }, []);
+//   return [loadingState, setLoading];
+// };
 
 //==========================================
 // const App = (props) => {
@@ -199,6 +234,7 @@ export const useAutoObservableEvent = (operators, callback) => {
   if (!isArray(operators)) {
     opArr = [operators];
   }
+
   const input$ = (event) => event.pipe(...opArr);
   const [trggerFn, callbackEvent] = useObservableCallback(input$);
   useEffect(() => {
@@ -242,7 +278,7 @@ export const useAutoObservableEvent = (operators, callback) => {
 // }
 //==========================================
 export const useAutoObservable = (init, inputs) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
   const ob = useObservable(init, inputs);
   useSubscription(ob, setData);
   return [data, setData];
@@ -263,6 +299,10 @@ export const pluck = (p, list) => {
 export const project = (props, list) => {
   return R.project(props, list);
 };
+
+export const includes = (item, list) => {
+  return R.includes(item, list);
+}
 
 //==========================================
 // forEach((v)=>{}, array);
@@ -343,6 +383,14 @@ export const props = (props, list) => {
 };
 
 //==========================================
+// const obj = {x: 1, y: 2}
+// invert(obj) //=>{1:x,2:y}
+//==========================================
+export const invert = (obj) => {
+  return _.invert(obj);
+};
+
+//==========================================
 // const arr = {x: 1, y: 2}
 // assoc('x', 2, arr) //=> {x: 2, y: 2}
 // assoc('z', 2, arr) //=> {x: 1, y: 2, z:2}
@@ -366,6 +414,14 @@ export const pick = (arr, obj) => {
 export const isEmpty = (objOrArr) => {
   if (R.isNil(objOrArr)) return true;
   return R.isEmpty(objOrArr);
+};
+
+//==========================================
+// const arr = ['a','b','c']
+// contains('a',arr) //=> true
+//==========================================
+export const contains = (item, array) => {
+  return R.indexOf(item, array);
 };
 
 //==========================================
@@ -400,25 +456,36 @@ export const forEachObject = (fn, obj) => {
 };
 
 //==========================================
+// mapObjIndexed((value, key, obj)=>{}, obj);
+//==========================================
+export const mapObjIndexed = (fn, obj) => {
+  return R.mapObjIndexed(fn, obj);
+}
+
+//==========================================
 // const obj = {x:1,y:2};
 // copyObject(obj, {z:3});
 //==========================================
-export const copyObject = (target, source) => {
+export const copyObject = (target, source, source2) => {
+  if (source2) {
+    return objectAssign(target, source, source2);
+  }
   return objectAssign(target, source);
+
 };
 
-//==========================================
-// product((action)=>{state[p] = 1}, state)
-//==========================================
-export const product = (state, fn) => {
-  return produce(state, fn);
-};
+// //==========================================
+// // product((action)=>{state[p] = 1}, state)
+// //==========================================
+// export const product = (state, fn) => {
+//   return produce(state, fn);
+// };
 
 //==========================================
 // split('/usr/local/bin/node','/') => ['usr', 'local', 'bin', 'node']
 //==========================================
 export const split = (value, s) => {
-  const spChar = ',';
+  let spChar = ',';
   if (s) {
     spChar = s;
   }
@@ -508,10 +575,57 @@ export const option2States = (options) => {
   const state = {};
   options &&
     forEach((v) => {
-      state[v.value] = { text: v.label, color: v.color };
+      state[v.value] = { text: v.label, color: v.color || 'default' };
     }, options);
   return state;
 };
+
+//===========================================
+//  const cabinOptons =
+//  {id: '1403176084383465473', dictCode: 'FREIGHT_COLLECTED', dictName: 'FREIGHT COLLECTED'}
+//  {id: '1403176192315490305', dictCode: 'FREIGHT_PREPAID', dictName: 'FREIGHT PREPAID'}
+//  data2States(cabinStatus) =>
+//  {
+//    FREIGHT_COLLECTED: { color: 'Default', text: 'FREIGHT COLLECTED' },
+//    FREIGHT_PREPAID: { color: 'Default', text: 'FREIGHT PREPAID' },
+//  };
+//===========================================
+export const data2States = (valueProp, labelProp, options) => {
+  const state = {};
+  options &&
+    forEach((v) => {
+      state[v[valueProp]] = { text: v[labelProp], color: v.color || 'default' };
+    }, options);
+  return state;
+};
+//===========================================
+//  const cabinOptons =
+//  [{value:UNSEND, label:'未发送',color: 'red'},
+//   {value:FAILURE, label:'发送失败',color: 'blue'},
+//   {value:SENDED, label:'已发送',color: 'green'}]
+//  option2States(cabinStatus) =>
+//  {
+//    UNSEND: '未发送',
+//    FAILURE: '发送失败',
+//    SENDED: '已发送',
+//  };
+//===========================================
+export const option2TextObject = (options) => {
+  const state = {};
+  options &&
+    forEach((v) => {
+      state[v.value] = v.label;
+    }, options);
+  return state;
+};
+
+export const data2TextObject = (keyProp, valueProp, data) => {
+  const state = {}
+  forEach((v) => {
+    state[v[keyProp]] = v[valueProp];
+  }, data);
+  return state;
+}
 
 //===========================================
 // const data = [{id:12343453, name:'经理', age:23},{id:12332453, name:'专员', age:26}]
@@ -560,4 +674,122 @@ export const beHasRowsPropNotEqual = (prop, value, rows) => {
   const values = pluck(prop, rows);
   let valueSets = [...new Set(values)];
   return valueSets.length > 1 || valueSets[0] !== value;
+};
+
+//===========================================
+//useage: INewWindow(url, title, (e) => search(pageNo, pageSize));
+//in the window components: window.close(); window.opener.onSuccess();
+//===========================================
+const sWidth = window.screen.width;
+const sHeight = window.screen.height;
+export const INewWindow = (props) => {
+  const { url, title, features, width, height, callback, callparam } = props;
+  const iwidth = width || sWidth;
+  const iheight = height || sHeight
+
+  var itop = (window.screen.height - 30 - (height || 0)) / 2;       //获得窗口的垂直位置;
+  var ileft = (window.screen.width - 10 - (width || 0)) / 2;
+  let browser = window
+  let popup = null
+
+  browser = window.self
+  browser.onSuccess = (message) => {
+    if (callback && _.isFunction(callback)) {
+      callback(message);
+    }
+  }
+
+  browser.onGetParams = () => {
+    if (callparam && _.isFunction(callparam)) {
+      return callparam();
+    }
+  }
+
+  browser.onError = (error) => {
+    if (callback && _.isFunction(callback)) {
+      callback(error);
+    }
+  }
+
+  browser.onOpen = (message) => {
+    if (callback && _.isFunction(callback)) {
+      callback(message);
+    }
+  }
+
+  browser.onClose = (message) => {
+    if (callback && _.isFunction(callback)) {
+      callback(message);
+    }
+  }
+
+  const opts = features || 'location=no,menubar=no,toolbar=no,resizable=no,status=no,width=' + (iwidth) + ',  height=' + (iheight) + ',top=' + itop + ',left=' + ileft;
+  if (popup) {
+    popup.focus()
+    return
+  }
+
+
+  const getPageQuery = () => parse(url.split('?')[1]);
+  window.getPageQuery = getPageQuery;
+  popup = browser.open(url, title, opts)
+
+  setTimeout(function () { popup.document.title = title }, 1000);
+
+}
+
+
+//格式化数字
+export const formatNumber = (v, fixNum) => {
+  if (!v) {
+    return '';
+  }
+  if (fixNum === '0') {
+    return v;
+  }
+  let suffix = '';
+  switch (fixNum) {
+    case 1:
+      suffix = '0.0';
+      break;
+    case 2:
+      suffix = '0.00';
+      break;
+    case 3:
+      suffix = '0.000';
+      break;
+    case 4:
+      suffix = '0.0000';
+      break;
+    default:
+      suffix = '';
+  }
+  return v ? toFixed(v, fixNum) : suffix;
+}
+
+function toFixed(n, d) {
+  var s = n + "";
+  if (!d) d = 0;
+  if (s.indexOf(".") == -1) s += ".";
+  s += new Array(d + 1).join("0");
+  if (new RegExp("^(-|\\+)?(\\d+(\\.\\d{0," + (d + 1) + "})?)\\d*$").test(s)) {
+    var s = "0" + RegExp.$2, pm = RegExp.$1, a = RegExp.$3.length, b = true;
+    if (a == d + 2) {
+      a = s.match(/\d/g);
+      if (parseInt(a[a.length - 1]) > 4) {
+        for (var i = a.length - 2; i >= 0; i--) {
+          a[i] = parseInt(a[i]) + 1;
+          if (a[i] == 10) {
+            a[i] = 0;
+            b = i != 1;
+          } else break;
+        }
+      }
+      s = a.join("").replace(new RegExp("(\\d+)(\\d{" + d + "})\\d$"), "$1.$2");
+
+    }
+    if (b) s = s.substr(1);
+    return (pm + s).replace(/\.$/, "");
+  }
+  return this + "";
 };

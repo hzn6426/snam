@@ -6,7 +6,7 @@ import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import './index.less';
+// import './index.less';
 import * as R from 'ramda';
 const IGrid = React.forwardRef((props, ref) => {
   const {
@@ -18,7 +18,7 @@ const IGrid = React.forwardRef((props, ref) => {
     // onInitGridColumns,
     request,
     dataSource,
-    // pageNo,
+    pageNo,
     pageSize,
     total,
     components,
@@ -52,7 +52,7 @@ const IGrid = React.forwardRef((props, ref) => {
   //设置功能表格列API
   const [settingGridColumnApi, setSettingGridColumnApi] = useState(null);
 
-  const [pageNo, setPageNo] = useState(1);
+  const [ipageNo, setIpageNo] = useState(pageNo || 1);
   const [ipageSize, setIpageSize] = useState(pageSize || 50);
   //主表格列
   const [gridColumns, setGridColumns] = useState([]);
@@ -63,27 +63,31 @@ const IGrid = React.forwardRef((props, ref) => {
   const tableHight = clientHeight - 260;
   const iheight = height || tableHight;
 
-  const refresh = () => {
-    setPageNo(1);
-    setBerefresh(!beRefresh);
-    request(1, ipageSize);
+  const refresh = (params) => {
+    setIpageNo(1);
+    //setBerefresh(!beRefresh);
+    request && request(1, ipageSize, params);
   };
 
   const reset = () => {
-    setPageNo(1);
-    setBerefresh(!beRefresh);
-    request(1, 50);
+    setIpageNo(1);
+
+    //setBerefresh(!beRefresh);
+    request && request(1, 50);
   };
 
   useImperativeHandle(ref, () => ({
-    refresh: () => {
+    refresh: (params) => {
       // 这里可以加自己的逻辑哦
-      refresh();
+      refresh(params);
     },
     reset: () => {
       reset();
     },
-  }));
+    getGridApi: () => {
+      return gridApi;
+    },
+  }), [beRefresh]);
 
   const createGridColumns = (values) => {
     const loopColumns = values || initColumns;
@@ -98,14 +102,19 @@ const IGrid = React.forwardRef((props, ref) => {
           width={v.width}
           cellRenderer={v.cellRenderer}
           hide={v.beHide}
-          cellStyle={!v.align ? { textAlign: 'center' } : { textAlign: v.align }}
+          cellStyle={v.cellStyle || (v.align ? { textAlign: v.align } : { textAlign: 'center' })}
           headerClass={
-            v.align === 'left' ? 'leftAlign' : v.align === 'right' ? 'rightAlign' : 'centerAlign'
+            v.headerClass || (v.align === 'left'
+              ? 'leftAlign'
+              : v.align === 'right'
+                ? 'rightAlign'
+                : 'centerAlign')
           }
           valueFormatter={v.valueFormatter}
           cellEditorSelector={v.cellEditorSelector}
           editable={v.editable}
           suppressMovable={v.suppressMovable}
+          pinned={v.pinned}
         />
       );
       // console.log(v.cellRenderer);
@@ -219,7 +228,8 @@ const IGrid = React.forwardRef((props, ref) => {
 
   //选择
   const onSelectionChanged = () => {
-    var selectedRows = gridApi.getSelectedRows();
+    let selectedRows = gridApi.getSelectedRows();
+    setBerefresh(!beRefresh);
     onSelectedChanged && onSelectedChanged(selectedRows);
   };
 
@@ -286,10 +296,11 @@ const IGrid = React.forwardRef((props, ref) => {
     setCheckedColumns(checkedValues);
     //设置选中
     setTimeout(() => {
-      settingGridApi.forEachNodeAfterFilter((node) => {
-        let index = node.data.field;
-        node.setSelected(checkedValues.indexOf(index) >= 0);
-      });
+      settingGridApi &&
+        settingGridApi.forEachNodeAfterFilter((node) => {
+          let index = node.data.field;
+          node.setSelected(checkedValues.indexOf(index) >= 0);
+        });
       if (isOpen) {
         setDrawerVisible(!drawerVisible);
       }
@@ -303,7 +314,7 @@ const IGrid = React.forwardRef((props, ref) => {
     createGridColumns(columns);
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
-    request && request(pageNo, ipageSize);
+    request && request(ipageNo, ipageSize);
     let settingColmuns = [];
     forEach((v) => {
       if (v.title != ' ') {
@@ -358,15 +369,32 @@ const IGrid = React.forwardRef((props, ref) => {
           title: colDef.headerName,
           width: v.actualWidth,
           dataIndex: colDef.field,
+          headerClass: colDef.field,
+          cellStyle: colDef.cellStyle,
+          //beHide: checkedValues.indexOf(colDef.field) === -1,
+          cellRenderer: colDef.cellRenderer,
+          valueFormatter: colDef.valueFormatter,
+          cellEditorSelector: colDef.cellEditorSelector,
+          editable: colDef.editable,
+          suppressMovable: colDef.suppressMovable,
           beHide: checkedValues.indexOf(colDef.field) === -1,
           rowIndex: sortMap[colDef.field],
         });
+
+        // copyObject(editColumn, {
+        //   title: colDef.headerName,
+        //   width: v.actualWidth,
+        //   dataIndex: colDef.field,
+        //   beHide: checkedValues.indexOf(colDef.field) === -1,
+        //   rowIndex: sortMap[colDef.field],
+        // });
         editColumns.push(editColumn);
       }
     }, columns);
     const indexSort = R.sortWith([R.ascend(R.prop('rowIndex'))]);
     editColumns = indexSort(editColumns);
     createGridColumns(editColumns);
+    // setTimeout(() => gridApi.refreshCells());
   };
 
   return (
@@ -377,8 +405,8 @@ const IGrid = React.forwardRef((props, ref) => {
         padding: optionsHide?.noPadding
           ? '0'
           : optionsHide?.pagination
-          ? '10px 10px 10px 10px'
-          : '10px 10px 44px 10px',
+            ? '10px 10px 10px 10px'
+            : '10px 10px 44px 10px',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -393,7 +421,7 @@ const IGrid = React.forwardRef((props, ref) => {
               <ReloadOutlined
                 style={{ marginLeft: '20px' }}
                 onClick={() => {
-                  request(pageNo, ipageSize);
+                  request && request(ipageNo, ipageSize);
                 }}
               />
             </Tooltip>
@@ -415,6 +443,7 @@ const IGrid = React.forwardRef((props, ref) => {
         style={{ height: iheight, marginTop: '5px', position: 'relative', overflow: 'hidden' }}
       >
         <AgGridReact
+          ref={ref}
           rowData={dataSource}
           onDragStopped={(e) => changeSetting(e, false)}
           onGridReady={onGridReady}
@@ -492,12 +521,17 @@ const IGrid = React.forwardRef((props, ref) => {
           visible={drawerVisible}
           getContainer={false}
           width={200}
-          style={{ position: 'absolute', border: '1px solid #f0f0f0' }}
+          style={{
+            position: 'absolute',
+            border: '1px solid #f0f0f0',
+            display: drawerVisible ? 'block' : 'none',
+          }}
           headerStyle={{ height: '32px' }}
           bodyStyle={{ fontSize: '12px', padding: '4px 0px' }}
-          // mask={false}
+        // mask={false}
         >
-          <div className="ag-theme-balham ag-grid-setting">
+          {/* <div className="ag-theme-balham ag-grid-setting"> */}
+          <div id="settingGrid" className="ag-theme-balham">
             <AgGridReact
               onSelectionChanged={settingOnSelectionChanged}
               onRowDragEnd={settingOnRowDragEnd}
@@ -524,7 +558,8 @@ const IGrid = React.forwardRef((props, ref) => {
       <div
         style={{
           display: optionsHide?.pagination ? 'none' : 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
+          // justifyContent: 'space-between',
           // marginTop: toolBarRender ? '0px' : '5px',
           marginTop: '5px',
           paddingRight: '10px',
@@ -533,17 +568,18 @@ const IGrid = React.forwardRef((props, ref) => {
         <div />
         <Pagination
           total={total || 0}
-          current={pageNo || 0}
+          current={ipageNo || 0}
           pageSize={ipageSize || 0}
           showQuickJumper
           size="small"
           onChange={(page, limit) => {
-            setPageNo(page);
+            setIpageNo(page);
             setIpageSize(limit);
-            request(page, limit);
+            request && request(page, limit);
           }}
           showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/总共 ${total} 条`}
         />
+
       </div>
     </div>
   );

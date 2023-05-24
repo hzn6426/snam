@@ -1,15 +1,17 @@
-import { api, isEmpty, useObservableAutoCallback, constant } from '@/common/utils';
+import React, { useState } from 'react';
+import { api, isEmpty, useObservableAutoCallback, constant, md5 } from '@/common/utils';
 import Language from '@/components/Layout/Language';
 import { AntDesignOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Checkbox, Form, Input, message, Typography } from 'antd';
 import { parse } from 'querystring';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { history, useIntl } from 'umi';
 const { Title } = Typography;
 const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
 export default (props) => {
   const { formatMessage } = useIntl(); //国际化
+  const [loading, setLoading] = useState(false);
 
   //读取cookies
   const getCookie = (name) => {
@@ -66,8 +68,10 @@ export default (props) => {
     event.pipe(
       debounceTime(400),
       distinctUntilChanged(),
+      tap(() => setLoading(true)),
       switchMap((v) => {
         v.systemTag = 'admin';
+        v.userPasswd = md5(v.userPasswd);
         return api.user.login(v).pipe(tap(handleRemeberMe(v)));
       }),
       map((data) => data[0]),
@@ -77,7 +81,8 @@ export default (props) => {
       }),
       tap((br) => sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || [])),
       tap((v) => handleRedirect()),
-    ),
+      shareReplay(1),
+    ), () => setLoading(false)
   );
 
   return (
@@ -143,14 +148,15 @@ export default (props) => {
             size="large"
             shape="round"
             style={{ width: '100%' }}
+            loading={loading}
           >
             {formatMessage({ id: 'login.loginBtn' })}
           </Button>
         </Form.Item>
         <Form.Item style={{ margin: '0px' }}>
-          <Language onChange={(e) => {}} />
+          <Language onChange={(e) => { }} />
         </Form.Item>
       </Form>
-    </Card>
+    </Card >
   );
 };

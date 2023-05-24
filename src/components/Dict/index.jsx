@@ -1,13 +1,15 @@
 import React from 'react';
 import { Select } from 'antd';
 import { api, useAutoObservable } from '@/common/utils';
+import { map,switchMap } from 'rxjs';
+import { isArray } from '@/common/utils';
 
 export default (props) => {
   const { Option } = Select;
   const { value, placeholder, onChange, style, disabled, initialValue, isAll, dictCode } = props;
 
   const [optionData] = useAutoObservable(
-    (input$) => input$.pipe(map((v) => api.dict.listChildByParentCode(v[0]))),
+    (input$) => input$.pipe(switchMap((v) => api.dict.listChildByParentCode(v[0]))),
     [dictCode],
   );
 
@@ -26,6 +28,7 @@ export default (props) => {
         </Option>
       )}
       {optionData &&
+        isArray(optionData) &&
         optionData.map((item) => (
           <Option key={item.dictCode} value={item.dictCode}>
             {item.dictName}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 export default (props) => {
-  const { type, children, flexs, spans, style, bodyStyle, gutter } = props;
+  const { type, children, flexs, spans, style, bodyStyle, gutter } = props || {};
   const length = children?.length;
   const span = {
     xs: 24,
@@ -18,12 +18,13 @@ export default (props) => {
     const columnFlexs = flexs && flexs.split(' ');
     const beSpan = columnSpans && columnSpans.length > 0;
     const beFlex = columnFlexs && columnFlexs.length > 0;
+    
     if (type === 'hbox') {
       rui = (
-        <Row wrap={false} style={style} gutter={gutter}>
-          {React.Children.map(children, (child, index) => (
+        <Row wrap={false} style={style || false } gutter={gutter}>
+          {children && React.Children.map(children, (child, index) => child && (
             <Col
-              style={bodyStyle}
+              style={bodyStyle || false}
               {...(columnSpans && columnSpans.length >= index + 1
                 ? { span: columnSpans[index] }
                 : beFlex
@@ -33,7 +34,7 @@ export default (props) => {
                 ? { flex: columnFlexs[index] }
                 : {})}
             >
-              {React.cloneElement(child)}
+              {React.cloneElement(child, { ...(child.props || {}) })}
             </Col>
           ))}
         </Row>
@@ -41,10 +42,10 @@ export default (props) => {
     } else if (type === 'vbox') {
       rui = (
         <>
-          {React.Children.map(children, (child, index) => (
-            <Row style={style} gutter={gutter}>
-              <Col span={24} style={bodyStyle}>
-                {React.cloneElement(child, { ...child.props })}
+          {children && React.Children.map(children, (child, index) => (
+            <Row style={style || false} gutter={gutter}>
+              <Col span={24} style={bodyStyle || false}>
+                {React.cloneElement(child, { ...(child.props || {}) })}
               </Col>
             </Row>
           ))}
@@ -52,10 +53,10 @@ export default (props) => {
       );
     } else if (type === 'fit') {
       rui = (
-        <Row style={style} gutter={gutter}>
-          {React.Children.map(children, (child, index) => (
+        <Row style={style || false} gutter={gutter}>
+          {children && React.Children.map(children, (child, index) => (
             <Col
-              style={bodyStyle}
+              style={bodyStyle || false}
               {...(columnSpans && columnSpans.length >= index + 1
                 ? { span: columnSpans[index] }
                 : beSpan
@@ -78,6 +79,6 @@ export default (props) => {
 
   useEffect(() => {
     renderUI();
-  }, []);
+  }, [props]);
   return ui;
 };

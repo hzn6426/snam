@@ -1,4 +1,7 @@
-import { ipost, iput, iget, iupload, isearch, idelete, constant } from '@/common/utils';
+import { ipost, iput, iget, iupload, isearch, idelete, constant, rmap, getCache, setCache, hasCache } from '@/common/utils';
+import { map, tap } from 'rxjs/operators';
+import { from } from 'rxjs';
+
 //登录
 export function login(params) {
   return ipost(constant.API_LOGIN, params);
@@ -80,3 +83,28 @@ export function listGroupUsersByRole(rid) {
 export function listGroupUsersByUset(usetId) {
   return iget(`${constant.API_USER_LIST_GROUP_USER_BY_USET}?usetId=${usetId}`);
 }
+
+// 包装模糊匹配
+export function listByKeyword(tag, keyword) {
+  let cacheKey;
+  if (!keyword) {
+    cacheKey = constant.KEY_USER + tag;
+    if (hasCache(cacheKey)) {
+      return from(getCache(cacheKey));
+    }
+  }
+  return iget(`${constant.API_USER_LIST_BY_KEYWORD}?userTag=${tag}&keyWord=${keyword}`).pipe(
+    map((data) => {
+      const theData = data || [];
+      return rmap(
+        (item) => ({
+          label: `${item.userRealCnName}`,
+          value: `${item.id}`,
+        }),
+        theData,
+      );
+    }),
+    tap((v) => cacheKey && setCache(cacheKey, v)),
+  );
+}
+

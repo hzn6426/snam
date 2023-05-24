@@ -22,11 +22,12 @@ export default (props) => {
     onChange,
     getSelectItem,
     disabled,
+    value
   } = props;
 
   const [keyword, setKeyword] = useAutoObservable(
     (input$) => input$.pipe(map((v) => (isEmpty(v) ? undefined : [{ label: v[0], value: v[1] }]))),
-    displayName && displayValue ? [displayName, displayValue] : [],
+    [displayName, value],
   );
 
   const [onSearch, optionData] = useObservableAutoCallback((event) =>
@@ -118,9 +119,7 @@ export default (props) => {
       style={style || { width: '100%' }}
       disabled={disabled}
     >
-      {optionData.map((item) => (
-        <Option key={item.value}>{item.label}</Option>
-      ))}
+      {optionData && optionData.map((item) => <Option key={item.value}>{item.label}</Option>)}
     </Select>
   );
 };

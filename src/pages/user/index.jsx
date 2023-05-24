@@ -14,6 +14,8 @@ import {
   beHasRowsPropNotEqual,
   isArray,
   join,
+  INewWindow,
+  data2States
 } from '@/common/utils';
 import {
   IFormItem,
@@ -47,7 +49,8 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
-import { of, zip, EMPTY } from 'rxjs';
+import { of, zip, EMPTY, from } from 'rxjs';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 // import { FooterToolbar } from '@ant-design/pro-layout';
 
 // //初始化角色,用户属性
@@ -68,11 +71,12 @@ zip(roleSource, userTagSource)
 const StateRenderer = (props) => {
   return props.value && <IStatus value={props.value} state={userState} />;
 };
+
 const TagRenderer = (props) => {
   return (
-    props.value && (
-      <ITag values={split(props.value)} options={userTags} multiColor={false} noColor={true} />
-    )
+    props.value ? (
+      <ITag values={split(props.value)} options={userTags} multiColor={false} />
+    ) : <span>-</span>
   );
 };
 
@@ -81,28 +85,45 @@ const initColumns = [
   {
     title: '状态',
     width: 80,
+    align: 'center',
     dataIndex: 'state',
     cellRenderer: 'stateCellRenderer',
   },
   {
     title: '账号',
-    width: 120,
+    width: 90,
     dataIndex: 'userName',
   },
   {
     title: '姓名',
-    width: 100,
+    width: 90,
     dataIndex: 'userRealCnName',
   },
   {
     title: '性别',
     width: 70,
+    align: 'center',
     dataIndex: 'userSex',
   },
   {
     title: '角色',
     width: 150,
     dataIndex: 'userRoles',
+  },
+  {
+    title: '公司',
+    width: 100,
+    dataIndex: 'userParentGroups',
+  },
+  {
+    title: '部门',
+    width: 90,
+    dataIndex: 'userGroups',
+  },
+  {
+    title: '职位',
+    width: 90,
+    dataIndex: 'userPosts',
   },
   {
     title: '属性',
@@ -142,24 +163,22 @@ const userState = {
 
 export default (props) => {
   const [searchForm] = Form.useForm();
-  // const [selectedKeys, setSelectedKeys] = useState([]);
+  const { clientWidth, clientHeight } = window?.document?.documentElement;
+  const [tableHight, setTableHight] = useState(clientHeight - 260);
   const [dataSource, setDataSource] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [loading, setLoading] = useObservableAutoState(false);
+  const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
   const [disabledActive, setDisabledActive] = useState(true);
   const [disabledStop, setDisabledStop] = useState(true);
+  const [disabledUnStop, setDisabledUnStop] = useState(true);
 
   const [modalItem, setModalItem] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const ref = useRef();
 
   const refresh = () => ref.current.refresh();
-  // const [pageNo, setPageNo] = useState(1);
-  // const [pageSize, setPageSize] = useState(50);
-  // const { clientHeight } = window?.document?.documentElement;
-  // const tableHight = clientHeight - 252;
 
   const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
     event.pipe(
@@ -168,8 +187,10 @@ export default (props) => {
       tap((keys) => {
         setDisabledActive(beHasRowsPropNotEqual('state', 'UNACTIVE', keys));
         setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', keys));
+        setDisabledUnStop(beHasRowsPropNotEqual('state', 'STOPPED', keys));
       }),
       switchMap((v) => of(pluck('id', v))),
+      shareReplay(1),
     ),
   );
 
@@ -182,6 +203,7 @@ export default (props) => {
         message.success('操作成功!');
         refresh();
       }),
+      shareReplay(1),
     ],
     () => setLoading(false),
   );
@@ -194,6 +216,7 @@ export default (props) => {
         message.success('操作成功!');
         refresh();
       }),
+      shareReplay(1),
     ],
     () => setLoading(false),
   );
@@ -206,6 +229,7 @@ export default (props) => {
         message.success('操作成功!');
         refresh();
       }),
+      shareReplay(1),
     ],
     () => setLoading(false),
   );
@@ -218,57 +242,23 @@ export default (props) => {
         message.success('操作成功!');
         refresh();
       }),
+      shareReplay(1),
     ],
     () => setLoading(false),
   );
 
-  const [onDoubleClick] = useAutoObservableEvent([
-    switchMap((id) => api.user.getUser(id)),
-    map((data) => {
-      const user = data[0];
-      if (user && user.userTag) {
-        user.userTag = split(user.userTag);
-      }
-      return user;
-    }),
-    tap((data) => {
-      setModalVisible(true);
-      setModalItem(data);
-    }),
-  ]);
-
-  const [onSaveClick] = useAutoObservableEvent([
-    map((user) => {
-      if (isArray(user.userTag)) {
-        user.userTag = join(',', user.userTag);
-      }
-      return user;
-    }),
-    switchMap((user) => api.user.saveOrUpdateUser(user)),
-    tap(() => {
-      setModalVisible(false);
-      message.success('操作成功!');
-      refresh();
-    }),
-  ]);
-  // const [onStop] = useObservableAutoCallback(
-  //   (event) =>
-  //     event.pipe(
-  //       debounceTime(300),
-  //       distinctUntilChanged(),
-  //       tap(() => setLoading(true)),
-  //       filter(([keys, ref]) => !isEmpty(keys)),
-  //       switchMap(([keys, ref]) =>
-  //         api.user.stopUser(keys).pipe(
-  //           tap(() => {
-  //             ref.refresh();
-  //           }),
-  //           shareReplay(1),
-  //         ),
-  //       ),
-  //     ),
-  //   () => setLoading(false),
-  // );
+  const [onResetPasswd] = useAutoObservableEvent(
+    [
+      tap(() => setLoading(true)),
+      switchMap((keys) => api.user.resetUserPasswd(keys)),
+      tap(() => {
+        message.success('重置密码成功, 请到对应邮箱查看新密码!');
+        refresh();
+      }),
+      shareReplay(1),
+    ],
+    () => setLoading(false),
+  );
 
   //查询
   const search = (pageNo, pageSize) => {
@@ -288,6 +278,26 @@ export default (props) => {
       });
   };
 
+  const onNewClick = () => {
+    INewWindow({
+      url: '/new/user/ADD',
+      title: '新建用户',
+      width: 700,
+      height: 400,
+      callback: () => refresh()
+    })
+  };
+
+  const [onDoubleClick] = useAutoObservableEvent([
+    tap((id) => INewWindow({
+      url: '/new/user/' + id,
+      title: '编辑用户',
+      width: 700,
+      height: 400,
+      callback: () => refresh()
+    })),
+  ]);
+
   // 列表及弹窗
   return (
     <>
@@ -295,24 +305,28 @@ export default (props) => {
         form={searchForm}
         onReset={() => ref.current.refresh()}
         onSearch={() => ref.current.refresh()}
+        onHeightChange = {(iheight) => setTableHight(iheight)}
       >
-        <IFormItem name="userName" label="用户名" xtype="input" />
+        <IFormItem name="userNo" label="账号" xtype="input" />
         <IFormItem name="userRealCnName" label="姓名" xtype="input" />
-        <IFormItem name="userRoles" label="角色" xtype="select" options={roles} />
         <IFormItem name="userTag" label="属性" xtype="select" options={userTags} />
         <IFormItem name="userMobile" label="手机" xtype="input" />
         <IFormItem
-          name="states"
+          name="state"
           label="状态"
           xtype="select"
           options={() => state2Option(userState)}
         />
+        <IFormItem name="roleName" label="角色" xtype="input" />
+        <IFormItem name="companyName" label="公司" xtype="input" />
+        <IFormItem name="departName" label="部门" xtype="input" />
+        <IFormItem name="postName" label="职位" xtype="input" />
       </ISearchForm>
 
       <IGrid
         ref={ref}
         title="用户列表"
-        // height={tableHight}
+        height={tableHight}
         components={{
           stateCellRenderer: StateRenderer,
           tagCellRenderer: TagRenderer,
@@ -321,16 +335,61 @@ export default (props) => {
         initColumns={initColumns}
         request={(pageNo, pageSize) => search(pageNo, pageSize)}
         dataSource={dataSource}
-        // pageNo={pageNo}
-        // pageSize={pageSize}
         total={total}
         onSelectedChanged={onChange}
         onDoubleClick={(record) => onDoubleClick(record.id)}
-        // onClick={(data) => onClicked(data)}
+        toolBarRender={[
+          <Button
+            key="add"
+            size="small"
+            type="primary"
+            shape="round"
+            icon={<PlusOutlined />}
+            onClick={() => onNewClick()}
+          >
+            新建
+          </Button>,
+        ]}
         clearSelect={searchLoading}
       />
       <IFooterToolbar visible={!isEmpty(selectedKeys)}>
-        <Permit authority="user:active">
+        <Button
+          key="active"
+          onClick={() => onActive(selectedKeys)}
+          disabled={disabledActive}
+          loading={loading}
+        >
+          激活
+        </Button>
+        <Button
+          danger
+          key="stop"
+          onClick={() => onStop(selectedKeys)}
+          disabled={disabledStop}
+          loading={loading}
+        >
+          停用
+        </Button>
+        <Button
+          danger
+          key="stop"
+          onClick={() => onUnStop(selectedKeys)}
+          disabled={disabledUnStop}
+          loading={loading}
+        >
+          启用
+        </Button>
+        <Button
+          type="danger"
+          key="delete"
+          onClick={() => showDeleteConfirm('确定删除选中的用户吗?', () => onDelete(selectedKeys))}
+        >
+          删除
+        </Button>
+        <Button danger key="reset" onClick={() => showDeleteConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？',()=> onResetPasswd)}>
+          重置密码
+        </Button>
+        {/* <Permit authority="user:active">
           <Button
             key="active"
             onClick={() => onActive(selectedKeys)}
@@ -360,7 +419,7 @@ export default (props) => {
           >
             删除
           </Button>
-        </Permit>
+        </Permit> */}
         {/* <Permit authority="user:unstop">
             <Button key="unstop" onClick={handleUnstop}>
               启用
@@ -387,98 +446,7 @@ export default (props) => {
             </Button>
           </Permit> */}
       </IFooterToolbar>
-      {/* )} */}
-      <IModal
-        current={modalItem}
-        title={modalItem && modalItem.id ? '编辑用户' : '新建用户'}
-        width="800px"
-        visible={modalVisible}
-        onCancel={() => {
-          setModalVisible(false);
-        }}
-        onSubmit={(item) => onSaveClick(item)}
-      >
-        <IFormItem xtype="id" />
-        <ILayout type="hbox" spans="12 12">
-          <IFormItem
-            disabled={modalItem && modalItem.id}
-            name="userName"
-            label="账号"
-            xtype="input"
-            tooltip="最长为20位,保存后不可更改"
-            rules={[{ required: true, message: '请输入账号', max: 20 }]}
-          />
-        </ILayout>
-        <ILayout type="hbox" spans="12 12">
-          <IFormItem name="userRealCnName" label="中文名" xtype="input" required={true} max={20} />
-          <IFormItem name="userRealEnName" label="英文名" xtype="input" required={true} max={20} />
-        </ILayout>
-        <ILayout type="hbox" spans="24">
-          <IFormItem
-            name="userSex"
-            label="性别"
-            initialValue="男"
-            required={true}
-            options={[
-              {
-                label: '男',
-                value: '男',
-              },
-              {
-                label: '女',
-                value: '女',
-              },
-              {
-                label: '保密',
-                value: '保密',
-              },
-            ]}
-            xtype="radio"
-          />
-        </ILayout>
-        <ILayout type="hbox" spans="12 12">
-          <IFormItem
-            name="userMobile"
-            label="手机"
-            xtype="input"
-            required={true}
-            max={20}
-            regexp="/^1[3456789]d{9}$/"
-          />
-
-          <IFormItem
-            name="userEmail"
-            label="邮箱"
-            xtype="input"
-            tooltip="激活后密码将发送到该邮箱"
-            required={true}
-            max={50}
-            ruleType="email"
-          />
-        </ILayout>
-        {/* <ILayout type="hbox" spans="12 12">
-          <IFormItem name="qq" label="QQ" xtype="input" max={20} />
-        </ILayout> */}
-        <ILayout type="hbox" spans="24">
-          <IFormItem
-            name="userTag"
-            label="用户属性"
-            xtype="checkbox"
-            required={true}
-            ruleType="array"
-            options={userTags}
-          />
-        </ILayout>
-        <ILayout type="hbox" spans="24">
-          <IFormItem
-            name="note"
-            label="备注说明"
-            xtype="textarea"
-            max={100}
-            autoSize={{ minRows: 4, maxRows: 6 }}
-          />
-        </ILayout>
-      </IModal>
+    
     </>
   );
 };

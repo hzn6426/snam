@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useImperativeHandle } from 'react';
 import { Button, Form, Modal, Space } from 'antd';
 import Draggable from 'react-draggable';
 import { useWindowSize } from '@/common/utils';
@@ -31,6 +31,12 @@ export default (props) => {
   const onStop = (e, uiData) => {
     setPosition({ x: uiData?.x, y: uiData?.y });
   };
+
+  useImperativeHandle(props.mref, () => ({
+    setFieldsValue: (obj) => {
+      snamModalForm.setFieldsValue(obj || {});
+    },
+  }));
 
   useEffect(() => {
     snamModalForm.resetFields();

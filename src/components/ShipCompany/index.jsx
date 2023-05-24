@@ -1,23 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Select } from 'antd';
-import { api, useObservableAutoCallback, useAutoObservable, isEmpty } from '@/common/utils';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import {
+  api,
+  useObservableAutoCallback,
+  useAutoObservable,
+  isEmpty,
+  stringRandom,
+  isArray,
+} from '@/common/utils';
+import { debounceTime, distinctUntilChanged, map, switchMap, tap, filter } from 'rxjs/operators';
 
 export default (props) => {
   const { Option } = Select;
 
-  const { displayValue, displayName, placeholder, style, onChange } = props;
+  const { value, displayName, placeholder, style, getShipCompany, onChange } = props;
+  const [beTrigger, setBeTrigger] = useState(true);
+  const [keyword, setKeyword] = useState();
+  useEffect(() => {
+    if (value && displayName && beTrigger) {
+      const labelInValue = { label: displayName, value: value };
+      const option = [labelInValue];
+      setOptionData(option);
+      setKeyword(labelInValue);
+    }
+  }, [displayName, value]);
+  // const [keyword, setKeyword] = useAutoObservable(
+  //   (input$) =>
+  //     input$.pipe(
+  //       filter((v) => v && v[0] && v[1]),
+  //       map((v) => {
+  //         const labelInValue = { label: v[0], value: v[1] };
+  //         const option = [labelInValue];
+  //         setOptionData(option);
+  //         return labelInValue;
+  //       }),
+  //     ),
+  //   [displayName, value],
+  // );
 
-  const [keyword, setKeyword] = useAutoObservable(
-    (input$) => input$.pipe(map((v) => (isEmpty(v) ? undefined : [{ label: v[0], value: v[1] }]))),
-    displayName && displayValue ? [displayName, displayValue] : [],
-  );
-
-  const [onSearch, optionData] = useObservableAutoCallback((event) =>
+  const [onSearch, optionData, setOptionData] = useObservableAutoCallback((event) =>
     event.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((v) => api.customer.listByKeyword('SHIP_COMPANY', v)),
+      switchMap((v) => api.shipComany.listByKeyword(v)),
       tap((v) => console.log(v)),
     ),
   );
@@ -37,8 +62,10 @@ export default (props) => {
   // };
   const [doOnChange] = useObservableAutoCallback((event) =>
     event.pipe(
+      tap((v) => setBeTrigger(false)),
       tap((v) => setKeyword(v || {})),
-      tap((v) => onChange && onChange(v.value)),
+      tap((v) => onChange && onChange(v?.value)),
+      tap((v) => getShipCompany && getShipCompany(v || {})),
     ),
   );
 
@@ -96,7 +123,13 @@ export default (props) => {
       onChange={doOnChange}
       style={style}
     >
-      {optionData && optionData.map((item) => <Option key={item.value}>{item.label}</Option>)}
+      {optionData &&
+        isArray(optionData) &&
+        optionData.map((item) => (
+          <Option value={item.value} key={stringRandom(16) + item.value}>
+            {item.label}
+          </Option>
+        ))}
     </Select>
   );
 };

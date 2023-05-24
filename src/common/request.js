@@ -34,6 +34,6 @@ export const iupload = (url, param) => {
   return wrapStreamObservable(wfileUpload, url, param);
 };
 
-export const idownload = (url, param, post = false) => {
+export const idownload = (url, param, post = true) => {
   return wrapStreamObservable(wfileDownload, url, param, post);
 };

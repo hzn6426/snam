@@ -17,6 +17,13 @@ const err = (error) => {
   if (response) {
     const errorText = data.message || response.statusText;
     const { status } = response;
+    if (status != 200) {
+      notification.error({
+        message: `请求错误 ${status}: ${response.config.url}`,
+        description: errorText,
+      });
+      return { code: status, message: errorText, data: data };
+    }
     if (data && data.code !== 200) {
       if (
         data.code === 20002 ||
@@ -74,6 +81,9 @@ service.interceptors.response.use((response) => {
   const res = response.data;
   if (res.code && res.code !== 200) {
     return Promise.reject(response);
+  }
+  if (res instanceof Blob) {
+    return { code: 200, message: 'OK', data: res };
   }
   return res;
 }, err);
@@ -166,7 +176,7 @@ export async function wdelete(purl, param) {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
     },
-    data: param,
+    data: param || {},
   });
 }
 
@@ -183,7 +193,7 @@ export async function wfileUpload(purl, formData) {
   });
 }
 
-export async function wfileDownload(purl, formData = false, post = false) {
+export async function wfileDownload(purl, formData = false, post = true) {
   const data = {
     headers: {
       'Content-Type': 'application/json; application/octet-stream;charset=UTF-8',
@@ -202,7 +212,17 @@ export async function wfileDownload(purl, formData = false, post = false) {
  * @returns
  */
 export const wrapStreamObservable = (promise, ...args) => {
-  return defer(() => from(promise(...args)).pipe(map((resp) => resp)));
+  return defer(() =>
+    from(promise(...args)).pipe(
+      filter((resp) => {
+        return has(resp, 'code') && has(resp, 'data') && resp.code === 200;
+      }),
+      map((resp) => {
+        console.log(resp.data);
+        return resp.data;
+      }),
+    ),
+  );
 };
 /**
  * rxjs封装Promise(后台请求)方法为可观察者，过滤结果为数组数据
@@ -216,7 +236,6 @@ export const wrapObservable = (promise, ...args) => {
     from(promise(...args)).pipe(
       filter((resp) => has(resp, 'code') && has(resp, 'data') && resp.code === 200),
       map((resp) => {
-        console.log(resp);
         return resp.data;
       }),
     ),

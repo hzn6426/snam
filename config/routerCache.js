@@ -20,5 +20,5 @@ forEach((v) => {
       }
     }, v.routes);
   }
-}, router[0].routes[1].routes);
+}, router[0].routes[2].routes);
 export default routeCache;

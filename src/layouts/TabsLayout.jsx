@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { history, Link, useIntl } from 'umi';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import logo from '../assets/logo.png';
-import { getQueryString, constant, product, api, PubSub } from '@/common/utils';
+import { getQueryString, constant, produce, api, PubSub } from '@/common/utils';
 import defaultSettings from '../../config/defaultSettings';
 import Blog from '@/pages/dashboard/blog';
 import { Tabs } from 'antd';
@@ -97,11 +97,11 @@ const BasicLayout = (props) => {
     let tabTitle = orderNo || props.location.pathname;
     if (tabTitle && tabTitle != '/dashboard/blog' && (routeCache[tabTitle] || orderNo)) {
       tabTitle = decodeURI(tabTitle);
-      setActiveTab(tabTitle);
+
       const tabExist = tabList.filter((item) => item.key === tabTitle);
       if (tabExist.length === 0) {
         // store.pushTab({ title: tabTitle, path: props.location.pathname });
-        const d = product(tabList, (draft) => {
+        const d = produce(tabList, (draft) => {
           if (tabIndex === -1) {
             draft.push({
               key: tabTitle,
@@ -109,7 +109,7 @@ const BasicLayout = (props) => {
               path: beHaveTabTitle
                 ? `${props.location.pathname}?tabTitle=${tabTitle}`
                 : props.location.pathname,
-              content: product(props.children, () => {}),
+              content: produce(props.children, () => {}),
             });
           } else {
             setTabIndex(-1);
@@ -119,24 +119,28 @@ const BasicLayout = (props) => {
               path: beHaveTabTitle
                 ? `${props.location.pathname}?tabTitle=${tabTitle}`
                 : props.location.pathname,
-              content: product(props.children, () => {}),
+              content: produce(props.children, () => {}),
             });
           }
         });
         setTabList(d);
+        setActiveTab(tabTitle);
         // const m = produce(dom, (draft) => {
         //   draft[props.location.pathname] = produce(props.children, () => {});
         // });
         // setDom(m);
         if (!route[tabTitle]) {
-          const r = product(route, (draft) => {
+          const r = produce(route, (draft) => {
             draft[tabTitle] = beHaveTabTitle
               ? `${props.location.pathname}?tabTitle=${tabTitle}`
               : props.location.pathname;
           });
           setRoute(r);
         }
+      } else {
+        setActiveTab(tabTitle);
       }
+      // setActiveTab(tabTitle);
     } else {
       setActiveTab('blog');
     }
@@ -174,7 +178,8 @@ const BasicLayout = (props) => {
 
   // 删除Tabs标签
   const delTablist = (key) => {
-    const tabTitle = getQueryString('tabTitle') || props.location.pathname;
+    let tabTitle = getQueryString('tabTitle') || props.location.pathname;
+    tabTitle = decodeURI(tabTitle);
     const w = tabList.filter((item) => item.key !== key);
     if (w.length > 0) {
       if (tabTitle === key) {

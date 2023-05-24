@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import IIF from '@/components/IIF';
 import { For } from 'react-loops';
-import { isEmpty, product } from '@/common/utils';
+import { isEmpty, produce } from '@/common/utils';
 export default (props) => {
   const { children } = props;
   const [noOtherWise, setNoOtherWise] = useState(true);
   const [childrenState, setChildrenState] = useState(new Array(children?.length));
   const doCallBack = (index, value) => {
-    const state = product(childrenState, (draft) => {
+    const state = produce(childrenState, (draft) => {
       draft[index] = !!value;
     });
     setChildrenState(state);

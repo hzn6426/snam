@@ -15,14 +15,17 @@ export default (props) => {
     onSearch,
     onAdSearch,
     onReset,
+    onHeightChange,
+    expanded,
     adSearchConfig,
   } = props;
   const [searchForm] = Form.useForm(form || null);
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(expanded == true ? true : false);
   const [searchLoading, setSearchLoading] = useState(false);
   const [adSearchVisible, setAdSearchVisible] = useState(false);
   const { clientWidth, clientHeight } = window?.document?.documentElement;
-  const [tableHight, setTableHight] = useState(clientHeight - 332);
+  const fixheight = clientHeight - 332;
+  const [tableHight, setTableHight] = useState(fixheight);
   const divRef = useRef();
 
   const span = {
@@ -35,10 +38,19 @@ export default (props) => {
   };
   useEffect(() => {
     var o = divRef.current;
+    let iheight;
+    let cheight;
     if (expand) {
-      setTableHight(tableHight - o.offsetHeight + 44);
+      iheight = tableHight - o.offsetHeight + 44;
+      //setTableHight(tableHight - o.offsetHeight + 44);
     } else {
-      setTableHight(clientHeight - 332);
+      iheight = clientHeight - 260;
+      // setTableHight(clientHeight - 332);
+    }
+    cheight = fixheight - iheight
+    setTableHight(iheight);
+    if (onHeightChange && isFunction(onHeightChange)) {
+      onHeightChange(iheight,cheight);
     }
   }, [expand]);
 
@@ -78,11 +90,11 @@ export default (props) => {
               {/* <ILayout type="hbox">
                 $
               </ILayout> */}
-              <Row gutter={2}>
+              <Row gutter={5}>
                 <For of={children}>
                   {(child) => (
-                    <Col xxl={4} lg={6} sm={8}>
-                      {React.cloneElement(child, { labelCol: { flex: '65px' } })}
+                    <Col xxl={6} lg={6} sm={8} style={{ paddingRight: '10px' }}>
+                      {React.cloneElement(child, { labelCol: { flex: '80px' } })}
                     </Col>
                   )}
                 </For>

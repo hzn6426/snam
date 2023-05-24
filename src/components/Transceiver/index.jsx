@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, Input } from 'antd';
 
 export default (props) => {
-  const { rows, placeholder, value, onChange, hideButton } = props;
+  const { rows, placeholder, value, onChange, hideButton, ...others } = props;
   const [message, setMessage] = useState('');
   const [colsNum, setColsNum] = useState(40);
 
@@ -37,7 +37,9 @@ export default (props) => {
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
       let number = i + 1;
-      if (line.match(/[^/|^\ \r\n|^@|^*|^'|^_|^+|^#|^&|^:|^"|^"|^\-|^ |^.|^,|^(|^)|^\d|^\[A-Z\]]/g)) {
+      if (
+        line.match(/[^/|^\ \r\n|^@|^*|^'|^_|^+|^#|^&|^:|^"|^"|^\-|^ |^.|^,|^(|^)|^\d|^\[A-Z\]]/g)
+      ) {
         setMessage('第' + number + '包含非法字符');
         falg = false;
         break;
@@ -61,7 +63,12 @@ export default (props) => {
       //  v
       // );
       onChange(
-        v.toUpperCase().replace(/[^/|^\ \r\n|^@|^_|^*|^'|^+|^#|^&|^:|^"|^"|^\-|^ |^.|^,|^(|^)|^\d|^\[A-Z\]]/g, '?'),
+        v
+          .toUpperCase()
+          .replace(
+            /[^/|^\ \r\n|^@|^_|^*|^'|^+|^#|^&|^:|^"|^"|^\-|^ |^.|^,|^(|^)|^\d|^\[A-Z\]]/g,
+            '?',
+          ),
       );
     } else {
       setMessage('');
@@ -95,13 +102,18 @@ export default (props) => {
             zIndex: 1,
           }}
           value={value}
+          {...others}
           onChange={(e) => {
             changeValue(e.target.value);
           }}
         />
-        <div style={{ marginLeft: '-1px', display: hideButton ? 'none' : '' }} >
+        <div style={{ marginLeft: '-1px', display: hideButton ? 'none' : '' }}>
           <div>
-            <Button size="small" style={{ height: props.height ? '40px' : '35px' }} onClick={() => changeCols(30)}>
+            <Button
+              size="small"
+              style={{ height: props.height ? '40px' : '35px' }}
+              onClick={() => changeCols(30)}
+            >
               30
             </Button>
           </div>
@@ -115,7 +127,11 @@ export default (props) => {
             </Button>
           </div>
           <div>
-            <Button size="small" style={{ height: props.height ? '40px' : '35px' }} onClick={() => changeCols(40)}>
+            <Button
+              size="small"
+              style={{ height: props.height ? '40px' : '35px' }}
+              onClick={() => changeCols(40)}
+            >
               40
             </Button>
           </div>

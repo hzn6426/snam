@@ -21,11 +21,11 @@ export default (props) => {
   return (
     <>
       <Tag
-        color={map[color]}
-        style={{ width: '65px', textAlign: 'center' }}
+        color={map[color] || 'default'}
+        style={{ textAlign: 'center' }}
         onClick={onClick && onClick()}
       >
-        {text + ' '}
+        {(text || '-') + ' '}
       </Tag>
     </>
   );

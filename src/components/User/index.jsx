@@ -6,6 +6,9 @@ import {
   useAutoObservable,
   isEmpty,
   forEach,
+  isArray,
+  stringRandom,
+  data2Option,
 } from '@/common/utils';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 
@@ -14,104 +17,46 @@ const { Option } = Select;
 export default (props) => {
   const { Option } = Select;
 
-  const { displayValue, displayName, placeholder, style, getPort, onChange, tag } = props;
+  const { value, displayName, placeholder, style, getUser, tag, onChange, ...others } = props;
+  const [beTrigger, setBeTrigger] = useState(true);
+  const [keyword, setKeyword] = useState();
+  useEffect(() => {
+    if (value && displayName && beTrigger) {
+      const labelInValue = { label: displayName, value: value };
+      const option = [labelInValue];
+      setOptionData(option);
+      setKeyword(labelInValue);
+    } else if (value) {
+      fetchUser(value);
+    }
+  }, [displayName, value]);
 
-  const [keyword, setKeyword] = useAutoObservable(
-    (input$) => input$.pipe(map((v) => (isEmpty(v) ? undefined : [{ label: v[0], value: v[1] }]))),
-    displayName && displayValue ? [displayName, displayValue] : [],
-  );
+  const fetchUser = (id) => {
+    api.user.getUser(id).subscribe({
+      next:(data) => {
+        const u = data2Option('id','userRealCnName',data);
+        setOptionData(u);
+        setKeyword(u[0]);
+      }
+    })
+  }
 
-  const [onSearch, optionData] = useObservableAutoCallback((event) =>
+  const [onSearch, optionData, setOptionData] = useObservableAutoCallback((event) =>
     event.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((v) => api.ouser.listByKeyword(tag, v)),
+      switchMap((v) => api.user.listByKeyword(tag || '', v || '')),
     ),
   );
 
-  // const doOnChange = (selectItem) => {
-  //   // setFlag(false);
-  //   setKeyword(selectItem || {});
-  //   props.onChange(selectItem?.value || '');
-  //   if (props.getPort) {
-  //     R.forEach((v) => {
-  //       if (v.value === selectItem?.value) {
-  //         props.getPort(v.item);
-  //         return;
-  //       }
-  //     }, optionData);
-  //   }
-  // };
   const [doOnChange] = useObservableAutoCallback((event) =>
     event.pipe(
+      tap((v) => setBeTrigger(false)),
       tap((v) => setKeyword(v || {})),
-      tap((v) => onChange && onChange(v?.value)),
+      tap((v) => onChange && onChange(v?.value || '')),
+      tap((v) => getUser && getUser(v || {})),
     ),
   );
-
-  // const { value, label, mode } = props;
-  // const [keyword, setKeyword] = useState();
-  // const [optionData, setOptionData] = useState([]);
-  // const delayedQuery = useRef(debounce((value) => loadData(value), 100)).current;
-  // const [flag, setFlag] = useState(true);
-
-  // useEffect(() => {
-  //   if (mode) {
-  //     getUser(value);
-  //   } else {
-  //     if (value && label && flag) {
-  //       let data = {
-  //         label: label,
-  //         value: value,
-  //       };
-  //       setOptionData([data]);
-  //       setKeyword(data);
-  //     } else {
-  //       fetchUser();
-  //     }
-  //   }
-  // }, [value, label]);
-
-  // const getUser = (code) => {
-  //   if (code) {
-  //     api.user.getUserByCode(code).then((body) => {
-  //       const { data } = body;
-  //       const values = data.map((item) => ({
-  //         label: `${item.userRealCnName}`,
-  //         value: `${item.userName}`,
-  //       }));
-  //       setOptionData(values);
-  //       setKeyword(values);
-  //     });
-  //   }
-  // };
-
-  // const fetchUser = (keywords) => {
-  //   delayedQuery(keywords);
-  // };
-
-  // const loadData = (keywords) => {
-  //   wrapObservable(api.user.listByKeyword, props.Tag, keywords || '').subscribe({
-  //     next: (body) => {
-  //       const data = R.map((item) => ({
-  //         label: `${item.userRealCnName}`,
-  //         value: `${item.userName}`,
-  //       }))(body);
-  //       setOptionData(data);
-  //     },
-  //   });
-  // };
-
-  // const handleChange = (selectItem) => {
-  //   setFlag(false);
-  //   setKeyword(selectItem);
-  //   if (props.mode) {
-  //     const values = selectItem.map((item) => item.value);
-  //     props.onChange(values.toString() || '');
-  //   } else {
-  //     props.onChange(selectItem?.value || '');
-  //   }
-  // };
 
   return (
     <Select
@@ -125,8 +70,9 @@ export default (props) => {
       onSearch={onSearch}
       onChange={doOnChange}
       style={style}
+      {...others}
     >
-      {optionData && optionData.map((item) => <Option key={item.value}>{item.label}</Option>)}
+      {optionData && isArray(optionData) && optionData.map((item) => <Option value={item.value} key={stringRandom(16) + item.value}>{item.label}</Option>)}
     </Select>
   );
 };

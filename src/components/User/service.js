@@ -17,7 +17,7 @@ export function listByKeyword(tag, keyword) {
       return rmap(
         (item) => ({
           label: `${item.userRealCnName}`,
-          value: `${item.userName}`,
+          value: `${item.id}`,
         }),
         theData,
       );

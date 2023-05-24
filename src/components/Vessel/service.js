@@ -16,7 +16,7 @@ export function listByKeyword(keyword) {
       const theData = data || [];
       return rmap(
         (item) => ({
-          label: `${item.enName} | ${item.countryName}`,
+          label: `${item.shipName}`,
           value: `${item.id}`,
           item: item,
         }),

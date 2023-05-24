@@ -5,7 +5,7 @@ export default (props) => {
   const show = visible === false ? false : true;
   return (
     <IIF test={show}>
-      <FooterToolbar>{children}</FooterToolbar>
+      <FooterToolbar {...others}>{children}</FooterToolbar>
     </IIF>
   );
 };

@@ -6,20 +6,39 @@ import {
   useAutoObservable,
   isEmpty,
   forEach,
+  stringRandom,
 } from '@/common/utils';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, tap, filter } from 'rxjs/operators';
 
 const Vessel = (props) => {
   const { Option } = Select;
 
-  const { displayValue, displayName, placeholder, style, onChange } = props;
+  const { value, displayName, placeholder, style, onChange } = props;
+  const [beTrigger, setBeTrigger] = useState(true);
+  const [keyword, setKeyword] = useState();
+  useEffect(() => {
+    if (value && displayName && beTrigger) {
+      const labelInValue = { label: displayName, value: value };
+      const option = [labelInValue];
+      setOptionData(option);
+      setKeyword(labelInValue);
+    }
+  }, [displayName, value]);
+  // const [keyword, setKeyword] = useAutoObservable(
+  //   (input$) =>
+  //     input$.pipe(
+  //       filter((v) => v && v[0] && v[1]),
+  //       map((v) => {
+  //         const labelInValue = { label: v[0], value: v[1] };
+  //         const option = [labelInValue];
+  //         setOptionData(option);
+  //         return labelInValue;
+  //       }),
+  //     ),
+  //   [displayName, value],
+  // );
 
-  const [keyword, setKeyword] = useAutoObservable(
-    (input$) => input$.pipe(map((v) => (isEmpty(v) ? undefined : [{ label: v[0], value: v[1] }]))),
-    displayName && displayValue ? [displayName, displayValue] : [],
-  );
-
-  const [onSearch, optionData] = useObservableAutoCallback((event) =>
+  const [onSearch, optionData, setOptionData] = useObservableAutoCallback((event) =>
     event.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -29,6 +48,7 @@ const Vessel = (props) => {
 
   const [doOnChange] = useObservableAutoCallback((event) =>
     event.pipe(
+      tap((v) => setBeTrigger(false)),
       tap((v) => setKeyword(v || {})),
       tap((v) => onChange && onChange(v)),
     ),
@@ -88,9 +108,12 @@ const Vessel = (props) => {
       onChange={doOnChange}
       style={style}
     >
-      {optionData.map((item) => (
-        <Option key={item.value}>{item.label}</Option>
-      ))}
+      {optionData &&
+        optionData.map((item) => (
+          <Option value={item.value} key={stringRandom(16) + item.value}>
+            {item.label}
+          </Option>
+        ))}
     </Select>
   );
 };
