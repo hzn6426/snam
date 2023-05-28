@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { api, isEmpty, useObservableAutoCallback, constant, md5 } from '@/common/utils';
+import { api, constant, isEmpty, md5 } from '@/common/utils';
 import Language from '@/components/Layout/Language';
 import { AntDesignOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Checkbox, Form, Input, message, Typography } from 'antd';
+import { Avatar, Button, Card, Checkbox, Form, Input, Typography, message } from 'antd';
 import { parse } from 'querystring';
-import { debounceTime, distinctUntilChanged, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { useState } from 'react';
 import { history, useIntl } from 'umi';
 const { Title } = Typography;
 const getPageQuery = () => parse(window.location.href.split('?')[1]);
@@ -64,26 +63,46 @@ export default (props) => {
     history.push(url);
   };
 
-  const [doFinish] = useObservableAutoCallback((event) =>
-    event.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      tap(() => setLoading(true)),
-      switchMap((v) => {
-        v.systemTag = 'admin';
-        v.userPasswd = md5(v.userPasswd);
-        return api.user.login(v).pipe(tap(handleRemeberMe(v)));
-      }),
-      map((data) => data[0]),
-      tap((v) => handleToken(v.access_token)),
-      switchMap(() => {
-        return api.user.loadUserButtons();
-      }),
-      tap((br) => sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || [])),
-      tap((v) => handleRedirect()),
-      shareReplay(1),
-    ), () => setLoading(false)
-  );
+  const doFinish = (v) => {
+    setLoading(true);
+    v.systemTag = 'admin';
+    v.userPasswd = md5(v.userPasswd);
+    api.user.login(v).subscribe({
+      next: (data) => {
+        const resp = data[0];
+        handleRemeberMe(v);
+        handleToken(resp.access_token);
+        handleRedirect();
+        api.user.loadUserButtons().subscribe({
+          next: (br) => {
+            sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || []);
+          }
+        });
+
+      }
+    }).add(() => setLoading(false));
+  }
+
+  // const [doFinish] = useObservableAutoCallback((event) =>
+  //   event.pipe(
+  //     debounceTime(400),
+  //     distinctUntilChanged(),
+  //     tap(() => setLoading(true)),
+  //     switchMap((v) => {
+  //       v.systemTag = 'admin';
+  //       v.userPasswd = md5(v.userPasswd);
+  //       return api.user.login(v).pipe(tap(handleRemeberMe(v)));
+  //     }),
+  //     map((data) => data[0]),
+  //     tap((v) => handleToken(v.access_token)),
+  //     switchMap(() => {
+  //       return api.user.loadUserButtons();
+  //     }),
+  //     tap((br) => sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || [])),
+  //     tap((v) => handleRedirect()),
+  //     shareReplay(1),
+  //   ), () => setLoading(false)
+  // );
 
   return (
     <Card

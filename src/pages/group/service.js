@@ -1,6 +1,4 @@
-import { ipost, iput, iget, iupload, isearch, idownload, getCache, setCache, constant, idelete, rmap, hasCache } from '@/common/utils';
-import { map, tap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { constant, idelete, iget, ipost, iput, isearch } from '@/common/utils';
 
 //查询
 export function treeAllGroupsAndUsers() {

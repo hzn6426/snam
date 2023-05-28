@@ -106,11 +106,9 @@ export default (props) => {
       case 'number':
         item = (
           <InputNumber
-            min={0}
             max={10000000}
             style={{ width: '100%' }}
             {...others}
-            onChange={() => { }}
           />
         );
         break;

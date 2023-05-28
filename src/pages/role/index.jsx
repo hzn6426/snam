@@ -1,63 +1,41 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { showDeleteConfirm } from '@/common/antd';
 import {
-  api,
-  forEach,
-  mapObjIndexed,
-  groupBy,
-  includes,
-  constant,
-  state2Option,
-  data2Option,
-  split,
-  useObservableAutoCallback,
-  useAutoObservableEvent,
-  useObservableAutoState,
-  pluck,
-  isEmpty,
-  beHasRowsPropNotEqual,
-  isArray,
-  join,
-  INewWindow,
-  copyObject,
-} from '@/common/utils';
-import {
+  IFooterToolbar,
   IFormItem,
   IGrid,
   ISearchForm,
-  IStatus,
-  ITag,
-  IModal,
-  Permit,
-  IFooterToolbar,
-  ILayout,
-  IFieldset,
+  IStatus
 } from '@/common/components';
-import produce from 'immer';
-import { For } from 'react-loops';
-import { showDeleteConfirm } from '@/common/antd';
-import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Modal } from 'antd';
 import {
-  concatMap,
-  debounceTime,
-  distinctUntilChanged,
-  exhaustMap,
-  filter,
-  map,
-  mergeMap,
-  shareReplay,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs/operators';
-import { of, zip, EMPTY, from } from 'rxjs';
+  INewWindow,
+  api,
+  beHasRowsPropNotEqual,
+  isEmpty,
+  pluck,
+  state2Option,
+  useAutoObservableEvent,
+  useObservableAutoCallback
+} from '@/common/utils';
 import {
-  BarsOutlined,
-  ScheduleOutlined,
-  SaveOutlined,
-  CheckSquareOutlined,
-  CloseSquareOutlined,
   PlusOutlined
 } from '@ant-design/icons';
+import { Button, Form, message } from 'antd';
+import { useRef, useState } from 'react';
+import { of } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  shareReplay,
+  switchMap,
+  tap
+} from 'rxjs/operators';
+
+const roleState = {
+  UNACTIVE: { text: '未激活', status: 'Warning' },
+  ACTIVE: { text: '启用', status: 'Success' },
+};
+
 
 const StateRenderer = (props) => {
   return props.value && <IStatus value={props.value} state={roleState} />;
@@ -95,10 +73,6 @@ const initColumns = [
   }
 ];
 
-const roleState = {
-  UNACTIVE: { text: '未激活', status: 'Warning' },
-  ACTIVE: { text: '启用', status: 'Success' },
-};
 
 export default (props) => {
   const [searchForm] = Form.useForm();
@@ -240,11 +214,11 @@ export default (props) => {
     setSearchLoading(true);
     let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
     api.role.searchRole(param).subscribe({
-        next: (data) => {
-          setDataSource(data.data);
-          setTotal(data.total);
-        },
-      })
+      next: (data) => {
+        setDataSource(data.data);
+        setTotal(data.total);
+      },
+    })
       .add(() => {
         setSearchLoading(false);
       });
@@ -329,8 +303,8 @@ export default (props) => {
           删除
         </Button>
         <Button type="primary" key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
-              添加用户
-            </Button>
+          添加用户
+        </Button>
         <Button
           key="grant"
           onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}

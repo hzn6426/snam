@@ -19,8 +19,11 @@ import * as role from '@/pages/role/service';
 // import * as sendlog from '@/pages/sendlog/service';
 // import * as box from '@/components/Box/service';
 // import * as syshmacuser from '@/pages/syshmacuser/service';
-import * as menu from '@/pages/menu/service';
+import * as column from '@/pages/column/service';
 import * as group from '@/pages/group/service';
+import * as logger from '@/pages/logger/service';
+import * as menu from '@/pages/menu/service';
+import * as param from '@/pages/param/service';
 import * as position from '@/pages/position/service';
 import * as uset from '@/pages/uset/service';
 
@@ -49,6 +52,9 @@ const api = {
   group,
   position,
   uset,
+  param,
+  logger,
+  column,
 };
 
 export default api;

@@ -1,18 +1,17 @@
-import React, { useRef, useState } from 'react';
-import { api, useAutoObservable, useAutoObservableEvent, forEach, isEmpty, copyObject, forEachObject, produce, mapObjIndexed, contains, groupBy } from '@/common/utils';
-import { IFormItem, ILayout, IWindow, IFieldset, IFor } from '@/common/components';
-import { Card, Tree, Checkbox, Space, Button, message } from 'antd';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { IFieldset, IFor, IFormItem, ILayout, IWindow } from '@/common/components';
+import { api, contains, copyObject, forEach, forEachObject, groupBy, isEmpty, mapObjIndexed, produce, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
+import { Button, Card, Checkbox, Space, Tree } from 'antd';
+import { useRef, useState } from 'react';
+import { zip } from 'rxjs';
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
-import { zip } from 'rxjs'
 
 import {
     BarsOutlined,
-    ScheduleOutlined,
-    SaveOutlined,
     CheckSquareOutlined,
     CloseSquareOutlined,
-    PlusOutlined
+    SaveOutlined,
+    ScheduleOutlined
 } from '@ant-design/icons';
 
 
@@ -234,7 +233,7 @@ export default (props) => {
                                             const privileges = {
                                                 buttons: permButtonIds,
                                                 menuId,
-                                                roleId: roleModalItem[0],
+                                                roleId: current.roleId,
                                             };
                                             onButtonSave(privileges);
                                         }}

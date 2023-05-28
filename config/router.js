@@ -104,6 +104,21 @@ export default [
                 path: '/new/position/:id',
                 component: './position/save',
               },
+              {
+                name: '编辑菜单',
+                path: '/new/menu/save',
+                component: './menu/save',
+              },
+              {
+                name: '编辑按钮',
+                path: '/new/menu/button',
+                component: './menu/button',
+              },
+              {
+                name: '编辑参数',
+                path: '/new/param/save',
+                component: './param/save',
+              },
 
               // {
               //   name: '公司充值',
@@ -224,12 +239,12 @@ export default [
               //   path: '/system/resource',
               //   component: './resource',
               // },
-              // {
-              //   name: 'logger',
-              //   icon: 'smile',
-              //   path: '/system/logger',
-              //   component: './logger',
-              // },
+              {
+                name: '日志管理',
+                icon: 'smile',
+                path: '/system/logger',
+                component: './logger',
+              },
               // {
               //   name: 'file',
               //   icon: 'smile',
@@ -242,12 +257,18 @@ export default [
                 path: '/system/dictionary',
                 component: './dict',
               },
-              // {
-              //   name: 'param',
-              //   icon: 'smile',
-              //   path: '/system/param',
-              //   component: './param',
-              // },
+              {
+                name: '参数管理',
+                icon: 'smile',
+                path: '/system/param',
+                component: './param',
+              },
+              {
+                name: '数据列',
+                icon: 'smile',
+                path: '/system/pcolumn',
+                component: './column',
+              },
               // {
               //   name: 'menu',
               //   icon: 'smile',

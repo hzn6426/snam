@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useImperativeHandle } from 'react';
-import { Pagination, Drawer, Space, Tooltip, Spin } from 'antd';
-import { SettingOutlined, ReloadOutlined } from '@ant-design/icons';
-import { copyObject, forEach, isFunction, pluk, product } from '@/common/utils';
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { copyObject, forEach } from '@/common/utils';
+import { ReloadOutlined, SettingOutlined } from '@ant-design/icons';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { Drawer, Pagination, Space, Spin, Tooltip } from 'antd';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 // import './index.less';
 import * as R from 'ramda';
 const IGrid = React.forwardRef((props, ref) => {
@@ -18,11 +18,12 @@ const IGrid = React.forwardRef((props, ref) => {
     // onInitGridColumns,
     request,
     dataSource,
+    showQuickJumper,
     pageNo,
     pageSize,
     total,
     components,
-    toolbar,
+    toolBar,
     toolBarRender,
     rowSelection,
     childRef,
@@ -111,6 +112,7 @@ const IGrid = React.forwardRef((props, ref) => {
                 : 'centerAlign')
           }
           valueFormatter={v.valueFormatter}
+          valueGetter={v.valueGetter}
           cellEditorSelector={v.cellEditorSelector}
           editable={v.editable}
           suppressMovable={v.suppressMovable}
@@ -198,6 +200,7 @@ const IGrid = React.forwardRef((props, ref) => {
           beHide: checkedValues.indexOf(colDef.field) === -1,
           cellRenderer: colDef.cellRenderer,
           valueFormatter: colDef.valueFormatter,
+          valueGetter: colDef.valueGetter,
           cellEditorSelector: colDef.cellEditorSelector,
           editable: colDef.editable,
           suppressMovable: colDef.suppressMovable,
@@ -374,6 +377,7 @@ const IGrid = React.forwardRef((props, ref) => {
           //beHide: checkedValues.indexOf(colDef.field) === -1,
           cellRenderer: colDef.cellRenderer,
           valueFormatter: colDef.valueFormatter,
+          valueGetter: colDef.valueGetter,
           cellEditorSelector: colDef.cellEditorSelector,
           editable: colDef.editable,
           suppressMovable: colDef.suppressMovable,
@@ -412,7 +416,7 @@ const IGrid = React.forwardRef((props, ref) => {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ fontWeight: 'bold', fontSize: '16px' }}>
           {title}
-          {toolbar && toolbar.map((obj) => obj)}
+          {toolBar && toolBar.map((obj) => obj)}
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {toolBarRender && toolBarRender.map((obj) => obj)}
@@ -570,14 +574,14 @@ const IGrid = React.forwardRef((props, ref) => {
           total={total || 0}
           current={ipageNo || 0}
           pageSize={ipageSize || 0}
-          showQuickJumper
+          showQuickJumper={showQuickJumper === false ? false : true}
           size="small"
           onChange={(page, limit) => {
             setIpageNo(page);
             setIpageSize(limit);
             request && request(page, limit);
           }}
-          showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/总共 ${total} 条`}
+          showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/共 ${total} 条`}
         />
 
       </div>

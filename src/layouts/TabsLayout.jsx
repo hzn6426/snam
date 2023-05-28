@@ -1,28 +1,28 @@
-import ProLayout from '@ant-design/pro-layout';
-import React, { useEffect, useRef, useState } from 'react';
-import { history, Link, useIntl } from 'umi';
+import { PubSub, api, constant, getQueryString, produce } from '@/common/utils';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import logo from '../assets/logo.png';
-import { getQueryString, constant, produce, api, PubSub } from '@/common/utils';
-import defaultSettings from '../../config/defaultSettings';
 import Blog from '@/pages/dashboard/blog';
-import { Tabs } from 'antd';
-import routeCache from '../../config/routerCache.js';
 import {
   AppstoreOutlined,
   CarryOutOutlined,
   DashboardOutlined,
   FileDoneOutlined,
+  FileSearchOutlined,
+  LineChartOutlined,
+  MessageOutlined,
   MoneyCollectOutlined,
   RedoOutlined,
   SettingOutlined,
   ShopOutlined,
   TeamOutlined,
   TransactionOutlined,
-  MessageOutlined,
-  FileSearchOutlined,
-  LineChartOutlined,
 } from '@ant-design/icons';
+import ProLayout from '@ant-design/pro-layout';
+import { Tabs } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { Link, history, useIntl } from 'umi';
+import defaultSettings from '../../config/defaultSettings';
+import routeCache from '../../config/routerCache.js';
+import logo from '../assets/auth.svg';
 
 const iconEnum = {
   dashboard: <DashboardOutlined />,
@@ -109,7 +109,7 @@ const BasicLayout = (props) => {
               path: beHaveTabTitle
                 ? `${props.location.pathname}?tabTitle=${tabTitle}`
                 : props.location.pathname,
-              content: produce(props.children, () => {}),
+              content: produce(props.children, () => { }),
             });
           } else {
             setTabIndex(-1);
@@ -119,7 +119,7 @@ const BasicLayout = (props) => {
               path: beHaveTabTitle
                 ? `${props.location.pathname}?tabTitle=${tabTitle}`
                 : props.location.pathname,
-              content: produce(props.children, () => {}),
+              content: produce(props.children, () => { }),
             });
           }
         });

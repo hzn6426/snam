@@ -308,10 +308,8 @@ export default () => {
                         </div>
                     )}
                 />
-
             </Col>
             <Col span={17}>
-
                 <IGrid
                     title="职位列表"
                     initColumns={initColumns}

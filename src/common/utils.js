@@ -1,66 +1,47 @@
-import { useState, useEffect } from 'react';
-import * as R from 'ramda';
+import { produce } from 'immer';
+import * as _ from 'lodash';
 import objectAssign from 'object-assign';
 import { parse } from 'querystring';
-import * as _ from 'lodash';
-import { produce } from 'immer';
-export { produce };
+import * as R from 'ramda';
+import { useEffect, useState } from 'react';
 import stringRandom from 'string-random';
 
-export { stringRandom };
+
+
 
 import md5 from 'js-md5';
 
-export { md5 };
 
-import { BehaviorSubject, tap } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { tap } from 'rxjs';
 
 import PubSub from 'pubsub-js';
 
-export { PubSub };
 
 import moment from 'moment';
 
-export { moment };
 
 import {
-  useRefFn,
+  pluckCurrentTargetChecked,
+  pluckCurrentTargetValue,
+  pluckFirst,
   useObservable,
   useObservableCallback,
   useObservableState,
+  useRefFn,
   useSubscription,
-  pluckFirst,
-  pluckCurrentTargetChecked,
-  pluckCurrentTargetValue,
 } from 'observable-hooks';
 
-export {
-  useRefFn,
-  useObservable,
-  useObservableCallback,
-  useObservableState,
-  useSubscription,
-  pluckFirst,
-  pluckCurrentTargetChecked,
-  pluckCurrentTargetValue,
-};
 
-import { isearch, ipost, iput, iget, idelete, iupload, idownload } from './request';
+import { idelete, idownload, iget, ipost, iput, isearch, iupload } from './request';
 
-export { isearch, ipost, iput, iget, idelete, iupload, idownload };
 
-import { removeCache, getCache, setCache, hasCache } from './cache';
+import { getCache, hasCache, removeCache, setCache } from './cache';
 
-export { removeCache, getCache, setCache, hasCache };
 
 import api from './service';
 
-export { api };
 
 import constant from './constant';
-
-export { constant };
 
 export const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({
@@ -111,7 +92,7 @@ export const isNil = (data) => {
 
 export const cloneDeep = (data) => {
   return _.cloneDeep(data);
-}
+};
 
 //==========================================
 // const App = (props) => {
@@ -736,7 +717,7 @@ export const INewWindow = (props) => {
 
   setTimeout(function () { popup.document.title = title }, 1000);
 
-}
+};
 
 
 //格式化数字
@@ -765,7 +746,7 @@ export const formatNumber = (v, fixNum) => {
       suffix = '';
   }
   return v ? toFixed(v, fixNum) : suffix;
-}
+};
 
 function toFixed(n, d) {
   var s = n + "";
@@ -793,3 +774,23 @@ function toFixed(n, d) {
   }
   return this + "";
 };
+
+export { produce };
+export { stringRandom };
+export { md5 };
+export { PubSub };
+export { moment };
+export {
+  useRefFn,
+  useObservable,
+  useObservableCallback,
+  useObservableState,
+  useSubscription,
+  pluckFirst,
+  pluckCurrentTargetChecked,
+  pluckCurrentTargetValue,
+};
+export { isearch, ipost, iput, iget, idelete, iupload, idownload };
+export { removeCache, getCache, setCache, hasCache };
+export { api };
+export { constant };

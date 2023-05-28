@@ -278,6 +278,20 @@ export default Object.freeze({
   // 停用
   API_SYSHMACUSER_STOPSTATE: '/authority/hmacUser/stop',
 
+  //= ==============================================//
+  //                   参数管理                      //
+  //= ==============================================//
+  // 参数查找
+  API_PARAM_SEARCH: '/authority/param/search',
+  // 参数增删改查
+  API_PARAM: '/authority/param',
+
+  //= ==============================================//
+  //                   日志管理                      //
+  //= ==============================================//
+  // 日志查询
+  API_LOGGER_SEARCH: '/authority/userLog/search',
+
   //==============================================================//
   // 菜单管理                                                      //
   //==============================================================//
@@ -291,7 +305,7 @@ export default Object.freeze({
   // 按钮查询
   API_SEARCH_BUTTON_AND_API_BY_MENU: '/authority/button/searchButtonsAndApiByMenu',
   // 按钮 新增 更新
-  API_BUTTON_SAVE_OR_UPDATE: '/authority/button/saveOrUpdateButton',
+  API_BUTTON_SAVE_OR_UPDATE: '/authority/button/saveOrUpdate',
   // 按钮 删除
   API_BUTTON_DELETE: '/authority/button',
   // ID
@@ -369,4 +383,17 @@ export default Object.freeze({
   // 保存职位角色
   API_POSITION_SAVE_POSITION_ROLES: '/authority/position/savePositionRole',
 
+  //= ==============================================//
+  //                   数据权限列                     //
+  //= ==============================================//
+  // 获取所有表格
+  API_PERM_FETCH_TABLE: '/authority/dataPermColumn/fetchTables',
+  // 获取表所对应的列
+  API_PERM_FETCH_TABLE_COLUMN: '/authority/dataPermColumn/fetchColumnByTableWithPerm',
+  // 获取表格对应的数据权限列
+  API_PERM_TABLE_PERM_COLUMN: '/authority/dataPermColumn/listPermColumnsByTable',
+  // 获取表格列表对应的数据权限列
+  API_PERM_TABLE_PERM_COLUMN_BY_TABLES: '/authority/dataPermColumn/listPermColumnsByTables',
+  // 数据权限列增删改查
+  API_PERM: '/authority/dataPermColumn',
 });
