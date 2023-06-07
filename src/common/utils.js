@@ -32,7 +32,7 @@ import {
 } from 'observable-hooks';
 
 
-import { idelete, idownload, iget, ipost, iput, isearch, iupload } from './request';
+import { idelete, idownload, iget, ilogin, ipost, iput, isearch, iupload } from './request';
 
 
 import { getCache, hasCache, removeCache, setCache } from './cache';
@@ -402,7 +402,7 @@ export const isEmpty = (objOrArr) => {
 // contains('a',arr) //=> true
 //==========================================
 export const contains = (item, array) => {
-  return R.indexOf(item, array);
+  return array.includes(item);
 };
 
 //==========================================
@@ -790,7 +790,8 @@ export {
   pluckCurrentTargetChecked,
   pluckCurrentTargetValue,
 };
-export { isearch, ipost, iput, iget, idelete, iupload, idownload };
+export { isearch, ipost, iput, iget, idelete, iupload, idownload, ilogin };
 export { removeCache, getCache, setCache, hasCache };
 export { api };
 export { constant };
+

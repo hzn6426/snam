@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import { isFunction } from '@/common/utils';
+import Box from '@/components/Box';
+import Country from '@/components/Country';
+import Customer from '@/components/Customer';
+import Dict from '@/components/Dict';
+import EntrustShipCompany from '@/components/EntrustShipCompany';
+import Pack from '@/components/Pack';
+import Port from '@/components/Port';
+import ShipCompany from '@/components/ShipCompany';
+import Transceiver from '@/components/Transceiver';
+import User from '@/components/User';
+import Vessel from '@/components/Vessel';
+import XInput from '@/components/XInput';
+
 import {
   Button,
+  Checkbox,
+  DatePicker,
   Form,
   Input,
-  DatePicker,
-  Select,
-  Radio,
-  Checkbox,
   InputNumber,
+  Radio,
+  Select,
   Switch,
 } from 'antd';
 import moment from 'moment';
-import Dict from '@/components/Dict';
-import User from '@/components/User';
-import Customer from '@/components/Customer';
-import Transceiver from '@/components/Transceiver';
-import Vessel from '@/components/Vessel';
-import ShipCompany from '@/components/ShipCompany';
-import Port from '@/components/Port';
-import Pack from '@/components/Pack';
-import Country from '@/components/Country';
-import EntrustShipCompany from '@/components/EntrustShipCompany';
-import Box from '@/components/Box';
-import XInput from '@/components/XInput';
-import { isFunction } from '@/common/utils';
+import { useEffect, useState } from 'react';
+import IStatus from '../IStatus';
 export default (props) => {
   const {
     xtype,
@@ -176,6 +178,12 @@ export default (props) => {
         break;
       case 'switch':
         item = <Switch {...others} />;
+        break;
+      case 'state':
+        item = <IStatus state={props.state} />
+        break;
+      case 'span':
+        item = <span className="ant-form-text">{children}</span>
         break;
       case 'empty':
         beFormItem = false;

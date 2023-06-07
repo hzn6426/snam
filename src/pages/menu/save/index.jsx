@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
 import { IFormItem, ILayout, IWindow } from '@/common/components';
-import { message, Radio, Select } from 'antd';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { api } from '@/common/utils';
+import { Radio, Select, message } from 'antd';
+import { useEffect, useState } from 'react';
 import { useParams } from 'umi';
 
 const { Option } = Select;
@@ -64,7 +63,7 @@ export default (props) => {
                     <Option value="ADMIN">系统</Option>
                     <Option value="BUSINESS">业务</Option>
                 </IFormItem>
-                <IFormItem name="iconCls" label="图标" xtype="input" required max={20} />
+                <IFormItem name="iconCls" label="图标" xtype="input" max={20} />
                 <IFormItem name="beUnauth" label="忽略授权" xtype="radio" defaultValue={false} >
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>

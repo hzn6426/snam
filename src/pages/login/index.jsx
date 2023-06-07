@@ -1,24 +1,43 @@
 import { api, constant, isEmpty, md5 } from '@/common/utils';
-import Language from '@/components/Layout/Language';
-import { AntDesignOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Checkbox, Form, Input, Typography, message } from 'antd';
+import { LockTwoTone, UserOutlined } from '@ant-design/icons';
+import { Alert, Button, Checkbox, Form, Input, Typography, message } from 'antd';
 import { parse } from 'querystring';
 import { useState } from 'react';
 import { history, useIntl } from 'umi';
+import styles from './index.less';
 const { Title } = Typography;
 const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
+const LoginMessage = ({ content }) => (
+  <Alert
+    style={{
+      marginBottom: 24,
+    }}
+    message={content}
+    type="error"
+    showIcon
+  />
+);
 export default (props) => {
   const { formatMessage } = useIntl(); //国际化
   const [loading, setLoading] = useState(false);
-
   //读取cookies
   const getCookie = (name) => {
     var arr,
       reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
-    if ((arr = document.cookie.match(reg))) return encodeURI(arr[2]);
+    if ((arr = document.cookie.match(reg))) return unescape(arr[2]);
     else return null;
   };
+
+  // Form 数据
+  const [form] = Form.useForm();
+  const [checked, setChecked] = useState(getCookie(constant.SYSTEM_AVATAR_NAME + 'userPasswd') ? true : false);
+  const [userName, setUserName] = useState(getCookie(constant.SYSTEM_AVATAR_NAME + 'userName'));
+  const [userPasswd, setUserPasswd] = useState(getCookie(constant.SYSTEM_AVATAR_NAME + 'userPasswd'));
+  const [errorMessage, setErrorMessage] = useState('');
+  const [beError, setBeError] = useState(false);
+
+
 
   const handleToken = (token) => {
     let itoken;
@@ -29,27 +48,25 @@ export default (props) => {
   };
 
   const handleRemeberMe = (values) => {
-    const { userName, userPasswd, remember } = values;
-    if (remember) {
-      var exp = new Date();
-      exp.setTime(exp.getTime() + 7 * 24 * 60 * 60 * 1000);
-      document.cookie = 'userName=' + decodeURI(userName) + ';expires=' + exp.toGMTString();
-      document.cookie = 'userPasswd=' + decodeURI(userPasswd) + ';expires=' + exp.toGMTString();
+    const { userName, userPasswd, autoLogin, groupId } = values;
+    var exp = new Date();
+    exp.setTime(exp.getTime() + 7 * 24 * 60 * 60 * 1000);
+    document.cookie = constant.SYSTEM_AVATAR_NAME + 'userName=' + escape(userName) + ';expires=' + exp.toGMTString();
+    if (autoLogin) {
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape(values.originPassword) + ";expires=" + exp.toGMTString();
     } else {
-      var exp = new Date();
       exp.setTime(exp.getTime() - 1);
-      document.cookie = 'userName=;expires=' + exp.toGMTString();
-      document.cookie = 'userPasswd=;expires=' + exp.toGMTString();
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape('') + ";expires=" + exp.toGMTString();
     }
   };
 
   const handleRedirect = () => {
     const urlParams = new URL(window.location.href);
     const params = getPageQuery();
-    message.success(`${formatMessage({ id: 'message.login.success' })}`);
-    localStorage.setItem('umi-locale', localStorage.getItem('umi-locale') || 'zh-CN');
+    message.success('登录成功');
+    // localStorage.setItem('umi-locale', localStorage.getItem('umi-locale') || 'zh-CN');
     let { redirect } = params;
-    let url = '/';
+    let url = '/dashboard/workplace';
     if (redirect) {
       const redirectUrlParams = new URL(redirect);
       if (redirectUrlParams.origin === urlParams.origin) {
@@ -63,11 +80,49 @@ export default (props) => {
     history.push(url);
   };
 
+  // const loadUserGroups = () => {
+  //   const v = form.getFieldsValue();
+  //   if (!v.userName || !v.userPasswd) {
+  //     return;
+  //   }
+  //   v.userPasswd = md5(v.userPasswd);
+  //   api.user.validateUserForDepartments(v).subscribe({
+  //     next: (res) => {
+  //       const code = res.code;
+  //       if (code != 200) {
+  //         setBeError(true);
+  //         setErrorMessage(res.message);
+  //         return;
+  //       } else {
+  //         setBeError(false);
+  //         setErrorMessage('');
+  //       }
+  //       let groups = res.data;
+  //       let deptId;
+  //       const list = [];
+  //       forEach((v) => {
+  //         if (!deptId) {
+  //           deptId = v.groupId;
+  //         }
+  //         let companyName = v.companyName;
+  //         if (isNil(companyName)) {
+  //           companyName = '';
+  //         }
+  //         list.push({ label: (companyName && (companyName + '-')) + v.groupName, value: v.groupId });
+  //       }, groups);
+  //       setOptions(list);
+  //       form.setFieldsValue({ groupId: deptId });
+  //     }
+  //   });
+  // }
+  // const delayedQuery = useRef(debounce(() => loadUserGroups(), 200)).current;
+
   const doFinish = (v) => {
     setLoading(true);
     v.systemTag = 'admin';
     v.userPasswd = md5(v.userPasswd);
-    api.user.login(v).subscribe({
+    v.originPassword = v.userPasswd
+    api.user.login(v, v.systemTag).subscribe({
       next: (data) => {
         const resp = data[0];
         handleRemeberMe(v);
@@ -105,77 +160,79 @@ export default (props) => {
   // );
 
   return (
-    <Card
-      style={{
-        width: 420,
-        margin: '0 auto',
-        top: 'calc(50% - 300px)',
-        padding: '20px 30px 0',
-        backgroundColor: 'rgba(255,255,255,0.8)',
-        borderRadius: '15px',
-      }}
-    >
-      <Title level={3}>
-        <Avatar
-          size={36}
-          icon={<AntDesignOutlined />}
-          style={{ margin: '0 30px', background: '#1890ff' }}
-        />
-        {formatMessage({ id: 'login.loginTitle' })}
-      </Title>
+    <div className={styles.main}>
       <Form
-        size="small"
-        style={{ marginTop: '30px' }}
+        name="basic"
         initialValues={{
-          remember: getCookie('userName') ? true : false,
-          userName: getCookie('userName'),
-          userPasswd: getCookie('userPasswd'),
+          autoLogin: checked,
+          userName: userName,
+          userPasswd: userPasswd,
         }}
-        onFinish={doFinish}
+        autoComplete="off"
+        className="snam-form"
+        form={form}
+        onFinish={(values) => {
+          // objectAssign(values, { userPasswd: md5(values.userPasswd), originPassword: values.userPasswd });
+          // values.systemTag = 'business' + values.groupId;
+          doFinish(values);
+        }}
       >
-        <Form.Item name="userName" rules={[{ required: true, message: false }]}>
+        {beError && (
+          <LoginMessage
+            content={errorMessage}
+          />)}
+        <Form.Item name="userName" label="账号" rules={[
+          {
+            required: true,
+            message: '请输入账号!'
+          },
+        ]}>
           <Input
-            prefix={<UserOutlined />}
-            type="text"
-            placeholder={formatMessage({ id: 'login.username' })}
-            size="large"
+            autoFocus={true}
+            // onBlur={delayedQuery}
+            prefix={<UserOutlined className={styles.prefixIcon} />}
+            placeholder="请输入账号"
           />
         </Form.Item>
-
-        <Form.Item name="userPasswd" rules={[{ required: true, message: false }]}>
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder={formatMessage({ id: 'login.password' })}
-            size="large"
+        <Form.Item name="userPasswd" label="密码" rules={[
+          {
+            required: true,
+            message: '请输入密码！'
+          },
+        ]}>
+          <Input.Password
+            // onBlur={delayedQuery}
+            prefix={<LockTwoTone className={styles.prefixIcon} />}
+            placeholder="请输入密码"
           />
         </Form.Item>
-
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>{formatMessage({ id: 'login.rememberPassword' })}</Checkbox>
+        {/* <Form.Item name="groupId" label="组织" rules={[{ required: true, message: "请选择组织!" }]}>
+          <Select
+            options={options}
+            prefix={<ApartmentOutlined />}
+            placeholder="请选择组织"
+          />
+        </Form.Item> */}
+        <div style={{ marginLeft: '54px', marginBottom: '30px' }}>
+          <Form.Item name="autoLogin" valuePropName="checked" noStyle >
+            <Checkbox>记住密码</Checkbox>
           </Form.Item>
-          <a href="" style={{ float: 'right' }}>
-            {formatMessage({ id: 'login.forgotPassword' })}
-          </a>
-        </Form.Item>
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            size="large"
-            shape="round"
-            style={{ width: '100%' }}
-            loading={loading}
-          >
-            {formatMessage({ id: 'login.loginBtn' })}
-          </Button>
-        </Form.Item>
-        <Form.Item style={{ margin: '0px' }}>
-          <Language onChange={(e) => { }} />
-        </Form.Item>
+        </div>
+        <div style={{ marginLeft: '54px' }}>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              shape="round"
+              style={{ width: '200px' }}
+              loading={loading}
+            >
+              登录
+            </Button>
+          </Form.Item>
+        </div>
       </Form>
-    </Card >
+    </div>
   );
 };

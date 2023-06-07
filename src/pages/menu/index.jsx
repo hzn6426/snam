@@ -1,5 +1,5 @@
 import { IFooterToolbar, IGrid, ISearchTree, IStatus, Permit } from '@/common/components';
-import { INewWindow, api, forEach, isEmpty, pluck, useObservableAutoCallback } from '@/common/utils';
+import { INewWindow, api, copyObject, forEach, isEmpty, pluck } from '@/common/utils';
 import {
     AppstoreOutlined,
     AppstoreTwoTone,
@@ -21,8 +21,6 @@ import {
     message
 } from 'antd';
 import objectAssign from 'object-assign';
-import { of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, switchMap } from 'rxjs/operators';
 
 
 const StateRenderer = (props) => {
@@ -45,14 +43,20 @@ const TagActionRenderer = (props) => {
 // 列初始化
 const initColumns = [
     {
+        title: '按钮ID',
+        width: 140,
+        align: 'left',
+        dataIndex: 'id',
+    },
+    {
         title: '子菜单',
-        width: 90,
+        width: 70,
         align: 'center',
         dataIndex: 'subMenu',
     },
     {
         title: '按钮名称',
-        width: 180,
+        width: 120,
         align: 'left',
         dataIndex: 'buttonName',
     },
@@ -123,20 +127,27 @@ export default (props) => {
     const [selectedMenuName, setSelectedMenuName] = useState();
     //选中的按钮
     const [selectedRecords, setSelectedRecords] = useState([]);
+    //选中的按钮ID
+    const [selectedKeys, setSelectedKeys] = useState([]);
+
+    const onChange = (records) => {
+        setSelectedRecords(records);
+        setSelectedKeys(pluck('id', records));
+    }
 
 
 
-    const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
-        event.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap((v) => {
-                setSelectedRecords(v);
-                return of(pluck('id', v))
-            }),
-            shareReplay(1),
-        ),
-    );
+    // const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
+    //     event.pipe(
+    //         debounceTime(300),
+    //         distinctUntilChanged(),
+    //         switchMap((v) => {
+    //             setSelectedRecords(v);
+    //             return of(pluck('id', v))
+    //         }),
+    //         shareReplay(1),
+    //     ),
+    // );
 
 
     //设置图标
@@ -170,7 +181,7 @@ export default (props) => {
         const param = {
             id: '',
             name: '',
-            parent: node.id,
+            parentId: node.key,
             parentName: node && node.text,
             menuType: node && node.menuType,
             reqMethod: 'GET',
@@ -191,7 +202,7 @@ export default (props) => {
     const handleEditMenu = (node) => {
         const param = {
             id: node.key,
-            parent: node.parent,
+            parentId: node.parentId,
             menuName: node.text,
             parentName: node.parentGroupName,
             icon: node.iconCls,
@@ -210,7 +221,7 @@ export default (props) => {
     };
     // 删除菜单
     const handleDeleteMenu = (node) => {
-        const id = node.id;
+        const id = node.key;
         api.menu.deleteMenu([id]).subscribe({
             next: (data) => {
                 loadAllMenu();
@@ -243,11 +254,13 @@ export default (props) => {
             menuId: selectedMenuId,
             name: selectedMenuName,
             menuName: selectedMenuName,
-            ...button,
         };
+        if (button) {
+            copyObject(param, button);
+        }
         INewWindow({
             url: '/new/menu/button',
-            title: '新建按钮',
+            title: button.id ? '编辑菜单' : '新建按钮',
             width: 700,
             height: 600,
             callback: () => {
@@ -268,13 +281,13 @@ export default (props) => {
             return;
         }
         const button = selectedRecords[0];
-        button.id = '';
         const param = {
             menuId: selectedMenuId,
             name: selectedMenuName,
             menuName: selectedMenuName,
             ...button,
         };
+        param.id = '';
         INewWindow({
             url: '/new/menu/button',
             title: '复制新建按钮',

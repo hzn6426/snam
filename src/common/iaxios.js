@@ -1,15 +1,16 @@
-import axios from 'axios';
+import { constant, forEach, has, isNil } from '@/common/utils';
 import { message, notification } from 'antd';
-import { constant, has, isNil, forEach } from '@/common/utils';
+import axios from 'axios';
 import objectAssign from 'object-assign';
 import { defer, from, lastValueFrom } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 // 创建 axios 实例
 const service = axios.create({
   timeout: 60000,
   withCredentials: true,
 });
+
 
 const err = (error) => {
   const { response } = error;
@@ -125,6 +126,15 @@ export const wrapResult = (response) => {
     total: totalCount,
   });
 };
+
+export async function wpostWithheaders(purl, param, headers) {
+  return service.post(purl, param, {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      ...headers
+    },
+  });
+}
 
 /**
  * 封装post请求方法

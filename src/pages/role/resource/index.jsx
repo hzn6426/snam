@@ -1,6 +1,6 @@
 import { IFieldset, IFor, IFormItem, ILayout, IWindow } from '@/common/components';
 import { api, contains, copyObject, forEach, forEachObject, groupBy, isEmpty, mapObjIndexed, produce, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { Button, Card, Checkbox, Space, Tree } from 'antd';
+import { Button, Card, Checkbox, Space, Tree, message } from 'antd';
 import { useRef, useState } from 'react';
 import { zip } from 'rxjs';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
@@ -127,10 +127,26 @@ export default (props) => {
         () => setLoading(false),
     );
 
+    const onMenuSave = (privileges) => {
+        api.role.saveMenuPerm(privileges).subscribe({
+            next: () => {
+                message.success('操作成功!');
+            }
+        });
+    }
+
+    const onButtonSave = (privileges) => {
+        api.role.saveButtonPerm(privileges).subscribe({
+            next: () => {
+                message.success('操作成功!');
+            }
+        })
+    }
+
     return (
         <IWindow
-            ref={ref}
             current={current}
+            saveVisible={false}
             className="snam-modal"
             title='角色授权'
             width={clientWidth}
@@ -156,7 +172,7 @@ export default (props) => {
                                         type="primary"
                                         icon={<SaveOutlined />}
                                         onClick={() => {
-                                            const privileges = { menus: userPerms, roleId: roleModalItem[0] };
+                                            const privileges = { menus: userPerms, roleId: params.id };
                                             onMenuSave(privileges);
                                         }}
                                     >

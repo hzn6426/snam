@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button, Form, Card, Space } from 'antd';
-import { IFooterToolbar } from '@/common/components';
+import { IFooterToolbar, IIF } from '@/common/components';
 import { useWindowSize } from '@/common/utils';
-import { SaveOutlined, CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, Card, Form, Space } from 'antd';
+import { useEffect, useState } from 'react';
 
 export default (props) => {
+    const { saveVisible } = props;
     //窗口大小
     const { clientWidth, clientHeight } = useWindowSize();
     //modal初始值
@@ -70,17 +71,19 @@ export default (props) => {
             // }}
             >
                 <Space>
-                    <Button
-                        icon={<SaveOutlined />}
-                        type="primary"
-                        htmlType="submit"
-                        loading={confirmLoading}
-                        onClick={() => {
-                            doSubmit();
-                        }}
-                    >
-                        保存
-                    </Button>
+                    <IIF test={saveVisible !== false}>
+                        <Button
+                            icon={<SaveOutlined />}
+                            type="primary"
+                            htmlType="submit"
+                            loading={confirmLoading}
+                            onClick={() => {
+                                doSubmit();
+                            }}
+                        >
+                            保存
+                        </Button>
+                    </IIF>
                     <Button
                         icon={<CloseOutlined />}
                         type="danger"

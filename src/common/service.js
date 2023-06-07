@@ -21,10 +21,13 @@ import * as role from '@/pages/role/service';
 // import * as syshmacuser from '@/pages/syshmacuser/service';
 import * as column from '@/pages/column/service';
 import * as group from '@/pages/group/service';
+import * as hmac from '@/pages/hmac/service';
 import * as logger from '@/pages/logger/service';
 import * as menu from '@/pages/menu/service';
+import * as mlogger from '@/pages/mlogger/service';
 import * as param from '@/pages/param/service';
 import * as position from '@/pages/position/service';
+import * as resource from '@/pages/resource/service';
 import * as uset from '@/pages/uset/service';
 
 const api = {
@@ -55,6 +58,9 @@ const api = {
   param,
   logger,
   column,
+  resource,
+  hmac,
+  mlogger,
 };
 
 export default api;

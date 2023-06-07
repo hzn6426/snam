@@ -6,118 +6,32 @@ export default Object.freeze({
   KEY_USER_BUTTON_PERMS: '_USER_BUTTON_PERMS',
   // 用户token存储KEY-sessionStorage
   KEY_USER_TOKEN: '_USER_TOKEN',
-  // 客户基础数据缓存
-  KEY_CUSTOMER: '_CUSTOMER',
-  // 港口数据缓存
-  KEY_PORT: '_PORT',
   //词典数据缓存
   KEY_DICT: '_DICT',
-  //包装数据缓存
-  KEY_PACK: '_PACK',
-  //国家数据缓存
-  KEY_COUNTRY: '_COUNTRY',
-  //箱型数据缓存
-  KEY_CONTAINER: '_CONTAINER',
-  //船公司
-  KEY_SHIP_COMPANY: '_SHIP_COMPANY',
-  //船代
-  KEY_ENTRUST_SHIP_COMPANY: '_ENTRUST_SHIP_COMPANY',
   //用户数据缓存
   KEY_USER: '_USER',
-  //船名匹配
-  KEY_VESSEL: '_VESSEL',
   //头像名称
   SYSTEM_AVATAR_NAME: 'SNM',
   // 登录路径
   SYSTEM_ROUTE_LOGIN: '/user/login',
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
+  SYSTEM_LOGIN_TITLE: '权限管理系统',
+  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境V1.0',
   // basicLayout 刷新
   SUBJECT_SYSTEM_REFRESH: '_subject_system_refresh',
-
-  // 海外代理
-  OVERSEAS_AGENT: 'OVERSEAS_AGENT',
-  // 场站
-  DEPOT: 'DEPOT',
-  // 订舱代理
-  BOOKING_AGENT: 'BOOKING_AGENT',
-  // 船代
-  SHIPPING_AGENT: 'SHIPPING_AGENT',
-  // 海外代理
-  // OVERSEAS_AGENT: 'OVERSEAS_AGENT',
-  //船公司
-  SHIP_COMPANY: 'SHIP_COMPANY',
-  //委托单位
-  CLIENT: 'CLIENT',
-  //车队
-  TRUCKING_COMPANY: 'TRUCKING_COMPANY',
-  //报关行
-  SHIP_CUSTOM: 'SHIP_CUSTOM',
-  //仓库
-  WAREHOUSE: 'WAREHOUSE',
-
   // 用户属性
   DICT_USER_BUSINEESS_TAG: 'USER_BUSINESS_TAG',
   // 职位权限范围
   DICT_POSITION_PERM_SCOPE_TAG: 'POSITION_PERM_SCOPE_TAG',
   // 业务权限范围
   DICT_BUSINESS_PERM_SCOPE_TAG: 'BUSINESS_PERM_SCOPE_TAG',
-
-  // 箱型类型
-  DICT_BOX_TYPE_TAG: 'BOX_TYPE_TAG',
-  // 船舶类型
-  DICT_SHIP_TYPE_TAG: 'SHIP_TYPE_TAG',
-  // 银行类型
-  DICT_BANK_TYPE_TAG: 'BANK_TYPE_TAG',
-  // 币别
-  DICT_CURRENCY_TAG: 'CURRENCY_TAG',
-  // 计费标准
-  DICT_CHARGE_TYPE_TAG: 'CHARGE_TYPE_TAG',
-  // 客户类型
-  DICT_CUSTOMER_TYPE_TAG: 'CUSTOMER_TYPE_TAG',
-  // 结算方式
-  DICT_FEE_TYPE_TAG: 'FEE_TYPE_TAG',
-  // 结算模式
-  DICT_SETTLE_MODE_TAG: 'SETTLE_MODE_TAG',
-  // 付费习惯
-  DICT_PAY_HABIT_TAG: 'PAY_HABIT_TAG',
-  // 计量单位
-  DICT_MEASURE_UNIT_TAG: 'MEASURE_UNIT_TAG',
-  // 发票类型
-  DICT_INVOCE_TYPE_TAG: 'INVOICE_TYPE_TAG',
-  // 业务类型
-  DICT_BUSINESS_TYPE_TAG: 'BUSINESS_TYPE_TAG',
-  // 签单方式
-  DICT_SIGNWAY_TYPE_TAG: 'SIGNWAY_TYPE_TAG',
-  // 装运方式
-  DICT_TRANSPORT_TYPE_TAG: 'TRANSPORT_TYPE_TAG',
-  // 运输条款
-  DICT_SHIP_CLAUSE_TAG: 'SHIP_CLAUSE_TAG',
-  // 提单业务来源
-  DICT_ORDER_SOURCE_FROM_TAG: 'ORDER_SOURCE_FROM_TAG',
-  // 货物标识
-  DICT_GOODS_TYPE_TAG: 'GOODS_TYPE_TAG',
-  // 危险品等级
-  DICT_CARGOD_ANGER_LEVEL_TAG: 'CARGOD_DANGER_LEVEL_TAG',
-  // 付费方式
-  DICT_PAY_METHOD_TAG: 'PAY_METHOD_TAG',
-  // 贸易方式
-  DICT_TRADE_TYPE_TAG: 'TRADE_TYPE_TAG',
-  // 贸易条款
-  DICT_TRADE_CLAUSE_TAG: 'TRADE_CLAUSE_TAG',
-  //危险品标签
-  DICT_DANGER_TAG: 'DANGEROUS_GOODS',
-  //危险品标签
-  REEFER_GOODS: 'REEFER_GOODS',
-  //提单份数
-  DICT_BL_COPIES_TAG: 'BL_COPIES_TAG',
-  //提单份数
-  DICT_WEIGHT_METHOD_TAG: 'WEIGHT_METHOD_TAG',
-
+  // 资源类型
+  DICT_RESOURCE_TYPE_TAG: 'RESOURCE_TYPE_TAG',
   // 缓存超时时间
   TIME_OUT_FOR_CACHE: 30,
   // localstorage key前缀
-  PREFIX_OF_CACHE: '_ctmcenter_',
+  PREFIX_OF_CACHE: '_snam_',
 
   // 登录
   API_LOGIN: '/authority/oauth/token',
@@ -161,23 +75,6 @@ export default Object.freeze({
   API_USER_LIST_GROUP_USER_BY_ROLE: '/authority/user/listGroupUsersByRole',
   // 根据用户组获取组织用户列表
   API_USER_LIST_GROUP_USER_BY_USET: '/authority/user/listGroupUsersByUset',
-
-  //= ==============================================//
-  //                      上传文件                   //
-  //= ==============================================//
-  // 根据父节点以树方式加载子节点列表
-  API_FILE_TREE_BY_PARENT: '/authority/fileManage/treeByParent',
-  // 下载文件
-  API_FILE_DOWNLOAD: '/authority/file/download',
-  // 直接下载
-  API_FILE_DIRECT_DOWNLOAD: '/authority/file/directDownload',
-  // 新建文件夹
-  API_FILE_SAVE_FOLDER: '/authority/fileManage/saveFolder',
-  // 根据提单号加载文档
-  API_FILE_LIST_BY_BLNO: '/authority/fileManage/listFilesByBlNo',
-  // 上传文件
-  API_FILE: '/authority/file/upload',
-
   //= ==============================================//
   //                   角色管理                      //
   //= ==============================================//
@@ -291,6 +188,15 @@ export default Object.freeze({
   //= ==============================================//
   // 日志查询
   API_LOGGER_SEARCH: '/authority/userLog/search',
+  //查看详情
+  API_LOGGER: '/authority/userLog',
+  //= ==============================================//
+  //                   接入日志管理                      //
+  //= ==============================================//
+  // 日志查询
+  API_MLOGGER_SEARCH: '/authority/hmacLog/search',
+  //查看日志详情
+  API_MLOGGER: '/authority/hmacLog',
 
   //==============================================================//
   // 菜单管理                                                      //
@@ -396,4 +302,56 @@ export default Object.freeze({
   API_PERM_TABLE_PERM_COLUMN_BY_TABLES: '/authority/dataPermColumn/listPermColumnsByTables',
   // 数据权限列增删改查
   API_PERM: '/authority/dataPermColumn',
+
+  //= ==============================================//
+  //                   授权管理                      //
+  //= ==============================================//
+  // 根据用户获取业务资源及业务权限范围
+  API_RESOURCE_BPERM_BY_USER: '/authority/resource/listResourcesForBPermByUser',
+  // 根据客户和权限加载用户业务权限
+  API_RESOURCE_PERM_ENTRUST_BY_USER: '/authority/resource/listPermEntrustsByUser',
+  // 根据客户和权限加载用户排除的业务权限
+  API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USER: '/authority/resource/listPermExceptEntrustsByUser',
+  // 保存用户业务权限
+  API_RESOURCE_SAVE_USER_PERM: '/authority/resource/saveBusinessPerm',
+  // 根据用户组获取业务资源及业务权限范围
+  API_RESOURCE_BPERM_BY_USET: '/authority/resource/listResourcesForBPermByUset',
+
+  // 根据客户和权限加载用户组业务权限
+  API_RESOURCE_PERM_ENTRUST_BY_USET: '/authority/resource/listPermEntrustsByUset',
+  // 根据客户和权限加载用户组排除的业务权限
+  API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USET: '/authority/resource/listPermExceptEntrustsByUset',
+  // 保存用户组业务权限
+  API_RESOURCE_SAVE_USET_PERM: '/authority/resource/saveUsetBusinessPerm',
+  // 根据权限获取对应的业务表列表
+  API_RESOURCE_PERM_TABLE: '/authority/resource/fetchActionMapperByPerm',
+  // 根据权限获取对应的列权限业务表列表
+  API_RESOURCE_PERM_COLUMN_TABLE: '/authority/resource/fetchColumnActionMapperByPerm',
+  // 根据表格获取对应的列信息
+  API_RESOURCE_TABLE_COLUMN: '/authority/resource/fetchColumnByTable',
+  // 保存用户数据权限
+  API_RESOURCE_SAVE_USER_DATA_PERM: '/authority/resource/saveDataPerm',
+  // 保存用户列权限
+  API_RESOURCE_SAVE_USER_COLUMN_PERM: '/authority/resource/saveUserColumnPerm',
+  // 获取用户的数据权限
+  API_RESOURCE_LOAD_USER_DATA_PERM: '/authority/resource/getUserDataPerm',
+  // 获取用户的列权限
+  API_RESOURCE_LOAD_USER_COLUMN_PERM: '/authority/resource/listUserColumnPerm',
+  // 获取用户组的数据权限
+  API_RESOURCE_LOAD_USET_DATA_PERM: '/authority/resource/getUsetDataPerm',
+  // 获取用户组的列权限
+  API_RESOURCE_LOAD_USET_COLUMN_PERM: '/authority/resource/listUsetColumnPerm',
+  // 保存用户组数据权限
+  API_RESOURCE_SAVE_USET_DATA_PERM: '/authority/resource/saveUsetDataPerm',
+  // 保存用户组列权限
+  API_RESOURCE_SAVE_USET_COLUMN_PERM: '/authority/resource/saveUsetColumnPerm',
+  //= ==============================================//
+  //                   外部用户授权管理                //
+  //= ==============================================//
+  // 查询
+  API_HMAC_SEARCH: '/authority/hmacUser/search',
+  // 保存/更新/删除
+  API_HMAC: '/authority/hmacUser',
+  //刷新缓存
+  API_HMAC_REFRESH_CACHE: '/authority/hmacUser/refreshCache',
 });

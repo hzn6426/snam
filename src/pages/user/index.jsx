@@ -1,33 +1,26 @@
-import React, { useState, useRef } from 'react';
 import {
-  api,
-  dateFormat,
-  constant,
-  state2Option,
-  data2Option,
-  split,
-  useObservableAutoCallback,
-  useAutoObservableEvent,
-  useObservableAutoState,
-  pluck,
-  isEmpty,
-  beHasRowsPropNotEqual,
-  isArray,
-  join,
-  INewWindow,
-  data2States
-} from '@/common/utils';
-import {
+  IFooterToolbar,
   IFormItem,
   IGrid,
   ISearchForm,
   IStatus,
-  ITag,
-  IModal,
-  Permit,
-  IFooterToolbar,
-  ILayout,
+  ITag
 } from '@/common/components';
+import {
+  INewWindow,
+  api,
+  beHasRowsPropNotEqual,
+  constant,
+  data2Option,
+  dateFormat,
+  isEmpty,
+  pluck,
+  split,
+  state2Option,
+  useAutoObservableEvent,
+  useObservableAutoCallback
+} from '@/common/utils';
+import { useRef, useState } from 'react';
 // import IGrid from '@/components/IGrid';
 // import ISearchForm from '@/components/ISearchForm';
 // import IStatus from '@/components/IStatus';
@@ -35,22 +28,18 @@ import {
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
 import { showDeleteConfirm } from '@/common/antd';
-import { Form, Button, Modal, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, message } from 'antd';
+import { of, zip } from 'rxjs';
 import {
-  concatMap,
   debounceTime,
   distinctUntilChanged,
-  exhaustMap,
   filter,
   map,
-  mergeMap,
   shareReplay,
   switchMap,
-  tap,
-  withLatestFrom,
+  tap
 } from 'rxjs/operators';
-import { of, zip, EMPTY, from } from 'rxjs';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 // import { FooterToolbar } from '@ant-design/pro-layout';
 
 // //初始化角色,用户属性
@@ -109,6 +98,11 @@ const initColumns = [
     title: '角色',
     width: 150,
     dataIndex: 'userRoles',
+  },
+  {
+    title: '用户组',
+    width: 150,
+    dataIndex: 'userSets',
   },
   {
     title: '公司',
@@ -305,7 +299,7 @@ export default (props) => {
         form={searchForm}
         onReset={() => ref.current.refresh()}
         onSearch={() => ref.current.refresh()}
-        onHeightChange = {(iheight) => setTableHight(iheight)}
+        onHeightChange={(iheight) => setTableHight(iheight)}
       >
         <IFormItem name="userNo" label="账号" xtype="input" />
         <IFormItem name="userRealCnName" label="姓名" xtype="input" />
@@ -386,7 +380,7 @@ export default (props) => {
         >
           删除
         </Button>
-        <Button danger key="reset" onClick={() => showDeleteConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？',()=> onResetPasswd)}>
+        <Button danger key="reset" onClick={() => showDeleteConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd)}>
           重置密码
         </Button>
         {/* <Permit authority="user:active">
@@ -446,7 +440,7 @@ export default (props) => {
             </Button>
           </Permit> */}
       </IFooterToolbar>
-    
+
     </>
   );
 };

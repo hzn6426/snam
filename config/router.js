@@ -119,17 +119,21 @@ export default [
                 path: '/new/param/save',
                 component: './param/save',
               },
-
-              // {
-              //   name: '公司充值',
-              //   path: '/new/company/recharge/:id',
-              //   component: './company/recharge',
-              // },
-              // {
-              //   name: '公司管理',
-              //   path: '/new/company/:id',
-              //   component: './company/save',
-              // },
+              {
+                name: '外部用户',
+                path: '/new/hmac/:id',
+                component: './hmac/save',
+              },
+              {
+                name: '日志详情',
+                path: '/new/logger/:id',
+                component: './logger/detail',
+              },
+              {
+                name: '接入日志详情',
+                path: '/new/mlogger/:id',
+                component: './mlogger/detail',
+              },
             ]
           }
         ]
@@ -172,25 +176,6 @@ export default [
                 path: '/system/user',
                 component: './user',
               },
-              // {
-              //   name: '舱单日志',
-              //   icon: 'smile',
-              //   path: '/system/cabininlog',
-              //   component: './cabininlog'
-              // },
-              // {
-              //   name: '发送日志',
-              //   icon: 'smile',
-              //   path: '/system/sendlog',
-              //   component: './sendlog',
-
-              // },
-              // {
-              //   name: '授权用户',
-              //   icon: 'smile',
-              //   path: '/system/syshmacuser',
-              //   component: './syshmacuser',
-              // },
               {
                 name: '角色管理',
                 icon: 'smile',
@@ -215,42 +200,24 @@ export default [
                 path: '/system/uset',
                 component: './uset',
               },
-              // {
-              //   name: 'role',
-              //   icon: 'smile',
-              //   path: '/system/role',
-              //   component: './role',
-              // },
-              // {
-              //   name: 'group',
-              //   icon: 'smile',
-              //   path: '/system/group',
-              //   component: './group',
-              // },
               {
                 name: '职位管理',
                 icon: 'smile',
                 path: '/system/position',
                 component: './position',
               },
-              // {
-              //   name: 'resource',
-              //   icon: 'smile',
-              //   path: '/system/resource',
-              //   component: './resource',
-              // },
+              {
+                name: '授权管理',
+                icon: 'smile',
+                path: '/system/resource',
+                component: './resource',
+              },
               {
                 name: '日志管理',
                 icon: 'smile',
                 path: '/system/logger',
                 component: './logger',
               },
-              // {
-              //   name: 'file',
-              //   icon: 'smile',
-              //   path: '/system/file',
-              //   component: './file',
-              // },
               {
                 name: '字典管理',
                 icon: 'smile',
@@ -269,55 +236,20 @@ export default [
                 path: '/system/pcolumn',
                 component: './column',
               },
-              // {
-              //   name: 'menu',
-              //   icon: 'smile',
-              //   path: '/system/menu',
-              //   component: './menu',
-              // },
-              // {
-              //   name: 'report',
-              //   icon: 'smile',
-              //   path: '/system/report',
-              //   component: './report',
-              // },
+              {
+                name: '接入用户',
+                icon: 'smile',
+                path: '/system/hmac',
+                component: './hmac',
+              },
+              {
+                name: '接入日志',
+                icon: 'smile',
+                path: '/system/mlog',
+                component: './mlogger',
+              },
             ],
           },
-          // {
-          //   path: '/business',
-          //   icon: 'operate',
-          //   name: '业务管理',
-          //   routes: [
-          //     {
-          //       path: '/',
-          //       redirect: '/business/cabin',
-          //     },
-          //     {
-          //       name: '舱单管理',
-          //       icon: 'smile',
-          //       path: '/business/cabin',
-          //       component: './cabin',
-          //     },
-          //     {
-          //       name: '业务详情',
-          //       icon: 'smile',
-          //       path: '/business/cabin/detail/:id',
-          //       component: './cabin/detail',
-          //     },
-          //     {
-          //       name: '公司管理',
-          //       icon: 'smile',
-          //       path: '/business/company',
-          //       component: './company',
-          //     },
-          //     {
-          //       name: '充值记录',
-          //       icon: 'smile',
-          //       path: '/business/recharge',
-          //       component: './recharge',
-          //     },
-          //   ],
-          // },
         ],
       },
     ],

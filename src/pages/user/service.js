@@ -1,10 +1,10 @@
-import { ipost, iput, iget, iupload, isearch, idelete, constant, rmap, getCache, setCache, hasCache } from '@/common/utils';
-import { map, tap } from 'rxjs/operators';
+import { constant, getCache, hasCache, idelete, iget, ilogin, ipost, iput, isearch, iupload, rmap, setCache } from '@/common/utils';
 import { from } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 //登录
-export function login(params) {
-  return ipost(constant.API_LOGIN, params);
+export function login(params, tag) {
+  return ilogin(constant.API_LOGIN, params, { HEADER_USER_SYSTEM_TAG: tag });
 }
 //登出
 export function logout() {

@@ -1,18 +1,23 @@
 import {
-  wrapObservable,
-  wrapStreamObservable,
-  wpost,
-  wget,
   wdelete,
-  wput,
-  wfileUpload,
   wfileDownload,
+  wfileUpload,
+  wget,
+  wpost,
+  wpostWithheaders,
+  wput,
+  wrapObservable,
   wrapSearchObservable,
+  wrapStreamObservable,
 } from './iaxios';
 
 export const isearch = (url, condition) => {
   return wrapSearchObservable(wpost, url, condition);
 };
+
+export const ilogin = (url, param, headers) => {
+  return wrapObservable(wpostWithheaders, url, param, headers);
+}
 
 export const ipost = (url, param) => {
   return wrapObservable(wpost, url, param);

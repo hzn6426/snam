@@ -1,0 +1,77 @@
+@import '~antd/es/style/themes/default.less';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: auto;
+    background: @layout-body-background;
+}
+
+.lang {
+    width: 100%;
+    height: 40px;
+    line-height: 44px;
+    text-align: right;
+
+    :global(.ant-dropdown-trigger) {
+        margin-right: 24px;
+    }
+}
+
+.content {
+    padding: 40px 10px;
+}
+
+@media (min-width: @screen-md-min) {
+    .container {
+        padding-top: 10%;
+        background: url('../assets/loginbg.jpeg') top center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .content {
+        width: 400px;
+        min-height: 420px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+    }
+}
+
+.top {
+    text-align: center;
+}
+
+.header {
+    height: 44px;
+    line-height: 44px;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.logo {
+    height: 60px;
+    margin-right: 16px;
+    vertical-align: top;
+}
+
+.title {
+    position: relative;
+    color: @heading-color;
+    font-weight: 600;
+    font-size: 28px;
+    font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.desc {
+    margin-top: 12px;
+    margin-right: 10px;
+    margin-bottom: 40px;
+    color: @text-color-secondary;
+    font-size: @font-size-base;
+    text-align: right;
+}

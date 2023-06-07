@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef } from 'react';
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
 
@@ -8,7 +8,9 @@ export default (props) => {
     height: props.style?.height || '100%',
     userSelect: 'none'
   }
-  var dragFlag = 0;
+
+  const containerLayout = useRef();
+  var dragFlag = false;
 
   // 左右
   const hCtn = useRef();
@@ -16,8 +18,8 @@ export default (props) => {
   const hBar = useRef();
   //回调resize
   const hResize = async () => {
-    if (dragFlag == 1) {
-      dragFlag = 0;
+    if (dragFlag) {
+      dragFlag = false;
       let hCtnWidth = hCtn.current.clientWidth;
       let leftWidth = leftLayout.current.clientWidth;
       let rightWidth = hCtnWidth - leftWidth - 8;
@@ -55,14 +57,19 @@ export default (props) => {
   }
   var leftPosition = 0;
   const hdrag = (e) => {
-    if (dragFlag == 0) {
+    if (e.which != 1) {
+      containerLayout.current.removeEventListener('mousemove', hdrag);
+      return;
+    }
+    if (!dragFlag) {
       leftPosition = e.pageX - hBar.current.offsetLeft;
-      dragFlag = 1;
+      dragFlag = true;
     } else {
       let hCtnWidth = hCtn.current.clientWidth;
       let newWidth = e.pageX - leftPosition - hCtn.current.offsetLeft;
       if (newWidth < 0 || newWidth > hCtnWidth) {
-        dragFlag = 0;
+        dragFlag = false;
+        return;
       }
       leftLayout.current.style.width = newWidth + 'px';
     }
@@ -74,8 +81,8 @@ export default (props) => {
 
   //回调resize
   const vResize = async () => {
-    if (dragFlag == 1) {
-      dragFlag = 0;
+    if (dragFlag) {
+      dragFlag = false;
       let vCtnHeight = vCtn.current.clientHeight;
       let topHeight = topLayout.current.clientHeight;
       let bottomHeight = vCtnHeight - topHeight - 8;
@@ -114,21 +121,26 @@ export default (props) => {
   }
   var topPosition = 0;
   const vdrag = (e) => {
-    if (dragFlag == 0) {
+    if (e.which != 1) {
+      containerLayout.current.removeEventListener('mousemove', vdrag);
+      return;
+    }
+    if (!dragFlag) {
       topPosition = e.pageY - vBar.current.offsetTop;
-      dragFlag = 1;
+      dragFlag = true;
     } else {
       let vCtnHeight = vCtn.current.clientHeight;
       let newHeight = e.pageY - topPosition - vCtn.current.offsetTop;
+
       if (newHeight < 0 || newHeight > vCtnHeight) {
-        dragFlag = 0;
+        dragFlag = false;
       }
       topLayout.current.style.height = newHeight + 'px';
     }
   }
 
   return (
-    <div style={container}>
+    <div style={container} ref={containerLayout}>
       {props.layout === "vertical" ?
         <div style={hContainer} ref={hCtn}
           onMouseUp={() => {
@@ -148,15 +160,15 @@ export default (props) => {
         </div>
         :
         <div style={vContainer} ref={vCtn}
-          onMouseUp={() => {
-            document.removeEventListener('mousemove', vdrag);
+          onMouseUp={(e) => {
+            containerLayout.current.removeEventListener('mousemove', vdrag);
             vResize();
           }}
         >
           <div style={topPanel} ref={topLayout}>{props.children[0]}</div>
           <div style={vDragBar} ref={vBar}
-            onMouseDown={() => {
-              document.addEventListener('mousemove', vdrag);
+            onMouseDown={(e) => {
+              containerLayout.current.addEventListener('mousemove', vdrag);
             }}
           >
             <span style={vBars}></span><span style={vBars}></span><span style={vBars}></span><span style={vBars}></span>

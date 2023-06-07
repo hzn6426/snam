@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { api, data2Option, pluck, split, useAutoObservableEvent, useObservableAutoCallback, copyObject, forEach, isEmpty, INewWindow,constant } from '@/common/utils';
+import { IDrag, IFooterToolbar, IGrid, ISearchTree, Permit } from '@/common/components';
+import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback } from '@/common/utils';
 import {
     ApartmentOutlined,
-    UserOutlined,
     DeleteOutlined,
     FormOutlined,
     PlusOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
-import { IFooterToolbar, IGrid, IDrag, ISearchTree, Permit } from '@/common/components';
-import User from '@/components/User'
+import { useEffect, useState } from 'react';
 
 import { showDeleteConfirm } from '@/common/antd';
-import { Button, Card, Checkbox, Col, Form, Input, message, Modal, Row, Space, Tree, } from 'antd';
-import { debounceTime, distinctUntilChanged, map, shareReplay, switchMap, tap, } from 'rxjs/operators';
+import { Button, Col, Form, message, Row, Space } from 'antd';
 import { of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, shareReplay, switchMap } from 'rxjs/operators';
 
 
 export default (props) => {
@@ -21,44 +20,44 @@ export default (props) => {
     const initColumns = [
         {
             title: '账号',
-            width: 150,
-            align: 'center',
+            width: 100,
+            align: 'left',
             dataIndex: 'userName',
         },
         {
             title: '姓名',
-            width: 150,
-            align: 'center',
+            width: 90,
+            align: 'left',
             dataIndex: 'userRealCnName',
         },
         {
             title: '角色',
             width: 150,
-            align: 'center',
+            align: 'left',
             dataIndex: 'userRoles',
         },
         {
             title: '职位',
-            width: 150,
-            align: 'center',
+            width: 130,
+            align: 'left',
             dataIndex: 'userPosts',
         },
         {
             title: '手机',
             align: 'center',
-            width: 150,
+            width: 120,
             dataIndex: 'userMobile',
         },
         {
             title: '邮箱',
-            align: 'center',
+            align: 'left',
             width: 150,
             dataIndex: 'userEmail',
         },
         {
             title: '备注',
-            align: 'center',
-            width: 250,
+            align: 'left',
+            width: 200,
             dataIndex: 'note',
         },
 
@@ -122,7 +121,10 @@ export default (props) => {
             if (v.tag && v.tag === 'GROUP') {
                 copyObject(v, { icon: <ApartmentOutlined /> });
             } else {
-                copyObject(v, { icon: <UserOutlined style={{ color: '#52c41a' }} /> });
+                copyObject(v, {
+                    selectable: false,
+                    disableCheckbox: true, icon: <UserOutlined style={{ color: '#52c41a' }} />
+                });
             }
             if (v.children && !isEmpty(v.children)) {
                 loopGroup(v.children);
@@ -156,7 +158,7 @@ export default (props) => {
                 callparam: () => param,
             });
         } else {
-           const param = {
+            const param = {
                 id: node.key,
                 groupName: node.text,
                 parentName: node.parentGroupName,
@@ -255,9 +257,9 @@ export default (props) => {
         if (!selectedGroupId || selectedGroupId === constant.ROOT_OF_GROUP) {
             message.error('请先选择一个部门或者公司!');
             return;
-          }
-          const param = { groupId: selectedGroupId, groupName: selectedGroupName }
-          INewWindow({
+        }
+        const param = { groupId: selectedGroupId, groupName: selectedGroupName }
+        INewWindow({
             url: '/new/group/user',
             title: '编辑用户',
             width: 600,
@@ -271,12 +273,13 @@ export default (props) => {
     const onDeleteUser = () => {
         const userGroup = { groupId: selectedGroupId, users: selectedGroupUserKeys };
         api.group.deleteUsers(userGroup).subscribe({
-        next: () => {
-            message.success('操作成功！');
-            setSelectedGroupUserKeys([]);
-            searchUserByGroup(pageNo, pageSize);
-            searchNotAssignedUser();
-        }});
+            next: () => {
+                message.success('操作成功！');
+                setSelectedGroupUserKeys([]);
+                searchUserByGroup(pageNo, pageSize);
+                searchNotAssignedUser();
+            }
+        });
     }
 
     //移动用户
@@ -284,9 +287,9 @@ export default (props) => {
         if (selectedGroupUserKeys.length === 0) {
             message.error('请至少选择一个要移动的用户！');
             return;
-          }
-          const param = { groupId: selectedGroupId, users: selectedGroupUserKeys.join(',') };
-          INewWindow({
+        }
+        const param = { groupId: selectedGroupId, users: selectedGroupUserKeys.join(',') };
+        INewWindow({
             url: '/new/group/move',
             title: '移动用户',
             width: 700,
@@ -295,24 +298,24 @@ export default (props) => {
             callparam: () => param,
         });
     }
-   
+
 
     // 将未分配的用户添加到分组中
     const addUser2Group = () => {
         if (!selectedGroupId || selectedGroupId === constant.ROOT_OF_GROUP) {
             message.error('请先选择一个部门或者公司!');
             return;
-          }
-          const userGroup = { groupId: selectedGroupId, users: selectedNotAssignUserKeys };
-          api.group.addOrUpdateUser(userGroup).subscribe({
+        }
+        const userGroup = { groupId: selectedGroupId, users: selectedNotAssignUserKeys };
+        api.group.addOrUpdateUser(userGroup).subscribe({
             next: () => {
-              message.success('操作成功！');
-              searchUserByGroup(pageNo, pageSize);
-              searchNotAssignedUser();
+                message.success('操作成功！');
+                searchUserByGroup(pageNo, pageSize);
+                searchNotAssignedUser();
             },
-          });
+        });
     }
-    
+
 
     // 添加分公司
     const handleAddCompany = () => {
@@ -322,7 +325,7 @@ export default (props) => {
             width: 600,
             height: 300,
             callback: () => reloadTree(),
-            callparam: () => {},
+            callparam: () => { },
         });
     };
 
@@ -377,31 +380,32 @@ export default (props) => {
                             <div style={{ float: 'left' }}>
                                 {node.icon} {node.title}
                             </div>
-                            <div style={{ float: 'right', zIndex: 999 }}>
-                                <Space>
-                                <Permit authority="group:addDepartment" key="addDepartment">
-                                    <PlusOutlined
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleAddGroup(node);
-                                        }}
-                                    />
-                                </Permit>
-                                <Permit authority="group:update" key="update">
-                                    <FormOutlined
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleEditGroup(node);
-                                        }}
-                                    />
-                                </Permit>
-                                <Permit authority="group:delete" key="delete">
-                                    <DeleteOutlined
-                                        onClick = {(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？',() => handleDeleteGroup(node))}
-                                    />
-                                </Permit>
-                                </Space>
-                            </div>
+                            {node.tag && node.tag === 'GROUP' && (
+                                <div style={{ float: 'right', zIndex: 999 }}>
+                                    <Space>
+                                        <Permit authority="group:addDepartment" key="addDepartment">
+                                            <PlusOutlined
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleAddGroup(node);
+                                                }}
+                                            />
+                                        </Permit>
+                                        <Permit authority="group:update" key="update">
+                                            <FormOutlined
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditGroup(node);
+                                                }}
+                                            />
+                                        </Permit>
+                                        <Permit authority="group:delete" key="delete">
+                                            <DeleteOutlined
+                                                onClick={(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？', () => handleDeleteGroup(node))}
+                                            />
+                                        </Permit>
+                                    </Space>
+                                </div>)}
                         </div>
                     )}
                     onSelect={(keys, { selected, node }) => {
@@ -414,7 +418,7 @@ export default (props) => {
 
             </Col>
             <Col span={17}>
-                <IDrag style={{ width: '100%', height: clientHeight - 105 }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
+                <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
                     <div>
                         <IGrid
                             title="用户列表"
@@ -431,36 +435,36 @@ export default (props) => {
 
                             toolBarRender={[
                                 <Space key='space'>
-                                <Button
-                                    key="addUser"
-                                    type="primary"
-                                    size="small"
-                                    onClick={handleAddUser}>添加成员</Button>
-                                <Button
-                                    key="addCompany"
-                                    type="danger"
-                                    size="small"
-                                    onClick={handleAddCompany}>添加分公司</Button>
-                                <Button
-                                    key="assignRole"
-                                    type="primary"
-                                    size="small"
-                                    onClick={handleAssignRoles}>分配角色</Button>
+                                    <Button
+                                        key="addUser"
+                                        type="primary"
+                                        size="small"
+                                        onClick={handleAddUser}>添加成员</Button>
+                                    <Button
+                                        key="addCompany"
+                                        type="danger"
+                                        size="small"
+                                        onClick={handleAddCompany}>添加分公司</Button>
+                                    <Button
+                                        key="assignRole"
+                                        type="primary"
+                                        size="small"
+                                        onClick={handleAssignRoles}>分配角色</Button>
                                 </Space>
 
                             ]}
                         />
                         {selectedGroupUserKeys?.length > 0 && (
                             <IFooterToolbar>
-                                 <Permit authority="group:moveUsers">
-                                <Button type="primary" key="move" onClick={() => onMove()}>
-                                    移动
-                                </Button>
+                                <Permit authority="group:moveUsers">
+                                    <Button type="primary" key="move" onClick={() => onMove()}>
+                                        移动
+                                    </Button>
                                 </Permit>
                                 <Permit authority="group:removeUsers">
-                                <Button type="danger" key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
-                                    删除
-                                </Button>
+                                    <Button type="danger" key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
+                                        删除
+                                    </Button>
                                 </Permit>
                             </IFooterToolbar>
                         )}
@@ -472,16 +476,16 @@ export default (props) => {
                             request={(pageNo, pageSize) => searchNotAssignedUser(pageNo, pageSize)}
                             dataSource={notAssignedDataSource}
                             total={total}
-                            height={bottomHeight}
+                            height={340}
                             onSelectedChanged={onNotAssignUserChange}
                             clearSelect={searchLoading}
                         />
                         {selectedNotAssignUserKeys?.length > 0 && (
                             <IFooterToolbar>
                                 <Permit authority="group:addUsers" key="addUsers">
-                                <Button type="primary" key="addUser2Group"onClick={() => addUser2Group()}>
-                                    添加成员
-                                </Button>
+                                    <Button type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
+                                        添加成员
+                                    </Button>
                                 </Permit>
                             </IFooterToolbar>
                         )}

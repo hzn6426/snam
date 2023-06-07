@@ -55,18 +55,6 @@ const initColumns = [
     dataIndex: 'roleName',
   },
   {
-    title: '用户组',
-    width: 140,
-    align: 'center',
-    dataIndex: 'usetNames',
-  },
-  {
-    title: '职位',
-    width: 140,
-    align: 'center',
-    dataIndex: 'postNames',
-  },
-  {
     title: '备注',
     width: 100,
     dataIndex: 'note',
@@ -85,30 +73,6 @@ export default (props) => {
   const [disabledActive, setDisabledActive] = useState(true);
   const [disabledStop, setDisabledStop] = useState(true);
 
-  const [modalItem, setModalItem] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);
-  const [roleModalItem, setRoleModalItem] = useState({});
-  const [roleModalVisible, setRoleModalVisible] = useState(false);
-
-  const [userPerms, setUserPerms] = useState([]);
-  // 分配用户窗口中树的数据
-  const [treeData, setTreeData] = useState([]);
-  // 根据菜单ID获取对应的按钮列表
-  const [menuId, setMenuId] = useState();
-  const [menuName, setMenuName] = useState();
-  // 分配的按钮数据
-  const [permButtons, setPermButtons] = useState({});
-  const [groupButtons, setGroupButtons] = useState({});
-  const [searchValue, setSearchValue] = useState({});
-  const [current, setCurrent] = useState({});
-  // 自动展开父节点的状态
-  const [autoExpandParent, setAutoExpandParent] = useState(true);
-  // 展开的树节点key
-  const [expandedKeys, setExpandedKeys] = useState([]);
-  const onExpand = (keys) => {
-    setExpandedKeys(keys);
-    setAutoExpandParent(false);
-  };
 
   const ref = useRef();
   const refresh = () => ref.current.refresh();

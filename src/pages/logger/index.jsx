@@ -9,7 +9,7 @@ import {
     api,
     dateFormat,
     pluck,
-    useObservableAutoCallback,
+    useObservableAutoCallback
 } from '@/common/utils';
 import { Form } from 'antd';
 import { useRef, useState } from 'react';
@@ -163,21 +163,14 @@ export default (props) => {
         ),
     );
 
-
-    //双击
-    const onDoubleClick = (param) => {
+    const onDoubleClick = (id) => {
         INewWindow({
-            url: '/new/param/save',
-            title: '编辑参数',
-            width: 600,
-            height: 400,
-            callback: () => refresh(),
-            callparam: () => param
-        })
+            url: '/new/logger/' + id,
+            title: '日志详情',
+            width: 1000,
+            height: 700,
+        });
     }
-
-
-
 
     //查询
     const search = (pageNo, pageSize) => {
@@ -224,6 +217,16 @@ export default (props) => {
                     label="模块名称"
                     xtype="input"
                 />
+                <IFormItem
+                    name="startTime"
+                    label="起始时间"
+                    xtype="datetime"
+                />
+                <IFormItem
+                    name="endTime"
+                    label="结束时间"
+                    xtype="datetime"
+                />
             </ISearchForm>
 
             <IGrid
@@ -241,7 +244,7 @@ export default (props) => {
                 total={total}
                 clearSelect={searchLoading}
                 onSelectedChanged={onChange}
-            // onDoubleClick={(record) => onDoubleClick(record)}
+                onDoubleClick={(record) => onDoubleClick(record.id)}
             />
         </>
     );

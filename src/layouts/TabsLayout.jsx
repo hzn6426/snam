@@ -22,7 +22,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, history, useIntl } from 'umi';
 import defaultSettings from '../../config/defaultSettings';
 import routeCache from '../../config/routerCache.js';
-import logo from '../assets/auth.svg';
+// import logo from '../assets/auth.svg';
+import logo from '../assets/logo.png';
 
 const iconEnum = {
   dashboard: <DashboardOutlined />,
