@@ -20,7 +20,7 @@ import {
   useAutoObservableEvent,
   useObservableAutoCallback
 } from '@/common/utils';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // import IGrid from '@/components/IGrid';
 // import ISearchForm from '@/components/ISearchForm';
 // import IStatus from '@/components/IStatus';
@@ -87,6 +87,27 @@ const initColumns = [
     title: '姓名',
     width: 90,
     dataIndex: 'userRealCnName',
+  },
+  {
+    title: '登录模式',
+    width: 90,
+    align: 'center',
+    dataIndex: 'beMultiLogin',
+    valueFormatter: (x) => x.value === true ? '共享登录' : '单点登录',
+  },
+  {
+    title: '过期策略',
+    width: 90,
+    align: 'center',
+    dataIndex: 'expirePolicy',
+    valueFormatter: (x) => {
+      if (x.value === 'LAST_ACTIVE') {
+        return '最后活跃';
+      } else if (x.value === 'FIXED') {
+        return '固定时间';
+      }
+      return '';
+    }
   },
   {
     title: '性别',
@@ -168,8 +189,9 @@ export default (props) => {
   const [disabledStop, setDisabledStop] = useState(true);
   const [disabledUnStop, setDisabledUnStop] = useState(true);
 
-  const [modalItem, setModalItem] = useState({});
-  const [modalVisible, setModalVisible] = useState(false);
+
+  const [groupTreeData, setGroupTreeData] = useState();
+  const [groupIdValue, setGroupIdValue] = useState();
   const ref = useRef();
 
   const refresh = () => ref.current.refresh();
@@ -277,7 +299,7 @@ export default (props) => {
       url: '/new/user/ADD',
       title: '新建用户',
       width: 700,
-      height: 400,
+      height: 600,
       callback: () => refresh()
     })
   };
@@ -287,10 +309,20 @@ export default (props) => {
       url: '/new/user/' + id,
       title: '编辑用户',
       width: 700,
-      height: 400,
+      height: 600,
       callback: () => refresh()
     })),
   ]);
+
+  const treeAllGroups = () => {
+    api.group.treeAllGroups().subscribe({
+      next: (data) => setGroupTreeData(data)
+    })
+  };
+
+  useEffect(() => {
+    treeAllGroups();
+  }, []);
 
   // 列表及弹窗
   return (
@@ -311,12 +343,10 @@ export default (props) => {
           xtype="select"
           options={() => state2Option(userState)}
         />
+        <IFormItem name="groupId" label="部门" xtype="department" />
         <IFormItem name="roleName" label="角色" xtype="input" />
-        <IFormItem name="companyName" label="公司" xtype="input" />
-        <IFormItem name="departName" label="部门" xtype="input" />
         <IFormItem name="postName" label="职位" xtype="input" />
       </ISearchForm>
-
       <IGrid
         ref={ref}
         title="用户列表"

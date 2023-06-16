@@ -1,7 +1,7 @@
 import { constant } from '@/common/utils';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-// import logo from '../assets/logo.png';
-import logo from '../assets/auth.svg';
+import logo from '../assets/logo.png';
+// import logo from '../assets/auth.svg';
 import styles from './UserLayout.less';
 
 const UserLayout = (props) => {

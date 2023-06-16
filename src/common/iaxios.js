@@ -18,13 +18,13 @@ const err = (error) => {
   if (response) {
     const errorText = data.message || response.statusText;
     const { status } = response;
-    if (status != 200) {
-      notification.error({
-        message: `请求错误 ${status}: ${response.config.url}`,
-        description: errorText,
-      });
-      return { code: status, message: errorText, data: data };
-    }
+    // if (status != 200) {
+    //   notification.error({
+    //     message: `请求错误 ${status}: ${response.config.url}`,
+    //     description: errorText,
+    //   });
+    //   return { code: status, message: errorText, data: data };
+    // }
     if (data && data.code !== 200) {
       if (
         data.code === 20002 ||
@@ -38,12 +38,12 @@ const err = (error) => {
           message: `请求错误 ${status}: ${response.config.url}`,
           description: errorText,
         });
-        // if (data.code !== 403) {
-        //   setTimeout(() => {
-        //     window.location.href = constant.ROUTE_LOGIN
-        //   }, 3000)
-        // }
-        // return data
+        if (data.code !== 403) {
+          setTimeout(() => {
+            window.location.href = constant.ROUTE_LOGIN;
+          }, 3000);
+        }
+        return data;
       } else {
         message.error(data.message);
       }

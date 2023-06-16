@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { api, copyObject, useAutoObservable, useAutoObservableEvent, isArray, split, constant, data2Option } from '@/common/utils';
 import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { api, constant, data2Option, isArray, split, useAutoObservable } from '@/common/utils';
 import { message } from 'antd';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { useEffect, useRef, useState } from 'react';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { useParams } from 'umi';
-import { from, of, zip } from 'rxjs';
 
 
 export default (props) => {
@@ -13,6 +12,7 @@ export default (props) => {
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState([]);
+    const [multiLogin, setMultiLogin] = useState(false);
     // const [current, setCurrent] = useState({});
 
     const [current, setCurrent] = useAutoObservable((inputs$) =>
@@ -22,7 +22,12 @@ export default (props) => {
             switchMap((id) => api.user.getUser(id)),
             map((t1) => {
                 const user = t1[0]
-                if (user.userTag && !isArray(user.userTag)) {
+                if (user.beMultiLogin === true) {
+                    user.loginMode = 'SHARED';
+                } else {
+                    user.loginMode = 'SINGLE';
+                }
+                if (user.userTag && isArray(user.userTag)) {
                     user.userTag = split(user.userTag, ',');
                 }
                 return user;
@@ -31,20 +36,22 @@ export default (props) => {
         [params.id],
     )
 
-    const [onSaveClick] = useAutoObservableEvent([
-        tap(() => setLoading(true)),
-        switchMap((user) => api.user.saveOrUpdateUser(user)),
-        tap(() => {
-            message.success('操作成功!');
-            window.close();
-            window.opener.onSuccess();
-        }),
-        shareReplay(1),
-    ], () => setLoading(false),);
+    const onSaveClick = (user) => {
+        setLoading(true);
+        user.beMultiLogin = user.loginMode === 'SHARED' ? true : false;
+        console.log(user);
+        api.user.saveOrUpdateUser(user).subscribe({
+            next: () => {
+                message.success('操作成功!');
+                window.close();
+                window.opener.onSuccess();
+            }
+        }).add(() => setLoading(false));
+    };
 
     const loadUserTags = () => {
         api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG).subscribe({
-            next:(t2) => {
+            next: (t2) => {
                 const dicts = data2Option('dictCode', 'dictName', t2);
                 setOptions(dicts);
             }
@@ -53,7 +60,7 @@ export default (props) => {
 
     useEffect(() => {
         loadUserTags();
-    },[]);
+    }, []);
 
     return (
         <IWindow
@@ -135,6 +142,10 @@ export default (props) => {
                     max={50}
                     ruleType="email"
                 />
+            </ILayout>
+            <ILayout type="hbox" spans="12 12">
+                <IFormItem label="登录模式" name="loginMode" xtype="select" options={[{ label: '共享登录', value: 'SHARED' }, { label: '单点登录', value: 'SINGLE' }]} tooltip="共享登录为账号可以同时登录,单点登录为账号同一时间同一系统只能登录一个" />
+                <IFormItem label="过期策略" name="expirePolicy" xtype="select" options={[{ label: '固定时间', value: 'FIXED' }, { label: '最后活跃', value: 'LAST_ACTIVE' }]} tooltip="固定时间为:登录后经过固定的过期时间必须重新登录,最后活跃为最后一次操作后经过过期时间才会过期" />
             </ILayout>
             <ILayout type="hbox" spans="24">
                 <IFormItem name="userTag" label="用户属性" xtype="checkbox" options={options} />

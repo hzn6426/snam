@@ -2,6 +2,10 @@
 //                 SYSTEM CONST                  //
 //= ==============================================//
 export default Object.freeze({
+  // 登录路径
+  ROUTE_LOGIN: '/user/login',
+  //授权码登录
+  ROUTE_LOGIN_TEMP: '/user/loginTemp',
   // 用户按钮KEY-sessionStorage
   KEY_USER_BUTTON_PERMS: '_USER_BUTTON_PERMS',
   // 用户token存储KEY-sessionStorage

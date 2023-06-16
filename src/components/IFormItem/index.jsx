@@ -1,16 +1,6 @@
+import { IStatus, XInput } from '@/common/components';
+import { Department, Dict, User } from '@/common/componentx';
 import { isFunction } from '@/common/utils';
-import Box from '@/components/Box';
-import Country from '@/components/Country';
-import Customer from '@/components/Customer';
-import Dict from '@/components/Dict';
-import EntrustShipCompany from '@/components/EntrustShipCompany';
-import Pack from '@/components/Pack';
-import Port from '@/components/Port';
-import ShipCompany from '@/components/ShipCompany';
-import Transceiver from '@/components/Transceiver';
-import User from '@/components/User';
-import Vessel from '@/components/Vessel';
-import XInput from '@/components/XInput';
 
 import {
   Button,
@@ -25,7 +15,6 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import IStatus from '../IStatus';
 export default (props) => {
   const {
     xtype,
@@ -121,6 +110,11 @@ export default (props) => {
           </Select>
         );
         break;
+      case 'department':
+        item = (
+          <Department style={{ width: '100%' }} />
+        );
+        break;
       case 'radio':
         item = (
           <Radio.Group {...others} options={ioptions}>
@@ -135,6 +129,9 @@ export default (props) => {
           </Checkbox.Group>
         );
         break;
+      case 'check':
+        item = (<Checkbox {...others} />);
+        break;
       case 'submit':
         beFormItem = false;
         item = <Button type={type || 'primary'} loading={loading} htmlType="submit" {...others} />;
@@ -148,33 +145,6 @@ export default (props) => {
         break;
       case 'user':
         item = <User tag={tag} {...others} displayName={displayName} />;
-        break;
-      case 'customer':
-        item = <Customer {...others} displayName={displayName} />;
-        break;
-      case 'transceiver':
-        item = <Transceiver {...others} />;
-        break;
-      case 'vssel':
-        item = <Vessel {...others} displayName={displayName} />;
-        break;
-      case 'country':
-        item = <Country {...others} displayName={displayName} />;
-        break;
-      case 'box':
-        item = <Box {...others} displayName={displayName} />;
-        break;
-      case 'shipCompany':
-        item = <ShipCompany {...others} displayName={displayName} />;
-        break;
-      case 'entrustShipCompany':
-        item = <EntrustShipCompany {...others} displayName={displayName} />;
-        break;
-      case 'port':
-        item = <Port {...others} displayName={displayName} />;
-        break;
-      case 'pack':
-        item = <Pack {...others} displayName={displayName} />;
         break;
       case 'switch':
         item = <Switch {...others} />;

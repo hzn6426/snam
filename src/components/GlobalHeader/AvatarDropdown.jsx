@@ -1,10 +1,10 @@
-import { LogoutOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
+import { api, constant, getPageQuery } from '@/common/utils';
+import { LogoutOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import React from 'react';
 import { history } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { api, getPageQuery, constant } from '@/common/utils';
 
 class AvatarDropdown extends React.Component {
   onMenuClick = (event) => {
@@ -34,7 +34,7 @@ class AvatarDropdown extends React.Component {
     // const { currentUser } = this.state;
     const menuHeaderDropdown = (
       <Menu className={styles.menu} onClick={this.onMenuClick}>
-        <Menu.Item key="center">
+        {/* <Menu.Item key="center">
           <UserOutlined />
           个人中心
         </Menu.Item>
@@ -42,7 +42,7 @@ class AvatarDropdown extends React.Component {
           <MessageOutlined />
           历史消息
         </Menu.Item>
-        <Menu.Divider />
+        <Menu.Divider /> */}
         <Menu.Item key="logout">
           <LogoutOutlined />
           退出登录

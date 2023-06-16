@@ -1,7 +1,5 @@
+import { User } from '@/common/componentx';
 import { groupBy, isArray, mapObjIndexed, moment, produce } from '@/common/utils';
-import Customer from '@/components/Customer';
-import Port from '@/components/Port';
-import User from '@/components/User';
 import {
   Button,
   Card,
@@ -84,12 +82,6 @@ const AdvanceSearch = (props) => {
       return comp;
     }
     switch (xtype) {
-      case 'customer':
-        comp = <Customer ctmType={ctmType} style={{ width: '100%' }} />;
-        break;
-      case 'port':
-        comp = <Port style={{ width: '100%' }} />;
-        break;
       case 'user':
         comp = <User style={{ width: '100%' }} Tag={utag} />;
         break;
