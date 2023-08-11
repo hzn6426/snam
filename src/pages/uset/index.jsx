@@ -14,7 +14,9 @@ import {
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined
+    PlusOutlined,
+    LockTwoTone,
+    UnlockTwoTone 
 } from '@ant-design/icons';
 import { Button, message } from 'antd';
 import { useState } from 'react';
@@ -37,6 +39,15 @@ const StateRenderer = (props) => {
     return props.value && <IStatus value={props.value} state={usetState} />;
 };
 
+//组件
+const LockRenderer = (props) => {
+    return props.value ? (
+      <LockTwoTone twoToneColor="#FF0000" />
+    ) : (
+      <UnlockTwoTone twoToneColor="#52c41a" />
+    );
+  };
+
 //列初始化
 const initColumns = [
     {
@@ -45,6 +56,12 @@ const initColumns = [
         dataIndex: 'state',
         cellRenderer: 'stateCellRenderer',
     },
+    {
+        title: '锁定',
+        width: 70,
+        dataIndex: 'beLock',
+        cellRenderer:'lockRenderer'
+      },
     {
         title: '组名称',
         width: 100,
@@ -184,6 +201,7 @@ export default () => {
             title="用户组列表"
             components={{
                 stateCellRenderer: StateRenderer,
+                lockRenderer: LockRenderer
             }}
             initColumns={initColumns}
             request={(pageNo, pageSize) => search(pageNo, pageSize)}

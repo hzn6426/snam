@@ -6,14 +6,31 @@ import {
     FormOutlined,
     PlusOutlined,
     UserOutlined,
+    LockTwoTone,
+    UnlockTwoTone,
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
 import { showDeleteConfirm } from '@/common/antd';
-import { Button, Col, Form, message, Row, Space } from 'antd';
+import { Button, Col, Form, message, Row, Space, Tag } from 'antd';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, switchMap } from 'rxjs/operators';
 
+const TagRenderer = (props) => {
+    if (props.value) {
+        return <Tag color="#f50">{props.value}</Tag>;
+    }
+    return <>员工</>;
+}
+
+//组件
+const LockRenderer = (props) => {
+    return props.value ? (
+        <LockTwoTone twoToneColor="#FF0000" />
+    ) : (
+        <UnlockTwoTone twoToneColor="#52c41a" />
+    );
+};
 
 export default (props) => {
     // 列初始化
@@ -23,6 +40,12 @@ export default (props) => {
             width: 100,
             align: 'left',
             dataIndex: 'userName',
+        },
+        {
+            title: '锁定',
+            width: 70,
+            dataIndex: 'beLock',
+            cellRenderer:'lockRenderer'
         },
         {
             title: '姓名',
@@ -40,7 +63,8 @@ export default (props) => {
             title: '职位',
             width: 130,
             align: 'left',
-            dataIndex: 'userPosts',
+            dataIndex: 'postName',
+            cellRenderer: 'tagCellRenderer',
         },
         {
             title: '手机',
@@ -247,7 +271,7 @@ export default (props) => {
             title: '编辑用户',
             width: 600,
             height: 300,
-            callback: () => reloadTree(),
+            callback: () => searchUserByGroup(pageNo, pageSize),
             callparam: () => param,
         });
     }
@@ -264,7 +288,7 @@ export default (props) => {
             title: '编辑用户',
             width: 600,
             height: 300,
-            callback: () => reloadTree(),
+            callback: () => searchUserByGroup(pageNo, pageSize),
             callparam: () => param,
         });
     };
@@ -348,7 +372,7 @@ export default (props) => {
                     title: '分配角色',
                     width: 700,
                     height: 600,
-                    callback: () => reloadTree(),
+                    callback: () => searchUserByGroup(pageNo, pageSize),
                     callparam: () => param,
                 });
             },
@@ -432,7 +456,10 @@ export default (props) => {
                             pageNo={pageNo}
                             pageSize={pageSize}
                             onDoubleClick={(record) => onDoubleClick(record)}
-
+                            components={{
+                                tagCellRenderer: TagRenderer,
+                                lockRenderer: LockRenderer
+                            }}
                             toolBarRender={[
                                 <Space key='space'>
                                     <Button

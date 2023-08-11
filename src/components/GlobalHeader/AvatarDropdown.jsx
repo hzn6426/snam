@@ -55,7 +55,7 @@ class AvatarDropdown extends React.Component {
           <Avatar
             size="small"
             className={styles.avatar}
-            src={currentUser.avatar?.replace(/192.168.1.5/g, 'files.dsi-log.cn:2020')}
+            src={currentUser.avatar}
           >
             {constant.SYSTEM_AVATAR_NAME}
           </Avatar>

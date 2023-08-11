@@ -31,7 +31,7 @@ export default (props) => {
     }
     const loadTree = () => {
         api.group.treeAllGroups().subscribe({
-            next: (data) => setTreeData(data.data)
+            next: (data) => setTreeData(data)
         });
     }
 

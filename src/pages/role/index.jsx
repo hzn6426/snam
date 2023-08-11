@@ -17,7 +17,9 @@ import {
   useObservableAutoCallback
 } from '@/common/utils';
 import {
-  PlusOutlined
+  PlusOutlined,
+  LockTwoTone,
+  UnlockTwoTone 
 } from '@ant-design/icons';
 import { Button, Form, message } from 'antd';
 import { useRef, useState } from 'react';
@@ -40,6 +42,14 @@ const roleState = {
 const StateRenderer = (props) => {
   return props.value && <IStatus value={props.value} state={roleState} />;
 };
+//组件
+const LockRenderer = (props) => {
+  return props.value ? (
+    <LockTwoTone twoToneColor="#FF0000" />
+  ) : (
+    <UnlockTwoTone twoToneColor="#52c41a" />
+  );
+};
 
 //列初始化
 const initColumns = [
@@ -48,6 +58,12 @@ const initColumns = [
     width: 80,
     dataIndex: 'state',
     cellRenderer: 'stateCellRenderer',
+  },
+  {
+    title: '锁定',
+    width: 70,
+    dataIndex: 'beLock',
+    cellRenderer:'lockRenderer'
   },
   {
     title: '角色名称',
@@ -216,6 +232,7 @@ export default (props) => {
         // height={tableHight}
         components={{
           stateCellRenderer: StateRenderer,
+          lockRenderer: LockRenderer
         }}
         // columnsStorageKey="_cache_role_columns"
         initColumns={initColumns}

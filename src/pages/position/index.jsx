@@ -40,6 +40,8 @@ import {
 import {
     SolutionOutlined,
     ApartmentOutlined,
+    LockTwoTone,
+    UnlockTwoTone,
 } from '@ant-design/icons';
 import {
     concatMap,
@@ -92,6 +94,14 @@ export default () => {
     const [disabledActive, setDisabledActive] = useState(true);
     const [disabledStop, setDisabledStop] = useState(true);
 
+    //组件
+const LockRenderer = (props) => {
+    return props.value ? (
+      <LockTwoTone twoToneColor="#FF0000" />
+    ) : (
+      <UnlockTwoTone twoToneColor="#52c41a" />
+    );
+  };
     //列初始化
     const initColumns = [
         {
@@ -99,6 +109,12 @@ export default () => {
             width: 80,
             dataIndex: 'state',
             cellRenderer: 'stateCellRenderer',
+        },
+        {
+            title: '锁定',
+            width: 70,
+            dataIndex: 'beLock',
+            cellRenderer:'lockRenderer'
         },
         {
             title: '职位名称',
@@ -316,6 +332,7 @@ export default () => {
                     components={{
                         stateCellRenderer: StateRenderer,
                         tagCellRenderer: TagRenderer,
+                        lockRenderer: LockRenderer,
                     }}
                     request={(pageNo, pageSize) => searchPositionByGroup(pageNo, pageSize)}
                     dataSource={dataSource}

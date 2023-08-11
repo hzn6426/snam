@@ -27,8 +27,8 @@ import { useEffect, useRef, useState } from 'react';
 // import ITag from '@/components/ITag';
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
-import { showDeleteConfirm } from '@/common/antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
+import { PlusOutlined,LockTwoTone,UnlockTwoTone } from '@ant-design/icons';
 import { Button, Form, message } from 'antd';
 import { of, zip } from 'rxjs';
 import {
@@ -68,7 +68,14 @@ const TagRenderer = (props) => {
     ) : <span>-</span>
   );
 };
-
+//组件
+const LockRenderer = (props) => {
+  return props.value ? (
+    <LockTwoTone twoToneColor="#FF0000" />
+  ) : (
+    <UnlockTwoTone twoToneColor="#52c41a" />
+  );
+};
 //列初始化
 const initColumns = [
   {
@@ -77,6 +84,12 @@ const initColumns = [
     align: 'center',
     dataIndex: 'state',
     cellRenderer: 'stateCellRenderer',
+  },
+  {
+    title: '锁定',
+    width: 70,
+    dataIndex: 'beLock',
+    cellRenderer:'lockRenderer'
   },
   {
     title: '账号',
@@ -354,6 +367,7 @@ export default (props) => {
         components={{
           stateCellRenderer: StateRenderer,
           tagCellRenderer: TagRenderer,
+          lockRenderer: LockRenderer
         }}
         // columnsStorageKey="_cache_user_columns"
         initColumns={initColumns}
@@ -396,7 +410,7 @@ export default (props) => {
         </Button>
         <Button
           danger
-          key="stop"
+          key="unstop"
           onClick={() => onUnStop(selectedKeys)}
           disabled={disabledUnStop}
           loading={loading}
@@ -410,7 +424,7 @@ export default (props) => {
         >
           删除
         </Button>
-        <Button danger key="reset" onClick={() => showDeleteConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd)}>
+        <Button danger key="reset" onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>
           重置密码
         </Button>
         {/* <Permit authority="user:active">

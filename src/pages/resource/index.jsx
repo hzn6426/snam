@@ -42,7 +42,8 @@ import {
     Table,
     Tabs,
     Transfer,
-    message
+    message,
+    Tooltip
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { zip } from 'rxjs';
@@ -79,20 +80,24 @@ const columns = [
         search: false,
         dataIndex: 'name',
         key: 'name',
-        // ellipsis: true,
+        ellipsis: true,
         render: (text, record) => {
             if (record.tag === 'MENU') {
                 return (
                     <Space>
                         <BarsOutlined />
+                        <Tooltip title={text}>
                         {text}
+                        </Tooltip>
                     </Space>
                 );
             }
             return (
                 <Space>
                     <ScheduleOutlined />
-                    {text}
+                    <Tooltip title={text}>
+                        {text}
+                    </Tooltip>
                 </Space>
             );
         },
@@ -1116,7 +1121,7 @@ export default () => {
                                             </div>,
                                         ]}
                                     >
-                                        <Form form={form} size='small' layout="horizontal" className="dsi-form">
+                                        <Form form={form} size='small' layout="horizontal" className="snam-form">
                                             <Form.Item style={{ display: 'none' }}>
                                                 <Form.Item name="permId" label="permId">
                                                     <Input />
@@ -1266,7 +1271,7 @@ export default () => {
                                             </div>,
                                         ]}
                                     >
-                                        <Form form={bform} size='small' layout="horizontal" className="dsi-form">
+                                        <Form form={bform} size='small' layout="horizontal" className="snam-form">
                                             <Form.Item style={{ display: 'none' }}>
                                                 <Form.Item name="permId" label="permId">
                                                     <Input />
@@ -1355,7 +1360,7 @@ export default () => {
                                             </div>,
                                         ]}
                                     >
-                                        <Form form={cform} size='small' layout="horizontal" className="dsi-form">
+                                        <Form form={cform} size='small' layout="horizontal" className="snam-form">
                                             <Form.Item style={{ display: 'none' }}>
                                                 <Form.Item name="permId" label="permId">
                                                     <Input />
@@ -1378,7 +1383,7 @@ export default () => {
                                             </Form.Item>
                                             <Row>
                                                 <Col span={24}>
-                                                    {columnPermTableOptions && columnPermTableOptions.length > 1 && (
+                                                    {columnPermTableOptions && columnPermTableOptions.length >= 1 && (
                                                         <Form.Item
                                                             labelCol={{ span: 4 }}
                                                             name="tables"
@@ -1388,7 +1393,7 @@ export default () => {
                                                             <Checkbox.Group options={columnPermTableOptions} onChange={onColumnTablesChange} />
                                                         </Form.Item>
                                                     )}
-                                                    {(!columnPermTableOptions || columnPermTableOptions.length <= 1) && (
+                                                    {(!columnPermTableOptions || columnPermTableOptions.length < 1) && (
                                                         <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="此功能不支持列配置(只有一列时,不支持列配置)!" type="error" showIcon={true} />
                                                     )}
                                                 </Col>

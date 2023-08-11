@@ -50,7 +50,7 @@ import {
     withLatestFrom,
 } from 'rxjs/operators';
 import { of, zip, EMPTY, from } from 'rxjs';
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, LockTwoTone, UnlockTwoTone} from '@ant-design/icons';
 
 const dictType = { BUSINESS: '业务', SYSTEM: '系统' };
 
@@ -62,6 +62,14 @@ const userState = {
 const StateRenderer = (props) => {
     return props.value && <IStatus value={props.value} state={userState} />;
 };
+//组件
+const LockRenderer = (props) => {
+    return props.value ? (
+      <LockTwoTone twoToneColor="#FF0000" />
+    ) : (
+      <UnlockTwoTone twoToneColor="#52c41a" />
+    );
+  };
 //列初始化
 const parentColumns = [
     {
@@ -69,6 +77,12 @@ const parentColumns = [
         width: 80,
         dataIndex: 'state',
         cellRenderer: 'stateCellRenderer',
+    },
+    {
+        title: '锁定',
+        width: 70,
+        dataIndex: 'beLock',
+        cellRenderer:'lockRenderer'
     },
     {
         title: '字典编号',
@@ -103,6 +117,12 @@ const childColumns = [
         width: 80,
         dataIndex: 'state',
         cellRenderer: 'stateCellRenderer',
+    },
+    {
+        title: '锁定',
+        width: 90,
+        dataIndex: 'beLock',
+        cellRenderer:'lockRenderer'
     },
     {
         title: '父字典名称',
@@ -360,6 +380,7 @@ export default (props) => {
                         key="parent"
                         components={{
                             stateCellRenderer: StateRenderer,
+                            lockRenderer: LockRenderer
                         }}
                         // columnsStorageKey="_cache_user_columns"
                         initColumns={parentColumns}
@@ -413,6 +434,7 @@ export default (props) => {
                         key="child"
                         components={{
                             stateCellRenderer: StateRenderer,
+                            lockRenderer: LockRenderer
                         }}
                         // columnsStorageKey="_cache_user_columns"
                         initColumns={childColumns}

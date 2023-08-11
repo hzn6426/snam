@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { api, useAutoObservable, data2Option } from '@/common/utils';
 import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { api, data2Option } from '@/common/utils';
 import { message } from 'antd';
+import { useEffect, useState } from 'react';
 
 export default (props) => {
     const { clientWidth, clientHeight } = window?.document?.documentElement;

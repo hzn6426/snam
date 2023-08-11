@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { api, useAutoObservable, useAutoObservableEvent, forEach, isEmpty, produce, mapObjIndexed, copyObject } from '@/common/utils';
+import { api, useAutoObservable, useAutoObservableEvent, forEach, isEmpty, produce, mapObjIndexed, copyObject, split } from '@/common/utils';
 import { IFormItem, ILayout, IWindow, IGroupTree,ISearchTree } from '@/common/components';
 import { message, Card, Space } from 'antd';
 import {
@@ -71,8 +71,8 @@ export default (props) => {
                 forEach((v) => {
                     if (v.indexOf('#') !== -1) {
                         // eslint-disable-next-line no-param-reassign
-                        const uid = R.split('#')(v)[1];
-                        const gid = R.split('#')(v)[0];
+                        const uid = split(v,'#')[1];
+                        const gid = split(v,'#')[0];
                         addValueToList(gid, uid);
                     }
                 }, userIds);
@@ -119,7 +119,7 @@ export default (props) => {
             title="角色分配用户"
             width={clientWidth}
             height={clientHeight}
-            onSubmit={(params) => onSaveClick(params, selectedUserIds)}
+            onSubmit={(params) => onSaveClick([params, selectedUserIds])}
             onCancel={() => {
                 window.close();
                 window.opener.onSuccess();

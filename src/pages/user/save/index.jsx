@@ -39,7 +39,7 @@ export default (props) => {
     const onSaveClick = (user) => {
         setLoading(true);
         user.beMultiLogin = user.loginMode === 'SHARED' ? true : false;
-        console.log(user);
+        user.userTag = user.userTag && user.userTag.join(',');
         api.user.saveOrUpdateUser(user).subscribe({
             next: () => {
                 message.success('操作成功!');

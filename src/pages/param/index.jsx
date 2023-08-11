@@ -27,7 +27,18 @@ import {
     switchMap,
     tap
 } from 'rxjs/operators';
-
+import {
+LockTwoTone,
+UnlockTwoTone 
+} from '@ant-design/icons';
+//组件
+const LockRenderer = (props) => {
+    return props.value ? (
+      <LockTwoTone twoToneColor="#FF0000" />
+    ) : (
+      <UnlockTwoTone twoToneColor="#52c41a" />
+    );
+  };
 
 //列初始化
 const initColumns = [
@@ -36,6 +47,12 @@ const initColumns = [
         width: 60,
         dataIndex: 'rowNo',
         valueGetter: (params) => params.node.rowIndex + 1
+    },
+    {
+        title: '锁定',
+        width: 70,
+        dataIndex: 'beLock',
+        cellRenderer:'lockRenderer'
     },
     {
         title: '参数编码',
@@ -168,6 +185,9 @@ export default (props) => {
                 initColumns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
+                components={{
+                    lockRenderer: LockRenderer
+                }}
                 // pageNo={pageNo}
                 // pageSize={pageSize}
                 total={total}

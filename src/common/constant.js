@@ -9,11 +9,11 @@ export default Object.freeze({
   // 用户按钮KEY-sessionStorage
   KEY_USER_BUTTON_PERMS: '_USER_BUTTON_PERMS',
   // 用户token存储KEY-sessionStorage
-  KEY_USER_TOKEN: '_USER_TOKEN',
+  KEY_USER_TOKEN: 'SNAPPER_USER_TOKEN',
   //词典数据缓存
-  KEY_DICT: '_DICT',
+  KEY_DICT: 'SNAPPER_DICT_',
   //用户数据缓存
-  KEY_USER: '_USER',
+  KEY_USER: 'SNAPPER_USER',
   //头像名称
   SYSTEM_AVATAR_NAME: 'SNM',
   // 登录路径

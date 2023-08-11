@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
 import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { api, useAutoObservableEvent } from '@/common/utils';
 import { message } from 'antd';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { useEffect, useRef, useState } from 'react';
+import { shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
 
 
@@ -16,7 +16,7 @@ export default (props) => {
 
     const [onSaveClick] = useAutoObservableEvent([
         tap(() => setLoading(true)),
-        switchMap((role) => api.role.saveOrUpdateRole(role)),
+        switchMap((role) => api.param.saveOrUpdateParam(role)),
         tap(() => {
             message.success('操作成功!');
             window.close();

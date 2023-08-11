@@ -1,11 +1,13 @@
-import { IFooterToolbar, IGrid, ISearchTree, IStatus, Permit } from '@/common/components';
+import { IFooterToolbar, IGrid, ISearchTree, IStatus, Permit, ISearchForm, IFormItem } from '@/common/components';
 import { INewWindow, api, copyObject, forEach, isEmpty, pluck } from '@/common/utils';
 import {
     AppstoreOutlined,
     AppstoreTwoTone,
     DeleteOutlined,
     FormOutlined,
-    PlusOutlined
+    PlusOutlined,
+    LockTwoTone,
+    UnlockTwoTone
 } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 
@@ -18,7 +20,8 @@ import {
     Row,
     Space,
     Tag,
-    message
+    message,
+    Checkbox
 } from 'antd';
 import objectAssign from 'object-assign';
 
@@ -40,6 +43,15 @@ const TagActionRenderer = (props) => {
     return <></>
 }
 
+//组件
+const LockRenderer = (props) => {
+    return props.value ? (
+        <LockTwoTone twoToneColor="#FF0000" />
+    ) : (
+        <UnlockTwoTone twoToneColor="#52c41a" />
+    );
+};
+
 // 列初始化
 const initColumns = [
     {
@@ -47,6 +59,12 @@ const initColumns = [
         width: 140,
         align: 'left',
         dataIndex: 'id',
+    },
+    {
+        title: '锁定',
+        width: 70,
+        dataIndex: 'beLock',
+        cellRenderer: 'lockRenderer'
     },
     {
         title: '子菜单',
@@ -105,6 +123,8 @@ export default (props) => {
     const { Search } = Input;
     const ref = useRef();
     const [searchForm] = Form.useForm();
+    const { clientWidth, clientHeight } = window?.document?.documentElement;
+    const [tableHight, setTableHight] = useState(clientHeight - 260);
     const [dataSource, setDataSource] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -129,13 +149,17 @@ export default (props) => {
     const [selectedRecords, setSelectedRecords] = useState([]);
     //选中的按钮ID
     const [selectedKeys, setSelectedKeys] = useState([]);
+    const [searchChecked, setSearchChecked] = useState(false);
+    const [tableSearchValue, setTableSearchValue] = useState('');
 
     const onChange = (records) => {
         setSelectedRecords(records);
         setSelectedKeys(pluck('id', records));
     }
 
-
+    const onChangeSearch = (e) => {
+        setSearchChecked(e.target.checked);
+    }
 
     // const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
     //     event.pipe(
@@ -231,10 +255,11 @@ export default (props) => {
     };
 
     // 查询button
-    const search = (pageNo, pageSize) => {
+    const search = (pageNo, pageSize, beInMenu) => {
         setSelectedKeys([]);
         let param = { dto: {}, pageNo: pageNo, pageSize: pageSize };
-        param.dto.menuId = selectedMenuId;
+        param.dto.menuId = beInMenu === true ? selectedMenuId : '';
+        param.dto.keyword = tableSearchValue;
         return api.menu.searchButtonsAndApiByMenu(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
@@ -265,7 +290,7 @@ export default (props) => {
             height: 600,
             callback: () => {
                 loadAllMenu();
-                search(pageNo, pageSize);
+                search(pageNo, pageSize, true);
             },
             callparam: () => param,
         });
@@ -295,7 +320,7 @@ export default (props) => {
             height: 600,
             callback: () => {
                 loadAllMenu();
-                search(pageNo, pageSize);
+                search(pageNo, pageSize, true);
             },
             callparam: () => param,
         });
@@ -317,9 +342,12 @@ export default (props) => {
     }, []);
 
     useEffect(() => {
-        search(pageNo, pageSize);
+        search(pageNo, pageSize, true);
     }, [selectedMenuId])
 
+    useEffect(() => {
+        search(pageNo, pageSize, searchChecked);
+    }, [tableSearchValue])
 
     // 列表及弹窗
     return (
@@ -374,12 +402,29 @@ export default (props) => {
                     />
                 </Col>
                 <Col span={17}>
+                    {/* <ISearchForm
+                        
+                        form={searchForm}
+                        onReset={() => ref.current.refresh()}
+                        onSearch={() => ref.current.refresh()}
+                        onHeightChange={(iheight) => setTableHight(iheight)}
+                    >
+                        <IFormItem name="id" label="按钮ID" xtype="input" />
+                        <IFormItem name="buttonName" label="按钮名称" xtype="input" />
+                        <IFormItem name="reqUrl" label="URL" xtype="input" />
+                        <IFormItem name="permAction" label="权限标识" xtype="input" />
+                    </ISearchForm> */}
                     <IGrid
                         ref={ref}
-                        title="按钮列表"
+                        title={<Space>
+                            <span>按钮列表</span>
+                            <Checkbox style={{ marginLeft: '20px' }} size='large' checked={searchChecked} onChange={onChangeSearch}>关联菜单</Checkbox>
+                            <Input.Search size='small' onSearch={(value) => setTableSearchValue(value)} style={{ width: 250 }} type='text' key="tableSearch" placeholder='查询 ID/URL/按钮名称/权限标识' allowClear />
+                        </Space>}
                         components={{
                             tagCellRenderer: TagRenderer,
                             tagActionCellRenderer: TagActionRenderer,
+                            lockRenderer: LockRenderer
                         }}
                         initColumns={initColumns}
                         request={(pageNo, pageSize) => search(pageNo, pageSize)}
