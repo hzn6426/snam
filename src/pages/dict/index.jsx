@@ -390,6 +390,7 @@ export default (props) => {
                         onSelectedChanged={onParentChange}
                         onDoubleClick={(record) => onParentDoubleClick(record.id)}
                         toolBarRender={[
+                            <Permit key="dictionary:save" authority="dictionary:save">
                             <Button
                                 key="add"
                                 size="small"
@@ -399,7 +400,8 @@ export default (props) => {
                                 onClick={() => onParentNewClick()}
                             >
                                 新建
-                            </Button>,
+                            </Button>
+                            </Permit>,
                         ]}
                         clearSelect={searchLoading}
                     />
@@ -444,6 +446,7 @@ export default (props) => {
                         onSelectedChanged={onChildChange}
                         onDoubleClick={(record) => onChildDoubleClick(record.id)}
                         toolBarRender={[
+                            <Permit key="dictChild:save" authority="dictChild:save">
                             <Button
                                 key="add"
                                 size="small"
@@ -453,7 +456,8 @@ export default (props) => {
                                 onClick={() => onChildNewClick()}
                             >
                                 新建
-                            </Button>,
+                            </Button>
+                            </Permit>,
                         ]}
                     />
                     <IFooterToolbar

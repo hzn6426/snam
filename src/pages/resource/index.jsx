@@ -1,7 +1,8 @@
 import {
     IAdvanceSearch,
     IFieldset,
-    ISearchTree
+    ISearchTree,
+    Permit
 } from '@/common/components';
 import {
     api,
@@ -223,6 +224,7 @@ export default () => {
     // 将组织设置为不可选
     const loopGroup = (data, beNotSelectGroup, beInit) => {
         forEach((v) => {
+            v.disabled = false;
             if (beInit === true) {
                 ugs[v.key] = v;
             }
@@ -1106,18 +1108,22 @@ export default () => {
                                         bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
+                                                <Permit authority="resource:saveUsetBusinessPerm">
                                                 <Button
                                                     key="cancel"
                                                     danger
                                                     htmlType="button"
                                                     onClick={() => resetUserPerm()}
                                                     style={{ marginRight: '10px' }}>重置</Button>
+                                                </Permit>
+                                                <Permit authority="resource:saveUsetBusinessPerm">
                                                 <Button
                                                     key="submit"
                                                     type="primary"
                                                     htmlType="submit"
                                                     onClick={submitUserPerm}
                                                     loading={confirmLoading}>保存</Button>
+                                                </Permit>
                                             </div>,
                                         ]}
                                     >
@@ -1261,6 +1267,7 @@ export default () => {
                                         bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
+                                                <Permit authority="resource:saveDataPerm">
                                                 <Button
                                                     key="submit"
                                                     type="primary"
@@ -1268,6 +1275,7 @@ export default () => {
                                                     loading={saveLoading}
                                                     onClick={() => submitUserDataPerm()}
                                                 >保存</Button>
+                                                </Permit>
                                             </div>,
                                         ]}
                                     >
@@ -1350,6 +1358,7 @@ export default () => {
                                         bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
+                                                <Permit authority="resource:saveUserColumnPerm">
                                                 <Button
                                                     key="submit"
                                                     type="primary"
@@ -1357,6 +1366,7 @@ export default () => {
                                                     loading={saveLoading}
                                                     onClick={() => submitColumnPerm()}
                                                 >保存</Button>
+                                                </Permit>
                                             </div>,
                                         ]}
                                     >

@@ -1,7 +1,8 @@
 import {
     IFooterToolbar,
     IGrid,
-    ILayout
+    ILayout,
+    Permit
 } from '@/common/components';
 import {
     api,
@@ -291,9 +292,11 @@ export default (props) => {
                         left: 'calc(37% + 20px)',
                         width: 'calc(36% - 5px)',
                     }} visible={!isEmpty(selectedColumns)}>
+                        <Permit  authority="pcolumn:save">
                         <Button type='danger' key="joinColumn" icon={<NodeExpandOutlined />} onClick={join} >
                             加入
                         </Button>
+                        </Permit>
                     </IFooterToolbar>
                 </>
                 <>
@@ -309,6 +312,7 @@ export default (props) => {
                         total={permTotal}
                         showQuickJumper={false}
                         toolBarRender={[
+                            <Permit  authority="pcolumn:save" key="new">
                             <Button
                                 key="save"
                                 size="small"
@@ -318,7 +322,8 @@ export default (props) => {
                                 onClick={() => onSave()}
                             >
                                 保存权限列
-                            </Button>,
+                            </Button>
+                            </Permit>,
 
                         ]}
                     />
@@ -326,9 +331,11 @@ export default (props) => {
                         left: 'calc(74% + 10px)',
                         width: 'calc(25% - 2px)',
                     }} visible={!isEmpty(selectedPerms)}>
+                        <Permit  authority="pcolumn:save">
                         <Button type='danger' key="joinPerm" icon={<NodeCollapseOutlined />} onClick={unJoin} >
                             移除
                         </Button>
+                        </Permit>
                     </IFooterToolbar>
                 </>
             </ILayout>

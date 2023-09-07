@@ -4,7 +4,8 @@ import {
   IFormItem,
   IGrid,
   ISearchForm,
-  IStatus
+  IStatus,
+  Permit
 } from '@/common/components';
 import {
   INewWindow,
@@ -19,9 +20,10 @@ import {
 import {
   PlusOutlined,
   LockTwoTone,
-  UnlockTwoTone 
+  UnlockTwoTone,
+  ReloadOutlined 
 } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, Form, Space, message } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -167,7 +169,18 @@ export default (props) => {
     })
   };
 
+  const onRefreshPrivileges = () => {
+    setLoading(true);
+    api.role.refreshPrivileges().subscribe({
+      next: () => message.success('操作成功！')
+    }).add(() => setLoading(false));
+  }
+
   const onAssignUser = (roleId) => {
+    if (selectedKeys.length !== 1) {
+      message.error('只能选择一条角色数据！');
+      return;
+  }
     INewWindow({
       url: '/new/role/assignUser/' + roleId,
       title: '分配用户',
@@ -177,15 +190,19 @@ export default (props) => {
     })
   };
 
-  const [onResourceClick] = useAutoObservableEvent([
-    tap((id) => INewWindow({
+  const onResourceClick = (id) => {
+    if (selectedKeys.length !== 1) {
+      message.error('只能选择一条用户组数据！');
+      return;
+    }
+    INewWindow({
       url: '/new/role/resource/' + id,
       title: '角色授权',
       width: 1000,
       height: 700,
       callback: () => refresh()
-    })),
-  ]);
+    });
+  }
 
 
   //查询
@@ -244,6 +261,20 @@ export default (props) => {
         onSelectedChanged={onChange}
         onDoubleClick={(record) => onDoubleClick(record.id)}
         toolBarRender={[
+          <Space key="space">
+          <Permit key="role:refreshPrivileges" authority="role:refreshPrivileges">
+          <Button
+            key="refresh"
+            size="small"
+            type="danger"
+            loading={loading}
+            icon={<ReloadOutlined />}
+            onClick={() => onRefreshPrivileges()}
+          >
+            刷新权限
+          </Button>
+          </Permit>
+          <Permit key="role:save" authority="role:save">
           <Button
             key="add"
             size="small"
@@ -252,13 +283,16 @@ export default (props) => {
             onClick={() => onNewClick()}
           >
             新建
-          </Button>,
+          </Button>
+          </Permit>
+          </Space>
 
         ]}
         // onClick={(data) => onClicked(data)}
         clearSelect={searchLoading}
       />
       <IFooterToolbar visible={!isEmpty(selectedKeys)}>
+      <Permit authority="role:use">
         <Button
           key="active"
           onClick={() => onActive(selectedKeys)}
@@ -267,6 +301,8 @@ export default (props) => {
         >
           激活
         </Button>
+        </Permit>
+        <Permit authority="role:stop">
         <Button
           danger
           key="stop"
@@ -276,6 +312,8 @@ export default (props) => {
         >
           停用
         </Button>
+        </Permit>
+        <Permit authority="role:delete">
         <Button
           type="danger"
           key="delete"
@@ -283,16 +321,20 @@ export default (props) => {
         >
           删除
         </Button>
+        </Permit>
+        <Permit authority="userRole:saveFromRole">
         <Button type="primary" key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
           添加用户
         </Button>
+        </Permit>
+        <Permit authority="role:saveMenuPerm">
         <Button
           key="grant"
           onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}
         >
           角色授权
         </Button>
-
+        </Permit>
       </IFooterToolbar>
     </>
   );

@@ -11,7 +11,9 @@ import {
     CheckSquareOutlined,
     CloseSquareOutlined,
     SaveOutlined,
-    ScheduleOutlined
+    ScheduleOutlined,
+    AppstoreTwoTone,
+    AppstoreOutlined
 } from '@ant-design/icons';
 
 
@@ -53,11 +55,17 @@ const loop = (data) =>
 const addIcon = (data) => {
     if (isEmpty(data)) return;
     forEach((v) => {
-        if (v.tag === 'MENU') {
-            copyObject(v, { icon: <BarsOutlined /> });
+        if (v.tag && v.menuType === 'ADMIN') {
+            copyObject(v, { icon: <AppstoreTwoTone />,
+            });
         } else {
-            copyObject(v, { icon: <ScheduleOutlined /> });
+            copyObject(v, { icon: <AppstoreOutlined /> });
         }
+        // if (v.tag === 'MENU') {
+        //     copyObject(v, { icon: <BarsOutlined /> });
+        // } else {
+        //     copyObject(v, { icon: <ScheduleOutlined /> });
+        // }
         if (v.children && !isEmpty(v.children)) {
             addIcon(v.children);
         }

@@ -39,7 +39,10 @@ export default (props) => {
     const onSaveClick = (user) => {
         setLoading(true);
         user.beMultiLogin = user.loginMode === 'SHARED' ? true : false;
-        user.userTag = user.userTag && user.userTag.join(',');
+        console.log(user.userTag);
+        if (user.userTag && isArray(user.userTag)) {
+            user.userTag = user.userTag.join(',');
+        }
         api.user.saveOrUpdateUser(user).subscribe({
             next: () => {
                 message.success('操作成功!');
@@ -64,7 +67,6 @@ export default (props) => {
 
     return (
         <IWindow
-            ref={ref}
             current={current}
             className="snam-modal"
             title={(current && current.id) ? '编辑用户' : '新建用户'}

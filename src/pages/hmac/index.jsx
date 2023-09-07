@@ -205,6 +205,7 @@ export default (props) => {
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
+                    <Permit authority="hmac:save" key="save">
                     <Button
                         key="add"
                         size="small"
@@ -213,7 +214,8 @@ export default (props) => {
                         onClick={() => onNewClick()}
                     >
                         新建
-                    </Button>,
+                    </Button>
+                    </Permit>,
 
                 ]}
                 // onClick={(data) => onClicked(data)}

@@ -208,7 +208,7 @@ export default (props) => {
         setSelectedParentId(node.key)
         INewWindow({
             url: '/new/group/save',
-            title: '编辑组织',
+            title: '添加子组织',
             width: 600,
             height: 300,
             callback: () => reloadTree(),
@@ -462,21 +462,27 @@ export default (props) => {
                             }}
                             toolBarRender={[
                                 <Space key='space'>
+                                    <Permit authority="group:addUsers" key="new">
                                     <Button
                                         key="addUser"
                                         type="primary"
                                         size="small"
                                         onClick={handleAddUser}>添加成员</Button>
+                                    </Permit>
+                                    <Permit authority="group:addCompany" key="addCompany">
                                     <Button
                                         key="addCompany"
                                         type="danger"
                                         size="small"
                                         onClick={handleAddCompany}>添加分公司</Button>
+                                    </Permit>
+                                    <Permit authority="userRole:saveFromUser" key="assignRole">
                                     <Button
                                         key="assignRole"
                                         type="primary"
                                         size="small"
                                         onClick={handleAssignRoles}>分配角色</Button>
+                                    </Permit>
                                 </Space>
 
                             ]}

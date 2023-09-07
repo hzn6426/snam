@@ -110,8 +110,9 @@ export default Object.freeze({
   API_ROLE_PERM_BUTTON_SAVE: '/authority/resource/saveButtonPerm',
   // 根据职位获取角色列表
   API_ROLE_BY_POSITION: '/authority/role/listByPosition',
-  // 字典匹配
-  API_DICT_CHILD_LIST: '/authority/dictionaryChild/listByParentCode',
+  // 刷新所有角色权限
+  API_ROLE_REFRESH_PRIVILEGES: '/authority/role/refreshPrivileges',
+  
   //==============================================================
   // 字典
   //==============================================================
@@ -131,7 +132,8 @@ export default Object.freeze({
   API_DICT_CHILD_USE: '/authority/dictionaryChild/use',
   // 字典子项停用
   API_DICT_CHILD_STOP: '/authority/dictionaryChild/stop',
-
+  // 字典匹配
+  API_DICT_CHILD_LIST: '/authority/dictionaryChild/listByParentCode',
   //==============================================================
   // 基础数据
   //==============================================================
@@ -220,6 +222,8 @@ export default Object.freeze({
   API_BUTTON_DELETE: '/authority/button',
   // ID
   API_BUTTON_GETBUTTON: '/authority/button',
+  // 关键字查询按钮
+  API_BUTTON_LIST_BY_KEYWORD: '/authority/button/listByKeyWord',
 
   //= ==============================================//
   //                      用户组管理                  //

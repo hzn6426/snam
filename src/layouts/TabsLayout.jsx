@@ -256,7 +256,7 @@ const BasicLayout = (props) => {
           closable={false}
           tab={
             <Link to="/dashboard/blog" onClick={() => setActiveTab('blog')}>
-              工作台
+              更新日志
             </Link>
           }
         >

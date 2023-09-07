@@ -138,7 +138,7 @@ export default () => {
         const usetId = selectedKeys[0];
         INewWindow({
             url: '/new/uset/user/' + usetId,
-            title: '编辑用户组',
+            title: '添加用户',
             width: 700,
             height: 600,
             callback: () => search(pageNo, pageSize)
@@ -153,7 +153,7 @@ export default () => {
         const usetId = selectedKeys[0];
         INewWindow({
             url: '/new/uset/role/' + usetId,
-            title: '编辑用户组',
+            title: '分配角色',
             width: 700,
             height: 600,
             callback: () => search(pageNo, pageSize)
@@ -212,6 +212,7 @@ export default () => {
             onSelectedChanged={onChange}
             onDoubleClick={(record) => onDoubleClick(record.id)}
             toolBarRender={[
+                <Permit key="uset:save" authority="uset:save">
                 <Button
                     key="add"
                     size="small"
@@ -220,23 +221,24 @@ export default () => {
                     onClick={() => onNewClick()}
                 >
                     新建
-                </Button>,
+                </Button>
+                </Permit>,
 
             ]}
             clearSelect={searchLoading}
         />
         <IFooterToolbar visible={!isEmpty(selectedKeys)}>
-            <Permit authority="role:use">
+            <Permit authority="uset:use">
                 <Button key="active" onClick={handleUse} loading={loading} disabled={disabledActive}>
                     启用
                 </Button>
             </Permit>
-            <Permit authority="role:stop">
+            <Permit authority="uset:stop">
                 <Button danger key="stop" onClick={() => showOperationConfirm('用户组停用后不可用，对应权限将失效，确定停用选中用户组吗？', () => handleStop())} disabled={disabledStop} loading={loading}>
                     停用
                 </Button>
             </Permit>
-            <Permit authority="role:delete">
+            <Permit authority="uset:delete">
                 <Button type="danger" key="delete" onClick={() => showDeleteConfirm('删除后用户组中的用户权限将失效,确定删除选中用户组吗？', () => handleDelete())}>
                     删除
                 </Button>
@@ -248,7 +250,7 @@ export default () => {
             </Permit>
             <Permit authority="uset:saveRoleFromUset">
                 <Button type="primary" key="saveRoleFromUset" onClick={handleAssignRoles}>
-                    添加角色
+                    分配角色
                 </Button>
             </Permit>
         </IFooterToolbar>

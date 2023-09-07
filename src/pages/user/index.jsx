@@ -4,7 +4,8 @@ import {
   IGrid,
   ISearchForm,
   IStatus,
-  ITag
+  ITag,
+  Permit
 } from '@/common/components';
 import {
   INewWindow,
@@ -29,7 +30,7 @@ import { useEffect, useRef, useState } from 'react';
 // import Permit from '@/components/Permit';
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
 import { PlusOutlined,LockTwoTone,UnlockTwoTone } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, Form, message, Tooltip } from 'antd';
 import { of, zip } from 'rxjs';
 import {
   debounceTime,
@@ -377,6 +378,7 @@ export default (props) => {
         onSelectedChanged={onChange}
         onDoubleClick={(record) => onDoubleClick(record.id)}
         toolBarRender={[
+          <Permit key="user:save" authority="user:save">
           <Button
             key="add"
             size="small"
@@ -386,19 +388,26 @@ export default (props) => {
             onClick={() => onNewClick()}
           >
             新建
-          </Button>,
+          </Button>
+          </Permit>,
         ]}
         clearSelect={searchLoading}
       />
       <IFooterToolbar visible={!isEmpty(selectedKeys)}>
+      <Permit authority="user:active">
+      <Tooltip  title="演示环境，激活后密码为123456">
         <Button
           key="active"
           onClick={() => onActive(selectedKeys)}
           disabled={disabledActive}
           loading={loading}
+          
         >
           激活
         </Button>
+        </Tooltip>
+        </Permit>
+        <Permit authority="user:stop">
         <Button
           danger
           key="stop"
@@ -408,6 +417,8 @@ export default (props) => {
         >
           停用
         </Button>
+        </Permit>
+        <Permit authority="user:unstop">
         <Button
           danger
           key="unstop"
@@ -417,6 +428,8 @@ export default (props) => {
         >
           启用
         </Button>
+        </Permit>
+        <Permit authority="user:delete">
         <Button
           type="danger"
           key="delete"
@@ -424,9 +437,14 @@ export default (props) => {
         >
           删除
         </Button>
-        <Button danger key="reset" onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>
+        </Permit>
+        <Permit authority="user:reset">
+        <Tooltip title="演示环境，暂不支持该功能">
+        <Button danger key="reset" disabled onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>
           重置密码
         </Button>
+        </Tooltip>
+        </Permit>
         {/* <Permit authority="user:active">
           <Button
             key="active"

@@ -130,7 +130,7 @@ export default (props) => {
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(50);
 
     const [disabledActive, setDisabledActive] = useState(true);
     const [disabledStop, setDisabledStop] = useState(true);
@@ -332,7 +332,7 @@ export default (props) => {
         api.menu.deleteButton(selectedKeys).subscribe({
             next: () => {
                 message.success('操作成功!');
-                search(pageNo, pageSize);
+                search(pageNo, pageSize, searchChecked);
             }
         }).add(() => setLoading(false))
     };
@@ -429,6 +429,8 @@ export default (props) => {
                         initColumns={initColumns}
                         request={(pageNo, pageSize) => search(pageNo, pageSize)}
                         dataSource={dataSource}
+                        pageNo={pageNo}
+                        pageSize={pageSize}
                         total={total}
                         onSelectedChanged={onChange}
                         clearSelect={searchLoading}

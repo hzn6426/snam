@@ -63,3 +63,7 @@ export function saveButtonPerm(ids) {
 export function saveUserRole(userRole) {
   return ipost(constant.API_ROLE_SAVE_USER, userRole);
 }
+//刷新所有角色权限
+export function refreshPrivileges() {
+  return ipost(constant.API_ROLE_REFRESH_PRIVILEGES);
+}
