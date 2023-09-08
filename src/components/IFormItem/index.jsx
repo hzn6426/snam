@@ -1,5 +1,5 @@
 import { IStatus, XInput } from '@/common/components';
-import { Department, Dict, User } from '@/common/componentx';
+import { Department, Dict, User, XUser } from '@/common/componentx';
 import { isFunction } from '@/common/utils';
 
 import {
@@ -145,6 +145,9 @@ export default (props) => {
         break;
       case 'user':
         item = <User tag={tag} {...others} displayName={displayName} />;
+        break;
+      case 'xuser':
+        item = <XUser tag={tag} {...others} />;
         break;
       case 'switch':
         item = <Switch {...others} />;

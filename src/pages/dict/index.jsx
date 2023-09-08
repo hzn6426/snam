@@ -87,13 +87,13 @@ const parentColumns = [
     {
         title: '字典编号',
         width: 160,
-        align: 'center',
+        align: 'left',
         dataIndex: 'dictCode',
     },
     {
         title: '字典名称',
         width: 100,
-        align: 'center',
+        align: 'left',
         dataIndex: 'dictName',
     },
     {
@@ -127,19 +127,19 @@ const childColumns = [
     {
         title: '父字典名称',
         width: 120,
-        align: 'center',
+        align: 'left',
         dataIndex: 'parentName',
     },
     {
         title: '字典编号',
         width: 160,
-        align: 'center',
+        align: 'left',
         dataIndex: 'dictCode',
     },
     {
         title: '字典名称',
         width: 100,
-        align: 'center',
+        align: 'left',
         dataIndex: 'dictName',
     },
     {

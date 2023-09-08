@@ -255,7 +255,7 @@ const LockRenderer = (props) => {
                 const param = { positionId: pid, roleIds: arr };
                 INewWindow({
                     url: '/new/position/role',
-                    title: '新建职位',
+                    title: '分配角色',
                     width: 600,
                     height: 300,
                     callback: () => {
@@ -349,7 +349,7 @@ const LockRenderer = (props) => {
                                 type="primary"
                                 onClick={onNewClick}
                             >
-                                添加
+                                新建
                             </Button>
                         </Permit>
                     ]}

@@ -79,6 +79,8 @@ export default Object.freeze({
   API_USER_LIST_GROUP_USER_BY_ROLE: '/authority/user/listGroupUsersByRole',
   // 根据用户组获取组织用户列表
   API_USER_LIST_GROUP_USER_BY_USET: '/authority/user/listGroupUsersByUset',
+  // 获取所有TAG对应的组织列表和用户
+  API_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG: '/authority/group/treeAllGroupsAndUsersByTag',
   //= ==============================================//
   //                   角色管理                      //
   //= ==============================================//

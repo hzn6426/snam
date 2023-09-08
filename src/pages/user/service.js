@@ -83,6 +83,10 @@ export function listGroupUsersByRole(rid) {
 export function listGroupUsersByUset(usetId) {
   return iget(`${constant.API_USER_LIST_GROUP_USER_BY_USET}?usetId=${usetId}`);
 }
+//根据TAG获取组织和用户
+export function treeAllGroupsAndUsersByTag(tag) {
+  return iget(`${constant.API_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG}?utag=${tag}`);
+}
 
 // 包装模糊匹配
 export function listByKeyword(tag, keyword) {

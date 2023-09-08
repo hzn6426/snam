@@ -29,8 +29,8 @@ export default (props) => {
         switchMap((user) => api.hmac.saveOrUpdateHmacUser(user)),
         tap(() => {
             message.success('操作成功!');
-            // window.close();
-            // window.opener.onSuccess();
+            window.close();
+            window.opener.onSuccess();
         }),
         shareReplay(1),
     ], () => setLoading(false));
@@ -79,7 +79,7 @@ export default (props) => {
                 <IFormItem
                     name="userId"
                     label="关联用户"
-                    xtype="user"
+                    xtype="xuser"
                     required={true}
                 />
                 <IFormItem
