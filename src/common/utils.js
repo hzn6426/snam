@@ -455,6 +455,13 @@ export const copyObject = (target, source, source2) => {
 
 };
 
+//==========================================
+// startsWith('a', 'abc')       //=> true
+//==========================================
+export const startsWith = (x, list) => {
+  return R.startsWith(x,list)
+}
+
 // //==========================================
 // // product((action)=>{state[p] = 1}, state)
 // //==========================================

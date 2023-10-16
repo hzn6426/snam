@@ -18,7 +18,9 @@ export default (props) => {
             filter(id => id !== 'ADD'),
             switchMap((id) => api.hmac.getHmacUser(id)),
             map((user) => {
-                return user[0];
+                const u =  user[0];
+                u.userId = u.orgId + '#' + u.userNo;
+                return u;
             })
         ),
         [params.id],
@@ -93,7 +95,7 @@ export default (props) => {
                     name="whilteIps"
                     label="白名单"
                     placeholder="不填为不限制,多个以逗号间隔"
-                    xtype="datetime"
+                    xtype="input"
                     required={false}
                     tooltip="支持192.168.10.10/24格式"
                 />

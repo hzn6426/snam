@@ -29,6 +29,7 @@ import * as param from '@/pages/param/service';
 import * as position from '@/pages/position/service';
 import * as resource from '@/pages/resource/service';
 import * as uset from '@/pages/uset/service';
+import * as limit from '@/pages/limit/service';
 
 const api = {
   user,
@@ -61,6 +62,7 @@ const api = {
   resource,
   hmac,
   mlogger,
+  limit,
 };
 
 export default api;

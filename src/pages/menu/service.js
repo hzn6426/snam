@@ -34,3 +34,13 @@ export function deleteButton(ids) {
 export function getButton(sid) {
     return iget(`${constant.API_BUTTON_GETBUTTON}/${sid}`);
 }
+
+// 关键字查询按钮
+export function listButtonsByKeyWord(keyword) {
+    return iget(constant.API_BUTTON_LIST_BY_KEYWORD + '?keyWord=' + keyword);
+}
+
+//根据按钮ID获取按钮信息
+export function getButtonAndApiById(id) {
+    return iget(constant.API_BUTTON_GET_BUTTON_AND_API_BY_ID + '?id=' + id);
+}

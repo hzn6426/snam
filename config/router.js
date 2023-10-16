@@ -134,6 +134,11 @@ export default [
                 path: '/new/mlogger/:id',
                 component: './mlogger/detail',
               },
+              {
+                name: '限流器',
+                path: '/new/limit/:id',
+                component: './limit/save',
+              },
             ]
           }
         ]
@@ -248,8 +253,31 @@ export default [
                 path: '/system/mlog',
                 component: './mlogger',
               },
+              {
+                name: '限流管理',
+                icon: 'smile',
+                path: '/system/limit',
+                component: './limit',
+              },
             ],
           },
+          // {
+          //   path: '/gateway',
+          //   icon: 'gateway',
+          //   name: '网关管理',
+          //   routes: [
+          //     {
+          //       path: '/',
+          //       redirect: '/gateway/limit',
+          //     },
+          //     {
+          //       name: '限流管理',
+          //       icon: 'smile',
+          //       path: '/gateway/limit',
+          //       component: './limit',
+          //     },
+          //   ]
+          // },
         ],
       },
     ],

@@ -20,8 +20,8 @@ export default Object.freeze({
   SYSTEM_ROUTE_LOGIN: '/user/login',
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
-  SYSTEM_LOGIN_TITLE: '权限管理系统',
-  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境V1.0',
+  SYSTEM_LOGIN_TITLE: 'Snapper权限框架系统',
+  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.0.7',
   // basicLayout 刷新
   SUBJECT_SYSTEM_REFRESH: '_subject_system_refresh',
   // 用户属性
@@ -32,6 +32,8 @@ export default Object.freeze({
   DICT_BUSINESS_PERM_SCOPE_TAG: 'BUSINESS_PERM_SCOPE_TAG',
   // 资源类型
   DICT_RESOURCE_TYPE_TAG: 'RESOURCE_TYPE_TAG',
+  // 系统端标识
+  SYSTEM_POINT_TAG: 'SYSTEM_POINT_TAG',
   // 缓存超时时间
   TIME_OUT_FOR_CACHE: 30,
   // localstorage key前缀
@@ -226,7 +228,8 @@ export default Object.freeze({
   API_BUTTON_GETBUTTON: '/authority/button',
   // 关键字查询按钮
   API_BUTTON_LIST_BY_KEYWORD: '/authority/button/listByKeyWord',
-
+  // 根据按钮ID获取按钮信息
+  API_BUTTON_GET_BUTTON_AND_API_BY_ID: '/authority/button/getButtonAndApiById',
   //= ==============================================//
   //                      用户组管理                  //
   //= ==============================================//
@@ -364,4 +367,17 @@ export default Object.freeze({
   API_HMAC: '/authority/hmacUser',
   //刷新缓存
   API_HMAC_REFRESH_CACHE: '/authority/hmacUser/refreshCache',
+  //= ==============================================//
+  //                   限流管理                      //
+  //= ==============================================//
+  // 限流查找
+  API_LIMIT_SEARCH: '/authority/gateLimit/search',
+  // 限流增删改查
+  API_LIMIT: '/authority/gateLimit',
+  //启用
+  API_LIMIT_USE: '/authority/gateLimit/use',
+  //停用
+  API_LIMIT_STOP: '/authority/gateLimit/stop',
+  //刷新缓存
+  API_LIMIT_REFRESH_CACHE: '/authority/gateLimit/refreshCache',
 });
