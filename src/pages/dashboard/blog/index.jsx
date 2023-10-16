@@ -9,6 +9,33 @@ export default () => {
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
 
+        <Timeline.Item>
+            <Title level={4}>[3.0.8] 2023.10.15</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>添加限流功能</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化HMAC授权关联用户信息</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+            修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复某些情况下SQL权限解析错误问题</li>
+                <li>修复在共享账户状态下，redis低版本导致lpos命令错误的问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
           <Timeline.Item>
             <Title level={4}>[3.0.7] 2023.7.16</Title>
             <Title level={5}>新增功能</Title>
