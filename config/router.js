@@ -261,23 +261,6 @@ export default [
               },
             ],
           },
-          // {
-          //   path: '/gateway',
-          //   icon: 'gateway',
-          //   name: '网关管理',
-          //   routes: [
-          //     {
-          //       path: '/',
-          //       redirect: '/gateway/limit',
-          //     },
-          //     {
-          //       name: '限流管理',
-          //       icon: 'smile',
-          //       path: '/gateway/limit',
-          //       component: './limit',
-          //     },
-          //   ]
-          // },
         ],
       },
     ],
