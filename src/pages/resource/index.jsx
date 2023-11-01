@@ -182,6 +182,8 @@ export default () => {
 
     // 数据权限是否OR条件
     const [beOrChecked, setBeOrChecked] = useState(false);
+    // 数据权限是否强制追加相同列条件
+    const [beForceChecked, setBeForceChecked] = useState(false);
 
     // 用户组树节点
     const [usetTreeData, setUsetTreeData] = useState([]);
@@ -492,6 +494,7 @@ export default () => {
                     permEndTime: perm.permEndTime
                 };
                 setBeOrChecked(perm.beOrCondition || false);
+                setBeForceChecked(perm.beForceCondition || false);
                 fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); });
             }
         })
@@ -523,6 +526,7 @@ export default () => {
                     permEndTime: perm.permEndTime
                 };
                 setBeOrChecked(perm.beOrCondition || false);
+                setBeForceChecked(perm.beForceCondition || false);
                 fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); });
 
             }
@@ -849,6 +853,9 @@ export default () => {
                 usetId: selectedUsetId,
                 permId: record.permId,
             };
+            setBeForceChecked(false);
+            setBeOrChecked(false);
+            setUi([]);
             bform.setFieldsValue(businessFormValue);
             loadTablesByPerm(selectedUserId, selectedUserGroupId, record.permId, () => {
                 if (permType === 'user') {
@@ -1309,6 +1316,19 @@ export default () => {
                                                         rules={[{ required: false, message: false }]}
                                                     >
                                                         <Switch checkedChildren="OR" unCheckedChildren="AND" checked={beOrChecked} onChange={(checked) => setBeOrChecked(checked)} />
+                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col span={24}>
+                                                    <Form.Item
+                                                        labelCol={{ span: 6 }}
+                                                        name="beForceCondition"
+                                                        label="强制追加条件"
+                                                        tooltip="勾选后，原始SQL中存在配置的查询列时，仍然追加该配置的查询列条件"
+                                                        rules={[{ required: false, message: false }]}
+                                                    >
+                                                        <Switch checkedChildren="强制追加" unCheckedChildren="忽略" checked={beForceChecked} onChange={(checked) => setBeForceChecked(checked)} />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
