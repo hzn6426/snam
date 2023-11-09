@@ -44,7 +44,8 @@ import {
     Tabs,
     Transfer,
     message,
-    Tooltip
+    Tooltip,
+    Divider
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { zip } from 'rxjs';
@@ -442,6 +443,20 @@ export default () => {
                     const alias = tableAliasMap[k];
                     mui.push(
                         <IFieldset title={tableComment[k] + '[' + alias + ']'}>
+                            <Row>
+                                <Col span={12}>
+                                <Form.Item
+                                    labelCol={{ span: 8 }}
+                                    name={'conditionTableAlias' + k}
+                                    label="表重命名"
+                                    tooltip="修改表格的名字，为适配子查询重命名，此处允许修改表名，请参考具体SQL进行修改"
+                                    rules={[{ whitespace: true, required: false, message: false, max: 50 }]}
+                                >
+                                    <Input placeholder="默认同当前表格名称" />
+                                </Form.Item>
+                                </Col>
+                            </Row>
+                            <Divider style={{ margin: 0, padding: 0 }} />
                             <Form.Item name={k}>
                                 <IAdvanceSearch size='small' searchColumns={v} table={k} alias={alias} />
                             </Form.Item>
@@ -472,30 +487,36 @@ export default () => {
     const loadUserDataPerm = (userId, orgId, permId) => {
         api.resource.loadUserDataPerm(userId, orgId, permId).subscribe({
             next: (data) => {
-                if (!data || data.length === 0) {
-                    return;
-                }
-                const perm = data[0];
+                // if (!data || data.length === 0) {
+                //     return;
+                // }
+                bform.setFieldsValue({});
+                setBeOrChecked(false);
+                setUi([]);
+
+                const perm = data[0] || {};
                 const aliaNames = [];
                 const ad = {};
+                const adConditionAlias = {};
                 const tableNames = [];
                 const tableAliasMap = {};
                 forEach((v) => {
                     aliaNames.push(v.aliasName);
                     tableNames.push(v.tableName);
+                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
                     ad[v.tableName] = v.express;
                     tableAliasMap[v.tableName] = v.aliasName;
                 }, perm.searchExpresses || []);
                 // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
                 const obj = {
-                    ...ad, tables: aliaNames,
+                    ...ad, ...adConditionAlias, tables: aliaNames,
                     // beOrCondition:perm.beOrCondition,
                     permStartTime: perm.permStartTime,
                     permEndTime: perm.permEndTime
                 };
-                setBeOrChecked(perm.beOrCondition || false);
-                setBeForceChecked(perm.beForceCondition || false);
-                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); });
+                // setBeOrChecked(perm.beOrCondition || false);
+                // setBeForceChecked(perm.beForceCondition || false);
+                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj);setBeOrChecked(perm.beOrCondition || false) });
             }
         })
     }
@@ -504,30 +525,36 @@ export default () => {
     const loadUsetDataPerm = (usetId, permId) => {
         api.resource.loadUsetDataPerm(usetId, permId).subscribe({
             next: (data) => {
-                if (!data || data.length === 0) {
-                    return;
-                }
-                const perm = data[0];
+                // if (!data || data.length === 0) {
+                //     return;
+                // }
+                bform.setFieldsValue({});
+                setBeOrChecked(false);
+                setUi([]);
+
+                const perm = data[0] || {};
                 const aliaNames = [];
                 const ad = {};
+                const adConditionAlias = {};
                 const tableNames = [];
                 const tableAliasMap = {};
                 forEach((v) => {
                     aliaNames.push(v.aliasName);
                     tableNames.push(v.tableName);
+                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
                     ad[v.tableName] = v.express;
                     tableAliasMap[v.tableName] = v.aliasName;
                 }, perm.searchExpresses || []);
                 // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
                 const obj = {
-                    ...ad, tables: aliaNames,
+                    ...ad, ...adConditionAlias, tables: aliaNames,
                     // beOrCondition:perm.beOrCondition,
                     permStartTime: perm.permStartTime,
                     permEndTime: perm.permEndTime
                 };
-                setBeOrChecked(perm.beOrCondition || false);
-                setBeForceChecked(perm.beForceCondition || false);
-                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); });
+                // setBeOrChecked(perm.beOrCondition || false);
+                // setBeForceChecked(perm.beForceCondition || false);
+                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj);setBeOrChecked(perm.beOrCondition || false); });
 
             }
         });
@@ -550,7 +577,10 @@ export default () => {
             const submitValues = [];
             if (values.tables) {
                 forEach((t) => {
-                    submitValues.push(values[aliasTable[t]]);
+                    const table = aliasTable[t];
+                    const dp = values[table];
+                    dp.conditionTableAlias = values['conditionTableAlias' + table];
+                    submitValues.push(dp);
                 }, values.tables);
             }
             values.searchExpresses = submitValues;
@@ -1316,19 +1346,6 @@ export default () => {
                                                         rules={[{ required: false, message: false }]}
                                                     >
                                                         <Switch checkedChildren="OR" unCheckedChildren="AND" checked={beOrChecked} onChange={(checked) => setBeOrChecked(checked)} />
-                                                    </Form.Item>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col span={24}>
-                                                    <Form.Item
-                                                        labelCol={{ span: 6 }}
-                                                        name="beForceCondition"
-                                                        label="强制追加条件"
-                                                        tooltip="勾选后，原始SQL中存在配置的查询列时，仍然追加该配置的查询列条件"
-                                                        rules={[{ required: false, message: false }]}
-                                                    >
-                                                        <Switch checkedChildren="强制追加" unCheckedChildren="忽略" checked={beForceChecked} onChange={(checked) => setBeForceChecked(checked)} />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>

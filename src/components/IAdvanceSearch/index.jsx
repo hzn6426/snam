@@ -163,7 +163,7 @@ const AdvanceSearch = (props) => {
         // width="600px"
         size={size}
         bordered={false}
-        bodyStyle={{ maxHeight: '250px', overflow: 'scroll' }}
+        bodyStyle={{ maxHeight: '250px', overflow: 'scroll', paddingRight:'2px' }}
       // visible={visible}
       >
         <Form form={form} size='small' layout="horizontal" className="snam-form">
