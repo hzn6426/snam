@@ -26,6 +26,7 @@ import {
     DeleteRowOutlined,
     ScheduleOutlined,
     UserOutlined,
+    TeamOutlined,
 } from '@ant-design/icons';
 import {
     Alert,
@@ -115,12 +116,30 @@ const columns = [
     },
     {
         title: '权限范围',
-        width: 100,
+        width: 80,
         align: 'center',
         search: false,
         dataIndex: 'permScope',
         key: 'permScope',
         render: (text) => permScopes[text] || text || '-',
+    },
+    {
+        title: '业务权限',
+        width: 80,
+        align: 'center',
+        search: false,
+        dataIndex: 'dataPerm',
+        key: 'dataPerm',
+        render: (text) => text || '-',
+    },
+    {
+        title: '列权限',
+        width: 60,
+        align: 'center',
+        search: false,
+        dataIndex: 'columnPerm',
+        key: 'columnPerm',
+        render: (text) => text || '-',
     },
 ];
 
@@ -223,6 +242,16 @@ export default () => {
     const uks = {};
     const uidks = {};
     const ugs = {};
+
+    const loopUserGroup = (data) => {
+        forEach((v) => {
+            copyObject(v, {
+                selectable: true,
+                icon: <TeamOutlined />,
+            });
+               
+        }, data);
+    }
 
     // 将组织设置为不可选
     const loopGroup = (data, beNotSelectGroup, beInit) => {
@@ -819,7 +848,9 @@ export default () => {
                     }, v)
                 }
                 action.columns = cmns;
-                submitValues.push(action);
+                if (cmns.length > 0) {
+                    submitValues.push(action);
+                }
             }, exceptTableColumn);
             values.tableColumns = submitValues;
             if (permType === 'user') {
@@ -1067,6 +1098,7 @@ export default () => {
                                     bordered={false}
                                     bodyStyle={{}}
                                     // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'scroll' }}
+                                    iconRender={(data) => loopUserGroup(data)}
                                     treeData={usetTreeData}
                                     onSelect={(uids, { node }) => onUsetSelect(node)}
                                     titleRender={(node) => (

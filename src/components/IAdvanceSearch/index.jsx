@@ -230,7 +230,7 @@ const AdvanceSearch = (props) => {
               htmlType="button"
               onClick={() => {
                 const rows = produce(ui, (draft) => {
-                  draft.push(<Input />);
+                  draft.push( { component: <Input /> });
                 });
                 setUi(rows);
               }}
