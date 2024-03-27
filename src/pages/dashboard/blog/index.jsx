@@ -10,6 +10,35 @@ export default () => {
         <Timeline>
 
         <Timeline.Item>
+            <Title level={4}>[3.0.9] 2023.11.12</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>功能权限添加重命名支持，用来解决嵌套SQL权限生效问题</li>
+                <li>授权管理表格中添加功能权限和列权限，用来查看是否已配置</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>组织管理中添加用户的激活、停用、启用功能，更方便管理用户</li>
+                <li>优化日志生成，会生成SQL日志、埋点日志、全部日志三个文件</li>
+                <li>优化docker配置，docker启动后会将日志映射到主机上</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+            修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复组织管理中相关操作后，树不刷新问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+        <Timeline.Item>
             <Title level={4}>[3.0.8] 2023.10.15</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>

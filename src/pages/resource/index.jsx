@@ -26,6 +26,7 @@ import {
     DeleteRowOutlined,
     ScheduleOutlined,
     UserOutlined,
+    TeamOutlined,
 } from '@ant-design/icons';
 import {
     Alert,
@@ -44,7 +45,8 @@ import {
     Tabs,
     Transfer,
     message,
-    Tooltip
+    Tooltip,
+    Divider
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { zip } from 'rxjs';
@@ -114,12 +116,30 @@ const columns = [
     },
     {
         title: '权限范围',
-        width: 100,
+        width: 80,
         align: 'center',
         search: false,
         dataIndex: 'permScope',
         key: 'permScope',
         render: (text) => permScopes[text] || text || '-',
+    },
+    {
+        title: '业务权限',
+        width: 80,
+        align: 'center',
+        search: false,
+        dataIndex: 'dataPerm',
+        key: 'dataPerm',
+        render: (text) => text || '-',
+    },
+    {
+        title: '列权限',
+        width: 60,
+        align: 'center',
+        search: false,
+        dataIndex: 'columnPerm',
+        key: 'columnPerm',
+        render: (text) => text || '-',
     },
 ];
 
@@ -182,6 +202,8 @@ export default () => {
 
     // 数据权限是否OR条件
     const [beOrChecked, setBeOrChecked] = useState(false);
+    // 数据权限是否强制追加相同列条件
+    const [beForceChecked, setBeForceChecked] = useState(false);
 
     // 用户组树节点
     const [usetTreeData, setUsetTreeData] = useState([]);
@@ -220,6 +242,16 @@ export default () => {
     const uks = {};
     const uidks = {};
     const ugs = {};
+
+    const loopUserGroup = (data) => {
+        forEach((v) => {
+            copyObject(v, {
+                selectable: true,
+                icon: <TeamOutlined />,
+            });
+               
+        }, data);
+    }
 
     // 将组织设置为不可选
     const loopGroup = (data, beNotSelectGroup, beInit) => {
@@ -440,6 +472,20 @@ export default () => {
                     const alias = tableAliasMap[k];
                     mui.push(
                         <IFieldset title={tableComment[k] + '[' + alias + ']'}>
+                            <Row>
+                                <Col span={12}>
+                                <Form.Item
+                                    labelCol={{ span: 8 }}
+                                    name={'conditionTableAlias' + k}
+                                    label="表重命名"
+                                    tooltip="修改表格的名字，为适配子查询重命名，此处允许修改表名，请参考具体SQL进行修改"
+                                    rules={[{ whitespace: true, required: false, message: false, max: 50 }]}
+                                >
+                                    <Input placeholder="默认同当前表格名称" />
+                                </Form.Item>
+                                </Col>
+                            </Row>
+                            <Divider style={{ margin: 0, padding: 0 }} />
                             <Form.Item name={k}>
                                 <IAdvanceSearch size='small' searchColumns={v} table={k} alias={alias} />
                             </Form.Item>
@@ -470,29 +516,36 @@ export default () => {
     const loadUserDataPerm = (userId, orgId, permId) => {
         api.resource.loadUserDataPerm(userId, orgId, permId).subscribe({
             next: (data) => {
-                if (!data || data.length === 0) {
-                    return;
-                }
-                const perm = data[0];
+                // if (!data || data.length === 0) {
+                //     return;
+                // }
+                bform.setFieldsValue({});
+                setBeOrChecked(false);
+                setUi([]);
+
+                const perm = data[0] || {};
                 const aliaNames = [];
                 const ad = {};
+                const adConditionAlias = {};
                 const tableNames = [];
                 const tableAliasMap = {};
                 forEach((v) => {
                     aliaNames.push(v.aliasName);
                     tableNames.push(v.tableName);
+                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
                     ad[v.tableName] = v.express;
                     tableAliasMap[v.tableName] = v.aliasName;
                 }, perm.searchExpresses || []);
                 // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
                 const obj = {
-                    ...ad, tables: aliaNames,
+                    ...ad, ...adConditionAlias, tables: aliaNames,
                     // beOrCondition:perm.beOrCondition,
                     permStartTime: perm.permStartTime,
                     permEndTime: perm.permEndTime
                 };
-                setBeOrChecked(perm.beOrCondition || false);
-                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); });
+                // setBeOrChecked(perm.beOrCondition || false);
+                // setBeForceChecked(perm.beForceCondition || false);
+                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj);setBeOrChecked(perm.beOrCondition || false) });
             }
         })
     }
@@ -501,29 +554,36 @@ export default () => {
     const loadUsetDataPerm = (usetId, permId) => {
         api.resource.loadUsetDataPerm(usetId, permId).subscribe({
             next: (data) => {
-                if (!data || data.length === 0) {
-                    return;
-                }
-                const perm = data[0];
+                // if (!data || data.length === 0) {
+                //     return;
+                // }
+                bform.setFieldsValue({});
+                setBeOrChecked(false);
+                setUi([]);
+
+                const perm = data[0] || {};
                 const aliaNames = [];
                 const ad = {};
+                const adConditionAlias = {};
                 const tableNames = [];
                 const tableAliasMap = {};
                 forEach((v) => {
                     aliaNames.push(v.aliasName);
                     tableNames.push(v.tableName);
+                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
                     ad[v.tableName] = v.express;
                     tableAliasMap[v.tableName] = v.aliasName;
                 }, perm.searchExpresses || []);
                 // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
                 const obj = {
-                    ...ad, tables: aliaNames,
+                    ...ad, ...adConditionAlias, tables: aliaNames,
                     // beOrCondition:perm.beOrCondition,
                     permStartTime: perm.permStartTime,
                     permEndTime: perm.permEndTime
                 };
-                setBeOrChecked(perm.beOrCondition || false);
-                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); });
+                // setBeOrChecked(perm.beOrCondition || false);
+                // setBeForceChecked(perm.beForceCondition || false);
+                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj);setBeOrChecked(perm.beOrCondition || false); });
 
             }
         });
@@ -546,7 +606,10 @@ export default () => {
             const submitValues = [];
             if (values.tables) {
                 forEach((t) => {
-                    submitValues.push(values[aliasTable[t]]);
+                    const table = aliasTable[t];
+                    const dp = values[table];
+                    dp.conditionTableAlias = values['conditionTableAlias' + table];
+                    submitValues.push(dp);
                 }, values.tables);
             }
             values.searchExpresses = submitValues;
@@ -785,7 +848,9 @@ export default () => {
                     }, v)
                 }
                 action.columns = cmns;
-                submitValues.push(action);
+                if (cmns.length > 0) {
+                    submitValues.push(action);
+                }
             }, exceptTableColumn);
             values.tableColumns = submitValues;
             if (permType === 'user') {
@@ -849,6 +914,9 @@ export default () => {
                 usetId: selectedUsetId,
                 permId: record.permId,
             };
+            setBeForceChecked(false);
+            setBeOrChecked(false);
+            setUi([]);
             bform.setFieldsValue(businessFormValue);
             loadTablesByPerm(selectedUserId, selectedUserGroupId, record.permId, () => {
                 if (permType === 'user') {
@@ -1030,6 +1098,7 @@ export default () => {
                                     bordered={false}
                                     bodyStyle={{}}
                                     // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'scroll' }}
+                                    iconRender={(data) => loopUserGroup(data)}
                                     treeData={usetTreeData}
                                     onSelect={(uids, { node }) => onUsetSelect(node)}
                                     titleRender={(node) => (

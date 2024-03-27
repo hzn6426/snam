@@ -1,5 +1,5 @@
-import { IDrag, IFooterToolbar, IGrid, ISearchTree, Permit } from '@/common/components';
-import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback } from '@/common/utils';
+import { IDrag, IFooterToolbar, IGrid, ISearchTree, Permit, IStatus, } from '@/common/components';
+import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, useAutoObservableEvent } from '@/common/utils';
 import {
     ApartmentOutlined,
     DeleteOutlined,
@@ -12,9 +12,9 @@ import {
 import { useEffect, useState } from 'react';
 
 import { showDeleteConfirm } from '@/common/antd';
-import { Button, Col, Form, message, Row, Space, Tag } from 'antd';
+import { Button, Col, Form, message, Row, Space, Tag, Tooltip } from 'antd';
 import { of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, switchMap, tap, filter } from 'rxjs/operators';
 
 const TagRenderer = (props) => {
     if (props.value) {
@@ -32,9 +32,27 @@ const LockRenderer = (props) => {
     );
 };
 
+const userState = {
+    UNACTIVE: { text: '未激活', status: 'Warning' },
+    ACTIVE: { text: '启用', status: 'Success' },
+    STOPPED: { text: '停用', status: 'Default' },
+    LOCKED: { text: '锁定', status: 'Error' },
+  };
+
+const StateRenderer = (props) => {
+    return props.value && <IStatus value={props.value} state={userState} />;
+  };
+
 export default (props) => {
     // 列初始化
     const initColumns = [
+        {
+            title: '状态',
+            width: 80,
+            align: 'center',
+            dataIndex: 'state',
+            cellRenderer: 'stateCellRenderer',
+          },
         {
             title: '账号',
             width: 100,
@@ -45,7 +63,7 @@ export default (props) => {
             title: '锁定',
             width: 70,
             dataIndex: 'beLock',
-            cellRenderer:'lockRenderer'
+            cellRenderer: 'lockRenderer'
         },
         {
             title: '姓名',
@@ -112,6 +130,12 @@ export default (props) => {
     const [topHeight, setTopHeight] = useState(middleHeight - 90);
     const [bottomHeight, setBottomHeight] = useState(middleHeight - 90);
 
+    const [loading, setLoading] = useState(false);
+
+    const [disabledActive, setDisabledActive] = useState(true);
+    const [disabledStop, setDisabledStop] = useState(true);
+    const [disabledUnStop, setDisabledUnStop] = useState(true);
+
 
 
     const reloadTree = () => {
@@ -122,6 +146,11 @@ export default (props) => {
         event.pipe(
             debounceTime(300),
             distinctUntilChanged(),
+            tap((keys) => {
+                setDisabledActive(beHasRowsPropNotEqual('state', 'UNACTIVE', keys));
+                setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', keys));
+                setDisabledUnStop(beHasRowsPropNotEqual('state', 'STOPPED', keys));
+              }),
             switchMap((v) => of(pluck('id', v))),
             shareReplay(1),
         ),
@@ -257,6 +286,49 @@ export default (props) => {
 
     };
 
+    const [onActive] = useAutoObservableEvent(
+        [
+          tap(() => setLoading(true)),
+          filter((keys) => !isEmpty(keys)),
+          switchMap((keys) => api.user.activeUser(keys)),
+          tap(() => {
+            message.success('操作成功!');
+            refresh();
+            reloadTree();
+          }),
+          shareReplay(1),
+        ],
+        () => setLoading(false),
+      );
+    
+      const [onStop] = useAutoObservableEvent(
+        [
+          tap(() => setLoading(true)),
+          switchMap((keys) => api.user.stopUser(keys)),
+          tap(() => {
+            message.success('操作成功!');
+            refresh();
+            reloadTree();
+          }),
+          shareReplay(1),
+        ],
+        () => setLoading(false),
+      );
+    
+      const [onUnStop] = useAutoObservableEvent(
+        [
+          tap(() => setLoading(true)),
+          switchMap((keys) => api.user.unstopUser(keys)),
+          tap(() => {
+            message.success('操作成功!');
+            refresh();
+            reloadTree();
+          }),
+          shareReplay(1),
+        ],
+        () => setLoading(false),
+      );
+
     // 双击用户 显示详情
     const onDoubleClick = (record) => {
         const param = {
@@ -288,7 +360,7 @@ export default (props) => {
             title: '编辑用户',
             width: 600,
             height: 300,
-            callback: () => searchUserByGroup(pageNo, pageSize),
+            callback: () => {reloadTree();searchUserByGroup(pageNo, pageSize);},
             callparam: () => param,
         });
     };
@@ -302,6 +374,7 @@ export default (props) => {
                 setSelectedGroupUserKeys([]);
                 searchUserByGroup(pageNo, pageSize);
                 searchNotAssignedUser();
+                reloadTree();
             }
         });
     }
@@ -336,6 +409,7 @@ export default (props) => {
                 message.success('操作成功！');
                 searchUserByGroup(pageNo, pageSize);
                 searchNotAssignedUser();
+                reloadTree();
             },
         });
     }
@@ -457,31 +531,32 @@ export default (props) => {
                             pageSize={pageSize}
                             onDoubleClick={(record) => onDoubleClick(record)}
                             components={{
+                                stateCellRenderer: StateRenderer,
                                 tagCellRenderer: TagRenderer,
                                 lockRenderer: LockRenderer
                             }}
                             toolBarRender={[
                                 <Space key='space'>
                                     <Permit authority="group:addUsers" key="new">
-                                    <Button
-                                        key="addUser"
-                                        type="primary"
-                                        size="small"
-                                        onClick={handleAddUser}>添加成员</Button>
+                                        <Button
+                                            key="addUser"
+                                            type="primary"
+                                            size="small"
+                                            onClick={handleAddUser}>添加成员</Button>
                                     </Permit>
                                     <Permit authority="group:addCompany" key="addCompany">
-                                    <Button
-                                        key="addCompany"
-                                        type="danger"
-                                        size="small"
-                                        onClick={handleAddCompany}>添加分公司</Button>
+                                        <Button
+                                            key="addCompany"
+                                            type="danger"
+                                            size="small"
+                                            onClick={handleAddCompany}>添加分公司</Button>
                                     </Permit>
                                     <Permit authority="userRole:saveFromUser" key="assignRole">
-                                    <Button
-                                        key="assignRole"
-                                        type="primary"
-                                        size="small"
-                                        onClick={handleAssignRoles}>分配角色</Button>
+                                        <Button
+                                            key="assignRole"
+                                            type="primary"
+                                            size="small"
+                                            onClick={handleAssignRoles}>分配角色</Button>
                                     </Permit>
                                 </Space>
 
@@ -489,6 +564,41 @@ export default (props) => {
                         />
                         {selectedGroupUserKeys?.length > 0 && (
                             <IFooterToolbar>
+                                <Permit authority="user:active">
+                                    <Tooltip title="演示环境，激活后密码为123456">
+                                        <Button
+                                            key="active"
+                                            onClick={() => onActive(selectedGroupUserKeys)}
+                                            disabled={disabledActive}
+                                            loading={loading}
+
+                                        >
+                                            激活
+                                        </Button>
+                                    </Tooltip>
+                                </Permit>
+                                <Permit authority="user:stop">
+                                    <Button
+                                        danger
+                                        key="stop"
+                                        onClick={() => onStop(selectedGroupUserKeys)}
+                                        disabled={disabledStop}
+                                        loading={loading}
+                                    >
+                                        停用
+                                    </Button>
+                                </Permit>
+                                <Permit authority="user:unstop">
+                                    <Button
+                                        danger
+                                        key="unstop"
+                                        onClick={() => onUnStop(selectedGroupUserKeys)}
+                                        disabled={disabledUnStop}
+                                        loading={loading}
+                                    >
+                                        启用
+                                    </Button>
+                                </Permit>
                                 <Permit authority="group:moveUsers">
                                     <Button type="primary" key="move" onClick={() => onMove()}>
                                         移动
@@ -512,6 +622,11 @@ export default (props) => {
                             height={340}
                             onSelectedChanged={onNotAssignUserChange}
                             clearSelect={searchLoading}
+                            components={{
+                                stateCellRenderer: StateRenderer,
+                                tagCellRenderer: TagRenderer,
+                                lockRenderer: LockRenderer
+                            }}
                         />
                         {selectedNotAssignUserKeys?.length > 0 && (
                             <IFooterToolbar>
