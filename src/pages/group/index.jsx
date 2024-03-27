@@ -294,6 +294,7 @@ export default (props) => {
           tap(() => {
             message.success('操作成功!');
             refresh();
+            reloadTree();
           }),
           shareReplay(1),
         ],
@@ -307,6 +308,7 @@ export default (props) => {
           tap(() => {
             message.success('操作成功!');
             refresh();
+            reloadTree();
           }),
           shareReplay(1),
         ],
@@ -320,6 +322,7 @@ export default (props) => {
           tap(() => {
             message.success('操作成功!');
             refresh();
+            reloadTree();
           }),
           shareReplay(1),
         ],
@@ -357,7 +360,7 @@ export default (props) => {
             title: '编辑用户',
             width: 600,
             height: 300,
-            callback: () => searchUserByGroup(pageNo, pageSize),
+            callback: () => {reloadTree();searchUserByGroup(pageNo, pageSize);},
             callparam: () => param,
         });
     };
@@ -371,6 +374,7 @@ export default (props) => {
                 setSelectedGroupUserKeys([]);
                 searchUserByGroup(pageNo, pageSize);
                 searchNotAssignedUser();
+                reloadTree();
             }
         });
     }
@@ -405,6 +409,7 @@ export default (props) => {
                 message.success('操作成功！');
                 searchUserByGroup(pageNo, pageSize);
                 searchNotAssignedUser();
+                reloadTree();
             },
         });
     }
