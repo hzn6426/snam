@@ -10,4 +10,4 @@
 <li>项目启动：yarn start </li>
 <li>项目打包：yarn build </li>
 </ul>
-<b>本地开发时请配置config/proxy.js文件，用来指向后端服务</b>
+<b>本地开发时请配置config/proxy.js文件，用来指向后端服务，单机版使用请将pathRewrite 中内容注释，添加'authority': 'api' 配置</b>
