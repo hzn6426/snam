@@ -15,9 +15,8 @@ export default () => {
             <Paragraph>
               <ul className="snam-li">
                 <li>新的UI-Antd升级到最新版本(5.x)，前端如果要使用新的UI，请切换newui分支</li>
-                <li>UI-表格升级</li>
                 <li><a href="https://gitee.com/ifrog/snam-standalone">单机版</a>发布，不需要任何外部依赖直接启动</li>
-
+                <li>添加自定义缓存前缀，同一个缓存服务器可以运行多套系统</li>
               </ul>
             </Paragraph>
             <Title level={5} type="success">
@@ -25,17 +24,10 @@ export default () => {
             </Title>
             <Paragraph type="success">
               <ul className="snam-li">
-                <li>组织管理中添加用户的激活、停用、启用功能，更方便管理用户</li>
-                <li>优化日志生成，会生成SQL日志、埋点日志、全部日志三个文件</li>
-                <li>优化docker配置，docker启动后会将日志映射到主机上</li>
-              </ul>
-            </Paragraph>
-            <Title level={5} type="warning">
-              修复BUG
-            </Title>
-            <Paragraph type="warning">
-              <ul className="snam-li">
-                <li>修复组织管理中相关操作后，树不刷新问题</li>
+                <li>优化依赖POM，为减少依赖，将对应的依赖打包成一个依赖文件</li>
+                <li>为能够运行，提供对应的依赖(根目录)，可自行安装到本地maven进行本地运行</li>
+                <li>优化docker配置，切换docker镜像能够自动适配服务器内存大小</li>
+                <li>MbaseServiceImpl基础服务优化，优化批量操作方法</li>
               </ul>
             </Paragraph>
           </Timeline.Item>
