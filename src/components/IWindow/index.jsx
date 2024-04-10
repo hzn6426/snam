@@ -3,7 +3,7 @@ import { useWindowSize } from '@/common/utils';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Space } from 'antd';
 import { useEffect, useState } from 'react';
-
+import './index.less';
 export default (props) => {
     const { saveVisible } = props;
     //窗口大小
@@ -43,7 +43,7 @@ export default (props) => {
     return (
         <Card
             style={{
-                height: clientHeight - 40 + 'px',
+                height: clientHeight - 0 + 'px',
                 overflow: 'auto',
                 padding: '0 10px 10px 10px',
             }}
@@ -86,7 +86,7 @@ export default (props) => {
                     </IIF>
                     <Button
                         icon={<CloseOutlined />}
-                        type="danger"
+                        danger
                         htmlType="submit"
                         loading={confirmLoading}
                         onClick={() => {

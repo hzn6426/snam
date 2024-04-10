@@ -2,8 +2,8 @@ import { showDeleteConfirm } from '@/common/antd';
 import {
     IFooterToolbar,
     IFormItem,
-    IGrid,
-    ISearchForm,
+    IAGrid,
+    XSearchForm,
     Permit
 } from '@/common/components';
 import {
@@ -43,40 +43,47 @@ const LockRenderer = (props) => {
 //列初始化
 const initColumns = [
     {
-        title: '#',
-        width: 60,
-        dataIndex: 'rowNo',
-        valueGetter: (params) => params.node.rowIndex + 1
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
+        width: 80,
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
     },
     {
-        title: '锁定',
+        headerName: '锁定',
         width: 70,
-        dataIndex: 'beLock',
-        cellRenderer:'lockRenderer'
+        field: 'beLock',
+        cellRenderer: LockRenderer
     },
     {
-        title: '参数编码',
+        headerName: '参数编码',
         width: 150,
         align: 'left',
-        dataIndex: 'paramCode',
+        field: 'paramCode',
     },
     {
-        title: '参数名称',
+        headerName: '参数名称',
         width: 160,
         align: 'left',
-        dataIndex: 'paramName',
+        field: 'paramName',
     },
     {
-        title: '参数值',
+        headerName: '参数值',
         width: 160,
         align: 'left',
-        dataIndex: 'paramValue',
+        field: 'paramValue',
     },
     {
-        title: '备注',
+        headerName: '备注',
         width: 160,
         align: 'left',
-        dataIndex: 'note',
+        field: 'note',
     }
 ];
 
@@ -157,12 +164,14 @@ export default (props) => {
         });
     };
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
     // 列表及弹窗
     return (
         <>
-            <ISearchForm
+            <XSearchForm
                 form={searchForm}
+                rows={1}
                 onReset={() => ref.current.refresh()}
                 onSearch={() => ref.current.refresh()}
             >
@@ -176,18 +185,19 @@ export default (props) => {
                     label="参数名称"
                     xtype="input"
                 />
-            </ISearchForm>
+            </XSearchForm>
 
-            <IGrid
+            <IAGrid
                 ref={ref}
                 title="参数列表"
+                height={offsetHeight - 150}
                 // columnsStorageKey="_cache_role_columns"
-                initColumns={initColumns}
+                columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
-                components={{
-                    lockRenderer: LockRenderer
-                }}
+                // components={{
+                //     lockRenderer: LockRenderer
+                // }}
                 // pageNo={pageNo}
                 // pageSize={pageSize}
                 total={total}
@@ -208,8 +218,20 @@ export default (props) => {
                     </Permit>
 
                 ]}
+                pageToolBarRender={[
+                    <Permit authority="param:delete">
+                        <Button
+                            danger
+                            key="delete"
+                            loading={loading}
+                            onClick={() => showDeleteConfirm('确定删除选中的参数吗?', () => onDelete(selectedKeys))}
+                        >
+                            删除
+                        </Button>
+                    </Permit>
+                ]}
             />
-            <IFooterToolbar visible={!isEmpty(selectedKeys)}>
+            {/* <IFooterToolbar visible={!isEmpty(selectedKeys)}>
                 <Permit authority="param:delete">
                     <Button
                         type="danger"
@@ -221,7 +243,7 @@ export default (props) => {
                     </Button>
                 </Permit>
 
-            </IFooterToolbar>
+            </IFooterToolbar> */}
         </>
     );
 };

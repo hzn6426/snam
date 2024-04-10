@@ -44,9 +44,10 @@ const err = (error) => {
           }, 3000);
         }
         return data;
-      } else {
-        message.error(data.message);
-      }
+      } 
+
+      let config = { content: errorText, className: 'errorMessage' };
+      message.error(config);
       // console.log(data)
       //message.error(errorText)
       // TODO

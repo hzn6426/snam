@@ -172,7 +172,7 @@ export default (props) => {
                 </>
             }
             bordered={bordered === false ? false : true}
-            bodyStyle={bodyStyle || { height: 'calc(100vh - 190px)', overflow: 'scroll' }}
+            bodyStyle={bodyStyle}
         >
             <Tree
                 // showIcon={showIcon}

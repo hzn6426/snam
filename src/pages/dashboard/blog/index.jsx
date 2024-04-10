@@ -9,6 +9,37 @@ export default () => {
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
 
+          <Timeline.Item>
+            <Title level={4}>[3.1.0] 2024.04.06</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新的UI-Antd升级到最新版本(5.x)，前端如果要使用新的UI，请切换newui分支</li>
+                <li>UI-表格升级</li>
+                <li><a href="https://gitee.com/ifrog/snam-standalone">单机版</a>发布，不需要任何外部依赖直接启动</li>
+
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>组织管理中添加用户的激活、停用、启用功能，更方便管理用户</li>
+                <li>优化日志生成，会生成SQL日志、埋点日志、全部日志三个文件</li>
+                <li>优化docker配置，docker启动后会将日志映射到主机上</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复组织管理中相关操作后，树不刷新问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
         <Timeline.Item>
             <Title level={4}>[3.0.9] 2023.11.12</Title>
             <Title level={5}>新增功能</Title>

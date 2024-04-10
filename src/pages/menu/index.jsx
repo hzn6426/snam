@@ -1,4 +1,4 @@
-import { IFooterToolbar, IGrid, ISearchTree, IStatus, Permit, ISearchForm, IFormItem } from '@/common/components';
+import { IFooterToolbar, IAGrid, ISearchTree, IStatus, Permit, ISearchForm, IFormItem } from '@/common/components';
 import { INewWindow, api, copyObject, forEach, isEmpty, pluck } from '@/common/utils';
 import {
     AppstoreOutlined,
@@ -55,66 +55,79 @@ const LockRenderer = (props) => {
 // 列初始化
 const initColumns = [
     {
-        title: '按钮ID',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
+        width: 80,
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
+    },
+    {
+        headerName: '按钮ID',
         width: 140,
         align: 'left',
-        dataIndex: 'id',
+        field: 'id',
     },
     {
-        title: '锁定',
+        headerName: '锁定',
         width: 70,
-        dataIndex: 'beLock',
-        cellRenderer: 'lockRenderer'
+        field: 'beLock',
+        cellRenderer: LockRenderer
     },
     {
-        title: '子菜单',
+        headerName: '子菜单',
         width: 70,
         align: 'center',
-        dataIndex: 'subMenu',
+        field: 'subMenu',
     },
     {
-        title: '按钮名称',
+        headerName: '按钮名称',
         width: 120,
         align: 'left',
-        dataIndex: 'buttonName',
+        field: 'buttonName',
     },
     {
-        title: '忽略权限',
+        headerName: '忽略权限',
         align: 'center',
         width: 80,
-        dataIndex: 'beUnauth',
-        cellRenderer: 'tagCellRenderer'
+        field: 'beUnauth',
+        cellRenderer: TagRenderer
     },
     {
-        title: '请求URL',
+        headerName: '请求URL',
         width: 260,
         align: 'left',
-        dataIndex: 'reqUrl',
+        field: 'reqUrl',
     },
     {
-        title: '请求方法',
+        headerName: '请求方法',
         align: 'center',
         width: 90,
-        dataIndex: 'reqMethod',
+        field: 'reqMethod',
     },
     {
-        title: '权限标识',
+        headerName: '权限标识',
         align: 'left',
         width: 140,
-        dataIndex: 'permAction',
+        field: 'permAction',
         // cellRenderer: 'tagActionCellRenderer',
     },
     {
-        title: '权限引用',
+        headerName: '权限引用',
         align: 'left',
         width: 100,
-        dataIndex: 'actionRef',
+        field: 'actionRef',
     },
     {
-        title: '备注',
+        headerName: '备注',
         align: 'center',
         width: 100,
-        dataIndex: 'note',
+        field: 'note',
     },
 
 ];
@@ -349,6 +362,7 @@ export default (props) => {
         search(pageNo, pageSize, searchChecked);
     }, [tableSearchValue])
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
     // 列表及弹窗
     return (
         <>
@@ -358,6 +372,7 @@ export default (props) => {
                         iconRender={loop}
                         blockNode={true}
                         treeData={treeData}
+                        bodyStyle={{ height: offsetHeight - 110, overflow: 'scroll' }}
                         titleRender={(node) => (
                             <div style={{ width: '100%' }}>
                                 <div style={{ float: 'left' }}>
@@ -414,19 +429,20 @@ export default (props) => {
                         <IFormItem name="reqUrl" label="URL" xtype="input" />
                         <IFormItem name="permAction" label="权限标识" xtype="input" />
                     </ISearchForm> */}
-                    <IGrid
+                    <IAGrid
                         ref={ref}
                         title={<Space>
                             <span>按钮列表</span>
                             <Checkbox style={{ marginLeft: '20px' }} size='large' checked={searchChecked} onChange={onChangeSearch}>关联菜单</Checkbox>
                             <Input.Search size='small' onSearch={(value) => setTableSearchValue(value)} style={{ width: 250 }} type='text' key="tableSearch" placeholder='查询 ID/URL/按钮名称/权限标识' allowClear />
                         </Space>}
-                        components={{
-                            tagCellRenderer: TagRenderer,
-                            tagActionCellRenderer: TagActionRenderer,
-                            lockRenderer: LockRenderer
-                        }}
-                        initColumns={initColumns}
+                        // components={{
+                        //     tagCellRenderer: TagRenderer,
+                        //     tagActionCellRenderer: TagActionRenderer,
+                        //     lockRenderer: LockRenderer
+                        // }}
+                        columns={initColumns}
+                        height={offsetHeight - 80}
                         request={(pageNo, pageSize) => search(pageNo, pageSize)}
                         dataSource={dataSource}
                         pageNo={pageNo}
@@ -438,25 +454,31 @@ export default (props) => {
                         toolBarRender={[
                             <Space key="space">
                                 <Permit authority="menu:saveOrUpdate" key="newMenu">
-                                    <Button key="newMenu" type="danger" size="small" onClick={handleAddMenu}>新建根菜单</Button>
+                                    <Button key="newMenu" danger size="small" onClick={handleAddMenu}>新建根菜单</Button>
                                 </Permit>
                                 <Permit authority="menu:saveOrUpdateButton" key="copyButton">
-                                    <Button key="copyButton" type="warn" size="small" onClick={handleCopyButton}>复制新建</Button>
+                                    <Button key="copyButton" warn size="small" onClick={handleCopyButton}>复制新建</Button>
                                 </Permit>
                                 <Permit authority="menu:saveOrUpdateButton" key="newButton">
                                     <Button key="newButton" type="primary" size="small" onClick={handleAddButton}>新建按钮</Button>
                                 </Permit>
                             </Space>
                         ]}
+                        pageToolBarRender={[
+                            <Button danger key="delete"
+                                onClick={() => showDeleteConfirm('确定删除选中的按钮吗?', () => onDeleteButton(selectedKeys))}>
+                                删除
+                            </Button>
+                        ]}
                     />
-                    {selectedKeys?.length > 0 && (
+                    {/* {selectedKeys?.length > 0 && (
                         <IFooterToolbar>
                             <Button type="danger" key="delete"
                                 onClick={() => showDeleteConfirm('确定删除选中的按钮吗?', () => onDeleteButton(selectedKeys))}>
                                 删除
                             </Button>
                         </IFooterToolbar>
-                    )}
+                    )} */}
                 </Col>
             </Row>
         </>

@@ -1,7 +1,7 @@
 import {
     IFormItem,
-    IGrid,
-    ISearchForm,
+    IAGrid,
+    XSearchForm,
     IStatus
 } from '@/common/components';
 import {
@@ -38,22 +38,35 @@ const StateRenderer = (props) => {
 //列初始化
 const initColumns = [
     {
-        title: '状态',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
         width: 80,
-        dataIndex: 'state',
-        cellRenderer: 'stateCellRenderer',
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
     },
     {
-        title: '操作人',
-        width: 100,
-        align: 'left',
-        dataIndex: 'createUserCnName',
+        headerName: '状态',
+        width: 80,
+        field: 'state',
+        cellRenderer: StateRenderer,
     },
     {
-        title: '来源系统',
+        headerName: '操作人',
         width: 100,
         align: 'left',
-        dataIndex: 'systemTag',
+        field: 'createUserCnName',
+    },
+    {
+        headerName: '来源系统',
+        width: 100,
+        align: 'left',
+        field: 'systemTag',
         valueFormatter: (x) => {
             const text = x.value;
             if (text) {
@@ -73,71 +86,71 @@ const initColumns = [
         }
     },
     {
-        title: '模块名称',
+        headerName: '模块名称',
         width: 130,
         align: 'left',
-        dataIndex: 'executeModuleName',
+        field: 'executeModuleName',
     },
     {
-        title: '模块方法',
+        headerName: '模块方法',
         width: 130,
         align: 'left',
-        dataIndex: 'executeMethod',
+        field: 'executeMethod',
     },
     {
-        title: '功能名称',
+        headerName: '功能名称',
         width: 130,
         align: 'left',
-        dataIndex: 'exchangeName',
+        field: 'exchangeName',
     },
     {
-        title: '日志类型',
+        headerName: '日志类型',
         width: 100,
         align: 'left',
-        dataIndex: 'logTypeCode',
+        field: 'logTypeCode',
     },
     {
-        title: '请求时间',
+        headerName: '请求时间',
         width: 150,
         align: 'left',
-        dataIndex: 'exchangeTime',
+        field: 'exchangeTime',
         valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
     {
-        title: '请求方法',
+        headerName: '请求方法',
         width: 80,
         align: 'left',
-        dataIndex: 'exchangeMethod',
+        field: 'exchangeMethod',
     },
     {
-        title: '请求地址',
+        headerName: '请求地址',
         width: 140,
         align: 'left',
-        dataIndex: 'exchangeUrl',
+        field: 'exchangeUrl',
     },
     {
-        title: 'IP',
+        headerName: 'IP',
         width: 80,
         align: 'left',
-        dataIndex: 'ipAddress',
+        field: 'ipAddress',
     },
     {
-        title: '执行时间',
+        headerName: '执行时间',
         width: 80,
         align: 'left',
-        dataIndex: 'executeTimer',
+        field: 'executeTimer',
     },
     {
-        title: '操作系统',
+        headerName: '操作系统',
         width: 140,
         align: 'left',
-        dataIndex: 'os',
+        field: 'os',
     },
     {
-        title: '浏览器',
+        headerName: '浏览器',
         width: 140,
         align: 'left',
-        dataIndex: 'browser',
+        field: 'browser',
     },
 ];
 
@@ -187,12 +200,13 @@ export default (props) => {
         });
     };
 
-
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
     // 列表及弹窗
     return (
         <>
-            <ISearchForm
+            <XSearchForm
                 form={searchForm}
+                rows={1}
                 onReset={() => ref.current.refresh()}
                 onSearch={() => ref.current.refresh()}
             >
@@ -227,16 +241,17 @@ export default (props) => {
                     label="结束时间"
                     xtype="datetime"
                 />
-            </ISearchForm>
+            </XSearchForm>
 
-            <IGrid
+            <IAGrid
                 ref={ref}
                 title="日志列表"
-                components={{
-                    stateCellRenderer: StateRenderer,
-                }}
+                height={offsetHeight - 150}
+                // components={{
+                //     stateCellRenderer: StateRenderer,
+                // }}
                 // columnsStorageKey="_cache_role_columns"
-                initColumns={initColumns}
+                columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
                 // pageNo={pageNo}

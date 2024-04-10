@@ -10,6 +10,8 @@ export default Object.freeze({
   KEY_USER_BUTTON_PERMS: '_USER_BUTTON_PERMS',
   // 用户token存储KEY-sessionStorage
   KEY_USER_TOKEN: 'SNAPPER_USER_TOKEN',
+  // 当前用户
+  KEY_CURRENT_USER: '_CURRENT_USER',
   //词典数据缓存
   KEY_DICT: 'SNAPPER_DICT_',
   //用户数据缓存
@@ -21,7 +23,9 @@ export default Object.freeze({
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
   SYSTEM_LOGIN_TITLE: 'Snapper权限框架系统',
-  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.0.9',
+  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.1.0',
+  // SYSTEM_LOGIN_TITLE: '权限管理系统',
+  // SYSTEM_LOGIN_DESC: '',
   // basicLayout 刷新
   SUBJECT_SYSTEM_REFRESH: '_subject_system_refresh',
   // 用户属性

@@ -1,9 +1,9 @@
 export default [
   {
-    path: '/',
-    component: '../layouts/BlankLayout',
-    routes: [
-      {
+    // path: '/',
+    // component: '../layouts/BlankLayout',
+    // routes: [
+    //   {
         path: '/user',
         component: '../layouts/UserLayout',
         routes: [
@@ -145,7 +145,7 @@ export default [
       },
       {
         path: '/',
-        component: '../layouts/TabsLayout',
+        component: '../layouts/MainLayout',
         routes: [
           {
             path: '/',
@@ -153,17 +153,23 @@ export default [
             redirect: '/dashboard/blog',
           },
           {
-            path: '/dashboard',
+            // path: '/dashboard',
+            // name: '工作台',
+            // icon: 'dashboard',
+            // routes: [
+
             name: '工作台',
-            icon: 'dashboard',
-            routes: [
+            icon: 'smile',
+            path: '/dashboard/workspace',
+            component: './dashboard/workspace',
+          },
               {
                 name: '更新日志',
                 icon: 'smile',
                 path: '/dashboard/blog',
                 component: './dashboard/blog',
-              },
-            ],
+                //   },
+                // ],
           },
           // 系统管理
           {
@@ -263,6 +269,5 @@ export default [
           },
         ],
       },
-    ],
-  },
+
 ];

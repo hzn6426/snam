@@ -1,6 +1,6 @@
 import {
     IFooterToolbar,
-    IGrid,
+    IAGrid,
     ILayout,
     Permit
 } from '@/common/components';
@@ -49,65 +49,65 @@ export default (props) => {
     //列初始化
     const tableColumns = [
         {
-            title: '表名',
+            headerName: '表名',
             width: 150,
             align: 'left',
-            dataIndex: 'tableName',
+            field: 'tableName',
         },
         {
-            title: '描述',
+            headerName: '描述',
             width: 170,
             align: 'left',
-            dataIndex: 'tableComment',
+            field: 'tableComment',
         },
     ];
 
     const columnColumns = [
         {
-            title: '列名',
+            headerName: '列名',
             width: 120,
             align: 'left',
-            dataIndex: 'columnName',
+            field: 'columnName',
         },
         {
-            title: '类型',
+            headerName: '类型',
             width: 100,
             align: 'left',
-            dataIndex: 'dataType',
+            field: 'dataType',
         },
         {
-            title: '描述',
+            headerName: '描述',
             width: 160,
             align: 'left',
-            dataIndex: 'columnComment',
+            field: 'columnComment',
         },
         {
-            title: '是否加入',
+            headerName: '是否加入',
             width: 90,
             align: 'left',
-            dataIndex: 'beInPerm',
+            field: 'beInPerm',
             cellRenderer: 'tagCellRenderer'
         },
     ];
 
     const permColumns = [
         {
-            title: '列名',
+            headerName: '列名',
             width: 120,
             align: 'left',
-            dataIndex: 'columnName',
+            field: 'columnName',
         },
         {
-            title: '类型',
+            headerName: '类型',
             width: 100,
             align: 'left',
-            dataIndex: 'columnType',
+            field: 'columnType',
         },
         {
-            title: '描述',
+            headerName: '描述',
             width: 160,
             align: 'left',
-            dataIndex: 'columnComment',
+            field: 'columnComment',
         },
     ];
 
@@ -253,42 +253,51 @@ export default (props) => {
         }).add(() => setSaveLoading(false));
     }
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
     // 列表及弹窗
     return (
         <>
-            <ILayout type="hbox" spans="7 10 7" gutter="8">
-                <IGrid
+            <ILayout type="hbox" spans="7 10 7" >
+                <IAGrid
                     toolBarRender={[<Input.Search onSearch={(value) => setTableSearchValue(value)} type='text' size='small' key="tableSearch" placeholder='输入表名或描述进行搜索' allowClear />]}
                     title="表格列表"
                     key="table"
-                    height={tableHight}
+                    height={offsetHeight - 72}
                     // columnsStorageKey="_cache_user_columns"
-                    initColumns={tableColumns}
+                    columns={tableColumns}
                     request={(pageNo, pageSize) => searchTable(pageNo, pageSize)}
                     dataSource={tableDataSource}
                     total={tableTotal}
                     rowSelection='single'
                     onSelectedChanged={onTableChange}
                     clearSelect={searchLoading}
-                    showQuickJumper={false}
+                    showSizeChanger={false}
+                    // showTotal={false}
                 />
                 <>
-                    <IGrid
+                    <IAGrid
                         toolBarRender={[<Input.Search onSearch={(value) => setColumnSearchValue(value)} type='text' size='small' key="columnSearch" placeholder='输入列名或描述进行搜索' allowClear />]}
                         title="表格列列表"
                         key="column"
-                        height={tableHight}
-                        components={{
-                            tagCellRenderer: TagRenderer,
-                        }}
-                        initColumns={columnColumns}
+                        height={offsetHeight - 72}
+                        // components={{
+                        //     tagCellRenderer: TagRenderer,
+                        // }}
+                        columns={columnColumns}
                         request={(pageNo, pageSize) => searchColmn(pageNo, pageSize)}
                         dataSource={columnDataSource}
                         total={columnTotal}
                         onSelectedChanged={onColumnChange}
-                        showQuickJumper={false}
+                        showSizeChanger={false}
+                        pageToolBarRender={[
+                            <Permit authority="pcolumn:save">
+                                <Button danger key="joinColumn" icon={<NodeExpandOutlined />} onClick={join} >
+                                    加入
+                                </Button>
+                            </Permit>
+                        ]}
                     />
-                    <IFooterToolbar style={{
+                    {/* <IFooterToolbar style={{
                         left: 'calc(37% + 20px)',
                         width: 'calc(36% - 5px)',
                     }} visible={!isEmpty(selectedColumns)}>
@@ -297,20 +306,20 @@ export default (props) => {
                             加入
                         </Button>
                         </Permit>
-                    </IFooterToolbar>
+                    </IFooterToolbar> */}
                 </>
                 <>
-                    <IGrid
+                    <IAGrid
                         title="权限列列表"
                         key="perm"
-                        height={tableHight}
+                        height={offsetHeight - 72}
                         onSelectedChanged={onPermChange}
                         request={false}
                         // columnsStorageKey="_cache_user_columns"
-                        initColumns={permColumns}
+                        columns={permColumns}
                         dataSource={permDataSource}
                         total={permTotal}
-                        showQuickJumper={false}
+                        showSizeChanger={false}
                         toolBarRender={[
                             <Permit  authority="pcolumn:save" key="new">
                             <Button
@@ -326,8 +335,15 @@ export default (props) => {
                             </Permit>,
 
                         ]}
+                        pageToolBarRender={[
+                            <Permit authority="pcolumn:save">
+                                <Button danger key="joinPerm" icon={<NodeCollapseOutlined />} onClick={unJoin} >
+                                    移除
+                                </Button>
+                            </Permit>
+                        ]}
                     />
-                    <IFooterToolbar style={{
+                    {/* <IFooterToolbar style={{
                         left: 'calc(74% + 10px)',
                         width: 'calc(25% - 2px)',
                     }} visible={!isEmpty(selectedPerms)}>
@@ -336,7 +352,7 @@ export default (props) => {
                             移除
                         </Button>
                         </Permit>
-                    </IFooterToolbar>
+                    </IFooterToolbar> */}
                 </>
             </ILayout>
         </>

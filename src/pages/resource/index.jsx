@@ -1065,14 +1065,16 @@ export default () => {
         renderColumnPermUi(columnPermSelectedTables);
     }, [exceptTableColumn])
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
+
     return (
         <>
             <Row gutter={5}>
                 <Col span={5}>
                     <Card
                         size='small'
-                        bordered={false}
-                        bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'scroll', paddingTop: '5px' }}
+                        //bordered={false}
+                        bodyStyle={{ height: offsetHeight - 66, overflow: 'scroll', paddingTop: '5px' }}
                     >
                         <Tabs size="small" type="card" >
                             <TabPane size='small' tab="用户组织" key="userGroup">
@@ -1125,7 +1127,7 @@ export default () => {
                             </div>
                         }
                         bordered={true}
-                        bodyStyle={{ height: 'calc(100vh - 170px)', overflow: 'scroll' }}
+                        bodyStyle={{ height: offsetHeight - 103, overflow: 'scroll' }}
                     >
                         <Table
                             size="small"
@@ -1160,7 +1162,7 @@ export default () => {
                         <Card
                             size='small'
                             bordered={true}
-                            bodyStyle={{ padding: 5, height: 'calc(100vh - 130px)', overflow: 'scroll' }} >
+                            bodyStyle={{ padding: 5, height: offsetHeight - 66, overflow: 'scroll' }} >
                             <Tabs
                                 activeKey={key}
                                 size="small"
@@ -1174,7 +1176,7 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll' }}
+                                        bodyStyle={{ height: offsetHeight - 192, overflow: 'scroll' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveUsetBusinessPerm">

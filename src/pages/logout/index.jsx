@@ -1,5 +1,5 @@
 import { api, constant, isEmpty, md5 } from '@/common/utils';
-import Language from '@/components/Layout/Language';
+import Language from '@/components/Layout1/Language';
 import { AntDesignOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Checkbox, Form, Input, Typography, message } from 'antd';
 import { parse } from 'querystring';

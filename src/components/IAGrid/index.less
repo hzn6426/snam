@@ -1,0 +1,67 @@
+ .ag-container {
+   display: flex;
+   flex-direction: column;
+   //  background: #f0f0f0;
+
+   /* AgGrid 工具栏 */
+   .ag-tools {
+     padding: 0px 10px !important;
+     height: 30px;
+     flex: none;
+     display: flex;
+     justify-content: space-between;
+
+     .ag-tools-left {
+       span {
+         font-size: 15px;
+         line-height: 32px;
+       }
+     }
+
+     .ag-tools-right {
+       display: flex;
+       justify-content: flex-end;
+     }
+   }
+
+   /* AgGrid 主体 */
+   .ag-body {
+     margin: 10px;
+     position: relative;
+     flex: auto;
+
+     .ag-ltr .ag-cell,
+     .ag-pinned-left-header,
+     .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
+       border: 0 !important;
+     }
+
+     .ag-setting {
+       .ag-unselectable .ag-has-focus {
+         -webkit-user-select: none !important;
+         user-select: none !important;
+       }
+
+       .ag-row-selected::before {
+         background-color: transparent;
+       }
+     }
+   }
+
+   /* AgGrid 分页栏 */
+   .ag-pagination {
+     display: flex;
+
+     .pagination-tools {
+       width: 400px;
+       padding: 0 20px;
+     }
+
+     .pagination-content {
+       width: 100%;
+       text-align: right;
+       padding: 0px 10px;
+       height: 30px;
+     }
+   }
+ }

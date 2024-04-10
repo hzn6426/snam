@@ -1,0 +1,81 @@
+@box-width: 220px;
+@layout-item-size: 48px;
+@theme-item-size: 32px;
+@color-item-size: 21px;
+
+.layout-box {
+    width: @box-width;
+    display: flex;
+    justify-content: start;
+
+    .layout-sub {
+        width: @layout-item-size;
+        height: @layout-item-size*0.75;
+        border-radius: 4px;
+        margin: 5px;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+        .layout-action{
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            z-index: 9;
+            color: #333;
+        }
+
+        .layout-icon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: @layout-item-size;
+            height: @layout-item-size*0.75;
+            z-index: 0;
+        }
+    }
+}
+
+.theme-box {
+    width: @box-width;
+    display: flex;
+    justify-content: space-between;
+
+    .theme-sub {
+        width: @theme-item-size;
+        height: @theme-item-size;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+        padding: 2px;
+        cursor: pointer;
+
+        .theme-icon {
+            width: @theme-item-size;
+            height: @theme-item-size;
+        }
+    }
+}
+
+.color-box {
+    width: @box-width;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+
+    .color-sub {
+        width: @color-item-size;
+        height: @color-item-size;
+        border-radius: 3px;
+        margin: 3px;
+        cursor: pointer;
+        overflow: hidden;
+
+        .color-icon {
+            width: @color-item-size;
+            height: @color-item-size;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            line-height: @color-item-size;
+        }
+    }
+}

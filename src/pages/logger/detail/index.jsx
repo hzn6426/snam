@@ -10,6 +10,9 @@ import { useParams } from 'umi';
 
 
 export default (props) => {
+
+    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? {} : localStorage.getItem("settings"));
+
     const ref = useRef();
     const params = useParams();
     const { clientWidth, clientHeight } = window?.document?.documentElement;
@@ -95,7 +98,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exchangeParam}
-                        theme="light"
+                        theme={settings.navTheme == 'realDark' ? 'dark' : 'light'}
                         language="json"
                         readOnly={true}
                         height="120px"
@@ -110,7 +113,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.responseData}
-                        theme="light"
+                        theme={settings.navTheme == 'realDark' ? 'dark' : 'light'}
                         language="json"
                         readOnly={true}
                         height="120px"
@@ -126,7 +129,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exceptionMsg}
-                        theme="light"
+                        theme={settings.navTheme == 'realDark' ? 'dark' : 'light'}
                         language="json"
                         readOnly={true}
                         height="120"

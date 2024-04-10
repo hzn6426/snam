@@ -19,8 +19,8 @@ import {
 } from '@/common/utils';
 import {
     IFormItem,
-    IGrid,
-    ISearchForm,
+    IAGrid,
+    XSearchForm,
     IStatus,
     ITag,
     IModal,
@@ -73,80 +73,106 @@ const LockRenderer = (props) => {
 //列初始化
 const parentColumns = [
     {
-        title: '状态',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
         width: 80,
-        dataIndex: 'state',
-        cellRenderer: 'stateCellRenderer',
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
     },
     {
-        title: '锁定',
+        headerName: '状态',
+        width: 80,
+        field: 'state',
+        cellRenderer: StateRenderer,
+    },
+    {
+        headerName: '锁定',
         width: 70,
-        dataIndex: 'beLock',
-        cellRenderer:'lockRenderer'
+        field: 'beLock',
+        cellRenderer: LockRenderer
     },
     {
-        title: '字典编号',
+        headerName: '字典编号',
         width: 160,
         align: 'left',
-        dataIndex: 'dictCode',
+        field: 'dictCode',
     },
     {
-        title: '字典名称',
+        headerName: '字典名称',
         width: 100,
         align: 'left',
-        dataIndex: 'dictName',
+        field: 'dictName',
     },
     {
-        title: '类型',
+        headerName: '类型',
         width: 70,
         align: 'center',
-        dataIndex: 'dictType',
+        field: 'dictType',
         valueFormatter: (x) => dictType[x.value],
     },
     {
-        title: '优先级',
+        headerName: '优先级',
         width: 70,
         align: 'center',
-        dataIndex: 'priority',
+        field: 'priority',
     },
 ];
 
 const childColumns = [
     {
-        title: '状态',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
         width: 80,
-        dataIndex: 'state',
-        cellRenderer: 'stateCellRenderer',
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
     },
     {
-        title: '锁定',
+        headerName: '状态',
+        width: 80,
+        field: 'state',
+        cellRenderer: StateRenderer,
+    },
+    {
+        headerName: '锁定',
         width: 90,
-        dataIndex: 'beLock',
-        cellRenderer:'lockRenderer'
+        field: 'beLock',
+        cellRenderer: LockRenderer
     },
     {
-        title: '父字典名称',
+        headerName: '父字典名称',
         width: 120,
         align: 'left',
-        dataIndex: 'parentName',
+        field: 'parentName',
     },
     {
-        title: '字典编号',
+        headerName: '字典编号',
         width: 160,
         align: 'left',
-        dataIndex: 'dictCode',
+        field: 'dictCode',
     },
     {
-        title: '字典名称',
+        headerName: '字典名称',
         width: 100,
         align: 'left',
-        dataIndex: 'dictName',
+        field: 'dictName',
     },
     {
-        title: '优先级',
+        headerName: '优先级',
         width: 70,
         align: 'center',
-        dataIndex: 'priority',
+        field: 'priority',
     },
 ];
 
@@ -169,7 +195,7 @@ export default (props) => {
 
     const [onParentChange, selectedParentKeys, setSelectedParentKeys] = useObservableAutoCallback((event) =>
         event.pipe(
-            debounceTime(300),
+            // debounceTime(300),
             distinctUntilChanged(),
             tap((v) => {
                 if (v && v.length > 0) {
@@ -353,11 +379,14 @@ export default (props) => {
         }),
     ]);
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
+
     // 列表及弹窗
     return (
         <>
-            <ISearchForm
+            <XSearchForm
                 form={searchParentForm}
+                rows={1}
                 onReset={() => parentRef.current.refresh()}
                 onSearch={() => parentRef.current.refresh()}
             >
@@ -371,19 +400,20 @@ export default (props) => {
                 />
                 <IFormItem name="childDictCode" label="子编码" xtype="input" />
                 <IFormItem name="childdictName" label="子名称" xtype="input" />
-            </ISearchForm>
-            <ILayout type="hbox" spans="12 12" gutter="8">
+            </XSearchForm>
+            <ILayout type="hbox" spans="12 12" gutter="0">
                 <>
-                    <IGrid
+                    <IAGrid
                         ref={parentRef}
                         title="父字典列表"
                         key="parent"
-                        components={{
-                            stateCellRenderer: StateRenderer,
-                            lockRenderer: LockRenderer
-                        }}
+                        height={offsetHeight - 150}
+                        // components={{
+                        //     stateCellRenderer: StateRenderer,
+                        //     lockRenderer: LockRenderer
+                        // }}
                         // columnsStorageKey="_cache_user_columns"
-                        initColumns={parentColumns}
+                        columns={parentColumns}
                         request={(pageNo, pageSize) => searchParent(pageNo, pageSize)}
                         dataSource={parentDataSource}
                         total={parentTotal}
@@ -403,9 +433,26 @@ export default (props) => {
                             </Button>
                             </Permit>,
                         ]}
+                        pageToolBarRender={[
+                            <Permit authority="dictionary:use">
+                                <Button key="use" onClick={() => onParentUse(selectedParentKeys)} loading={loading}>
+                                    启用
+                                </Button>
+                            </Permit>,
+                            <Permit authority="dictionary:stop">
+                                <Button danger key="stop" onClick={() => onParentStop(selectedParentKeys)} loading={loading}>
+                                    停用
+                                </Button>
+                            </Permit>,
+                            <Permit authority="dictionary:delete">
+                                <Button danger key="delete" onClick={() => showDeleteConfirm('父字典删除后,子字典也将被删除,确定删除选中的字典吗?', () => onParentDelete(selectedParentKeys))} loading={loading}>
+                                    删除
+                                </Button>
+                            </Permit>
+                        ]}
                         clearSelect={searchLoading}
                     />
-                    <IFooterToolbar
+                    {/* <IFooterToolbar
                         visible={!isEmpty(selectedParentKeys)}
                         style={{
                             right: 'calc(45% - 12px)',
@@ -427,19 +474,20 @@ export default (props) => {
                                 </Button>
                             </Permit>
                         </Space>
-                    </IFooterToolbar>
+                    </IFooterToolbar> */}
                 </>
                 <>
-                    <IGrid
+                    <IAGrid
                         ref={childRef}
                         title="子字典列表"
                         key="child"
-                        components={{
-                            stateCellRenderer: StateRenderer,
-                            lockRenderer: LockRenderer
-                        }}
+                        height={offsetHeight - 150}
+                        // components={{
+                        //     stateCellRenderer: StateRenderer,
+                        //     lockRenderer: LockRenderer
+                        // }}
                         // columnsStorageKey="_cache_user_columns"
-                        initColumns={childColumns}
+                        columns={childColumns}
                         request={(pageNo, pageSize, params) => searchChild(pageNo, pageSize, params)}
                         dataSource={childDataSource}
                         total={childTotal}
@@ -459,8 +507,39 @@ export default (props) => {
                             </Button>
                             </Permit>,
                         ]}
+                        pageToolBarRender={[
+                            <Permit authority="dictChild:use">
+                                <Button key="use"
+                                    onClick={() => {
+                                        const parentId = selectedParentKeys[selectedParentKeys.length - 1];
+                                        onChildUse([selectedChildKeys, parentId]);
+                                    }}
+                                    loading={loading}>
+                                    启用
+                                </Button>
+                            </Permit>,
+                            <Permit authority="dictChild:stop">
+                                <Button danger key="stop"
+                                    onClick={() => {
+                                        const parentId = selectedParentKeys[selectedParentKeys.length - 1];
+                                        onChildStop([selectedChildKeys, parentId]);
+                                    }}
+                                    loading={loading}>
+                                    停用
+                                </Button>
+                            </Permit>,
+                            <Permit authority="dictChild:delete">
+                                <Button danger key="delete" onClick={() => {
+
+                                    const parentId = selectedParentKeys[selectedParentKeys.length - 1];
+                                    showDeleteConfirm('确定删除选中的子字典吗?', () => onChildDelete([selectedChildKeys, parentId]));
+                                }}>
+                                    删除
+                                </Button>
+                            </Permit>
+                        ]}
                     />
-                    <IFooterToolbar
+                    {/* <IFooterToolbar
                         visible={!isEmpty(selectedChildKeys)}
                         style={{
                             left: 'calc(55% + 22px)',
@@ -497,7 +576,7 @@ export default (props) => {
                                 </Button>
                             </Permit>
                         </Space>
-                    </IFooterToolbar>
+                    </IFooterToolbar> */}
                 </>
             </ILayout>
         </>

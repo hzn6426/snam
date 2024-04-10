@@ -2,8 +2,8 @@ import { showDeleteConfirm } from '@/common/antd';
 import {
     IFooterToolbar,
     IFormItem,
-    IGrid,
-    ISearchForm,
+    IAGrid,
+    XSearchForm,
     IStatus,
     Permit
 } from '@/common/components';
@@ -40,46 +40,59 @@ const StateRenderer = (props) => {
 //列初始化
 const initColumns = [
     {
-        title: '系统名称',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
+        width: 80,
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
+    },
+    {
+        headerName: '系统名称',
         width: 100,
         align: 'left',
-        dataIndex: 'systemName',
+        field: 'systemName',
     },
     {
-        title: 'APPID',
+        headerName: 'APPID',
         width: 170,
         align: 'left',
-        dataIndex: 'appId',
+        field: 'appId',
     },
     {
-        title: 'APPKEY',
+        headerName: 'APPKEY',
         width: 170,
         align: 'left',
-        dataIndex: 'appKey',
+        field: 'appKey',
     },
     {
-        title: '过期时间',
+        headerName: '过期时间',
         width: 150,
-        dataIndex: 'expireDate',
+        field: 'expireDate',
         valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
     {
-        title: '关联用户',
+        headerName: '关联用户',
         width: 140,
         align: 'center',
-        dataIndex: 'userRealCnName',
+        field: 'userRealCnName',
     },
     {
-        title: '白名单',
+        headerName: '白名单',
         width: 140,
         align: 'center',
-        dataIndex: 'whiteIps',
+        field: 'whiteIps',
     },
     {
-        title: '备注',
+        headerName: '备注',
         width: 140,
         align: 'center',
-        dataIndex: 'note',
+        field: 'note',
     },
 ];
 
@@ -162,12 +175,14 @@ export default (props) => {
         });
     };
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
     // 列表及弹窗
     return (
         <>
-            <ISearchForm
+            <XSearchForm
                 form={searchForm}
+                rows={1}
                 onReset={() => ref.current.refresh()}
                 onSearch={() => ref.current.refresh()}
             >
@@ -186,17 +201,18 @@ export default (props) => {
                     label="用户"
                     xtype="user"
                 />
-            </ISearchForm>
+            </XSearchForm>
 
-            <IGrid
+            <IAGrid
                 ref={ref}
                 title="接入用户列表"
+                height={offsetHeight - 150}
                 // height={tableHight}
-                components={{
-                    stateCellRenderer: StateRenderer,
-                }}
+                // components={{
+                //     stateCellRenderer: StateRenderer,
+                // }}
                 // columnsStorageKey="_cache_role_columns"
-                initColumns={initColumns}
+                columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
                 // pageNo={pageNo}
@@ -218,10 +234,31 @@ export default (props) => {
                     </Permit>,
 
                 ]}
+                pageToolBarRender={[
+                    <Permit authority="hmac:delete">
+                        <Button
+                            danger
+                            key="delete"
+                            onClick={() => showDeleteConfirm('确定删除选中的外部用户吗?', () => onDelete(selectedKeys))}
+                        >
+                            删除
+                        </Button>
+                    </Permit>,
+                    <Permit authority="hmac:refreshCache">
+                        <Button
+                            type='dashed'
+                            danger
+                            key="delete"
+                            onClick={() => onRefreshCache(selectedKeys)}
+                        >
+                            刷新缓存
+                        </Button>
+                    </Permit>
+                ]}
                 // onClick={(data) => onClicked(data)}
                 clearSelect={searchLoading}
             />
-            <IFooterToolbar visible={!isEmpty(selectedKeys)}>
+            {/* <IFooterToolbar visible={!isEmpty(selectedKeys)}>
                 <Permit authority="hmac:delete">
                     <Button
                         type="danger"
@@ -241,7 +278,7 @@ export default (props) => {
                         刷新缓存
                     </Button>
                 </Permit>
-            </IFooterToolbar>
+            </IFooterToolbar> */}
         </>
     );
 };

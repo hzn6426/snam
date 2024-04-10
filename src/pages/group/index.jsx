@@ -1,4 +1,4 @@
-import { IDrag, IFooterToolbar, IGrid, ISearchTree, Permit, IStatus, } from '@/common/components';
+import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, } from '@/common/components';
 import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, useAutoObservableEvent } from '@/common/utils';
 import {
     ApartmentOutlined,
@@ -37,70 +37,81 @@ const userState = {
     ACTIVE: { text: '启用', status: 'Success' },
     STOPPED: { text: '停用', status: 'Default' },
     LOCKED: { text: '锁定', status: 'Error' },
-  };
+};
 
 const StateRenderer = (props) => {
     return props.value && <IStatus value={props.value} state={userState} />;
-  };
+};
 
 export default (props) => {
     // 列初始化
     const initColumns = [
         {
-            title: '状态',
+            headerName: '序号',
+            textAlign: 'center',
+            checkboxSelection: true,
+            headerCheckboxSelection: true,
+            lockPosition: 'left',
+            width: 80,
+            cellStyle: { userSelect: 'none' },
+            valueFormatter: (params) => {
+                return `${parseInt(params.node.id) + 1}`;
+            },
+            // rowDrag: true,
+        },
+        {
+            headerName: '状态',
             width: 80,
             align: 'center',
-            dataIndex: 'state',
-            cellRenderer: 'stateCellRenderer',
-          },
+            field: 'state',
+            cellRenderer: StateRenderer,
+        },
         {
-            title: '账号',
+            headerName: '账号',
             width: 100,
             align: 'left',
-            dataIndex: 'userName',
+            field: 'userName',
         },
         {
-            title: '锁定',
+            headerName: '锁定',
             width: 70,
-            dataIndex: 'beLock',
-            cellRenderer: 'lockRenderer'
+            field: 'beLock',
+            cellRenderer: LockRenderer
         },
         {
-            title: '姓名',
+            headerName: '姓名',
             width: 90,
-            align: 'left',
-            dataIndex: 'userRealCnName',
+            field: 'userRealCnName',
         },
         {
-            title: '角色',
+            headerName: '角色',
             width: 150,
-            align: 'left',
+            field: 'left',
             dataIndex: 'userRoles',
         },
         {
-            title: '职位',
+            headerName: '职位',
             width: 130,
-            align: 'left',
-            dataIndex: 'postName',
-            cellRenderer: 'tagCellRenderer',
+            field: 'postName',
+            cellRenderer: TagRenderer,
         },
         {
-            title: '手机',
+            headerName: '手机',
             align: 'center',
             width: 120,
-            dataIndex: 'userMobile',
+            field: 'userMobile',
         },
         {
-            title: '邮箱',
+            headerName: '邮箱',
             align: 'left',
             width: 150,
-            dataIndex: 'userEmail',
+            field: 'userEmail',
         },
         {
-            title: '备注',
+            headerName: '备注',
             align: 'left',
             width: 200,
-            dataIndex: 'note',
+            field: 'note',
         },
 
     ];
@@ -150,7 +161,7 @@ export default (props) => {
                 setDisabledActive(beHasRowsPropNotEqual('state', 'UNACTIVE', keys));
                 setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', keys));
                 setDisabledUnStop(beHasRowsPropNotEqual('state', 'STOPPED', keys));
-              }),
+            }),
             switchMap((v) => of(pluck('id', v))),
             shareReplay(1),
         ),
@@ -288,46 +299,46 @@ export default (props) => {
 
     const [onActive] = useAutoObservableEvent(
         [
-          tap(() => setLoading(true)),
-          filter((keys) => !isEmpty(keys)),
-          switchMap((keys) => api.user.activeUser(keys)),
-          tap(() => {
-            message.success('操作成功!');
-            refresh();
-            reloadTree();
-          }),
-          shareReplay(1),
+            tap(() => setLoading(true)),
+            filter((keys) => !isEmpty(keys)),
+            switchMap((keys) => api.user.activeUser(keys)),
+            tap(() => {
+                message.success('操作成功!');
+                refresh();
+                reloadTree();
+            }),
+            shareReplay(1),
         ],
         () => setLoading(false),
-      );
-    
-      const [onStop] = useAutoObservableEvent(
+    );
+
+    const [onStop] = useAutoObservableEvent(
         [
-          tap(() => setLoading(true)),
-          switchMap((keys) => api.user.stopUser(keys)),
-          tap(() => {
-            message.success('操作成功!');
-            refresh();
-            reloadTree();
-          }),
-          shareReplay(1),
+            tap(() => setLoading(true)),
+            switchMap((keys) => api.user.stopUser(keys)),
+            tap(() => {
+                message.success('操作成功!');
+                refresh();
+                reloadTree();
+            }),
+            shareReplay(1),
         ],
         () => setLoading(false),
-      );
-    
-      const [onUnStop] = useAutoObservableEvent(
+    );
+
+    const [onUnStop] = useAutoObservableEvent(
         [
-          tap(() => setLoading(true)),
-          switchMap((keys) => api.user.unstopUser(keys)),
-          tap(() => {
-            message.success('操作成功!');
-            refresh();
-            reloadTree();
-          }),
-          shareReplay(1),
+            tap(() => setLoading(true)),
+            switchMap((keys) => api.user.unstopUser(keys)),
+            tap(() => {
+                message.success('操作成功!');
+                refresh();
+                reloadTree();
+            }),
+            shareReplay(1),
         ],
         () => setLoading(false),
-      );
+    );
 
     // 双击用户 显示详情
     const onDoubleClick = (record) => {
@@ -360,7 +371,7 @@ export default (props) => {
             title: '编辑用户',
             width: 600,
             height: 300,
-            callback: () => {reloadTree();searchUserByGroup(pageNo, pageSize);},
+            callback: () => { reloadTree(); searchUserByGroup(pageNo, pageSize); },
             callparam: () => param,
         });
     };
@@ -463,9 +474,10 @@ export default (props) => {
         searchUserByGroup(pageNo, pageSize);
     }, [selectedGroupId]);
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
     // 列表及弹窗
     return (
-        <Row gutter={5}>
+        <Row >
             <Col span={7}>
                 <ISearchTree
                     iconRender={loopGroup}
@@ -473,6 +485,7 @@ export default (props) => {
                     placeholder="输入组织或人员进行搜索"
                     checkable={false}
                     blockNode={true}
+                    bodyStyle={{ height: offsetHeight - 110, overflow: 'scroll' }}
                     titleRender={(node) => (
                         <div style={{ width: '100%' }}>
                             <div style={{ float: 'left' }}>
@@ -516,119 +529,132 @@ export default (props) => {
 
             </Col>
             <Col span={17}>
-                <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
-                    <div>
-                        <IGrid
-                            title="用户列表"
-                            initColumns={initColumns}
-                            request={(pageNo, pageSize) => searchUserByGroup(pageNo, pageSize)}
-                            dataSource={dataSource}
-                            total={total}
-                            height={topHeight - 70}
-                            onSelectedChanged={onGroupUserChange}
-                            clearSelect={searchLoading}
-                            pageNo={pageNo}
-                            pageSize={pageSize}
-                            onDoubleClick={(record) => onDoubleClick(record)}
-                            components={{
-                                stateCellRenderer: StateRenderer,
-                                tagCellRenderer: TagRenderer,
-                                lockRenderer: LockRenderer
-                            }}
-                            toolBarRender={[
-                                <Space key='space'>
-                                    <Permit authority="group:addUsers" key="new">
-                                        <Button
-                                            key="addUser"
-                                            type="primary"
-                                            size="small"
-                                            onClick={handleAddUser}>添加成员</Button>
-                                    </Permit>
-                                    <Permit authority="group:addCompany" key="addCompany">
-                                        <Button
-                                            key="addCompany"
-                                            type="danger"
-                                            size="small"
-                                            onClick={handleAddCompany}>添加分公司</Button>
-                                    </Permit>
-                                    <Permit authority="userRole:saveFromUser" key="assignRole">
-                                        <Button
-                                            key="assignRole"
-                                            type="primary"
-                                            size="small"
-                                            onClick={handleAssignRoles}>分配角色</Button>
-                                    </Permit>
-                                </Space>
+                {/* <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
+                    <div> */}
+                <div style={{ marginBottom: '15px', border: 0 }}>
+                    <IAGrid
+                        title="用户列表"
+                        columns={initColumns}
+                        request={(pageNo, pageSize) => searchUserByGroup(pageNo, pageSize)}
+                        dataSource={dataSource}
+                        total={total}
+                        height={offsetHeight / 2 + 50}
+                        onSelectedChanged={onGroupUserChange}
+                        clearSelect={searchLoading}
+                        pageNo={pageNo}
+                        pageSize={pageSize}
+                        onDoubleClick={(record) => onDoubleClick(record)}
+                        // components={{
+                        //     stateCellRenderer: StateRenderer,
+                        //     tagCellRenderer: TagRenderer,
+                        //     lockRenderer: LockRenderer
+                        // }}
+                        toolBarRender={[
+                            <Space key='space'>
+                                <Permit authority="group:addUsers" key="new">
+                                    <Button
+                                        key="addUser"
+                                        type="primary"
+                                        size="small"
+                                        onClick={handleAddUser}>添加成员</Button>
+                                </Permit>
+                                <Permit authority="group:addCompany" key="addCompany">
+                                    <Button
+                                        key="addCompany"
+                                        danger
+                                        size="small"
+                                        onClick={handleAddCompany}>添加分公司</Button>
+                                </Permit>
+                                <Permit authority="userRole:saveFromUser" key="assignRole">
+                                    <Button
+                                        key="assignRole"
+                                        type="primary"
+                                        size="small"
+                                        onClick={handleAssignRoles}>分配角色</Button>
+                                </Permit>
+                            </Space>
 
-                            ]}
-                        />
-                        {selectedGroupUserKeys?.length > 0 && (
+                        ]}
+                        pageToolBarRender={[
+                            <Permit authority="user:active">
+                                <Tooltip title="演示环境，激活后密码为123456">
+                                    <Button
+                                        key="active"
+                                        onClick={() => onActive(selectedGroupUserKeys)}
+                                        disabled={disabledActive}
+                                        loading={loading}
+
+                                    >
+                                        激活
+                                    </Button>
+                                </Tooltip>
+                            </Permit>,
+                            <Permit authority="user:stop">
+                                <Button
+                                    danger
+                                    key="stop"
+                                    onClick={() => onStop(selectedGroupUserKeys)}
+                                    disabled={disabledStop}
+                                    loading={loading}
+                                >
+                                    停用
+                                </Button>
+                            </Permit>,
+                            <Permit authority="user:unstop">
+                                <Button
+                                    danger
+                                    key="unstop"
+                                    onClick={() => onUnStop(selectedGroupUserKeys)}
+                                    disabled={disabledUnStop}
+                                    loading={loading}
+                                >
+                                    启用
+                                </Button>
+                            </Permit>,
+                            <Permit authority="group:moveUsers">
+                                <Button type="primary" key="move" onClick={() => onMove()}>
+                                    移动
+                                </Button>
+                            </Permit>,
+                            <Permit authority="group:removeUsers">
+                                <Button type="danger" key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
+                                    删除
+                                </Button>
+                            </Permit>
+                        ]}
+                    />
+                    {/* {selectedGroupUserKeys?.length > 0 && (
                             <IFooterToolbar>
-                                <Permit authority="user:active">
-                                    <Tooltip title="演示环境，激活后密码为123456">
-                                        <Button
-                                            key="active"
-                                            onClick={() => onActive(selectedGroupUserKeys)}
-                                            disabled={disabledActive}
-                                            loading={loading}
-
-                                        >
-                                            激活
-                                        </Button>
-                                    </Tooltip>
-                                </Permit>
-                                <Permit authority="user:stop">
-                                    <Button
-                                        danger
-                                        key="stop"
-                                        onClick={() => onStop(selectedGroupUserKeys)}
-                                        disabled={disabledStop}
-                                        loading={loading}
-                                    >
-                                        停用
-                                    </Button>
-                                </Permit>
-                                <Permit authority="user:unstop">
-                                    <Button
-                                        danger
-                                        key="unstop"
-                                        onClick={() => onUnStop(selectedGroupUserKeys)}
-                                        disabled={disabledUnStop}
-                                        loading={loading}
-                                    >
-                                        启用
-                                    </Button>
-                                </Permit>
-                                <Permit authority="group:moveUsers">
-                                    <Button type="primary" key="move" onClick={() => onMove()}>
-                                        移动
-                                    </Button>
-                                </Permit>
-                                <Permit authority="group:removeUsers">
-                                    <Button type="danger" key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
-                                        删除
-                                    </Button>
-                                </Permit>
+                                
                             </IFooterToolbar>
-                        )}
-                    </div>
-                    <div>
-                        <IGrid
-                            title="未分配列表"
-                            initColumns={initColumns}
-                            request={(pageNo, pageSize) => searchNotAssignedUser(pageNo, pageSize)}
-                            dataSource={notAssignedDataSource}
-                            total={total}
-                            height={340}
-                            onSelectedChanged={onNotAssignUserChange}
-                            clearSelect={searchLoading}
-                            components={{
-                                stateCellRenderer: StateRenderer,
-                                tagCellRenderer: TagRenderer,
-                                lockRenderer: LockRenderer
-                            }}
-                        />
-                        {selectedNotAssignUserKeys?.length > 0 && (
+                        )} */}
+                    {/* </div>
+                    <div> */}
+                </div>
+                <IAGrid
+                    title="未分配列表"
+                    columns={initColumns}
+                    request={(pageNo, pageSize) => searchNotAssignedUser(pageNo, pageSize)}
+                    dataSource={notAssignedDataSource}
+                    total={total}
+                    height={offsetHeight - (offsetHeight / 2 + 150)}
+                    onSelectedChanged={onNotAssignUserChange}
+                    clearSelect={searchLoading}
+
+                    // components={{
+                    //     stateCellRenderer: StateRenderer,
+                    //     tagCellRenderer: TagRenderer,
+                    //     lockRenderer: LockRenderer
+                    // }}
+                    pageToolBarRender={[
+                        <Permit authority="group:addUsers" key="addUsers">
+                            <Button type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
+                                添加成员
+                            </Button>
+                        </Permit>
+                    ]}
+                />
+                {/* {selectedNotAssignUserKeys?.length > 0 && (
                             <IFooterToolbar>
                                 <Permit authority="group:addUsers" key="addUsers">
                                     <Button type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
@@ -636,9 +662,9 @@ export default (props) => {
                                     </Button>
                                 </Permit>
                             </IFooterToolbar>
-                        )}
-                    </div>
-                </IDrag>
+                        )} */}
+                {/* </div>
+                </IDrag> */}
             </Col>
         </Row>
     );

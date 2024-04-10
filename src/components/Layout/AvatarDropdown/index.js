@@ -1,57 +1,39 @@
 import React from 'react';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Dropdown, Typography } from 'antd';
+import { Dropdown } from 'antd';
 import { history } from 'umi';
-const { Text } = Typography;
+// import api from '@/services';
+// import { wrapObservable } from '@/utils/RxjsUtil';
+// import { getPageQuery } from '@/utils/utils';
+// import url from '@/constant/url';
+// import SYSTEM from '@/constant/system';
+
 
 export default (props) => {
-  const currentUser = { name: '管理员', avatar: '' };
+    const logout = () => {
+        sessionStorage.removeItem('token');
+        history.push('/user/login');
+      };
 
-  const logout = () => {
-    sessionStorage.removeItem('token');
-    history.push('/user/login');
-  };
+    const items = [
+        // {
+        //     key: 'center',
+        //     icon: <UserOutlined />,
+        //     label: <span >个人信息</span>,
+        // },
+        {
+            key: 'settings',
+            icon: <SettingOutlined />,
+            label: <span onClick={() => { props.onSetting() }}>主题布局</span>,
+        },
+        {
+            key: 'logout',
+            icon: <LogoutOutlined />,
+            label: <span onClick={logout}>退出登录</span>,
+        }
+    ]
 
-  const menuHeaderDropdown = (
-    <Menu>
-      <Menu.Item key="center">
-        <UserOutlined />
-        <span style={{ margin: '0 10px' }}>个人信息</span>
-      </Menu.Item>
-      <Menu.Item key="settings">
-        <SettingOutlined />
-        <span
-          style={{ margin: '0 10px' }}
-          onClick={() => {
-            props.onSetting();
-          }}
-        >
-          系统设置
-        </span>
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="logout">
-        <LogoutOutlined />
-        <span style={{ margin: '0 10px' }} onClick={logout}>
-          退出登录
-        </span>
-      </Menu.Item>
-    </Menu>
-  );
-
-  return (
-    <div style={{ padding: '8px 0', display: 'flex' }}>
-      <Dropdown overlay={menuHeaderDropdown}>
-        <Avatar size="small" style={{ backgroundColor: props.bgColor }} src={currentUser.avatar}>
-          G
-        </Avatar>
-      </Dropdown>
-      <Text
-        ellipsis
-        style={{ width: '75px', padding: '0 10px', lineHeight: '24px', color: '#999' }}
-      >
-        {currentUser.name}
-      </Text>
-    </div>
-  );
-};
+    return <Dropdown menu={{ items }}>
+        {props.children}
+    </Dropdown>
+}

@@ -9,18 +9,18 @@ if (token) {
   history.push(constant.SYSTEM_ROUTE_LOGIN);
 }
 
-// 搜索栏布局
-const closeStyle = {
-  width: '100%',
-  backgroundColor: '#FFFFFF',
-  paddingTop: '10px',
-  marginBottom: '10px',
-  height: '44px',
-  overflow: 'hidden',
-};
-const openStyle = {
-  width: '100%',
-  backgroundColor: '#FFFFFF',
-  paddingTop: '10px',
-  marginBottom: '10px',
-};
+// // 搜索栏布局
+// const closeStyle = {
+//   width: '100%',
+//   backgroundColor: '#FFFFFF',
+//   paddingTop: '10px',
+//   marginBottom: '10px',
+//   height: '44px',
+//   overflow: 'hidden',
+// };
+// const openStyle = {
+//   width: '100%',
+//   backgroundColor: '#FFFFFF',
+//   paddingTop: '10px',
+//   marginBottom: '10px',
+// };

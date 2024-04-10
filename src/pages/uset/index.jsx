@@ -1,7 +1,7 @@
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
 import {
     IFooterToolbar,
-    IGrid,
+    IAGrid,
     IStatus,
     Permit
 } from '@/common/components';
@@ -51,27 +51,40 @@ const LockRenderer = (props) => {
 //列初始化
 const initColumns = [
     {
-        title: '状态',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
         width: 80,
-        dataIndex: 'state',
-        cellRenderer: 'stateCellRenderer',
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
     },
     {
-        title: '锁定',
+        headerName: '状态',
+        width: 80,
+        field: 'state',
+        cellRenderer: StateRenderer,
+    },
+    {
+        headerName: '锁定',
         width: 70,
-        dataIndex: 'beLock',
-        cellRenderer:'lockRenderer'
+        field: 'beLock',
+        cellRenderer: LockRenderer
       },
     {
-        title: '组名称',
+        headerName: '组名称',
         width: 100,
-        dataIndex: 'usetName',
+        field: 'usetName',
     },
     {
-        title: '组描述',
+        headerName: '组描述',
         width: 140,
         align: 'left',
-        dataIndex: 'note',
+        field: 'note',
     },
 ];
 
@@ -88,7 +101,7 @@ export default () => {
 
     const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
         event.pipe(
-            debounceTime(300),
+            // debounceTime(300),
             distinctUntilChanged(),
             tap((keys) => {
                 setDisabledActive(beHasRowsPropNotEqual('state', 'UNACTIVE', keys));
@@ -196,18 +209,21 @@ export default () => {
         });
     };
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
+
     return (<>
-        <IGrid
+        <IAGrid
             title="用户组列表"
-            components={{
-                stateCellRenderer: StateRenderer,
-                lockRenderer: LockRenderer
-            }}
-            initColumns={initColumns}
+            // components={{
+            //     stateCellRenderer: StateRenderer,
+            //     lockRenderer: LockRenderer
+            // }}
+            columns={initColumns}
+            height={offsetHeight - 72}
             request={(pageNo, pageSize) => search(pageNo, pageSize)}
             dataSource={dataSource}
-            pageNo={pageNo}
-            pageSize={pageSize}
+            // pageNo={pageNo}
+            // pageSize={pageSize}
             total={total}
             onSelectedChanged={onChange}
             onDoubleClick={(record) => onDoubleClick(record.id)}
@@ -225,34 +241,34 @@ export default () => {
                 </Permit>,
 
             ]}
+            pageToolBarRender={[
+                <Permit authority="uset:use">
+                    <Button key="active" onClick={handleUse} loading={loading} disabled={disabledActive}>
+                        启用
+                    </Button>
+                </Permit>,
+                <Permit authority="uset:stop">
+                    <Button danger key="stop" onClick={() => showOperationConfirm('用户组停用后不可用，对应权限将失效，确定停用选中用户组吗？', () => handleStop())} disabled={disabledStop} loading={loading}>
+                        停用
+                    </Button>
+                </Permit>,
+                <Permit authority="uset:delete">
+                    <Button danger key="delete" onClick={() => showDeleteConfirm('删除后用户组中的用户权限将失效,确定删除选中用户组吗？', () => handleDelete())}>
+                        删除
+                    </Button>
+                </Permit>,
+                <Permit authority="userUset:saveFromUset">
+                    <Button type="primary" key="saveFromUset" onClick={handleAssignUsers}>
+                        添加用户
+                    </Button>
+                </Permit>,
+                <Permit authority="uset:saveRoleFromUset">
+                    <Button type="primary" key="saveRoleFromUset" onClick={handleAssignRoles}>
+                        分配角色
+                    </Button>
+                </Permit>
+            ]}
             clearSelect={searchLoading}
         />
-        <IFooterToolbar visible={!isEmpty(selectedKeys)}>
-            <Permit authority="uset:use">
-                <Button key="active" onClick={handleUse} loading={loading} disabled={disabledActive}>
-                    启用
-                </Button>
-            </Permit>
-            <Permit authority="uset:stop">
-                <Button danger key="stop" onClick={() => showOperationConfirm('用户组停用后不可用，对应权限将失效，确定停用选中用户组吗？', () => handleStop())} disabled={disabledStop} loading={loading}>
-                    停用
-                </Button>
-            </Permit>
-            <Permit authority="uset:delete">
-                <Button type="danger" key="delete" onClick={() => showDeleteConfirm('删除后用户组中的用户权限将失效,确定删除选中用户组吗？', () => handleDelete())}>
-                    删除
-                </Button>
-            </Permit>
-            <Permit authority="userUset:saveFromUset">
-                <Button type="primary" key="saveFromUset" onClick={handleAssignUsers}>
-                    添加用户
-                </Button>
-            </Permit>
-            <Permit authority="uset:saveRoleFromUset">
-                <Button type="primary" key="saveRoleFromUset" onClick={handleAssignRoles}>
-                    分配角色
-                </Button>
-            </Permit>
-        </IFooterToolbar>
     </>)
 }
