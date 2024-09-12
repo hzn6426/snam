@@ -646,7 +646,7 @@ export default () => {
                     setTableAlias(tableMap);
                     return;
                 }
-                const tables = result.tables || [];
+                const tables = result.whereTables || [];
                 forEach((v) => {
                     options.push({ label: v.tableComment + '[' + v.alias + ']', value: v.alias });
                     aliasMap[v.alias] = v.table;
@@ -682,7 +682,7 @@ export default () => {
                     setTableAlias(tableMap);
                     return;
                 }
-                const tables = result.tables;
+                const tables = result.selectTables;
                 const tableColumn = {};
                 const specials = []
                 forEach((v) => {
@@ -996,7 +996,7 @@ export default () => {
                 exceptGroupEntrusts: [],
                 exceptUserEntrusts: [],
             });
-            if (isEmpty(permGroupOrUserId)) {
+            if (!isEmpty(permGroupOrUserId)) {
                 const g = [];
                 const u = [];
                 forEach((v) => {

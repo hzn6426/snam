@@ -86,8 +86,8 @@ export default (props) => {
         {
             headerName: '角色',
             width: 150,
-            field: 'left',
-            dataIndex: 'userRoles',
+            align: 'left',
+            field: 'userRoles',
         },
         {
             headerName: '职位',
@@ -297,48 +297,35 @@ export default (props) => {
 
     };
 
-    const [onActive] = useAutoObservableEvent(
-        [
-            tap(() => setLoading(true)),
-            filter((keys) => !isEmpty(keys)),
-            switchMap((keys) => api.user.activeUser(keys)),
-            tap(() => {
+    const onActive = () => {
+        setLoading(true);
+        api.user.activeUser(selectedGroupUserKeys).subscribe({
+            next: (data) => {
                 message.success('操作成功!');
-                refresh();
                 reloadTree();
-            }),
-            shareReplay(1),
-        ],
-        () => setLoading(false),
-    );
+            }
+        }).add(() => setLoading(false))
+    };
 
-    const [onStop] = useAutoObservableEvent(
-        [
-            tap(() => setLoading(true)),
-            switchMap((keys) => api.user.stopUser(keys)),
-            tap(() => {
+    const onStop = () => {
+        setLoading(true);
+        api.user.stopUser(selectedGroupUserKeys).subscribe({
+            next: (data) => {
                 message.success('操作成功!');
-                refresh();
                 reloadTree();
-            }),
-            shareReplay(1),
-        ],
-        () => setLoading(false),
-    );
+            }
+        }).add(() => setLoading(false))
+    }
 
-    const [onUnStop] = useAutoObservableEvent(
-        [
-            tap(() => setLoading(true)),
-            switchMap((keys) => api.user.unstopUser(keys)),
-            tap(() => {
+    const onUnStop = () => {
+        setLoading(true);
+        api.user.unstopUser(selectedGroupUserKeys).subscribe({
+            next: (data) => {
                 message.success('操作成功!');
-                refresh();
                 reloadTree();
-            }),
-            shareReplay(1),
-        ],
-        () => setLoading(false),
-    );
+            }
+        }).add(() => setLoading(false))
+    }
 
     // 双击用户 显示详情
     const onDoubleClick = (record) => {

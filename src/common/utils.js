@@ -671,14 +671,14 @@ export const beHasRowsPropNotEqual = (prop, value, rows) => {
 const sWidth = window.screen.width;
 const sHeight = window.screen.height;
 export const INewWindow = (props) => {
-  const { url, title, width, height, callback, callparam, features, } = props;
+  const { url, title, width, height, callback, callparam, features } = props;
   const iwidth = width || sWidth;
   const iheight = height || sHeight
 
   var itop = (window.screen.height - 30 - (height || 0)) / 2;       //获得窗口的垂直位置;
   var ileft = (window.screen.width - 10 - (width || 0)) / 2;
-  let browser = window
-  let popup = null
+  let browser = window.self;
+  let popup = null;
 
   browser = window.self
   browser.onSuccess = (message) => {
@@ -711,24 +711,25 @@ export const INewWindow = (props) => {
     }
   }
   const opts = features || ('location=no,menubar=no,toolbar=no,resizable=no,status=no,width=' + (iwidth) + ',  height=' + (iheight) + ',top=' + itop + ',left=' + ileft);
-  if (popup) {
-    popup.focus()
-    return
-  }
 
-  console.log(opts);
+  // if (popup) {
+  //   popup.focus()
+  //   return
+  // }
 
 
-  let settings = localStorage.getItem("settings")
+
+  let settings = localStorage.getItem("settings");
+  console.log(settings);
   if (settings) {
     browser.localStorage.setItem("settings", settings);
   }
   const getPageQuery = () => parse(url.split('?')[1]);
   window.getPageQuery = getPageQuery;
-  popup = browser.open(url, '_blank', opts)
+  popup = browser.open(url, title, opts)
 
   
-  setTimeout(function () { popup.document.title = title }, 200);
+  setTimeout(function () { popup.document.title = title }, 300);
 
 };
 

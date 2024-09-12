@@ -86,7 +86,7 @@ export default (props) => {
             width: 90,
             align: 'left',
             field: 'beInPerm',
-            cellRenderer: 'tagCellRenderer'
+            cellRenderer: TagRenderer
         },
     ];
 

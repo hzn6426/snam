@@ -93,20 +93,20 @@ export default (props) => {
             }
             let newTabs = tabList.filter((item) => { return item.key != key });
             setTabList(newTabs);
-            dropScope(key);
+            dropScope(key).then(() => { });
         }
     }
 
     // 右键事件
     const refreshTab = (key) => {
-        refresh(key);
+        refresh(key).then(() => { });
     }
     const closeAllTabs = () => {
         let newTabs = [].concat(tabList[0]);
         setPathname(newTabs[0].key);
         history.replace(newTabs[0].key);
         setTabList(newTabs);
-        clear();
+        clear().then(() => { });
     }
     const closeOtherTabs = (key) => {
         let index = tabList.findIndex((item) => { return item.key == key });

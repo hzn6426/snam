@@ -329,7 +329,7 @@ const LockRenderer = (props) => {
                     onSelect={(keys, { selected }) => {
                         if (selected) {
                             setSelectedGroupId(keys[0]);
-                            searchPositionByGroup(pageNo, pageSize);
+                            // searchPositionByGroup(pageNo, pageSize);
                         }
                     }}
                     titleRender={(node) => (

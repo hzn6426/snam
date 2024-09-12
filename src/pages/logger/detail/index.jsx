@@ -4,14 +4,20 @@ import { javascript } from "@codemirror/lang-javascript";
 import CodeMirror from '@uiw/react-codemirror';
 import { Descriptions } from 'antd';
 import { EditorView } from "codemirror";
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { useParams } from 'umi';
 
 
 export default (props) => {
 
-    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? {} : localStorage.getItem("settings"));
+    const [settings, setSettings] = useState({});
+
+    useEffect(() => {
+        if (localStorage.getItem("settings")) {
+            setSettings(JSON.parse(localStorage.getItem("settings")));
+        }
+    }, []);
 
     const ref = useRef();
     const params = useParams();
@@ -22,8 +28,8 @@ export default (props) => {
             map(([id]) => id),
             filter(id => id !== 'ADD'),
             switchMap((id) => api.logger.getLogger(id)),
-            map((role) => {
-                return role[0];
+            map((logger) => {
+                return logger[0];
             })
         ),
         [params.id],
@@ -54,10 +60,10 @@ export default (props) => {
 
     return (
         <IWindow
-            ref={ref}
+            // ref={ref}
             current={current}
             className="snam-modal"
-            title={(current && current.id) ? '编辑角色' : '新建角色'}
+            title={(current && current.id) ? '查看日志' : '查看日志'}
             width={clientWidth}
             height={clientHeight}
             saveVisible={false}
@@ -98,7 +104,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exchangeParam}
-                        theme={settings.navTheme == 'realDark' ? 'dark' : 'light'}
+                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120px"
@@ -113,7 +119,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.responseData}
-                        theme={settings.navTheme == 'realDark' ? 'dark' : 'light'}
+                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120px"
@@ -129,7 +135,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exceptionMsg}
-                        theme={settings.navTheme == 'realDark' ? 'dark' : 'light'}
+                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Row, Col, Button, message, Checkbox } from 'antd';
+import { Form, Row, Col, Button, message, Checkbox, Card } from 'antd';
 import { OrderedListOutlined } from '@ant-design/icons';
 import DragModal from '@/components/DragModal';
 import Container from "./Container.jsx";
@@ -133,8 +133,9 @@ export default (props) => {
     }
 
     return (<>
+        {/* <Card bodyStyle={{ paddingBottom: 0, border: 0 }}> */}
         <div style={{ padding: '0px', height: props.rows && props.rows >= 1 ? (props.rows - 2) * 35 + 60 : 60, overflow: 'hidden', margin: '0 10px 15px 10px' }}>
-            <Form size="small" className='cala-search-form' onFinish={doFinish} form={searchForm}>
+            <Form size="small" className='snam-form' onFinish={doFinish} form={searchForm}>
                 <Row wrap={false} gutter={8}>
                     <Col flex="auto" style={{ marginRight: '10px' }}>
                         <Row>
@@ -167,6 +168,7 @@ export default (props) => {
                 </Row>
             </Form>
         </div>
+        {/* </Card> */}
 
         <DragModal
             title="自定义查询条件"
@@ -179,5 +181,6 @@ export default (props) => {
         >
             <Container items={dragItems} onChange={(data) => onChange(data)} />
         </DragModal>
+
     </>)
 }
