@@ -87,8 +87,43 @@ export function listGroupUsersByUset(usetId) {
 export function treeAllGroupsAndUsersByTag(tag) {
   return iget(`${constant.API_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG}?utag=${tag}`);
 }
-
-// 包装模糊匹配
+//保存菜单权限
+export function saveMenuPerm(perm) {
+  return ipost(constant.API_USER_SAVE_PERM_MENU, perm);
+}
+//保存按钮权限
+export function saveButtonPerm(perm) {
+  return ipost(constant.API_USER_SAVE_PERM_BUTTON, perm);
+}
+// 获取菜单权限
+export function listPermMenus(userId, groupId) {
+  return iget(`${constant.API_USER_LIST_PERM_MENUS}?uid=${userId}&gid=${groupId}`);
+}
+// 获取按钮权限
+export function listPermButtons(userId, groupId, menuId) {
+  return iget(`${constant.API_USER_LIST_PERM_BUTTONS}?uid=${userId}&gid=${groupId}&mid=${menuId}`);
+}
+// 获取权限菜单按钮
+export function listPermMenusAndButtons(userId, groupId) {
+  return iget(`${constant.API_USER_LIST_PERM_MENUS_AND_BUTTONS}?uid=${userId}&gid=${groupId}`);
+}
+// 获取角色列表
+export function listRoles(userId, groupId) {
+  return iget(`${constant.API_USER_LIST_ROLES}?uid=${userId}&gid=${groupId}`);
+}
+// 获取用户组列表
+export function listUsets(userId, groupId) {
+  return iget(`${constant.API_USER_LIST_USETS}?uid=${userId}&gid=${groupId}`);
+}
+// 获取用户职位列表
+export function listPositions(userId, groupId) {
+  return iget(`${constant.API_USER_LIST_POSITIONS}?uid=${userId}&gid=${groupId}`);
+}
+// 获取业务权限对应的菜单和按钮
+export function listActionMenusAndButtons(userId, groupId) {
+  return iget(`${constant.API_USER_LIST_ACTION_PERM_MENUS_AND_BUTTONS}?uid=${userId}&gid=${groupId}`);
+}
+// 用户模糊匹配
 export function listByKeyword(tag, keyword) {
   let cacheKey;
   if (!keyword) {

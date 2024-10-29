@@ -207,7 +207,7 @@ export default (props) => {
 
   const onResourceClick = (id) => {
     if (selectedKeys.length !== 1) {
-      message.error('只能选择一条用户组数据！');
+      message.error('只能选择一条角色数据！');
       return;
     }
     INewWindow({

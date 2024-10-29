@@ -209,7 +209,7 @@ export default (props) => {
 
     //查询
     const loadAllMenu = () => {
-        api.menu.searchTreeAllMenu().subscribe({
+        api.tmenu.treeAllMenus().subscribe({
             next: (data) => {
                 setTreeData(data);
             },
@@ -228,7 +228,7 @@ export default (props) => {
             reqMethod: 'GET',
         };
         INewWindow({
-            url: '/new/menu/save',
+            url: '/new/tmenu/save',
             title: '新建菜单',
             width: 700,
             height: 600,
@@ -250,7 +250,7 @@ export default (props) => {
             ...node,
         };
         INewWindow({
-            url: '/new/menu/save',
+            url: '/new/tmenu/save',
             title: '编辑菜单',
             width: 700,
             height: 600,
@@ -263,7 +263,7 @@ export default (props) => {
     // 删除菜单
     const handleDeleteMenu = (node) => {
         const id = node.key;
-        api.menu.deleteMenu([id]).subscribe({
+        api.tmenu.deleteMenu([id]).subscribe({
             next: (data) => {
                 loadAllMenu();
             },
@@ -277,7 +277,7 @@ export default (props) => {
         let param = { dto: {}, pageNo: pageNo, pageSize: pageSize };
         param.dto.menuId = beInMenu === true ? selectedMenuId : '';
         param.dto.keyword = tableSearchValue;
-        return api.menu.searchButtonsAndApiByMenu(param).subscribe({
+        return api.tmenu.searchButtonsAndApiByMenu(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
                 setTotal(data.total);
@@ -301,7 +301,7 @@ export default (props) => {
             copyObject(param, button);
         }
         INewWindow({
-            url: '/new/menu/button',
+            url: '/new/tmenu/button',
             title: button.id ? '编辑菜单' : '新建按钮',
             width: 700,
             height: 600,
@@ -331,7 +331,7 @@ export default (props) => {
         };
         param.id = '';
         INewWindow({
-            url: '/new/menu/button',
+            url: '/new/tmenu/button',
             title: '复制新建按钮',
             width: 700,
             height: 600,
@@ -346,7 +346,7 @@ export default (props) => {
     // 按钮删除
     const onDeleteButton = () => {
         setLoading(true);
-        api.menu.deleteButton(selectedKeys).subscribe({
+        api.tmenu.deleteButton(selectedKeys).subscribe({
             next: () => {
                 message.success('操作成功!');
                 search(pageNo, pageSize, searchChecked || (!!selectedMenuId));
@@ -438,7 +438,7 @@ export default (props) => {
                         title={<Space>
                             <span>按钮列表</span>
                             <Checkbox style={{ marginLeft: '20px' }} size='large' checked={searchChecked} onChange={onChangeSearch}>关联菜单</Checkbox>
-                            <Input.Search size='small' onSearch={(value) => setTableSearchValue(value)} style={{ width: 250,height:30 }} type='text' key="tableSearch" placeholder='查询 ID/URL/按钮名称/权限标识'  />
+                            <Input.Search size='small' onSearch={(value) => setTableSearchValue(value)} style={{ width: 250, height: 30 }} type='text' key="tableSearch" placeholder='查询 ID/URL/按钮名称/权限标识' />
                         </Space>}
                         // components={{
                         //     tagCellRenderer: TagRenderer,

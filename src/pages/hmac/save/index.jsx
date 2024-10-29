@@ -1,4 +1,4 @@
-import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { IFormItem, IIF, ILayout, IWindow } from '@/common/components';
 import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
 import { message } from 'antd';
 import { useRef, useState } from 'react';
@@ -11,6 +11,7 @@ export default (props) => {
     const params = useParams();
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
+    const [bindUserType, setBindUserType] = useState('tenant');
 
     const [current, setCurrent] = useAutoObservable((inputs$) =>
         inputs$.pipe(
@@ -19,7 +20,9 @@ export default (props) => {
             switchMap((id) => api.hmac.getHmacUser(id)),
             map((user) => {
                 const u =  user[0];
-                u.userId = u.orgId + '#' + u.userNo;
+                if (u.bindType === 'user') {
+                    u.userId = u.orgId + '#' + u.userNo;
+                }
                 return u;
             })
         ),
@@ -79,11 +82,33 @@ export default (props) => {
                     tooltip="APPKEY由系统自动生成!"
                 />
                 <IFormItem
-                    name="userId"
-                    label="关联用户"
-                    xtype="xuser"
+                    name="bindType"
+                    label="关联类型"
+                    xtype="select"
+                    defaultValue={'tenant'}
                     required={true}
+                    onChange={(v) => setBindUserType(v)}
+                    options={() => [
+                        { label: '用户', value: 'user' },
+                        { label: '租户', value: 'tenant' },
+                    ]}
                 />
+                <IIF test={bindUserType === 'user'}>
+                    <IFormItem
+                        name="userId"
+                        label="关联用户"
+                        xtype="xuser"
+                        required={true}
+                    />
+                </IIF>
+                <IIF test={bindUserType === 'tenant'}>
+                    <IFormItem
+                        name="userId"
+                        label="关联用户"
+                        xtype="tuser"
+                        required={true}
+                    />
+                </IIF>
                 <IFormItem
                     name="expireDate"
                     label="过期时间"
