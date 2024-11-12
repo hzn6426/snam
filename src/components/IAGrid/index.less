@@ -1,11 +1,14 @@
  .ag-container {
    display: flex;
    flex-direction: column;
+  border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    margin: 10px;
    //  background: #f0f0f0;
 
    /* AgGrid 工具栏 */
    .ag-tools {
-     padding: 0px 10px !important;
+    padding: 3px 5px 0px 10px !important;
      height: 30px;
      flex: none;
      display: flex;
@@ -26,7 +29,7 @@
 
    /* AgGrid 主体 */
    .ag-body {
-     margin: 10px;
+    margin-top: 5px;
      position: relative;
      flex: auto;
 
@@ -48,9 +51,47 @@
      }
    }
 
+.ag-theme-balham .ag-root-wrapper {
+  border-radius: 10px 10px 0px 0px;
+  border-color: #f0f0f0;
+  // border-width: 2px;
+}
+
+.ag-theme-balham-dark .ag-root-wrapper {
+  border-radius: 10px;
+  // border-color: #f0f0f0;
+  // border-width: 2px;
+}
+
+.ag-theme-balham {
+  --ag-borders: none;
+  --ag-row-border-style: none;
+  --ag-header-foreground-color: #323232;
+  // --ag-header-foreground-color: white;
+  // --ag-header-background-color: rgb(66, 98, 223);
+  --ag-header-background-color: #f0f0f0;
+}
+
+// /* we set border radius for header row  */
+// .ag-theme-balham .ag-header {
+//   border-radius: 10px;
+// }
+
+// /* we set background and border radius for odd rows */
+// .ag-theme-balham .ag-row-odd {
+//   background-color: rgb(238, 241, 238);
+//   border-radius: 10px;
+// }
+
+// /* we set background and border radius for even rows */
+// .ag-theme-balham .ag-row-even {
+//   background-color: white;
+//   border-radius: 10px;
+// }
    /* AgGrid 分页栏 */
    .ag-pagination {
      display: flex;
+    margin: 5px 5px 5px 5px;
 
      .pagination-tools {
        width: 400px;
