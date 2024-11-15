@@ -144,6 +144,7 @@ export default (props) => {
     return (
         <Card
             size="small"
+            className='snam-card'
             title={
                 <>
                     <IIF test={title ? true : false}>
@@ -171,6 +172,7 @@ export default (props) => {
                     </IIF>
                 </>
             }
+            style={{ borderRadius: '10px' }}
             bordered={bordered === false ? false : true}
             bodyStyle={bodyStyle}
         >

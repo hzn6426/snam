@@ -10,7 +10,8 @@ import { Link, history } from 'umi';
 import KeepAlive, { useAliveController } from 'react-activation';
 import routeCache from '../../config/routerCache.js';
 import { iconEnum } from '@/common/icons';
-import Logo from '../assets/auth.svg';
+// import Logo from '../assets/auth.svg';
+import Logo from '../assets/antd.svg';
 import Header from '@/assets/images/header.jpg';
 import './index.less';
 import { api, constant } from '@/common/utils';
@@ -43,7 +44,7 @@ export default (props) => {
             .loadUserMenus()
             .subscribe({
                 next: (data) => {
-                    setMenuData(data);
+                    setMenuData(data[0].children);
                 },
             })
             .add(() => setLoading(false));

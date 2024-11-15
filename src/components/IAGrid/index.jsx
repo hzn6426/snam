@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useImperativeHandle } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Typography, Button, Space, Drawer, Pagination, message, theme } from 'antd';
-import { SettingOutlined, SyncOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { SettingOutlined, SyncOutlined, FullscreenOutlined, DiffOutlined, InteractionOutlined, AppstoreOutlined, ControlOutlined } from '@ant-design/icons';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
@@ -35,7 +35,8 @@ export default React.forwardRef((props, ref) => {
     showQuickJumper,
     showTotal,
     showSizeChanger,
-    clearSelect
+    clearSelect,
+    childRef
   } = props;
 
 
@@ -80,6 +81,13 @@ export default React.forwardRef((props, ref) => {
       return gridApi;
     },
   }), []);
+
+  useImperativeHandle(childRef, () => ({
+    getGridApi: () => {
+      console.log(gridApi);
+      return gridApi;
+    },
+  }));
 
   const NoRowsOverlay = () => {
     return <>
@@ -273,15 +281,15 @@ export default React.forwardRef((props, ref) => {
           <Typography.Text>{title}</Typography.Text>
         </div>
         <div className='ag-tools-right'>
-          <Space>
+          {/* <Space> */}
+          <Space.Compact block>
             {toolBarRender && toolBarRender.map((obj) => obj)}
             {/* {topToolBar && topToolBar()} */}
-            <Space.Compact block>
-              {/* <Button size='samll' type="text" icon={<SyncOutlined />} /> */}
-              {/* <Button size='samll' type="text" icon={<FullscreenOutlined />} /> */}
-              <Button size='samll' type="text" icon={<SettingOutlined />} onClick={openSetting} />
-            </Space.Compact>
-          </Space>
+
+            <Button size="small" key="refresh" type="default" iconPosition="end" icon={<InteractionOutlined />} onClick={() => getRowData(pageNo, pageSize)} />
+            <Button size="small" key="setting" type="default" iconPosition="end" icon={<AppstoreOutlined />} onClick={openSetting} />
+          </Space.Compact>
+          {/* </Space> */}
         </div>
       </div>
 
@@ -313,6 +321,7 @@ export default React.forwardRef((props, ref) => {
           rowDragManaged={true} // 允许拖动
           animateRows={true} // 行动画
           noRowsOverlayComponent={optionsHide?.noDatasEmpty ? NoRowsOverlayEmpty : NoRowsOverlay}
+          enableCellChangeFlash={true}
         />
         <Drawer
           onClose={() => setIsOpen(false)}

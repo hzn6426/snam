@@ -7,7 +7,8 @@ import {
   // XSearchForm,
   IStatus,
   ITag,
-  Permit
+  Permit,
+  ISearchTree
 } from '@/common/components';
 import XSearchForm from '@/components/XSearchForm';
 import {
@@ -22,7 +23,9 @@ import {
   split,
   state2Option,
   useAutoObservableEvent,
-  useObservableAutoCallback
+  useObservableAutoCallback,
+  forEach,
+  copyObject,
 } from '@/common/utils';
 import { useEffect, useRef, useState } from 'react';
 // import IGrid from '@/components/IGrid';
@@ -32,8 +35,8 @@ import { useEffect, useRef, useState } from 'react';
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
-import { PlusOutlined, LockTwoTone, UnlockTwoTone } from '@ant-design/icons';
-import { Button, Form, message, Tooltip, Spin, Input } from 'antd';
+import { RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined } from '@ant-design/icons';
+import { Button, Form, message, Tooltip, Spin, Input, Row, Col, Divider, Select } from 'antd';
 import { of, zip } from 'rxjs';
 import {
   debounceTime,
@@ -44,6 +47,7 @@ import {
   switchMap,
   tap
 } from 'rxjs/operators';
+import { on } from 'ramda';
 // import { FooterToolbar } from '@ant-design/pro-layout';
 
 // //初始化角色,用户属性
@@ -97,7 +101,7 @@ const initColumns = [
   },
   {
     headerName: '状态',
-    width: 100,
+    width: 60,
     textAlign: 'center',
     field: 'state',
     // cellRenderer: 'stateCellRenderer',
@@ -105,9 +109,8 @@ const initColumns = [
   },
   {
     headerName: '锁定',
-    width: 70,
+    width: 60,
     field: 'beLock',
-    // cellRenderer:'lockRenderer'
     cellRenderer: LockRenderer
   },
   {
@@ -228,9 +231,42 @@ export default (props) => {
 
   const [groupTreeData, setGroupTreeData] = useState();
   const [groupIdValue, setGroupIdValue] = useState();
+  const [treeData, setTreeData] = useState([]);
+  // 选中的组织ID
+  const [selectedGroupId, setSelectedGroupId] = useState();
+  // 选中的组织名称
+  const [selectedGroupName, setSelectedGroupName] = useState();
   const ref = useRef();
 
   const refresh = () => ref.current.refresh();
+
+  // 将组织设置为不可选
+  const loopGroup = (data) => {
+    forEach((v) => {
+      // 节点是组织不允许修改
+      if (v.tag && v.tag === 'GROUP') {
+        copyObject(v, { icon: <ApartmentOutlined /> });
+      } else {
+        copyObject(v, {
+          selectable: false,
+          disableCheckbox: true, icon: <UserOutlined style={{ color: '#52c41a' }} />
+        });
+      }
+      if (v.children && !isEmpty(v.children)) {
+        loopGroup(v.children);
+      }
+    }, data);
+  };
+
+  //查询
+  const loadGroup = () => {
+    let param = { dto: searchForm.getFieldValue() };
+    api.group.treeAllGroupsAndUsers(param).subscribe({
+      next: (data) => {
+        setTreeData(data);
+      },
+    });
+  };
 
   // const [selectedKeys, setSelectedKeys] = useState([]);
   const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
@@ -318,10 +354,13 @@ export default (props) => {
   );
 
   //查询
-  const search = (pageNo, pageSize, params) => {
+  const search = (pageNo, pageSize, params, beBindGroup) => {
     setSelectedKeys([]);
     // setSearchLoading(true);searchForm.getFieldValue()
     let param = { dto: params, pageNo: pageNo, pageSize: pageSize };
+    if (beBindGroup === true) {
+      params.groupId = selectedGroupId || '';
+    }
     api.user
       .searchUser(param)
       .subscribe({
@@ -335,6 +374,42 @@ export default (props) => {
         // setSearchLoading(false);
       });
   };
+
+  const onPrivilegeClick = (id) => {
+    if (selectedKeys.length !== 1) {
+      message.error('只能选择一条用户数据！');
+      return;
+    }
+    if (!selectedGroupId) {
+      message.error('必须选中一个组织！');
+      return;
+    }
+    INewWindow({
+      url: '/new/user/privilege/' + (id + "_" + selectedGroupId),
+      title: '用户权限',
+      width: 1280,
+      height: 850,
+      callback: () => refresh()
+    });
+  }
+
+  const onResourceClick = (id) => {
+    if (selectedKeys.length !== 1) {
+      message.error('只能选择一条用户数据！');
+      return;
+    }
+    if (!selectedGroupId) {
+      message.error('必须选中一个组织！');
+      return;
+    }
+    INewWindow({
+      url: '/new/user/resource/' + (id + "_" + selectedGroupId),
+      title: '用户授权',
+      width: 1000,
+      height: 700,
+      callback: () => refresh()
+    });
+  }
 
   const onNewClick = () => {
     INewWindow({
@@ -364,29 +439,57 @@ export default (props) => {
 
   useEffect(() => {
     treeAllGroups();
+    loadGroup();
   }, []);
+
+  useEffect(() => {
+    if (selectedGroupId) {
+      search(1, pageSize, searchForm.getFieldsValue(), true);
+    }
+  }, [selectedGroupId]);
 
   const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
   // 列表及弹窗
   return (
     <>
+      <Row >
+        <Col span={5}>
+          <ISearchTree
+            iconRender={loopGroup}
+            treeData={treeData}
+            placeholder="输入组织或人员进行搜索"
+            checkable={false}
+            blockNode={true}
+            bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
+            titleRender={(node) => (
+              <div style={{ width: '100%' }}>
+                <div style={{ float: 'left' }}>
+                  {node.icon} {node.title}
+                </div>
+              </div>
+            )}
+            onSelect={(keys, { selected, node }) => {
+              if (selected) {
+                setSelectedGroupId(keys[0]);
+                setSelectedGroupName(node.text);
+              }
+            }}
+          />
+
+        </Col>
+        <Col span={19}>
       <Spin spinning={searchLoading}>
-        <XSearchForm
+            {/* <XSearchForm
           searchName="businessUser_Search"
           form={searchForm}
+          span={6}
           onReset={() => ref.current.refresh()}
           onSearch={(params) => {
             search(1, 50, params);
           }}
         // onHeightChange={(iheight) => setTableHight(iheight)}
         >
-          {/* <Form.Item name="userRealCnName" label="中文名" labelCol={{ flex: '80px' }}>
-                        <Input />
-                    </Form.Item>
-         <Form.Item name="userNo" label="账号名" labelCol={{ flex: '80px' }}>
-                        <Input />
-                    </Form.Item> */}
           <IFormItem name="userNo" label="账号" xtype="input" />
           <IFormItem name="userRealCnName" label="姓名" xtype="input" />
           <IFormItem name="userTag" label="属性" xtype="select" options={userTags} />
@@ -397,10 +500,11 @@ export default (props) => {
             xtype="select"
             options={() => state2Option(userState)}
           />
-          <IFormItem name="groupId" label="部门" xtype="department" />
+          <IFormItem name="groupState" label="部门" xtype="select" options={[{label:'全部',value:'ALL'}
+            ,{label:'未分配',value:'UNASSIGNED'},{label:'已分配',value:'ASSIGNED'}]} />
           <IFormItem name="roleName" label="角色" xtype="input" />
           <IFormItem name="postName" label="职位" xtype="input" />
-        </XSearchForm>
+        </XSearchForm> */}
         <IAGrid
           gridName="businessUser_List"
           // searchName="businessUser_Search"
@@ -408,7 +512,7 @@ export default (props) => {
           title="用户列表"
           rowDragManaged={true}
           animateRows={true}
-          height={offsetHeight - 150}
+              height={offsetHeight - 66}
           defaultSearch={true}
           // components={{
           //   stateCellRenderer: StateRenderer,
@@ -423,23 +527,30 @@ export default (props) => {
           onSelectedChanged={onChange}
           onDoubleClick={(record) => onDoubleClick(record.id)}
           toolBarRender={[
+            <Select defaultValue={'userName'} size="small" options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' }]} />,
+            <Input.Search
+              style={{ width: 150, marginRight: '5px' }}
+              onSearch={(value) => setColumnSearchValue(value)}
+              size="small" key="columnSearch"
+              enterButton
+              placeholder='搜索' allowClear />,
             <Permit key="user:save" authority="user:save">
               <Button
                 key="add"
                 size="small"
-                type="primary"
-                shape="round"
-                icon={<PlusOutlined />}
+                // type="primary"
+                icon={<DiffOutlined />}
                 onClick={() => onNewClick()}
               >
-                新建
+
               </Button>
             </Permit>,
           ]}
           pageToolBarRender={[
             <Permit authority="user:active">
-              <Tooltip title="演示环境，激活后密码为123456">
+              <Tooltip>
                 <Button
+                  size='small'
                   key="active"
                   onClick={() => onActive(selectedKeys)}
                   disabled={disabledActive}
@@ -453,7 +564,11 @@ export default (props) => {
             <Permit authority="user:stop">
               <Button
                 danger
+                type='primary'
+                size='small'
                 key="stop"
+                // style={{ paddingLeft: 2, paddingRight: 2 }}
+                icon={< ApiOutlined style={{ marginRight: '-8px' }} />}
                 onClick={() => onStop(selectedKeys)}
                 disabled={disabledStop}
                 loading={loading}
@@ -464,6 +579,7 @@ export default (props) => {
             <Permit authority="user:unstop">
               <Button
                 danger
+                size='small'
                 key="unstop"
                 onClick={() => onUnStop(selectedKeys)}
                 disabled={disabledUnStop}
@@ -474,7 +590,9 @@ export default (props) => {
             </Permit>,
             <Permit authority="user:delete">
               <Button
+                size='small'
                 danger
+                icon={<RestOutlined style={{ marginRight: '-8px' }} />}
                 key="delete"
                 onClick={() => showDeleteConfirm('确定删除选中的用户吗?', () => onDelete(selectedKeys))}
               >
@@ -482,12 +600,37 @@ export default (props) => {
               </Button>
             </Permit>,
             <Permit authority="user:reset">
-              <Tooltip title="演示环境，暂不支持该功能">
-                <Button danger key="reset" disabled onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>
+              <Tooltip >
+                <Button
+                  danger
+                  size='small'
+                  key="reset"
+                  disabled
+                  onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>
                   重置密码
                 </Button>
               </Tooltip>
-            </Permit>
+            </Permit>,
+            <Permit authority="user:saveMenuPerm">
+              <Button
+                style={{ backgroundColor: '#f2bf23' }}
+                danger
+                size='small'
+                key="saveMenuPerm"
+                onClick={() => onResourceClick(selectedKeys[selectedKeys.length - 1])}
+              >
+                授权
+              </Button>
+            </Permit>,
+            <Permit authority="user:listPermMenusAndButtons">
+              <Button
+                size='small'
+                key="listPermMenusAndButtons"
+                onClick={() => onPrivilegeClick(selectedKeys[selectedKeys.length - 1])}
+              >
+                权限查看
+              </Button>
+            </Permit>,
           ]}
           clearSelect={searchLoading}
         />
@@ -495,6 +638,8 @@ export default (props) => {
 
         </IFooterToolbar> */}
       </Spin>
+        </Col>
+      </Row>
     </>
   );
 };
