@@ -321,7 +321,7 @@ export default (props) => {
     const ref = useRef();
     const params = useParams();
 
-
+   
 
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     // const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
@@ -429,7 +429,7 @@ export default (props) => {
                 api.user.listUsets(uid, gid),
                 api.user.listPositions(uid, gid),
                 // api.group.treeAllGroupsAndUsers()
-            )),
+                )),
             map(([users, menus, roles, usets, positions, pmenus]) => {
                 setUserDataSource(users);
                 addIcon(menus);
@@ -924,12 +924,12 @@ export default (props) => {
                         }}
                         render={(item) => item.title}
                         targetKeys={exceptTableColumn[v.table]}
-                    // onChange={(targetKeys) => {
-                    //     const ecolumns = produce(exceptTableColumn, (draft) => {
-                    //         draft[v.table] = targetKeys;
-                    //     });
-                    //     setExceptTableColumn(ecolumns);
-                    // }}
+                        // onChange={(targetKeys) => {
+                        //     const ecolumns = produce(exceptTableColumn, (draft) => {
+                        //         draft[v.table] = targetKeys;
+                        //     });
+                        //     setExceptTableColumn(ecolumns);
+                        // }}
                     />
                 </IFieldset>)
         }, tables);
@@ -1027,7 +1027,7 @@ export default (props) => {
         setUsetClearSelect(false);
         setPostClearSelect(false);
         setUserClearSelect(false);
-
+        
         if (selectedRows.length > 0) {
             var ids = pluck('id', selectedRows);
             setUserSelectedKeys(ids);
@@ -1052,7 +1052,7 @@ export default (props) => {
         if (selectedRows.length > 0) {
             var ids = pluck('id', selectedRows);
             setUsetSelectedKeys(ids);
-            const uset = selectedRows[selectedRows.length - 1].id;
+            const uset = selectedRows[selectedRows.length -1].id;
             const usetId = uset.id;
             loadPermResourceByUset(usetId);
             setPermType('uset');
@@ -1108,7 +1108,7 @@ export default (props) => {
         <IWindow
             current={current}
             saveVisible={false}
-            className="snam-modal"
+            className="odm-modal"
             title='资源权限'
             width={clientWidth}
             height={clientHeight}
@@ -1314,45 +1314,45 @@ export default (props) => {
                             </Card>
                         </ILayout>
                         {bePostSelect === false && (
-                            <Card
-                                size='small'
-                                title={
-                                    <div style={{ verticalAlign: 'top' }}>
-                                        <Space>
-                                            功能列表
-                                            <span style={{ fontSize: 14, color: '#C5C5C5' }}>权限范围只作用于按钮功能</span>
-                                        </Space>
-                                    </div>
-                                }
-                                bordered={true}
-                                bodyStyle={{ height: clientHeight - 180, overflow: 'scroll' }}
-                            >
-                                <Table
-                                    size="small"
-                                    bordered
-                                    rowKey="id"
-                                    columns={columns}
-                                    search={false}
-                                    dataSource={dataSource}
-                                    rowSelection={{
-                                        columnTitle: '选择',
-                                        columnWidth: 80,
-                                        selectedRowKeys: selectedKeys,
-                                        type: 'radio',
-                                        onSelect: (record) => {
+                        <Card
+                            size='small'
+                            title={
+                                <div style={{ verticalAlign: 'top' }}>
+                                    <Space>
+                                        功能列表
+                                        <span style={{ fontSize: 14, color: '#C5C5C5' }}>权限范围只作用于按钮功能</span>
+                                    </Space>
+                                </div>
+                            }
+                            bordered={true}
+                            bodyStyle={{ height: clientHeight - 180, overflow: 'scroll' }}
+                        >
+                            <Table
+                                size="small"
+                                bordered
+                                rowKey="id"
+                                columns={columns}
+                                search={false}
+                                dataSource={dataSource}
+                                rowSelection={{
+                                    columnTitle: '选择',
+                                    columnWidth: 80,
+                                    selectedRowKeys: selectedKeys,
+                                    type: 'radio',
+                                    onSelect: (record) => {
+                                        onSelect(record, key);
+                                    },
+                                }}
+                                pagination={false}
+                                onRow={(record) => {
+                                    return {
+                                        onClick: () => {
                                             onSelect(record, key);
                                         },
-                                    }}
-                                    pagination={false}
-                                    onRow={(record) => {
-                                        return {
-                                            onClick: () => {
-                                                onSelect(record, key);
-                                            },
-                                        };
-                                    }}
-                                />
-                            </Card>)}
+                                    };
+                                }}
+                            />
+                        </Card>)}
                         {bePostSelect === true && (
                             <Card
                                 bordered={true}
@@ -1367,7 +1367,7 @@ export default (props) => {
                                     </div>
                                 }
                             >
-                                <Form form={postForm} size='small' layout="horizontal" className="snam-form">
+                                <Form form={postForm} size='small' layout="horizontal" className="odm-form">
                                     <ILayout type="vbox">
                                         <IFormItem
                                             name="postName"
@@ -1412,27 +1412,27 @@ export default (props) => {
                             </Card>
                         )}
                         {((selectedTag && selectedTag === 'BUTTON') && bePostSelect === false) && (
-                            <Card
-                                size='small'
-                                bordered={true}
-                                bodyStyle={{ padding: 5, height: clientHeight - 66, overflow: 'scroll' }} >
-                                <Tabs
-                                    activeKey={key}
-                                    size="small"
-                                    type="card"
-                                    onChange={(activeKey) => {
-                                        setKey(activeKey);
-                                        onSelect(selectedRecord, activeKey);
-                                    }}>
+                                <Card
+                                    size='small'
+                                    bordered={true}
+                                    bodyStyle={{ padding: 5, height: clientHeight - 66, overflow: 'scroll' }} >
+                                    <Tabs
+                                        activeKey={key}
+                                        size="small"
+                                        type="card"
+                                        onChange={(activeKey) => {
+                                            setKey(activeKey);
+                                            onSelect(selectedRecord, activeKey);
+                                        }}>
 
-                                    <TabPane tab="功能数据权限" key="buttonPerm" style={{ padding: 0 }}>
+                                        <TabPane tab="功能数据权限" key="buttonPerm" style={{ padding: 0 }}>
                                         <IIF test={!bePostSelect}>
                                             <Card
                                                 bordered={false}
                                                 size='small'
-                                                bodyStyle={{ height: clientHeight - 192, overflow: 'scroll' }}
+                                            bodyStyle={{ height: clientHeight - 192, overflow: 'scroll' }}
                                             >
-                                                <Form form={form} size='small' layout="horizontal" className="snam-form">
+                                                <Form form={form} size='small' layout="horizontal" className="odm-form">
                                                     <Form.Item style={{ display: 'none' }}>
                                                         <Form.Item name="permId" label="permId">
                                                             <Input />
@@ -1550,137 +1550,137 @@ export default (props) => {
                                                 )}
                                             </Card>
                                         </IIF>
-
-                                    </TabPane>
+                                        
+                                        </TabPane>
                                     <TabPane tab="业务数据权限" key="businessPerm" style={{ padding: 0 }} disabled={bePostSelect === true}>
-                                        <Card
-                                            bordered={false}
-                                            size='small'
-                                            bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
-                                        >
-                                            <Form form={bform} size='small' layout="horizontal" className="snam-form">
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="permId" label="permId">
-                                                        <Input />
+                                            <Card
+                                                bordered={false}
+                                                size='small'
+                                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
+                                            >
+                                                <Form form={bform} size='small' layout="horizontal" className="odm-form">
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="permId" label="permId">
+                                                            <Input />
+                                                        </Form.Item>
                                                     </Form.Item>
-                                                </Form.Item>
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="userId" label="userId">
-                                                        <Input />
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="userId" label="userId">
+                                                            <Input />
+                                                        </Form.Item>
                                                     </Form.Item>
-                                                </Form.Item>
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="orgId" label="orgId">
-                                                        <Input />
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="orgId" label="orgId">
+                                                            <Input />
+                                                        </Form.Item>
                                                     </Form.Item>
-                                                </Form.Item>
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="usetId" label="usetId">
-                                                        <Input />
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="usetId" label="usetId">
+                                                            <Input />
+                                                        </Form.Item>
                                                     </Form.Item>
-                                                </Form.Item>
-                                                <Row>
-                                                    <Col span={24}>
-                                                        <Form.Item
-                                                            labelCol={{ span: 6 }}
-                                                            name="beOrCondition"
-                                                            label="OR条件"
-                                                            rules={[{ required: false, message: false }]}
-                                                        >
+                                                    <Row>
+                                                        <Col span={24}>
+                                                            <Form.Item
+                                                                labelCol={{ span: 6 }}
+                                                                name="beOrCondition"
+                                                                label="OR条件"
+                                                                rules={[{ required: false, message: false }]}
+                                                            >
                                                             <Switch checkedChildren="OR" unCheckedChildren="AND" disabled={true} />
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col span={24}>
-                                                        <Form.Item
-                                                            labelCol={{ span: 6 }}
-                                                            name="timeRange"
-                                                            label="授权时效"
-                                                            tooltip="不填写为永久授权"
-                                                            rules={[{ required: false, message: false }]}
-                                                        >
-                                                            <RangePicker
-                                                                disabled={true}
-                                                                style={{ width: '240px' }}
-                                                                ranges={{
-                                                                    今天: [moment(), moment()],
-                                                                    本月: [moment().startOf('month'), moment().endOf('month')],
-                                                                }}
-                                                                // showTime
-                                                                format="YYYY-MM-DD"
-                                                            />
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col span={24}>
-                                                        <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="注意: 若勾选表格未出现选择列信息,请先到 [数据列管理] 中配置对应的表!" type="warning" showIcon={true} />
-                                                        <Form.Item
-                                                            labelCol={{ span: 4 }}
-                                                            name="tables"
-                                                            label="表格列表"
-                                                            rules={[{ required: false, message: false, type: 'array' }]}
-                                                        >
-                                                            <Checkbox.Group options={tableOptions} disabled={true} />
-                                                        </Form.Item>
-                                                    </Col>
-                                                </Row>
-                                                {ui.map((item) => (<>{item}</>))}
-                                            </Form>
-                                        </Card>
-                                    </TabPane>
-
-                                    <TabPane tab="列数据权限" key="columnPerm" style={{ padding: 0 }} disabled={bePostSelect === true}>
-                                        <Card
-                                            bordered={false}
-                                            size='small'
-                                            bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
-                                        >
-                                            <Form form={cform} size='small' layout="horizontal" className="snam-form">
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="permId" label="permId">
-                                                        <Input />
-                                                    </Form.Item>
-                                                </Form.Item>
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="userId" label="userId">
-                                                        <Input />
-                                                    </Form.Item>
-                                                </Form.Item>
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="orgId" label="orgId">
-                                                        <Input />
-                                                    </Form.Item>
-                                                </Form.Item>
-                                                <Form.Item style={{ display: 'none' }}>
-                                                    <Form.Item name="usetId" label="usetId">
-                                                        <Input />
-                                                    </Form.Item>
-                                                </Form.Item>
-                                                <Row>
-                                                    <Col span={24}>
-                                                        {columnPermTableOptions && columnPermTableOptions.length >= 1 && (
+                                                            </Form.Item>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col span={24}>
+                                                            <Form.Item
+                                                                labelCol={{ span: 6 }}
+                                                                name="timeRange"
+                                                                label="授权时效"
+                                                                tooltip="不填写为永久授权"
+                                                                rules={[{ required: false, message: false }]}
+                                                            >
+                                                                <RangePicker
+                                                                    disabled={true}
+                                                                    style={{ width: '240px' }}
+                                                                    ranges={{
+                                                                        今天: [moment(), moment()],
+                                                                        本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                    }}
+                                                                    // showTime
+                                                                    format="YYYY-MM-DD"
+                                                                />
+                                                            </Form.Item>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col span={24}>
+                                                            <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="注意: 若勾选表格未出现选择列信息,请先到 [数据列管理] 中配置对应的表!" type="warning" showIcon={true} />
                                                             <Form.Item
                                                                 labelCol={{ span: 4 }}
                                                                 name="tables"
                                                                 label="表格列表"
                                                                 rules={[{ required: false, message: false, type: 'array' }]}
                                                             >
-                                                                <Checkbox.Group options={columnPermTableOptions} disabled={true} />
+                                                            <Checkbox.Group options={tableOptions} disabled={true} />
                                                             </Form.Item>
-                                                        )}
-                                                        {(!columnPermTableOptions || columnPermTableOptions.length < 1) && (
-                                                            <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="此功能不支持列配置(只有一列时,不支持列配置)!" type="error" showIcon={true} />
-                                                        )}
-                                                    </Col>
-                                                </Row>
-                                                {columnUi.map((item) => (<>{item}</>))}
-                                            </Form>
-                                        </Card>
-                                    </TabPane>
-                                </Tabs>
-                            </Card>
+                                                        </Col>
+                                                    </Row>
+                                                    {ui.map((item) => (<>{item}</>))}
+                                                </Form>
+                                            </Card>
+                                        </TabPane>
+
+                                    <TabPane tab="列数据权限" key="columnPerm" style={{ padding: 0 }} disabled={bePostSelect === true}>
+                                            <Card
+                                                bordered={false}
+                                                size='small'
+                                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
+                                            >
+                                                <Form form={cform} size='small' layout="horizontal" className="odm-form">
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="permId" label="permId">
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </Form.Item>
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="userId" label="userId">
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </Form.Item>
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="orgId" label="orgId">
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </Form.Item>
+                                                    <Form.Item style={{ display: 'none' }}>
+                                                        <Form.Item name="usetId" label="usetId">
+                                                            <Input />
+                                                        </Form.Item>
+                                                    </Form.Item>
+                                                    <Row>
+                                                        <Col span={24}>
+                                                            {columnPermTableOptions && columnPermTableOptions.length >= 1 && (
+                                                                <Form.Item
+                                                                    labelCol={{ span: 4 }}
+                                                                    name="tables"
+                                                                    label="表格列表"
+                                                                    rules={[{ required: false, message: false, type: 'array' }]}
+                                                                >
+                                                                <Checkbox.Group options={columnPermTableOptions} disabled={true} />
+                                                                </Form.Item>
+                                                            )}
+                                                            {(!columnPermTableOptions || columnPermTableOptions.length < 1) && (
+                                                                <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="此功能不支持列配置(只有一列时,不支持列配置)!" type="error" showIcon={true} />
+                                                            )}
+                                                        </Col>
+                                                    </Row>
+                                                    {columnUi.map((item) => (<>{item}</>))}
+                                                </Form>
+                                            </Card>
+                                        </TabPane>
+                                    </Tabs>
+                                </Card>
                         )}
                     </ILayout>
                 </TabPane>

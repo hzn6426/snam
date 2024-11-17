@@ -172,7 +172,7 @@ export default (props) => {
                     </IIF>
                 </>
             }
-            style={{ borderRadius: '10px' }}
+            // style={{ borderRadius: '10px' }}
             bordered={bordered === false ? false : true}
             bodyStyle={bodyStyle}
         >

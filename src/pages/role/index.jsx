@@ -23,9 +23,9 @@ import {
   UnlockTwoTone,
   CloudSyncOutlined,
   SyncOutlined,
-  ReloadOutlined
+  DiffOutlined
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin } from 'antd';
+import { Button, Form, Select, Input, message, Spin, Tooltip } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -243,7 +243,7 @@ export default (props) => {
   return (
     <>
       <Spin spinning={searchLoading}>
-        <XSearchForm
+        {/* <XSearchForm
           form={searchForm}
           onReset={() => ref.current.refresh()}
           rows={1}
@@ -262,14 +262,14 @@ export default (props) => {
             xtype="select"
             options={() => state2Option(roleState)}
           />
-        </XSearchForm>
+        </XSearchForm> */}
 
         <IAGrid
           gridName="businessRole_List"
           ref={ref}
           title="角色列表"
           columns={initColumns}
-          height={offsetHeight - 150}
+          height={offsetHeight - 72}
           defaultSearch={true}
           request={(pageNo, pageSize) => search(pageNo, pageSize)}
           dataSource={dataSource}
@@ -279,37 +279,46 @@ export default (props) => {
           onSelectedChanged={onChange}
           onDoubleClick={(record) => onDoubleClick(record.id)}
           toolBarRender={[
-            <Space key="space">
+            <Select defaultValue={'roleName'} size="small" options={[{ label: '角色名', value: 'roleName' }]} />,
+            <Input.Search
+              style={{ width: 150, marginRight: '5px' }}
+              onSearch={(value) => {}}
+              size="small" key="columnSearch"
+              enterButton
+              placeholder='搜索' allowClear />,
               <Permit key="role:refreshPrivileges" authority="role:refreshPrivileges">
+                <Tooltip title="刷新权限">
                 <Button
                   key="refresh"
                   size="small"
-                  danger
+                  // danger
                   loading={loading}
                   icon={<SyncOutlined />}
                   onClick={() => onRefreshPrivileges()}
                 >
-                  刷新权限
+                  
                 </Button>
-              </Permit>
+                </Tooltip>
+              </Permit>,
               <Permit key="role:save" authority="role:save">
                 <Button
                   key="add"
                   size="small"
-                  type="primary"
-                  icon={<PlusOutlined />}
+                  // type="primary"
+                  icon={<DiffOutlined />}
                   onClick={() => onNewClick()}
                 >
-                  新建
+                  
                 </Button>
               </Permit>
-            </Space>
+    
 
           ]}
           pageToolBarRender={[
             <Permit authority="role:use">
               <Button
                 key="active"
+                size="small"
                 onClick={() => onActive(selectedKeys)}
                 disabled={disabledActive}
                 loading={loading}
@@ -321,6 +330,7 @@ export default (props) => {
               <Button
                 danger
                 key="stop"
+                size="small"
                 onClick={() => onStop(selectedKeys)}
                 disabled={disabledStop}
                 loading={loading}
@@ -331,6 +341,7 @@ export default (props) => {
             <Permit authority="role:delete">
               <Button
                 danger
+                size="small"
                 key="delete"
                 onClick={() => showDeleteConfirm('确定删除选中的角色吗?', () => onDelete(selectedKeys))}
               >
@@ -338,13 +349,17 @@ export default (props) => {
               </Button>
             </Permit>,
             <Permit authority="userRole:saveFromRole">
-              <Button type="primary" key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
+              <Button 
+              size="small"
+              type="primary" 
+              key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
                 添加用户
               </Button>
             </Permit>,
             <Permit authority="role:saveMenuPerm">
               <Button
                 key="grant"
+                size="small"
                 onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}
               >
                 角色授权

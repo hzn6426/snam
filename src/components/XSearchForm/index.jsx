@@ -161,7 +161,7 @@ export default (props) => {
                         {/* <IIF test={props.showExtra == true ? true : false}> */}
                         <Form.Item>
                             <Checkbox checked={searchChecked} onChange={onChangeSearch}>记忆查询</Checkbox>
-                            <Button type="text" style={{ margin: '10px 8px' }} icon={<OrderedListOutlined />} onClick={openModal} />
+                            <Button type="text" style={{ margin: '10px 8px', marginLeft:'-5px' }} icon={<OrderedListOutlined />} onClick={openModal} />
                         </Form.Item>
                         {/* </IIF> */}
                     </Col>

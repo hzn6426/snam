@@ -68,13 +68,13 @@ export default (props) => {
         },
         {
             headerName: '账号',
-            width: 100,
+            width: 90,
             align: 'left',
             field: 'userName',
         },
         {
             headerName: '锁定',
-            width: 70,
+            width: 60,
             field: 'beLock',
             cellRenderer: LockRenderer
         },
@@ -91,14 +91,14 @@ export default (props) => {
         },
         {
             headerName: '职位',
-            width: 130,
+            width: 120,
             field: 'postName',
             cellRenderer: TagRenderer,
         },
         {
             headerName: '手机',
             align: 'center',
-            width: 120,
+            width: 110,
             field: 'userMobile',
         },
         {
@@ -110,7 +110,7 @@ export default (props) => {
         {
             headerName: '备注',
             align: 'left',
-            width: 200,
+            width: 180,
             field: 'note',
         },
 
@@ -465,14 +465,14 @@ export default (props) => {
     // 列表及弹窗
     return (
         <Row >
-            <Col span={7}>
+            <Col span={6}>
                 <ISearchTree
                     iconRender={loopGroup}
                     treeData={treeData}
                     placeholder="输入组织或人员进行搜索"
                     checkable={false}
                     blockNode={true}
-                    bodyStyle={{ height: offsetHeight - 110, overflow: 'scroll' }}
+                    bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
                     titleRender={(node) => (
                         <div style={{ width: '100%' }}>
                             <div style={{ float: 'left' }}>
@@ -515,7 +515,7 @@ export default (props) => {
                 />
 
             </Col>
-            <Col span={17}>
+            <Col span={18}>
                 {/* <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
                     <div> */}
                 <div style={{ marginBottom: '15px', border: 0 }}>
@@ -537,21 +537,21 @@ export default (props) => {
                         //     lockRenderer: LockRenderer
                         // }}
                         toolBarRender={[
-                            <Space key='space'>
+                           
                                 <Permit authority="group:addUsers" key="new">
                                     <Button
                                         key="addUser"
                                         type="primary"
                                         size="small"
                                         onClick={handleAddUser}>添加成员</Button>
-                                </Permit>
+                                </Permit>,
                                 <Permit authority="group:addCompany" key="addCompany">
                                     <Button
                                         key="addCompany"
                                         danger
                                         size="small"
                                         onClick={handleAddCompany}>添加分公司</Button>
-                                </Permit>
+                                </Permit>,
                                 <Permit authority="userRole:saveFromUser" key="assignRole">
                                     <Button
                                         key="assignRole"
@@ -559,7 +559,7 @@ export default (props) => {
                                         size="small"
                                         onClick={handleAssignRoles}>分配角色</Button>
                                 </Permit>
-                            </Space>
+                           
 
                         ]}
                         pageToolBarRender={[
@@ -567,6 +567,7 @@ export default (props) => {
                                 <Tooltip title="演示环境，激活后密码为123456">
                                     <Button
                                         key="active"
+                                        size="small"
                                         onClick={() => onActive(selectedGroupUserKeys)}
                                         disabled={disabledActive}
                                         loading={loading}
@@ -579,6 +580,7 @@ export default (props) => {
                             <Permit authority="user:stop">
                                 <Button
                                     danger
+                                    size="small"
                                     key="stop"
                                     onClick={() => onStop(selectedGroupUserKeys)}
                                     disabled={disabledStop}
@@ -590,6 +592,7 @@ export default (props) => {
                             <Permit authority="user:unstop">
                                 <Button
                                     danger
+                                    size="small"
                                     key="unstop"
                                     onClick={() => onUnStop(selectedGroupUserKeys)}
                                     disabled={disabledUnStop}
@@ -599,12 +602,12 @@ export default (props) => {
                                 </Button>
                             </Permit>,
                             <Permit authority="group:moveUsers">
-                                <Button type="primary" key="move" onClick={() => onMove()}>
+                                <Button size="small" type="primary" key="move" onClick={() => onMove()}>
                                     移动
                                 </Button>
                             </Permit>,
                             <Permit authority="group:removeUsers">
-                                <Button type="danger" key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
+                                <Button size="small" danger key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
                                     删除
                                 </Button>
                             </Permit>
@@ -624,7 +627,7 @@ export default (props) => {
                     request={(pageNo, pageSize) => searchNotAssignedUser(pageNo, pageSize)}
                     dataSource={notAssignedDataSource}
                     total={total}
-                    height={offsetHeight - (offsetHeight / 2 + 150)}
+                    height={offsetHeight - (offsetHeight / 2 + 130)}
                     onSelectedChanged={onNotAssignUserChange}
                     clearSelect={searchLoading}
 
@@ -635,7 +638,7 @@ export default (props) => {
                     // }}
                     pageToolBarRender={[
                         <Permit authority="group:addUsers" key="addUsers">
-                            <Button type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
+                            <Button size="small" type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
                                 添加成员
                             </Button>
                         </Permit>

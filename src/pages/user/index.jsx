@@ -454,7 +454,7 @@ export default (props) => {
   return (
     <>
       <Row >
-        <Col span={5}>
+        <Col span={6}>
           <ISearchTree
             iconRender={loopGroup}
             treeData={treeData}
@@ -478,7 +478,7 @@ export default (props) => {
           />
 
         </Col>
-        <Col span={19}>
+        <Col span={18}>
       <Spin spinning={searchLoading}>
             {/* <XSearchForm
           searchName="businessUser_Search"

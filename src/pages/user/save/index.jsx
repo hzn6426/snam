@@ -68,7 +68,7 @@ export default (props) => {
     return (
         <IWindow
             current={current}
-            className="snam-modal"
+            className="odm-modal"
             title={(current && current.id) ? '编辑用户' : '新建用户'}
             width={clientWidth}
             height={clientHeight}

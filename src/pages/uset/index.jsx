@@ -14,7 +14,7 @@ import {
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined,
+    DiffOutlined,
     LockTwoTone,
     UnlockTwoTone 
 } from '@ant-design/icons';
@@ -232,38 +232,38 @@ export default () => {
                 <Button
                     key="add"
                     size="small"
-                    type="primary"
-                    icon={<PlusOutlined />}
+                    // type="primary"
+                    icon={<DiffOutlined />}
                     onClick={() => onNewClick()}
                 >
-                    新建
+                    
                 </Button>
                 </Permit>,
 
             ]}
             pageToolBarRender={[
                 <Permit authority="uset:use">
-                    <Button key="active" onClick={handleUse} loading={loading} disabled={disabledActive}>
+                    <Button size="small" key="active" onClick={handleUse} loading={loading} disabled={disabledActive}>
                         启用
                     </Button>
                 </Permit>,
                 <Permit authority="uset:stop">
-                    <Button danger key="stop" onClick={() => showOperationConfirm('用户组停用后不可用，对应权限将失效，确定停用选中用户组吗？', () => handleStop())} disabled={disabledStop} loading={loading}>
+                    <Button size="small" danger key="stop" onClick={() => showOperationConfirm('用户组停用后不可用，对应权限将失效，确定停用选中用户组吗？', () => handleStop())} disabled={disabledStop} loading={loading}>
                         停用
                     </Button>
                 </Permit>,
                 <Permit authority="uset:delete">
-                    <Button danger key="delete" onClick={() => showDeleteConfirm('删除后用户组中的用户权限将失效,确定删除选中用户组吗？', () => handleDelete())}>
+                    <Button size="small" danger key="delete" onClick={() => showDeleteConfirm('删除后用户组中的用户权限将失效,确定删除选中用户组吗？', () => handleDelete())}>
                         删除
                     </Button>
                 </Permit>,
                 <Permit authority="userUset:saveFromUset">
-                    <Button type="primary" key="saveFromUset" onClick={handleAssignUsers}>
+                    <Button size="small" type="primary" key="saveFromUset" onClick={handleAssignUsers}>
                         添加用户
                     </Button>
                 </Permit>,
                 <Permit authority="uset:saveRoleFromUset">
-                    <Button type="primary" key="saveRoleFromUset" onClick={handleAssignRoles}>
+                    <Button size="small" type="primary" key="saveRoleFromUset" onClick={handleAssignRoles}>
                         分配角色
                     </Button>
                 </Permit>

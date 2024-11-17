@@ -42,6 +42,7 @@ import {
     ApartmentOutlined,
     LockTwoTone,
     UnlockTwoTone,
+    DiffOutlined,
 } from '@ant-design/icons';
 import {
     concatMap,
@@ -318,14 +319,14 @@ const LockRenderer = (props) => {
 
     return (
         <Row gutter={5}>
-            <Col span={7}>
+            <Col span={6}>
                 <ISearchTree
                     iconRender={loopGroup}
                     treeData={treeData}
                     placeholder="输入组织或职位进行搜索"
                     checkable={false}
                     blockNode={true}
-                    bodyStyle={{ height: offsetHeight - 110, overflow: 'scroll' }}
+                    bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
                     onSelect={(keys, { selected }) => {
                         if (selected) {
                             setSelectedGroupId(keys[0]);
@@ -341,11 +342,11 @@ const LockRenderer = (props) => {
                     )}
                 />
             </Col>
-            <Col span={17}>
+            <Col span={18}>
                 <IAGrid
                     title="职位列表"
                     columns={initColumns}
-                    height={offsetHeight - 80}
+                    height={offsetHeight - 66}
                     // components={{
                     //     stateCellRenderer: StateRenderer,
                     //     tagCellRenderer: TagRenderer,
@@ -363,31 +364,32 @@ const LockRenderer = (props) => {
                         <Permit authority="position:save" key="new">
                             <Button
                                 size='small'
-                                type="primary"
+                                icon={<DiffOutlined />}
+                                // type="primary"
                                 onClick={onNewClick}
                             >
-                                新建
+                               
                             </Button>
                         </Permit>
                     ]}
                     pageToolBarRender={[
                         <Permit authority="position:use">
-                            <Button key="use" onClick={handleUse} disabled={disabledActive}>
+                            <Button size="small" key="use" onClick={handleUse} disabled={disabledActive}>
                                 启用
                             </Button>
                         </Permit>,
                         <Permit authority="position:stop">
-                            <Button danger key="stop" onClick={handleStop} disabled={disabledStop}>
+                            <Button size="small" danger key="stop" onClick={handleStop} disabled={disabledStop}>
                                 停用
                             </Button>
                         </Permit>,
                         <Permit authority="position:delete">
-                            <Button danger key="delete" onClick={() => showDeleteConfirm('删除职位后,对应的权限将失效, 确定要删除选中职位吗？', () => handleDelete())}>
+                            <Button size="small" danger key="delete" onClick={() => showDeleteConfirm('删除职位后,对应的权限将失效, 确定要删除选中职位吗？', () => handleDelete())}>
                                 删除
                             </Button>
                         </Permit>,
                         <Permit authority="position:savePositionRole">
-                            <Button danger key="assign" onClick={handleAssignRoles}>
+                            <Button size="small" danger key="assign" onClick={handleAssignRoles}>
                                 分配角色
                             </Button>
                         </Permit>

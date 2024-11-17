@@ -56,8 +56,7 @@ const addIcon = (data) => {
     if (isEmpty(data)) return;
     forEach((v) => {
         if (v.tag && v.menuType === 'ADMIN') {
-            copyObject(v, {
-                icon: <AppstoreTwoTone />,
+            copyObject(v, { icon: <AppstoreTwoTone />,
             });
         } else {
             copyObject(v, { icon: <AppstoreOutlined /> });
@@ -93,13 +92,13 @@ export default (props) => {
 
     const [current, setCurrent] = useAutoObservable((inputs$) =>
         inputs$.pipe(
-            map(([id]) => split(id, '_')),
-            switchMap(([uid, gid]) => zip(api.role.treeAllMenus(), api.user.listPermMenus(uid, gid))),
+            map(([id]) => split(id,'_')),
+            switchMap(([uid,gid]) => zip(api.role.treeAllMenus(), api.user.listPermMenus(uid,gid))),
             map(([menus, permMenus]) => {
                 addIcon(menus);
                 setTreeData(menus);
                 setUserPerms(permMenus)
-                const [uid, gid] = split(params.id, '_');
+                const [uid,gid] = split(params.id,'_');
                 console.log(uid);
                 console.log(gid);
                 return { userId: uid, groupId: gid };
@@ -159,7 +158,7 @@ export default (props) => {
         <IWindow
             current={current}
             saveVisible={false}
-            className="snam-modal"
+            className="odm-modal"
             title='角色授权'
             width={clientWidth}
             height={clientHeight}
@@ -185,7 +184,7 @@ export default (props) => {
                                         type="primary"
                                         icon={<SaveOutlined />}
                                         onClick={() => {
-                                            const privileges = { menus: userPerms, userId: current.userId, groupId: current.groupId };
+                                            const privileges = { menus: userPerms, userId: current.userId, groupId:current.groupId };
                                             onMenuSave(privileges);
                                         }}
                                     >

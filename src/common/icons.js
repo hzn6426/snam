@@ -1,3 +1,4 @@
+import tfunction from '@/pages/tfunction';
 import {
     SettingOutlined,
     TeamOutlined,
@@ -14,6 +15,13 @@ import {
     FunnelPlotOutlined,
     FileTextOutlined,
     RobotFilled,
+    RobotOutlined,
+    OneToOneOutlined,
+    SolutionOutlined,
+    AppstoreOutlined,
+    AppstoreAddOutlined,
+    DollarOutlined,
+    MergeCellsOutlined
 } from '@ant-design/icons';
 
 const icons = {
@@ -32,6 +40,10 @@ const icons = {
     column: <TableOutlined />,
     limit: <FunnelPlotOutlined />,
     robot: <RobotFilled />,
+    tenant: <RobotOutlined />,
+    tmenu: <OneToOneOutlined />,
+    tlog: <SolutionOutlined />,
+    tfunction: <MergeCellsOutlined />,
 };
 
 export const iconEnum = (item) => {
