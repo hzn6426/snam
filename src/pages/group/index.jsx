@@ -1,4 +1,4 @@
-import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, } from '@/common/components';
+import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, IButton } from '@/common/components';
 import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, useAutoObservableEvent } from '@/common/utils';
 import {
     ApartmentOutlined,
@@ -8,6 +8,8 @@ import {
     UserOutlined,
     LockTwoTone,
     UnlockTwoTone,
+    RestOutlined, ApiOutlined, DiffOutlined, HistoryOutlined, UserAddOutlined, MergeOutlined, SolutionOutlined,
+    AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, UserSwitchOutlined
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
@@ -482,26 +484,33 @@ export default (props) => {
                                 <div style={{ float: 'right', zIndex: 999 }}>
                                     <Space>
                                         <Permit authority="group:addDepartment" key="addDepartment">
+                                            <Tooltip title="添加子部门">
                                             <PlusOutlined
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleAddGroup(node);
                                                 }}
                                             />
+                                            </Tooltip>
                                         </Permit>
                                         <Permit authority="group:update" key="update">
+                                            <Tooltip title="编辑该部门">
                                             <FormOutlined
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleEditGroup(node);
                                                 }}
                                             />
+                                            </Tooltip>
                                         </Permit>
                                         <Permit authority="group:delete" key="delete">
+                                            <Tooltip title="删除该部门">
                                             <DeleteOutlined
                                                 onClick={(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？', () => handleDeleteGroup(node))}
                                             />
+                                            </Tooltip>
                                         </Permit>
+
                                     </Space>
                                 </div>)}
                         </div>
@@ -539,25 +548,31 @@ export default (props) => {
                         toolBarRender={[
                            
                                 <Permit authority="group:addUsers" key="new">
+                                <Tooltip title="添加成员">
                                     <Button
                                         key="addUser"
-                                        type="primary"
                                         size="small"
-                                        onClick={handleAddUser}>添加成员</Button>
+                                        icon={<UserAddOutlined />}
+                                        onClick={handleAddUser}></Button>
+                                </Tooltip>
                                 </Permit>,
                                 <Permit authority="group:addCompany" key="addCompany">
-                                    <Button
-                                        key="addCompany"
-                                        danger
+                                    <Tooltip title="添加分公司">
+                                        <Button
+                                            key="addCompany"
                                         size="small"
-                                        onClick={handleAddCompany}>添加分公司</Button>
+                                            icon={<MergeOutlined />}
+                                            onClick={handleAddCompany}></Button>
+                                    </Tooltip>
                                 </Permit>,
                                 <Permit authority="userRole:saveFromUser" key="assignRole">
-                                    <Button
-                                        key="assignRole"
-                                        type="primary"
+                                    <Tooltip title="分配角色">
+                                        <Button
+                                            key="assignRole"
                                         size="small"
-                                        onClick={handleAssignRoles}>分配角色</Button>
+                                            icon={<SolutionOutlined />}
+                                            onClick={handleAssignRoles}></Button>
+                                    </Tooltip>
                                 </Permit>
                            
 
@@ -565,7 +580,9 @@ export default (props) => {
                         pageToolBarRender={[
                             <Permit authority="user:active">
                                 <Tooltip title="演示环境，激活后密码为123456">
-                                    <Button
+                                    <IButton
+                                        type="primary"
+                                        icon={<AimOutlined />}
                                         key="active"
                                         size="small"
                                         onClick={() => onActive(selectedGroupUserKeys)}
@@ -574,24 +591,13 @@ export default (props) => {
 
                                     >
                                         激活
-                                    </Button>
+                                    </IButton>
                                 </Tooltip>
                             </Permit>,
-                            <Permit authority="user:stop">
-                                <Button
-                                    danger
-                                    size="small"
-                                    key="stop"
-                                    onClick={() => onStop(selectedGroupUserKeys)}
-                                    disabled={disabledStop}
-                                    loading={loading}
-                                >
-                                    停用
-                                </Button>
-                            </Permit>,
                             <Permit authority="user:unstop">
-                                <Button
-                                    danger
+                                <IButton
+                                    type="warning"
+                                    icon={<SunOutlined />}
                                     size="small"
                                     key="unstop"
                                     onClick={() => onUnStop(selectedGroupUserKeys)}
@@ -599,18 +605,37 @@ export default (props) => {
                                     loading={loading}
                                 >
                                     启用
+                                </IButton>
+                            </Permit>,
+                            <Permit authority="user:stop">
+                                <IButton
+                                    size="small"
+                                    key="stop"
+                                    onClick={() => onStop(selectedGroupUserKeys)}
+                                    disabled={disabledStop}
+                                    loading={loading}
+                                    type="warning"
+                                    icon={< ApiOutlined />}
+                                >
+                                    停用
+                                </IButton>
+                            </Permit>,
+                            <Permit authority="group:removeUsers">
+                                <Button size="small" danger
+                                    type="primary"
+                                    icon={<RestOutlined />}
+                                    key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
+                                    删除
                                 </Button>
                             </Permit>,
                             <Permit authority="group:moveUsers">
-                                <Button size="small" type="primary" key="move" onClick={() => onMove()}>
+                                <Button size="small" type="success"
+                                    icon={<UserSwitchOutlined />}
+                                    key="move" onClick={() => onMove()}>
                                     移动
                                 </Button>
                             </Permit>,
-                            <Permit authority="group:removeUsers">
-                                <Button size="small" danger key="delete" onClick={() => showDeleteConfirm('确定要从组织中删除选中的用户吗?', () => onDeleteUser())}>
-                                    删除
-                                </Button>
-                            </Permit>
+
                         ]}
                     />
                     {/* {selectedGroupUserKeys?.length > 0 && (
@@ -638,9 +663,9 @@ export default (props) => {
                     // }}
                     pageToolBarRender={[
                         <Permit authority="group:addUsers" key="addUsers">
-                            <Button size="small" type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
-                                添加成员
-                            </Button>
+                            <IButton size="small" icon={<UserAddOutlined />} type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
+                                加入
+                            </IButton>
                         </Permit>
                     ]}
                 />

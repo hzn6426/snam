@@ -35,8 +35,12 @@ import { useEffect, useRef, useState } from 'react';
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
-import { RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined } from '@ant-design/icons';
-import { Button, Form, message, Tooltip, Spin, Input, Row, Col, Divider, Select } from 'antd';
+import {
+  RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined, HistoryOutlined,
+  AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, EyeOutlined
+} from '@ant-design/icons';
+import { Form, message, Tooltip, Spin, Input, Row, Col, Divider, Select } from 'antd';
+import { IButton } from '@/common/components';
 import { of, zip } from 'rxjs';
 import {
   debounceTime,
@@ -535,7 +539,7 @@ export default (props) => {
               enterButton
               placeholder='搜索' allowClear />,
             <Permit key="user:save" authority="user:save">
-              <Button
+              <IButton
                 key="add"
                 size="small"
                 // type="primary"
@@ -543,94 +547,101 @@ export default (props) => {
                 onClick={() => onNewClick()}
               >
 
-              </Button>
+              </IButton>
             </Permit>,
           ]}
           pageToolBarRender={[
             <Permit authority="user:active">
               <Tooltip>
-                <Button
+                <IButton
+                  type="primary"
                   size='small'
                   key="active"
                   onClick={() => onActive(selectedKeys)}
                   disabled={disabledActive}
                   loading={loading}
+                  icon={<AimOutlined />}
 
                 >
                   激活
-                </Button>
+                </IButton>
               </Tooltip>
             </Permit>,
-            <Permit authority="user:stop">
-              <Button
-                danger
-                type='primary'
-                size='small'
-                key="stop"
-                // style={{ paddingLeft: 2, paddingRight: 2 }}
-                icon={< ApiOutlined style={{ marginRight: '-8px' }} />}
-                onClick={() => onStop(selectedKeys)}
-                disabled={disabledStop}
-                loading={loading}
-              >
-                停用
-              </Button>
-            </Permit>,
             <Permit authority="user:unstop">
-              <Button
-                danger
+              <IButton
                 size='small'
                 key="unstop"
                 onClick={() => onUnStop(selectedKeys)}
                 disabled={disabledUnStop}
                 loading={loading}
+                type="warning"
+                icon={<SunOutlined />}
               >
                 启用
-              </Button>
+              </IButton>
+            </Permit>,
+            <Permit authority="user:stop">
+              <IButton
+                size='small'
+                key="stop"
+                // style={{ paddingLeft: 2, paddingRight: 2 }}
+                type="warning"
+                icon={< ApiOutlined />}
+                onClick={() => onStop(selectedKeys)}
+                disabled={disabledStop}
+                loading={loading}
+              >
+                停用
+              </IButton>
             </Permit>,
             <Permit authority="user:delete">
-              <Button
-                size='small'
+              <IButton
                 danger
-                icon={<RestOutlined style={{ marginRight: '-8px' }} />}
+                size='small'
+                type="primary"
+                icon={<RestOutlined />}
                 key="delete"
                 onClick={() => showDeleteConfirm('确定删除选中的用户吗?', () => onDelete(selectedKeys))}
               >
                 删除
-              </Button>
+              </IButton>
             </Permit>,
             <Permit authority="user:reset">
-              <Tooltip >
-                <Button
+              <Tooltip title="演示环境，该功能暂时不可用！">
+                <IButton
                   danger
                   size='small'
                   key="reset"
                   disabled
+                  icon={< HistoryOutlined />}
                   onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>
                   重置密码
-                </Button>
+                </IButton>
               </Tooltip>
             </Permit>,
             <Permit authority="user:saveMenuPerm">
-              <Button
-                style={{ backgroundColor: '#f2bf23' }}
-                danger
+              <IButton
+                type="success"
                 size='small'
                 key="saveMenuPerm"
+                icon={<KeyOutlined />}
                 onClick={() => onResourceClick(selectedKeys[selectedKeys.length - 1])}
               >
                 授权
-              </Button>
+              </IButton>
             </Permit>,
             <Permit authority="user:listPermMenusAndButtons">
-              <Button
+              <IButton
+                type="info"
                 size='small'
                 key="listPermMenusAndButtons"
                 onClick={() => onPrivilegeClick(selectedKeys[selectedKeys.length - 1])}
+                icon={<EyeOutlined />}
               >
-                权限查看
-              </Button>
+                权限
+              </IButton>
             </Permit>,
+
           ]}
           clearSelect={searchLoading}
         />

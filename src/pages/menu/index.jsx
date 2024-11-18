@@ -7,7 +7,11 @@ import {
     FormOutlined,
     PlusOutlined,
     LockTwoTone,
-    UnlockTwoTone
+    UnlockTwoTone,
+    DiffOutlined,
+    FolderAddOutlined,
+    RestOutlined,
+    PlusSquareOutlined
 } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 
@@ -21,7 +25,8 @@ import {
     Space,
     Tag,
     message,
-    Checkbox
+    Checkbox,
+    Tooltip
 } from 'antd';
 import objectAssign from 'object-assign';
 
@@ -370,8 +375,8 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <Row gutter={12}>
-                <Col span={7}>
+            <Row >
+                <Col span={6}>
                     <ISearchTree
                         iconRender={loop}
                         blockNode={true}
@@ -385,28 +390,34 @@ export default (props) => {
                                 <div style={{ float: 'right', zIndex: 999 }}>
                                     <Space>
                                         <Permit authority="menu:saveOrUpdate" key="saveMenu">
+                                            <Tooltip title="添加子菜单">
                                             <PlusOutlined
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleAddMenu(node);
                                                 }}
                                             />
+                                            </Tooltip>
                                         </Permit>
                                         <Permit authority="menu:saveOrUpdate" key="updateMenu">
+                                            <Tooltip title="编辑菜单">
                                             <FormOutlined
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleEditMenu(node);
                                                 }}
                                             />
+                                            </Tooltip>
                                         </Permit>
                                         <Permit authority="menu:delete" key="deleteMenu">
+                                            <Tooltip title="删除菜单">
                                             <DeleteOutlined
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     showDeleteConfirm('删除菜单前，请确认菜单中不包含子菜单和按钮，确定要删除该菜单吗？', () => handleDeleteMenu(node));
                                                 }}
                                             />
+                                            </Tooltip>
                                         </Permit>
                                     </Space>
                                 </div>
@@ -420,7 +431,7 @@ export default (props) => {
                         }}
                     />
                 </Col>
-                <Col span={17}>
+                <Col span={18}>
                     {/* <ISearchForm
                         
                         form={searchForm}
@@ -435,10 +446,10 @@ export default (props) => {
                     </ISearchForm> */}
                     <IAGrid
                         ref={ref}
-                        title={<Space>
-                            <span>按钮列表</span>
+                        title={<Space>按钮列表
+                            {/* <span>按钮列表</span>
                             <Checkbox style={{ marginLeft: '20px' }} size='large' checked={searchChecked} onChange={onChangeSearch}>关联菜单</Checkbox>
-                            <Input.Search size='small' onSearch={(value) => setTableSearchValue(value)} style={{ width: 250,height:30 }} type='text' key="tableSearch" placeholder='查询 ID/URL/按钮名称/权限标识'  />
+                            <Input.Search size='small' onSearch={(value) => setTableSearchValue(value)} style={{ width: 250,height:30 }} type='text' key="tableSearch" placeholder='查询 ID/URL/按钮名称/权限标识'  /> */}
                         </Space>}
                         // components={{
                         //     tagCellRenderer: TagRenderer,
@@ -446,7 +457,7 @@ export default (props) => {
                         //     lockRenderer: LockRenderer
                         // }}
                         columns={initColumns}
-                        height={offsetHeight - 80}
+                        height={offsetHeight - 66}
                         request={(pageNo, pageSize) => search(pageNo, pageSize)}
                         dataSource={dataSource}
                         pageNo={pageNo}
@@ -456,20 +467,32 @@ export default (props) => {
                         clearSelect={searchLoading}
                         onDoubleClick={(record) => handleAddButton(record)}
                         toolBarRender={[
-                            <Space key="space">
+                            <Checkbox size="small" style={{ marginTop: '-5px', marginRight: '5px' }} checked={searchChecked} onChange={onChangeSearch}><div style={{ marginTop: '8px', fontSize: 12 }}>关联菜单</div></Checkbox>,
+                            <Input.Search
+                                style={{ width: 250, marginRight: '5px' }}
+                                onSearch={(value) => setTableSearchValue(value)}
+                                size="small" key="columnSearch"
+                                enterButton
+                                placeholder='查询 ID/URL/按钮名称/权限标识' allowClear />,
                                 <Permit authority="menu:saveOrUpdate" key="newMenu">
-                                    <Button key="newMenu" danger size="small" onClick={handleAddMenu}>新建根菜单</Button>
-                                </Permit>
+                                <Tooltip title="新建根菜单">
+                                    <Button key="newMenu" size="small" icon={<FolderAddOutlined />} onClick={handleAddMenu}></Button>
+                                </Tooltip>
+                            </Permit>,
                                 <Permit authority="menu:saveOrUpdateButton" key="copyButton">
-                                    <Button key="copyButton" warn size="small" onClick={handleCopyButton}>复制新建</Button>
-                                </Permit>
+                                <Tooltip title="复制新建菜单">
+                                    <Button key="copyButton" icon={<DiffOutlined />} size="small" onClick={handleCopyButton}></Button>
+                                </Tooltip>
+                            </Permit>,
                                 <Permit authority="menu:saveOrUpdateButton" key="newButton">
-                                    <Button key="newButton" type="primary" size="small" onClick={handleAddButton}>新建按钮</Button>
+                                    <Tooltip title="新建按钮">
+                                        <Button key="newButton" icon={<PlusSquareOutlined />} size="small" onClick={handleAddButton}></Button>
+                                    </Tooltip>
                                 </Permit>
-                            </Space>
+
                         ]}
                         pageToolBarRender={[
-                            <Button danger key="delete"
+                            <Button danger key="delete" size="small" icon={<RestOutlined />} type='primary'
                                 onClick={() => showDeleteConfirm('确定删除选中的按钮吗?', () => onDeleteButton(selectedKeys))}>
                                 删除
                             </Button>

@@ -1,10 +1,11 @@
-import { Button, Form, message } from 'antd';
+import { Button, Form, Tooltip, message } from 'antd';
 import { useRef, useState } from 'react';
 import {
     IFooterToolbar,
     IFormItem,
     IAGrid,
     ISearchForm,
+    IButton,
     IStatus,
     Permit
   } from '@/common/components';
@@ -21,6 +22,10 @@ import {
 import {
     PlusOutlined,
     LockTwoTone,
+    DiffOutlined,
+    RestOutlined,
+    ApiOutlined,
+    SunOutlined,
     UnlockTwoTone 
 } from '@ant-design/icons';
 import { of } from 'rxjs';
@@ -70,7 +75,7 @@ const initColumns = [
     },
     {
         headerName: '状态',
-        width: 70,
+        width: 80,
         field: 'state',
         cellRenderer: StateRenderer
     },
@@ -245,7 +250,7 @@ export default () => {
         <IAGrid
             ref={ref}
             title="限流列表"
-            height={offsetHeight - 72}
+            height={offsetHeight - 66}
             // components={{
             //     stateRenderer: StateRenderer,
             //     lockRenderer: LockRenderer
@@ -260,33 +265,39 @@ export default () => {
             onDoubleClick={(record) => onDoubleClick(record.id)}
             toolBarRender={[
                 <Permit key="limit:save" authority="limit:save">
+                    <Tooltip title="新建限流">
+
                 <Button
                     key="add"
                     size="small"
-                    type="primary"
-                    icon={<PlusOutlined />}
+                            icon={<DiffOutlined />}
                     onClick={() => onNewClick()}
-                >
-                    新建
+                        >
                 </Button>
+                    </Tooltip>
                 </Permit>,
 
             ]}
             pageToolBarRender={[
                 <Permit authority="limit:use">
-                    <Button key="active" onClick={() => showOperationConfirm('只能启用一条限流规则，本条启用后，其他的启用的将自动停用，确定启用吗？', () => handleUse())} loading={loading} disabled={disabledActive}>
+                    <IButton key="active" type="warning" size='small'
+                        icon={<SunOutlined />} onClick={() => showOperationConfirm('只能启用一条限流规则，本条启用后，其他的启用的将自动停用，确定启用吗？', () => handleUse())} loading={loading} disabled={disabledActive}>
                         启用
-                    </Button>
+                    </IButton>
                 </Permit>,
                 <Permit authority="limit:stop">
-                    <Button danger key="stop" onClick={() => handleStop()} disabled={disabledStop} loading={loading}>
+                    <IButton type="warning" size='small'
+                        icon={< ApiOutlined />} key="stop" onClick={() => handleStop()} disabled={disabledStop} loading={loading}>
                         停用
-                    </Button>
+                    </IButton>
                 </Permit>,
                 <Permit authority="limit:delete">
-                    <Button danger key="delete" onClick={() => showDeleteConfirm('确定删除选中限流器吗？', () => handleDelete())}>
+                    <IButton danger
+                        size='small'
+                        type="primary"
+                        icon={<RestOutlined />} key="delete" onClick={() => showDeleteConfirm('确定删除选中限流器吗？', () => handleDelete())}>
                         删除
-                    </Button>
+                    </IButton>
                 </Permit>
             ]}
             clearSelect={searchLoading}

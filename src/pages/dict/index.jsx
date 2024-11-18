@@ -27,6 +27,7 @@ import {
     Permit,
     IFooterToolbar,
     ILayout,
+    IButton
 } from '@/common/components';
 // import IGrid from '@/components/IGrid';
 // import ISearchForm from '@/components/ISearchForm';
@@ -35,7 +36,7 @@ import {
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
 import { showDeleteConfirm } from '@/common/antd';
-import { Form, Button, Modal, message, Space } from 'antd';
+import { Form, Button, Modal, message, Select, Input, Tooltip } from 'antd';
 import {
     concatMap,
     debounceTime,
@@ -50,7 +51,11 @@ import {
     withLatestFrom,
 } from 'rxjs/operators';
 import { of, zip, EMPTY, from } from 'rxjs';
-import { PlusOutlined, LockTwoTone, UnlockTwoTone} from '@ant-design/icons';
+import {
+    PlusOutlined, LockTwoTone, UnlockTwoTone, DiffOutlined, SunOutlined,
+    ApiOutlined,
+    RestOutlined,
+} from '@ant-design/icons';
 
 const dictType = { BUSINESS: '业务', SYSTEM: '系统' };
 
@@ -384,7 +389,7 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <XSearchForm
+            {/* <XSearchForm
                 form={searchParentForm}
                 rows={1}
                 onReset={() => parentRef.current.refresh()}
@@ -400,14 +405,14 @@ export default (props) => {
                 />
                 <IFormItem name="childDictCode" label="子编码" xtype="input" />
                 <IFormItem name="childdictName" label="子名称" xtype="input" />
-            </XSearchForm>
+            </XSearchForm> */}
             <ILayout type="hbox" spans="12 12" gutter="0">
                 <>
                     <IAGrid
                         ref={parentRef}
                         title="父字典列表"
                         key="parent"
-                        height={offsetHeight - 150}
+                        height={offsetHeight - 66}
                         // components={{
                         //     stateCellRenderer: StateRenderer,
                         //     lockRenderer: LockRenderer
@@ -420,34 +425,46 @@ export default (props) => {
                         onSelectedChanged={onParentChange}
                         onDoubleClick={(record) => onParentDoubleClick(record.id)}
                         toolBarRender={[
+                            <Select defaultValue={'dictName'} size="small" style={{ width: 100 }}
+                                options={[{ label: '字典名称', value: 'dictName' }, { label: '字典编码', value: 'dictCode' }
+                                ]} />,
+                            <Input.Search
+                                style={{ width: 150, marginRight: '5px' }}
+                                onSearch={(value) => { }}
+                                size="small" key="columnSearch"
+                                enterButton
+                                placeholder='搜索' allowClear />,
                             <Permit key="dictionary:save" authority="dictionary:save">
+                                <Tooltip title="新建字典">
                             <Button
                                 key="add"
                                 size="small"
-                                type="primary"
-                                shape="round"
-                                icon={<PlusOutlined />}
+                                        icon={<DiffOutlined />}
                                 onClick={() => onParentNewClick()}
-                            >
-                                新建
+                                    >
                             </Button>
+                                </Tooltip>
                             </Permit>,
                         ]}
                         pageToolBarRender={[
                             <Permit authority="dictionary:use">
-                                <Button key="use" onClick={() => onParentUse(selectedParentKeys)} loading={loading}>
+                                <IButton type="warning" size="small"
+                                    icon={<SunOutlined />} key="use" onClick={() => onParentUse(selectedParentKeys)} loading={loading}>
                                     启用
-                                </Button>
+                                </IButton>
                             </Permit>,
                             <Permit authority="dictionary:stop">
-                                <Button danger key="stop" onClick={() => onParentStop(selectedParentKeys)} loading={loading}>
+                                <IButton icon={< ApiOutlined />} size="small"
+                                    type="warning" key="stop" onClick={() => onParentStop(selectedParentKeys)} loading={loading}>
                                     停用
-                                </Button>
+                                </IButton>
                             </Permit>,
                             <Permit authority="dictionary:delete">
-                                <Button danger key="delete" onClick={() => showDeleteConfirm('父字典删除后,子字典也将被删除,确定删除选中的字典吗?', () => onParentDelete(selectedParentKeys))} loading={loading}>
+                                <IButton danger
+                                    type="primary" size="small"
+                                    icon={<RestOutlined />} key="delete" onClick={() => showDeleteConfirm('父字典删除后,子字典也将被删除,确定删除选中的字典吗?', () => onParentDelete(selectedParentKeys))} loading={loading}>
                                     删除
-                                </Button>
+                                </IButton>
                             </Permit>
                         ]}
                         clearSelect={searchLoading}
@@ -481,7 +498,7 @@ export default (props) => {
                         ref={childRef}
                         title="子字典列表"
                         key="child"
-                        height={offsetHeight - 150}
+                        height={offsetHeight - 66}
                         // components={{
                         //     stateCellRenderer: StateRenderer,
                         //     lockRenderer: LockRenderer
@@ -494,48 +511,67 @@ export default (props) => {
                         onSelectedChanged={onChildChange}
                         onDoubleClick={(record) => onChildDoubleClick(record.id)}
                         toolBarRender={[
+                            <Select defaultValue={'childdictName'} size="small" style={{ width: 100 }}
+                                options={[{ label: '字典名称', value: 'childdictName' }, { label: '字典编码', value: 'childDictCode' }
+                                ]} />,
+                            <Input.Search
+                                style={{ width: 150, marginRight: '5px' }}
+                                onSearch={(value) => { }}
+                                size="small" key="columnSearch"
+                                enterButton
+                                placeholder='搜索' allowClear />,
                             <Permit key="dictChild:save" authority="dictChild:save">
+                                <Tooltip title="新建子字典">
                             <Button
                                 key="add"
                                 size="small"
-                                type="primary"
-                                shape="round"
-                                icon={<PlusOutlined />}
+                                        icon={<DiffOutlined />}
                                 onClick={() => onChildNewClick()}
                             >
-                                新建
+
                             </Button>
+                                </Tooltip>
                             </Permit>,
                         ]}
                         pageToolBarRender={[
                             <Permit authority="dictChild:use">
-                                <Button key="use"
+                                <IButton key="use"
+                                    size="small"
+                                    type="warning"
+                                    icon={<SunOutlined />}
                                     onClick={() => {
                                         const parentId = selectedParentKeys[selectedParentKeys.length - 1];
                                         onChildUse([selectedChildKeys, parentId]);
                                     }}
                                     loading={loading}>
                                     启用
-                                </Button>
+                                </IButton>
                             </Permit>,
                             <Permit authority="dictChild:stop">
-                                <Button danger key="stop"
+                                <IButton danger key="stop"
+                                    icon={< ApiOutlined />}
+                                    type="warning"
+                                    size="small"
                                     onClick={() => {
                                         const parentId = selectedParentKeys[selectedParentKeys.length - 1];
                                         onChildStop([selectedChildKeys, parentId]);
                                     }}
                                     loading={loading}>
                                     停用
-                                </Button>
+                                </IButton>
                             </Permit>,
                             <Permit authority="dictChild:delete">
-                                <Button danger key="delete" onClick={() => {
+                                <IButton danger
+                                    type="primary"
+                                    size="small"
+                                    icon={<RestOutlined />}
+                                    key="delete" onClick={() => {
 
                                     const parentId = selectedParentKeys[selectedParentKeys.length - 1];
                                     showDeleteConfirm('确定删除选中的子字典吗?', () => onChildDelete([selectedChildKeys, parentId]));
                                 }}>
                                     删除
-                                </Button>
+                                </IButton>
                             </Permit>
                         ]}
                     />

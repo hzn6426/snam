@@ -5,6 +5,7 @@ import {
     IAGrid,
     XSearchForm,
     IStatus,
+    IButton,
     Permit
 } from '@/common/components';
 import {
@@ -19,14 +20,17 @@ import {
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined,
+    DiffOutlined,
+    RestOutlined,
     LockTwoTone,
+    CloudDownloadOutlined,
+    CloudUploadOutlined,
     UnlockTwoTone,
     CloudSyncOutlined,
     SyncOutlined,
     ReloadOutlined
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin, Tag } from 'antd';
+import { Button, Form, Space, message, Spin, Select, Input, Tooltip } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -219,7 +223,7 @@ export default (props) => {
         })
     };
 
-    const { offsetHeight } = window?.document?.documentElement;
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
     return (<>
         <Spin spinning={searchLoading}>
@@ -228,7 +232,7 @@ export default (props) => {
                 title="功能列表"
                 ref={ref}
                 columns={initColumns}
-                height={offsetHeight - 150}
+                height={offsetHeight - 66}
                 defaultSearch={true}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
@@ -236,51 +240,58 @@ export default (props) => {
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
-                    <Space key="space">
                         <Permit key="function:save" authority="tfunction:save">
+                        <Tooltip title="新建接口">
+
                             <Button
                                 key="add"
                                 size="small"
-                                type="primary"
-                                icon={<PlusOutlined />}
+                                icon={<DiffOutlined />}
                                 onClick={() => onNewClick()}
                             >
-                                新建
                             </Button>
-                        </Permit>
-                    </Space>
+                        </Tooltip>
+                    </Permit>
 
                 ]}
                 pageToolBarRender={[
                     <Permit authority="tfunction:offline">
-                        <Button
+                        <IButton
+                            size="small"
+                            type="warning"
+                            icon={<CloudDownloadOutlined />}
                             key="offline"
                             onClick={() => offline(selectedKeys)}
                             disabled={disabledOffline}
                             loading={loading}
                         >
                             下线
-                        </Button>
+                        </IButton>
                     </Permit>,
                     <Permit authority="tfunction:online">
-                        <Button
-                            danger
+                        <IButton
+                            size="small"
+                            type="warning"
+                            icon={<CloudUploadOutlined />}
                             key="online"
                             onClick={() => online(selectedKeys)}
                             disabled={disabledOnline}
                             loading={loading}
                         >
                             上线
-                        </Button>
+                        </IButton>
                     </Permit>,
                     <Permit authority="tfunction:delete">
-                        <Button
+                        <IButton
                             danger
+                            size='small'
+                            type="primary"
+                            icon={<RestOutlined />}
                             key="delete"
                             onClick={() => showDeleteConfirm('确定删除选中的功能吗?', () => onDelete(selectedKeys))}
                         >
                             删除
-                        </Button>
+                        </IButton>
                     </Permit>,
 
                 ]}

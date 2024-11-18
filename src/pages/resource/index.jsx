@@ -2,7 +2,8 @@ import {
     IAdvanceSearch,
     IFieldset,
     ISearchTree,
-    Permit
+    Permit,
+    IButton
 } from '@/common/components';
 import {
     api,
@@ -27,6 +28,8 @@ import {
     ScheduleOutlined,
     UserOutlined,
     TeamOutlined,
+    IssuesCloseOutlined,
+    SaveOutlined
 } from '@ant-design/icons';
 import {
     Alert,
@@ -1072,6 +1075,7 @@ export default () => {
             <Row gutter={5}>
                 <Col span={5}>
                     <Card
+                        className='snam-card'
                         size='small'
                         //bordered={false}
                         bodyStyle={{ height: offsetHeight - 66, overflow: 'scroll', paddingTop: '5px' }}
@@ -1117,6 +1121,7 @@ export default () => {
                 </Col>
                 <Col span={10}>
                     <Card
+                        className='snam-card'
                         size='small'
                         title={
                             <div style={{ verticalAlign: 'top' }}>
@@ -1160,6 +1165,7 @@ export default () => {
                 {selectedTag && selectedTag === 'BUTTON' && (
                     <Col span={9}>
                         <Card
+                            className='snam-card'
                             size='small'
                             bordered={true}
                             bodyStyle={{ padding: 5, height: offsetHeight - 66, overflow: 'scroll' }} >
@@ -1180,20 +1186,25 @@ export default () => {
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveUsetBusinessPerm">
-                                                <Button
+                                                    <IButton
+                                                        size="small"
                                                     key="cancel"
                                                     danger
+                                                        type="primary"
                                                     htmlType="button"
                                                     onClick={() => resetUserPerm()}
-                                                    style={{ marginRight: '10px' }}>重置</Button>
+                                                        icon={<IssuesCloseOutlined />}
+                                                        style={{ marginRight: '10px' }}>重置</IButton>
                                                 </Permit>
                                                 <Permit authority="resource:saveUsetBusinessPerm">
-                                                <Button
-                                                    key="submit"
-                                                    type="primary"
+                                                    <IButton
+                                                        size="small"
+                                                        key="submit"
                                                     htmlType="submit"
                                                     onClick={submitUserPerm}
-                                                    loading={confirmLoading}>保存</Button>
+                                                        type="primary"
+                                                        icon={<SaveOutlined />}
+                                                        loading={confirmLoading}>保存</IButton>
                                                 </Permit>
                                             </div>,
                                         ]}
@@ -1339,13 +1350,15 @@ export default () => {
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveDataPerm">
-                                                <Button
+                                                    <IButton
                                                     key="submit"
-                                                    type="primary"
+                                                        type="primary"
+                                                        icon={<SaveOutlined />}
+                                                        size="small"
                                                     htmlType="submit"
                                                     loading={saveLoading}
                                                     onClick={() => submitUserDataPerm()}
-                                                >保存</Button>
+                                                    >保存</IButton>
                                                 </Permit>
                                             </div>,
                                         ]}
@@ -1430,13 +1443,15 @@ export default () => {
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveUserColumnPerm">
-                                                <Button
+                                                    <IButton
+                                                        size="small"
                                                     key="submit"
-                                                    type="primary"
+                                                        type="primary"
+                                                        icon={<SaveOutlined />}
                                                     htmlType="submit"
                                                     loading={saveLoading}
                                                     onClick={() => submitColumnPerm()}
-                                                >保存</Button>
+                                                    >保存</IButton>
                                                 </Permit>
                                             </div>,
                                         ]}

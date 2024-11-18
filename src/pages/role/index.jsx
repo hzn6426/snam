@@ -5,7 +5,8 @@ import {
   IAGrid,
   XSearchForm,
   IStatus,
-  Permit
+  Permit,
+  IButton,
 } from '@/common/components';
 import {
   INewWindow,
@@ -23,9 +24,15 @@ import {
   UnlockTwoTone,
   CloudSyncOutlined,
   SyncOutlined,
-  DiffOutlined
+  DiffOutlined,
+  AimOutlined,
+  ApiOutlined,
+  RestOutlined,
+  UserAddOutlined,
+  KeyOutlined,
 } from '@ant-design/icons';
 import { Button, Form, Select, Input, message, Spin, Tooltip } from 'antd';
+
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -293,7 +300,7 @@ export default (props) => {
                   size="small"
                   // danger
                   loading={loading}
-                  icon={<SyncOutlined />}
+                    icon={<CloudSyncOutlined />}
                   onClick={() => onRefreshPrivileges()}
                 >
                   
@@ -316,54 +323,62 @@ export default (props) => {
           ]}
           pageToolBarRender={[
             <Permit authority="role:use">
-              <Button
+              <IButton
+                type="primary"
+                size='small'
                 key="active"
-                size="small"
                 onClick={() => onActive(selectedKeys)}
                 disabled={disabledActive}
                 loading={loading}
+                icon={<AimOutlined />}
               >
                 激活
-              </Button>
+              </IButton>
             </Permit>,
             <Permit authority="role:stop">
-              <Button
-                danger
+              <IButton
+                type="warning"
                 key="stop"
                 size="small"
                 onClick={() => onStop(selectedKeys)}
                 disabled={disabledStop}
                 loading={loading}
+                icon={< ApiOutlined />}
               >
                 停用
-              </Button>
+              </IButton>
             </Permit>,
             <Permit authority="role:delete">
-              <Button
+              <IButton
                 danger
+                type="primary"
+                icon={<RestOutlined />}
                 size="small"
                 key="delete"
                 onClick={() => showDeleteConfirm('确定删除选中的角色吗?', () => onDelete(selectedKeys))}
               >
                 删除
-              </Button>
+              </IButton>
             </Permit>,
             <Permit authority="userRole:saveFromRole">
-              <Button 
+              <IButton 
               size="small"
-              type="primary" 
+                type="success"
+                icon={<UserAddOutlined />}
               key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
                 添加用户
-              </Button>
+              </IButton>
             </Permit>,
             <Permit authority="role:saveMenuPerm">
-              <Button
+              <IButton
                 key="grant"
                 size="small"
+                type="info"
+                icon={<KeyOutlined />}
                 onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}
               >
-                角色授权
-              </Button>
+                授权
+              </IButton>
             </Permit>
           ]}
           // onClick={(data) => onClicked(data)}

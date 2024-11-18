@@ -18,6 +18,7 @@ import ITag from '@/components/ITag';
 import IWindow from '@/components/IWindow';
 import Permit from '@/components/Permit';
 import XInput from '@/components/XInput';
+import IButton from '@/components/IButton';
 
 import IGroupTree from '@/components/IGroupTree';
 import ISearchTree from '@/components/ISearchTree';
@@ -28,6 +29,6 @@ export {
   IModal, ISearchForm, XSearchForm, ISearchTree, IStatus,
   ITag, IWindow,
   Permit,
-  XInput
+  XInput, IButton
 };
 

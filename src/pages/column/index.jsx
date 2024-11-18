@@ -2,6 +2,7 @@ import {
     IFooterToolbar,
     IAGrid,
     ILayout,
+    IButton,
     Permit
 } from '@/common/components';
 import {
@@ -12,7 +13,7 @@ import {
     produce
 } from '@/common/utils';
 import { NodeCollapseOutlined, NodeExpandOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Input, Tag, message } from 'antd';
+import { Button, Input, Tag, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 
 
@@ -259,10 +260,13 @@ export default (props) => {
         <>
             <ILayout type="hbox" spans="7 10 7" >
                 <IAGrid
-                    toolBarRender={[<Input.Search onSearch={(value) => setTableSearchValue(value)} type='text' size='small' key="tableSearch" placeholder='输入表名或描述进行搜索' allowClear />]}
+                    toolBarRender={[
+                        <Input.Search onSearch={(value) => setTableSearchValue(value)} enterButton type='text'
+                            style={{ marginRight: '5px' }}
+                            size='small' key="tableSearch" placeholder='输入表名或描述进行搜索' allowClear />]}
                     title="表格列表"
                     key="table"
-                    height={offsetHeight - 72}
+                    height={offsetHeight - 66}
                     // columnsStorageKey="_cache_user_columns"
                     columns={tableColumns}
                     request={(pageNo, pageSize) => searchTable(pageNo, pageSize)}
@@ -276,10 +280,12 @@ export default (props) => {
                 />
                 <>
                     <IAGrid
-                        toolBarRender={[<Input.Search onSearch={(value) => setColumnSearchValue(value)} type='text' size='small' key="columnSearch" placeholder='输入列名或描述进行搜索' allowClear />]}
+                        toolBarRender={[<Input.Search onSearch={(value) => setColumnSearchValue(value)} enterButton type='text'
+                            style={{ marginRight: '5px' }}
+                            size='small' key="columnSearch" placeholder='输入列名或描述进行搜索' allowClear />]}
                         title="表格列列表"
                         key="column"
-                        height={offsetHeight - 72}
+                        height={offsetHeight - 66}
                         // components={{
                         //     tagCellRenderer: TagRenderer,
                         // }}
@@ -291,9 +297,9 @@ export default (props) => {
                         showSizeChanger={false}
                         pageToolBarRender={[
                             <Permit authority="pcolumn:save">
-                                <Button danger key="joinColumn" icon={<NodeExpandOutlined />} onClick={join} >
+                                <IButton size="small" danger type="primary" key="joinColumn" icon={<NodeExpandOutlined />} onClick={join} >
                                     加入
-                                </Button>
+                                </IButton>
                             </Permit>
                         ]}
                     />
@@ -312,7 +318,7 @@ export default (props) => {
                     <IAGrid
                         title="权限列列表"
                         key="perm"
-                        height={offsetHeight - 72}
+                        height={offsetHeight - 66}
                         onSelectedChanged={onPermChange}
                         request={false}
                         // columnsStorageKey="_cache_user_columns"
@@ -322,24 +328,25 @@ export default (props) => {
                         showSizeChanger={false}
                         toolBarRender={[
                             <Permit  authority="pcolumn:save" key="new">
-                            <Button
-                                key="save"
-                                size="small"
-                                type="danger"
-                                loading={saveLoading}
-                                icon={<SaveOutlined />}
-                                onClick={() => onSave()}
-                            >
-                                保存权限列
-                            </Button>
+                                <Tooltip title="保存权限列">
+
+                                    <Button
+                                        key="save"
+                                        size="small"
+                                        loading={saveLoading}
+                                        icon={<SaveOutlined />}
+                                        onClick={() => onSave()}
+                                    >
+                                    </Button>
+                                </Tooltip>
                             </Permit>,
 
                         ]}
                         pageToolBarRender={[
                             <Permit authority="pcolumn:save">
-                                <Button danger key="joinPerm" icon={<NodeCollapseOutlined />} onClick={unJoin} >
+                                <IButton size="small" danger type='primary' key="joinPerm" icon={<NodeCollapseOutlined />} onClick={unJoin} >
                                     移除
-                                </Button>
+                                </IButton>
                             </Permit>
                         ]}
                     />

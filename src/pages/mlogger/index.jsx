@@ -11,7 +11,7 @@ import {
     pluck,
     useObservableAutoCallback
 } from '@/common/utils';
-import { Form } from 'antd';
+import { Form, Select, Input } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -153,7 +153,7 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <XSearchForm
+            {/* <XSearchForm
                 form={searchForm}
                 rows={1}
                 onReset={() => ref.current.refresh()}
@@ -185,12 +185,12 @@ export default (props) => {
                     label="结束时间"
                     xtype="datetime"
                 />
-            </XSearchForm>
+            </XSearchForm> */}
 
             <IAGrid
                 ref={ref}
                 title="日志列表"
-                height={offsetHeight - 150}
+                height={offsetHeight - 66}
                 // components={{
                 //     stateCellRenderer: StateRenderer,
                 // }}
@@ -204,6 +204,17 @@ export default (props) => {
                 clearSelect={searchLoading}
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
+                toolBarRender={[
+                    <Select defaultValue={'exchangeName'} size="small" style={{ width: 100 }}
+                        options={[{ label: '来源系统', value: 'dataFrom' }, { label: '模块名称', value: 'exchangeName' }
+                        ]} />,
+                    <Input.Search
+                        style={{ width: 150, marginRight: '5px' }}
+                        onSearch={(value) => { }}
+                        size="small" key="columnSearch"
+                        enterButton
+                        placeholder='搜索' allowClear />,
+                ]}
             />
         </>
     );

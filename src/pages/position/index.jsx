@@ -36,6 +36,7 @@ import {
     ISearchTree,
     ILayout,
     IFieldset,
+    IButton
 } from '@/common/components';
 import {
     SolutionOutlined,
@@ -43,6 +44,10 @@ import {
     LockTwoTone,
     UnlockTwoTone,
     DiffOutlined,
+    SunOutlined,
+    ApiOutlined,
+    RestOutlined,
+    UserAddOutlined,
 } from '@ant-design/icons';
 import {
     concatMap,
@@ -374,24 +379,27 @@ const LockRenderer = (props) => {
                     ]}
                     pageToolBarRender={[
                         <Permit authority="position:use">
-                            <Button size="small" key="use" onClick={handleUse} disabled={disabledActive}>
+                            <IButton type="warning"
+                                icon={<SunOutlined />} size="small" key="use" onClick={handleUse} disabled={disabledActive}>
                                 启用
-                            </Button>
+                            </IButton>
                         </Permit>,
                         <Permit authority="position:stop">
-                            <Button size="small" danger key="stop" onClick={handleStop} disabled={disabledStop}>
+                            <IButton size="small" icon={< ApiOutlined />}
+                                type="warning" key="stop" onClick={handleStop} disabled={disabledStop}>
                                 停用
-                            </Button>
+                            </IButton>
                         </Permit>,
                         <Permit authority="position:delete">
-                            <Button size="small" danger key="delete" onClick={() => showDeleteConfirm('删除职位后,对应的权限将失效, 确定要删除选中职位吗？', () => handleDelete())}>
+                            <IButton danger size="small" type="primary"
+                                icon={<RestOutlined />} key="delete" onClick={() => showDeleteConfirm('删除职位后,对应的权限将失效, 确定要删除选中职位吗？', () => handleDelete())}>
                                 删除
-                            </Button>
+                            </IButton>
                         </Permit>,
                         <Permit authority="position:savePositionRole">
-                            <Button size="small" danger key="assign" onClick={handleAssignRoles}>
-                                分配角色
-                            </Button>
+                            <IButton size="small" type="info" icon={<SolutionOutlined />} key="assign" onClick={handleAssignRoles}>
+                                角色
+                            </IButton>
                         </Permit>
                     ]}
                 />

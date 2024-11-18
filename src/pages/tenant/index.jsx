@@ -4,6 +4,7 @@ import {
     IFormItem,
     IAGrid,
     XSearchForm,
+    IButton,
     IStatus,
     Permit
 } from '@/common/components';
@@ -22,12 +23,20 @@ import {
 import {
     PlusOutlined,
     LockTwoTone,
-    UnlockTwoTone,
-    CloudSyncOutlined,
-    SyncOutlined,
-    ReloadOutlined
+    DiffOutlined,
+    RestOutlined,
+    GatewayOutlined,
+    TransactionOutlined,
+    KeyOutlined,
+    LockOutlined,
+    UnlockOutlined,
+    ClusterOutlined,
+    FilePdfOutlined,
+    ApiOutlined,
+    SunOutlined,
+    UnlockTwoTone
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin, Tag } from 'antd';
+import { Button, Form, Space, message, Spin, Tag, Tooltip, Select, Input } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -311,7 +320,7 @@ export default (props) => {
     return (
         <>
             <Spin spinning={searchLoading}>
-                <XSearchForm
+                {/* <XSearchForm
                     form={searchForm}
                     onReset={() => ref.current.refresh()}
                     rows={1}
@@ -330,14 +339,14 @@ export default (props) => {
                         xtype="select"
                         options={() => state2Option(tenantState)}
                     />
-                </XSearchForm>
+                </XSearchForm> */}
 
                 <IAGrid
                     gridName="businessTenant_List"
                     ref={ref}
                     title="租户列表"
                     columns={initColumns}
-                    height={offsetHeight - 150}
+                    height={offsetHeight - 66}
                     defaultSearch={true}
                     request={(pageNo, pageSize) => search(pageNo, pageSize)}
                     dataSource={dataSource}
@@ -347,77 +356,105 @@ export default (props) => {
                     onSelectedChanged={onChange}
                     onDoubleClick={(record) => onDoubleClick(record.id)}
                     toolBarRender={[
-                        <Space key="space">
+                        <Select defaultValue={'name'} size="small" style={{ width: 100 }}
+                            options={[{ label: '租户名称', value: 'name' },
+                            ]} />,
+                        <Input.Search
+                            style={{ width: 150, marginRight: '5px' }}
+                            onSearch={(value) => { }}
+                            size="small" key="columnSearch"
+                            enterButton
+                            placeholder='搜索' allowClear />,
                             <Permit key="tenant:save" authority="tenant:save">
+                                <Tooltip title="新建租户">
+
                                 <Button
                                     key="add"
                                     size="small"
-                                    type="primary"
-                                    icon={<PlusOutlined />}
+                                        icon={<DiffOutlined />}
                                     onClick={() => onNewClick()}
-                                >
-                                    新建
+                                    >
                                 </Button>
+                                </Tooltip>
                             </Permit>
-                        </Space>
 
                     ]}
                     pageToolBarRender={[
                         <Permit authority="tenant:lock">
-                            <Button
+                            <IButton
                                 key="lock"
+                                size="small"
+                                type="warning"
+                                icon={<LockOutlined />}
                                 onClick={() => onLock(selectedKeys)}
                                 disabled={disabledLock}
                                 loading={loading}
                             >
                                 锁定
-                            </Button>
+                            </IButton>
                         </Permit>,
                         <Permit authority="tenant:unlock">
-                            <Button
-                                danger
+                            <IButton
+                                size="small"
+                                type="warning"
+                                icon={< UnlockOutlined />}
                                 key="unlock"
                                 onClick={() => onUnlock(selectedKeys)}
                                 disabled={disabledUnlock}
                                 loading={loading}
                             >
                                 解锁
-                            </Button>
+                            </IButton>
+                        </Permit>,
+                        <Permit authority="tenant:charge">
+                            <IButton danger type="primary"
+                                size="small"
+                                icon={<TransactionOutlined />}
+                                key="charge" onClick={() => onChargeClick(selectedKeys[selectedKeys.length - 1])}>
+                                充值
+                            </IButton>
                         </Permit>,
                         <Permit authority="tenant:assignMenus">
-                            <Button
-                                danger
+                            <IButton
+                                type="success"
+                                size='small'
+                                icon={<KeyOutlined />}
                                 key="assignMenus"
                                 onClick={() => onResourceClick(selectedKeys[selectedKeys.length - 1])}
                             >
                                 授权
-                            </Button>
+                            </IButton>
                         </Permit>,
                         <Permit authority="tfunction:open">
-                            <Button
+                            <IButton
                                 key="open"
+                                type="info"
+                                size='small'
+                                icon={<GatewayOutlined />}
                                 onClick={() => onFunctionClick(selectedKeys[selectedKeys.length - 1])}
                             >
-                                接口管理
-                            </Button>
+                                接口
+                            </IButton>
                         </Permit>,
                         <Permit authority="tenant:doInitSUser">
-                            <Button danger key="doInitSUser" onClick={() => handleInitSUser(selectedKeys[selectedKeys.length - 1])}>
-                                初始化超管
-                            </Button>
+                            <Tooltip title="初始化超级管理员">
+                                <IButton key="doInitSUser" type="primary" size="small" icon={<ClusterOutlined />}
+                                    onClick={() => handleInitSUser(selectedKeys[selectedKeys.length - 1])}>
+                                    超管
+                                </IButton>
+                            </Tooltip>
                         </Permit>,
-                        <Permit authority="tenant:charge">
-                            <Button danger key="charge" onClick={() => onChargeClick(selectedKeys[selectedKeys.length - 1])}>
-                                充值
-                            </Button>
-                        </Permit>,
+
                         <Permit authority="tenant:searchTenantFee">
-                            <Button
+                            <IButton
+                                type="info"
+                                size="small"
+                                icon={<FilePdfOutlined />}
                                 key="searchTenantFee"
                                 onClick={() => onBillClick(selectedKeys[selectedKeys.length - 1])}
                             >
                                 账单
-                            </Button>
+                            </IButton>
                         </Permit>,
                         
                     ]}

@@ -5,6 +5,7 @@ import {
     IAGrid,
     XSearchForm,
     IStatus,
+    IButton,
     Permit
 } from '@/common/components';
 import {
@@ -17,9 +18,9 @@ import {
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined
+    DiffOutlined, RestOutlined, CloudSyncOutlined
 } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, Form, Tooltip, message, Select, Input } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -180,7 +181,7 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <XSearchForm
+            {/* <XSearchForm
                 form={searchForm}
                 rows={1}
                 onReset={() => ref.current.refresh()}
@@ -201,12 +202,12 @@ export default (props) => {
                     label="用户"
                     xtype="user"
                 />
-            </XSearchForm>
+            </XSearchForm> */}
 
             <IAGrid
                 ref={ref}
                 title="接入用户列表"
-                height={offsetHeight - 150}
+                height={offsetHeight - 66}
                 // height={tableHight}
                 // components={{
                 //     stateCellRenderer: StateRenderer,
@@ -221,38 +222,49 @@ export default (props) => {
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
+                    <Select defaultValue={'systemName'} size="small" options={[{ label: '系统名称', value: 'systemName' }, { label: 'AppId', value: 'appId' }]} />,
+                    <Input.Search
+                        style={{ width: 150, marginRight: '5px' }}
+                        onSearch={(value) => { }}
+                        size="small" key="columnSearch"
+                        enterButton
+                        placeholder='搜索' allowClear />,
                     <Permit authority="hmac:save" key="save">
+                        <Tooltip title="新建接入用户">
                     <Button
                         key="add"
                         size="small"
-                        type="primary"
-                        icon={<PlusOutlined />}
+                                icon={<DiffOutlined />}
                         onClick={() => onNewClick()}
-                    >
-                        新建
+                            >
                     </Button>
+                        </Tooltip>
                     </Permit>,
 
                 ]}
                 pageToolBarRender={[
                     <Permit authority="hmac:delete">
-                        <Button
+                        <IButton
+                            size="small"
                             danger
+                            type="primary"
+                            icon={<RestOutlined />}
                             key="delete"
                             onClick={() => showDeleteConfirm('确定删除选中的外部用户吗?', () => onDelete(selectedKeys))}
                         >
                             删除
-                        </Button>
+                        </IButton>
                     </Permit>,
                     <Permit authority="hmac:refreshCache">
-                        <Button
-                            type='dashed'
-                            danger
+                        <IButton
+                            size="small"
+                            type="success"
                             key="delete"
+                            icon={<CloudSyncOutlined />}
                             onClick={() => onRefreshCache(selectedKeys)}
                         >
-                            刷新缓存
-                        </Button>
+                            缓存
+                        </IButton>
                     </Permit>
                 ]}
                 // onClick={(data) => onClicked(data)}

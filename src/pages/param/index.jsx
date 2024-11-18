@@ -4,6 +4,7 @@ import {
     IFormItem,
     IAGrid,
     XSearchForm,
+    IButton,
     Permit
 } from '@/common/components';
 import {
@@ -17,7 +18,7 @@ import {
 import {
     PlusOutlined
 } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, Form, Tooltip, message, Input, Select } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -29,7 +30,9 @@ import {
 } from 'rxjs/operators';
 import {
 LockTwoTone,
-UnlockTwoTone 
+    RestOutlined,
+    UnlockTwoTone,
+    DiffOutlined
 } from '@ant-design/icons';
 //组件
 const LockRenderer = (props) => {
@@ -169,7 +172,7 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <XSearchForm
+            {/* <XSearchForm
                 form={searchForm}
                 rows={1}
                 onReset={() => ref.current.refresh()}
@@ -185,12 +188,12 @@ export default (props) => {
                     label="参数名称"
                     xtype="input"
                 />
-            </XSearchForm>
+            </XSearchForm> */}
 
             <IAGrid
                 ref={ref}
                 title="参数列表"
-                height={offsetHeight - 150}
+                height={offsetHeight - 66}
                 // columnsStorageKey="_cache_role_columns"
                 columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
@@ -205,29 +208,39 @@ export default (props) => {
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record)}
                 toolBarRender={[
+                    <Select defaultValue={'paramName'} size="small" options={[{ label: '参数名称', value: 'paramName' }, { label: '参数编码', value: 'paramCode' }]} />,
+                    <Input.Search
+                        style={{ width: 150, marginRight: '5px' }}
+                        onSearch={(value) => { }}
+                        size="small" key="columnSearch"
+                        enterButton
+                        placeholder='搜索' allowClear />,
                     <Permit authority="param:save" key="save">
+                        <Tooltip title="新建参数">
                         <Button
                             key="newParam"
                             size="small"
-                            type="primary"
-                            icon={<PlusOutlined />}
+                                icon={<DiffOutlined />}
                             onClick={() => onNewClick()}
-                        >
-                            新建
+                            >
                         </Button>
+                        </Tooltip>
                     </Permit>
 
                 ]}
                 pageToolBarRender={[
                     <Permit authority="param:delete">
-                        <Button
+                        <IButton
                             danger
+                            type="primary"
+                            icon={<RestOutlined />}
+                            size="small"
                             key="delete"
                             loading={loading}
                             onClick={() => showDeleteConfirm('确定删除选中的参数吗?', () => onDelete(selectedKeys))}
                         >
                             删除
-                        </Button>
+                        </IButton>
                     </Permit>
                 ]}
             />
