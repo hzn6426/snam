@@ -1,8 +1,7 @@
 import {
-    IFormItem,
     IAGrid,
-    XSearchForm,
-    IStatus
+    IStatus,
+    IGridSearch
 } from '@/common/components';
 import {
     INewWindow,
@@ -11,7 +10,6 @@ import {
     pluck,
     useObservableAutoCallback
 } from '@/common/utils';
-import { Form, Select, Input } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -48,7 +46,6 @@ const initColumns = [
         valueFormatter: (params) => {
             return `${parseInt(params.node.id) + 1}`;
         },
-        // rowDrag: true,
     },
     {
         headerName: '状态',
@@ -156,12 +153,11 @@ const initColumns = [
 
 
 export default (props) => {
-    const [searchForm] = Form.useForm();
-    // const [selectedKeys, setSelectedKeys] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
+    const [pageNo, setPageNo] = useState(1);
+    const [pageSize, setPageSize] = useState(50);
 
 
     const ref = useRef();
@@ -186,10 +182,10 @@ export default (props) => {
     }
 
     //查询
-    const search = (pageNo, pageSize) => {
+    const search = (pageNo, pageSize, params) => {
         setSelectedKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
         api.tlog.searchLogger(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
@@ -204,73 +200,36 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            {/* <XSearchForm
-                form={searchForm}
-                rows={1}
-                onReset={() => ref.current.refresh()}
-                onSearch={() => ref.current.refresh()}
-            >
-                <IFormItem
-                    name="state"
-                    label="状态"
-                    xtype="select"
-                    options={[{ label: '成功', value: 'SUCCESS' }, { label: '失败', value: 'FAILURE' }]}
-                />
-                <IFormItem
-                    name="createUserCnName"
-                    label="操作人"
-                    xtype="input"
-                />
-                <IFormItem
-                    name="systemTag"
-                    label="来源系统"
-                    xtype="input"
-                />
-                <IFormItem
-                    name="exchangeName"
-                    label="模块名称"
-                    xtype="input"
-                />
-                <IFormItem
-                    name="startTime"
-                    label="起始时间"
-                    xtype="datetime"
-                />
-                <IFormItem
-                    name="endTime"
-                    label="结束时间"
-                    xtype="datetime"
-                />
-            </XSearchForm> */}
-
             <IAGrid
                 ref={ref}
                 title="日志列表"
                 height={offsetHeight - 66}
-                // components={{
-                //     stateCellRenderer: StateRenderer,
-                // }}
-                // columnsStorageKey="_cache_role_columns"
                 columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
-                // pageNo={pageNo}
-                // pageSize={pageSize}
+                pageNo={pageNo}
+                pageSize={pageSize}
                 total={total}
                 clearSelect={searchLoading}
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
-                    <Select defaultValue={'createUserCnName'} size="small" style={{ width: 100 }}
+                    <IGridSearch defaultValue={'createUserCnName'} size="small" style={{ width: 100 }}
+                        onSearch={(params) => {
+                            let p = {};
+                            if (params.startTime) {
+                                p.startTime = params.startTime[0];
+                                p.endTime = params.startTime[1];
+                            } else {
+                                p = params;
+                            }
+                            search(1, pageSize, p);
+                        }}
                         options={[{ label: '来源系统', value: 'systemTag' }, { label: '模块名称', value: 'exchangeName' },
-                        { label: '操作人', value: 'createUserCnName' }
+                            { label: '操作人', value: 'createUserCnName' },
+                            { label: '状态', value: 'state', xtype: 'select', valueOptions: [{ label: '成功', value: 'SUCCESS' }, { label: '失败', value: 'FAILURE' }] },
+                            { label: '请求时间', value: 'startTime', xtype: 'datetimerange' }
                         ]} />,
-                    <Input.Search
-                        style={{ width: 150, marginRight: '5px' }}
-                        onSearch={(value) => { }}
-                        size="small" key="columnSearch"
-                        enterButton
-                        placeholder='搜索' allowClear />,
                 ]}
             />
         </>

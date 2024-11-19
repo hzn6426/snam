@@ -27,7 +27,8 @@ import {
     Permit,
     IFooterToolbar,
     ILayout,
-    IButton
+    IButton,
+    IGridSearch
 } from '@/common/components';
 // import IGrid from '@/components/IGrid';
 // import ISearchForm from '@/components/ISearchForm';
@@ -195,6 +196,13 @@ export default (props) => {
 
     const parentRef = useRef();
     const childRef = useRef();
+    const [disabledActive, setDisabledActive] = useState(true);
+    const [disabledStop, setDisabledStop] = useState(true);
+
+    const [disabledChildActive, setDisabledChildActive] = useState(true);
+    const [disabledChildStop, setDisabledChildStop] = useState(true);
+
+
     const refreshParent = () => parentRef.current.refresh();
     const refreshChild = (params) => childRef.current.refresh(params);
 
@@ -203,6 +211,8 @@ export default (props) => {
             // debounceTime(300),
             distinctUntilChanged(),
             tap((v) => {
+                setDisabledActive(beHasRowsPropNotEqual('state', 'STOPPED', v));
+                setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', v));
                 if (v && v.length > 0) {
                     const selected = v[v.length - 1]
                     setParentName(selected.dictName);
@@ -221,6 +231,10 @@ export default (props) => {
         event.pipe(
             debounceTime(300),
             distinctUntilChanged(),
+            tap((keys) => {
+                setDisabledChildActive(beHasRowsPropNotEqual('state', 'STOPPED', keys));
+                setDisabledChildStop(beHasRowsPropNotEqual('state', 'ACTIVE', keys));
+            }),
             switchMap((v) => of(pluck('id', v))),
         ),
     );
@@ -305,10 +319,10 @@ export default (props) => {
     );
 
     //查询
-    const searchParent = (pageNo, pageSize) => {
+    const searchParent = (pageNo, pageSize, params) => {
         // setSelectedParentKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchParentForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
         api.dict.searchDictionary(param).subscribe({
             next: (data) => {
                 setParentDataSource(data.data);
@@ -425,15 +439,9 @@ export default (props) => {
                         onSelectedChanged={onParentChange}
                         onDoubleClick={(record) => onParentDoubleClick(record.id)}
                         toolBarRender={[
-                            <Select defaultValue={'dictName'} size="small" style={{ width: 100 }}
+                            <IGridSearch defaultValue={'dictName'} size="small" style={{ width: 100 }} onSearch={(params) => searchParent(1, pageSize, params)}
                                 options={[{ label: '字典名称', value: 'dictName' }, { label: '字典编码', value: 'dictCode' }
                                 ]} />,
-                            <Input.Search
-                                style={{ width: 150, marginRight: '5px' }}
-                                onSearch={(value) => { }}
-                                size="small" key="columnSearch"
-                                enterButton
-                                placeholder='搜索' allowClear />,
                             <Permit key="dictionary:save" authority="dictionary:save">
                                 <Tooltip title="新建字典">
                             <Button
@@ -448,13 +456,13 @@ export default (props) => {
                         ]}
                         pageToolBarRender={[
                             <Permit authority="dictionary:use">
-                                <IButton type="warning" size="small"
+                                <IButton type="warning" size="small" disabled={disabledActive}
                                     icon={<SunOutlined />} key="use" onClick={() => onParentUse(selectedParentKeys)} loading={loading}>
                                     启用
                                 </IButton>
                             </Permit>,
                             <Permit authority="dictionary:stop">
-                                <IButton icon={< ApiOutlined />} size="small"
+                                <IButton icon={< ApiOutlined />} size="small" disabled={disabledStop}
                                     type="warning" key="stop" onClick={() => onParentStop(selectedParentKeys)} loading={loading}>
                                     停用
                                 </IButton>
@@ -511,15 +519,15 @@ export default (props) => {
                         onSelectedChanged={onChildChange}
                         onDoubleClick={(record) => onChildDoubleClick(record.id)}
                         toolBarRender={[
-                            <Select defaultValue={'childdictName'} size="small" style={{ width: 100 }}
-                                options={[{ label: '字典名称', value: 'childdictName' }, { label: '字典编码', value: 'childDictCode' }
-                                ]} />,
-                            <Input.Search
-                                style={{ width: 150, marginRight: '5px' }}
-                                onSearch={(value) => { }}
-                                size="small" key="columnSearch"
-                                enterButton
-                                placeholder='搜索' allowClear />,
+                            // <Select defaultValue={'childdictName'} size="small" style={{ width: 100 }}
+                            //     options={[{ label: '字典名称', value: 'childdictName' }, { label: '字典编码', value: 'childDictCode' }
+                            //     ]} />,
+                            // <Input.Search
+                            //     style={{ width: 150, marginRight: '5px' }}
+                            //     onSearch={(value) => { }}
+                            //     size="small" key="columnSearch"
+                            //     enterButton
+                            //     placeholder='搜索' allowClear />,
                             <Permit key="dictChild:save" authority="dictChild:save">
                                 <Tooltip title="新建子字典">
                             <Button
@@ -539,6 +547,7 @@ export default (props) => {
                                     size="small"
                                     type="warning"
                                     icon={<SunOutlined />}
+                                    disabled={disabledChildActive}
                                     onClick={() => {
                                         const parentId = selectedParentKeys[selectedParentKeys.length - 1];
                                         onChildUse([selectedChildKeys, parentId]);
@@ -552,6 +561,7 @@ export default (props) => {
                                     icon={< ApiOutlined />}
                                     type="warning"
                                     size="small"
+                                    disabled={disabledChildStop}
                                     onClick={() => {
                                         const parentId = selectedParentKeys[selectedParentKeys.length - 1];
                                         onChildStop([selectedChildKeys, parentId]);

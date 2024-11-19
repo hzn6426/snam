@@ -23,7 +23,7 @@ import {
     data2States,
 } from '@/common/utils';
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
-import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Tag } from 'antd';
+import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Tag, Tooltip } from 'antd';
 import {
     IFormItem,
     IAGrid,
@@ -94,7 +94,7 @@ export default () => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(50);
     const [dataSource, setDataSource] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
     const [disabledActive, setDisabledActive] = useState(true);
@@ -367,6 +367,7 @@ const LockRenderer = (props) => {
                     onDoubleClick={(record) => onDoubleClick(record)}
                     toolBarRender={[
                         <Permit authority="position:save" key="new">
+                            <Tooltip title="创建职位">
                             <Button
                                 size='small'
                                 icon={<DiffOutlined />}
@@ -375,6 +376,7 @@ const LockRenderer = (props) => {
                             >
                                
                             </Button>
+                            </Tooltip>
                         </Permit>
                     ]}
                     pageToolBarRender={[

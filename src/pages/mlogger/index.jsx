@@ -2,6 +2,7 @@ import {
     IFormItem,
     IAGrid,
     XSearchForm,
+    IGridSearch,
     IStatus
 } from '@/common/components';
 import {
@@ -110,6 +111,8 @@ export default (props) => {
     const [searchLoading, setSearchLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
+    const [pageNo, setPageNo] = useState(1);
+    const [pageSize, setPageSize] = useState(50);
 
 
     const ref = useRef();
@@ -134,10 +137,10 @@ export default (props) => {
     }
 
     //查询
-    const search = (pageNo, pageSize) => {
+    const search = (pageNo, pageSize, params) => {
         setSelectedKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
         api.mlogger.searchLogger(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
@@ -198,23 +201,37 @@ export default (props) => {
                 columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
-                // pageNo={pageNo}
-                // pageSize={pageSize}
+                pageNo={pageNo}
+                pageSize={pageSize}
                 total={total}
                 clearSelect={searchLoading}
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
-                    <Select defaultValue={'exchangeName'} size="small" style={{ width: 100 }}
-                        options={[{ label: '来源系统', value: 'dataFrom' }, { label: '模块名称', value: 'exchangeName' }
+                    <IGridSearch defaultValue={'dataFrom'} size="small" onSearch={(params) => {
+                        let p = {};
+                        if (params.startTime) {
+                            p.startTime = params.startTime[0];
+                            p.endTime = params.startTime[1];
+                        } else {
+                            p = params;
+                        }
+                        search(1, pageSize, p);
+                    }}
+                        options={[{ label: '来源系统', value: 'dataFrom' }, { label: '模块名称', value: 'exchangeName' },
+                            { label: '状态', value: 'state', xtype: 'select', valueOptions: [{ label: '成功', value: 'SUCCESS' }, { label: '失败', value: 'FAILURE' }] },
+                            { label: '请求时间', value: 'startTime', xtype: 'datetimerange' }
                         ]} />,
-                    <Input.Search
-                        style={{ width: 150, marginRight: '5px' }}
-                        onSearch={(value) => { }}
-                        size="small" key="columnSearch"
-                        enterButton
-                        placeholder='搜索' allowClear />,
                 ]}
+                // <Select defaultValue={'exchangeName'} size="small" style={{ width: 100 }}
+                //     options={[{ label: '来源系统', value: 'dataFrom' }, { label: '模块名称', value: 'exchangeName' }
+                //     ]} />,
+                // <Input.Search
+                //     style={{ width: 150, marginRight: '5px' }}
+                //     onSearch={(value) => { }}
+                //     size="small" key="columnSearch"
+                //     enterButton
+                //     placeholder='搜索' allowClear />,
             />
         </>
     );

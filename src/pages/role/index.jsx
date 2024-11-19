@@ -5,6 +5,7 @@ import {
   IAGrid,
   XSearchForm,
   IStatus,
+  IGridSearch,
   Permit,
   IButton,
 } from '@/common/components';
@@ -109,6 +110,8 @@ export default (props) => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
 
   const [disabledActive, setDisabledActive] = useState(true);
   const [disabledStop, setDisabledStop] = useState(true);
@@ -228,10 +231,10 @@ export default (props) => {
 
 
   //查询
-  const search = (pageNo, pageSize) => {
+  const search = (pageNo, pageSize, params) => {
     setSelectedKeys([]);
     setSearchLoading(true);
-    let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+    let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
     api.role.searchRole(param).subscribe({
       next: (data) => {
         setDataSource(data.data);
@@ -280,19 +283,23 @@ export default (props) => {
           defaultSearch={true}
           request={(pageNo, pageSize) => search(pageNo, pageSize)}
           dataSource={dataSource}
-          // pageNo={pageNo}
-          // pageSize={pageSize}
+          pageNo={pageNo}
+          pageSize={pageSize}
           total={total}
           onSelectedChanged={onChange}
           onDoubleClick={(record) => onDoubleClick(record.id)}
           toolBarRender={[
-            <Select defaultValue={'roleName'} size="small" options={[{ label: '角色名', value: 'roleName' }]} />,
-            <Input.Search
-              style={{ width: 150, marginRight: '5px' }}
-              onSearch={(value) => {}}
-              size="small" key="columnSearch"
-              enterButton
-              placeholder='搜索' allowClear />,
+            <IGridSearch defaultValue={'roleName'}
+              onSearch={(params) => search(1, pageSize, params)}
+              options={[{ label: '角色名', value: 'roleName' }, { label: '状态', value: 'state', xtype: 'select', valueOptions: state2Option(roleState) }]}
+            />,
+            // <Select defaultValue={'roleName'} size="small" options={[{ label: '角色名', value: 'roleName' }]} />,
+            // <Input.Search
+            //   style={{ width: 150, marginRight: '5px' }}
+            //   onSearch={(value) => {}}
+            //   size="small" key="columnSearch"
+            //   enterButton
+            //   placeholder='搜索' allowClear />,
               <Permit key="role:refreshPrivileges" authority="role:refreshPrivileges">
                 <Tooltip title="刷新权限">
                 <Button
@@ -308,6 +315,7 @@ export default (props) => {
                 </Tooltip>
               </Permit>,
               <Permit key="role:save" authority="role:save">
+                <Tooltip title="创建角色">
                 <Button
                   key="add"
                   size="small"
@@ -317,6 +325,7 @@ export default (props) => {
                 >
                   
                 </Button>
+                </Tooltip>
               </Permit>
     
 

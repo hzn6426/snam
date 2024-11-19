@@ -5,7 +5,8 @@ import {
     IAGrid,
     XSearchForm,
     IButton,
-    Permit
+    Permit,
+    IGridSearch
 } from '@/common/components';
 import {
     INewWindow,
@@ -98,7 +99,8 @@ export default (props) => {
     const [searchLoading, setSearchLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
-
+    const [pageNo, setPageNo] = useState(1);
+    const [pageSize, setPageSize] = useState(50);
 
     const ref = useRef();
     const refresh = () => ref.current.refresh();
@@ -153,10 +155,10 @@ export default (props) => {
 
 
     //查询
-    const search = (pageNo, pageSize) => {
+    const search = (pageNo, pageSize, params) => {
         setSelectedKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
         api.param.searchParam(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
@@ -198,6 +200,8 @@ export default (props) => {
                 columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
+                pageNo={pageNo}
+                pageSize={pageSize}
                 // components={{
                 //     lockRenderer: LockRenderer
                 // }}
@@ -208,13 +212,14 @@ export default (props) => {
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record)}
                 toolBarRender={[
-                    <Select defaultValue={'paramName'} size="small" options={[{ label: '参数名称', value: 'paramName' }, { label: '参数编码', value: 'paramCode' }]} />,
-                    <Input.Search
-                        style={{ width: 150, marginRight: '5px' }}
-                        onSearch={(value) => { }}
-                        size="small" key="columnSearch"
-                        enterButton
-                        placeholder='搜索' allowClear />,
+                    <IGridSearch defaultValue={'paramName'} size="small" onSearch={(params) => search(1, pageSize, params)}
+                        options={[{ label: '参数名称', value: 'paramName' }, { label: '参数编码', value: 'paramCode' }]} />,
+                    // <Input.Search
+                    //     style={{ width: 150, marginRight: '5px' }}
+                    //     onSearch={(value) => { }}
+                    //     size="small" key="columnSearch"
+                    //     enterButton
+                    //     placeholder='搜索' allowClear />,
                     <Permit authority="param:save" key="save">
                         <Tooltip title="新建参数">
                         <Button

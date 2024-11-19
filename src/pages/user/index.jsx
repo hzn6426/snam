@@ -8,6 +8,7 @@ import {
   IStatus,
   ITag,
   Permit,
+  IGridSearch,
   ISearchTree
 } from '@/common/components';
 import XSearchForm from '@/components/XSearchForm';
@@ -39,7 +40,7 @@ import {
   RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined, HistoryOutlined,
   AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, EyeOutlined
 } from '@ant-design/icons';
-import { Form, message, Tooltip, Spin, Input, Row, Col, Divider, Select } from 'antd';
+import { Form, message, Tooltip, Spin, Input, Row, Col, Divider, Button } from 'antd';
 import { IButton } from '@/common/components';
 import { of, zip } from 'rxjs';
 import {
@@ -225,7 +226,7 @@ export default (props) => {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [pageNo, setPageNo] = useState(1);
-  const [pageSize, setPageSize] = useState(100);
+  const [pageSize, setPageSize] = useState(50);
   const [searchParam, setSearchParam] = useState({});
 
   const [disabledActive, setDisabledActive] = useState(true);
@@ -264,8 +265,7 @@ export default (props) => {
 
   //查询
   const loadGroup = () => {
-    let param = { dto: searchForm.getFieldValue() };
-    api.group.treeAllGroupsAndUsers(param).subscribe({
+    api.group.treeAllGroupsAndUsers().subscribe({
       next: (data) => {
         setTreeData(data);
       },
@@ -528,26 +528,34 @@ export default (props) => {
           request={(pageNo, pageSize) => search(pageNo, pageSize)}
           dataSource={dataSource}
           total={total}
+              pageNo={pageNo}
+              pageSize={pageSize}
           onSelectedChanged={onChange}
           onDoubleClick={(record) => onDoubleClick(record.id)}
           toolBarRender={[
-            <Select defaultValue={'userName'} size="small" options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' }]} />,
-            <Input.Search
-              style={{ width: 150, marginRight: '5px' }}
-              onSearch={(value) => setColumnSearchValue(value)}
-              size="small" key="columnSearch"
-              enterButton
-              placeholder='搜索' allowClear />,
+            <IGridSearch defaultValue={'userName'} onSearch={(params) => search(1, pageSize, params)}
+              options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' },
+              { label: '属性', value: 'userTag', xtype: "select", valueOptions: { userTags } },
+              { label: '手机', value: 'userMobile' }, { label: '角色', value: 'roleName' }, { label: '职位', value: 'postName' }]}
+              width={150} />,
+            // <Select defaultValue={'userName'} size="small" options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' }]} />,
+            // <Input.Search
+            //   style={{ width: 150, marginRight: '5px' }}
+            //   onSearch={(value) => setColumnSearchValue(value)}
+            //   size="small" key="columnSearch"
+            //   enterButton
+            //   placeholder='搜索' allowClear />,
             <Permit key="user:save" authority="user:save">
-              <IButton
+              <Button
                 key="add"
                 size="small"
+                type="default" iconPosition="end"
                 // type="primary"
                 icon={<DiffOutlined />}
                 onClick={() => onNewClick()}
               >
 
-              </IButton>
+              </Button>
             </Permit>,
           ]}
           pageToolBarRender={[

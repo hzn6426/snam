@@ -24,9 +24,7 @@ import {
     UnlockTwoTone,
     SolutionOutlined
 } from '@ant-design/icons';
-import { message } from 'antd';
-import Button from "antd-button-color";
-import 'antd-button-color/dist/css/style.css';
+import { Tooltip, message, Button } from 'antd';
 import { useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -101,7 +99,7 @@ export default () => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(50);
     const [dataSource, setDataSource] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
     const [disabledActive, setDisabledActive] = useState(true);
@@ -230,22 +228,25 @@ export default () => {
             height={offsetHeight - 66}
             request={(pageNo, pageSize) => search(pageNo, pageSize)}
             dataSource={dataSource}
-            // pageNo={pageNo}
-            // pageSize={pageSize}
+            pageNo={pageNo}
+            pageSize={pageSize}
             total={total}
             onSelectedChanged={onChange}
             onDoubleClick={(record) => onDoubleClick(record.id)}
             toolBarRender={[
                 <Permit key="uset:save" authority="uset:save">
+                    <Tooltip title="创建用户组">
+
                 <Button
                     key="add"
                     size="small"
-                    // type="primary"
+                            type="default"
                     icon={<DiffOutlined />}
                     onClick={() => onNewClick()}
                 >
                     
                 </Button>
+                    </Tooltip>
                 </Permit>,
 
             ]}

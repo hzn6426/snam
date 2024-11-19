@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ConfigProvider, Dropdown, Spin, Input, Button, Space } from 'antd';
+import { ConfigProvider, Dropdown, Spin, Input, Button, Space, Avatar } from 'antd';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
-import { SyncOutlined, PicCenterOutlined, UngroupOutlined, PicLeftOutlined, PicRightOutlined, SearchOutlined, PlusCircleFilled } from '@ant-design/icons';
+import { SyncOutlined, PicCenterOutlined, UngroupOutlined, PicLeftOutlined, PicRightOutlined, SearchOutlined, PlusCircleFilled, GithubFilled } from '@ant-design/icons';
 import defaultSettings from '../../config/defaultSettings';
 import AvatarDropdown from '@/components/Layout/AvatarDropdown';
 import SettingDrawer from '@/components/Layout/SettingDrawer';
@@ -158,6 +158,7 @@ export default (props) => {
                     },
                 }}
                 avatarProps={{
+                    shape: "square",
                     ////TODO 用户信息
                     src: currentUser.avatar || Header,
                     size: 'small',
@@ -166,45 +167,58 @@ export default (props) => {
                         return (<AvatarDropdown onSetting={() => { setIsVisible(true) }}>{dom}</AvatarDropdown>)
                     }
                 }}
+                actionsRender={(props) => {
+                    if (props.isMobile) return [];
+                    if (typeof window === 'undefined') return [];
+                    return [
+                        // props.layout !== 'side' && document.body.clientWidth > 1400 ? (
+                        //     <SearchInput />
+                        // ) : undefined,
+                        // <InfoCircleFilled key="InfoCircleFilled" />,
+                        // <QuestionCircleFilled key="QuestionCircleFilled" />,
+                        // <Avatar shape="square" size={28} icon={<GithubFilled />} style={{ marginLeft: 0, marginRight: -10 }} />
+                        // <GithubFilled key="GithubFilled" shape="square" style={{ fontSize: 23, marginLeft: 0, marginRight: -10 }} />,
+                    ];
+                }}
                 // actionsRender={(props) => {
                 //     if (props.isMobile) return [];
                 //     return [
-                //       props.layout !== 'side' ? (
-                //         <div
-                //           key="SearchOutlined"
-                //           aria-hidden
-                //           style={{
-                //             display: 'flex',
-                //             alignItems: 'center',
-                //             marginInlineEnd: -20,
-                //           }}
-                //           onMouseDown={(e) => {
-                //             e.stopPropagation();
-                //             e.preventDefault();
-                //           }}
-                //         >
-                //         <Space.Compact style={{ width: '100%' }}>
-                //           <Input
+                //         props.layout !== 'side' ? (
+                //             <div
+                //                 key="SearchOutlined"
+                //                 aria-hidden
+                //                 style={{
+                //                     display: 'flex',
+                //                     alignItems: 'center',
+                //                     marginInlineEnd: -20,
+                //                 }}
+                //                 onMouseDown={(e) => {
+                //                     e.stopPropagation();
+                //                     e.preventDefault();
+                //                 }}
+                //             >
+                //                 <Space.Compact style={{ width: '100%' }}>
+                //                     <Input
 
-                //             style={{
-                //               borderRadius: 4,
-                //             //   marginInlineEnd: 12,
-                //             //   backgroundColor:'var(--ant-primary-color)',
-                //             //   backgroundColor: '#ffffff',
-                //             }}
-                //             placeholder="搜索方案"
+                //                         style={{
+                //                             borderRadius: 4,
+                //                             //   marginInlineEnd: 12,
+                //                             //   backgroundColor:'var(--ant-primary-color)',
+                //                             //   backgroundColor: '#ffffff',
+                //                         }}
+                //                         placeholder="搜索方案"
 
-                //           />
-                //           <Button  style={{padding:0,margin:0}} icon={<SearchOutlined/>}/>
-                //           </Space.Compact>
-                //           {/* <PlusCircleFilled
+                //                     />
+                //                     <Button style={{ padding: 0, margin: 0 }} icon={<SearchOutlined />} />
+                //                 </Space.Compact>
+                //                 {/* <PlusCircleFilled
                 //             style={{
                 //               backgroundColor: 'var(--ant-primary-color)',
                 //               fontSize: 24,
                 //             }}
                 //           /> */}
-                //         </div>
-                //       ) : undefined
+                //             </div>
+                //         ) : undefined
                 //     ];
                 // }}
 
