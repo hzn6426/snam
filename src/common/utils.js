@@ -671,14 +671,14 @@ export const beHasRowsPropNotEqual = (prop, value, rows) => {
 const sWidth = window.screen.width;
 const sHeight = window.screen.height;
 export const INewWindow = (props) => {
-  const { url, title, features, width, height, callback, callparam } = props;
+  const { url, title, width, height, callback, callparam, features } = props;
   const iwidth = width || sWidth;
   const iheight = height || sHeight
 
   var itop = (window.screen.height - 30 - (height || 0)) / 2;       //获得窗口的垂直位置;
   var ileft = (window.screen.width - 10 - (width || 0)) / 2;
-  let browser = window
-  let popup = null
+  let browser = window.self;
+  let popup = null;
 
   browser = window.self
   browser.onSuccess = (message) => {
@@ -710,19 +710,26 @@ export const INewWindow = (props) => {
       callback(message);
     }
   }
+  const opts = features || ('location=no,menubar=no,toolbar=no,resizable=no,status=no,width=' + (iwidth) + ',  height=' + (iheight) + ',top=' + itop + ',left=' + ileft);
 
-  const opts = features || 'location=no,menubar=no,toolbar=no,resizable=no,status=no,width=' + (iwidth) + ',  height=' + (iheight) + ',top=' + itop + ',left=' + ileft;
-  if (popup) {
-    popup.focus()
-    return
+  // if (popup) {
+  //   popup.focus()
+  //   return
+  // }
+
+
+
+  let settings = localStorage.getItem("settings");
+  console.log(settings);
+  if (settings) {
+    browser.localStorage.setItem("settings", settings);
   }
-
-
   const getPageQuery = () => parse(url.split('?')[1]);
   window.getPageQuery = getPageQuery;
   popup = browser.open(url, title, opts)
 
-  setTimeout(function () { popup.document.title = title }, 1000);
+  
+  setTimeout(function () { popup.document.title = title }, 300);
 
 };
 
@@ -754,6 +761,42 @@ export const formatNumber = (v, fixNum) => {
   }
   return v ? toFixed(v, fixNum) : suffix;
 };
+
+export const timeFormat = (d, str) => {
+  let date = new Date(d),
+      year = date.getFullYear(), //年
+      month = date.getMonth() + 1, //月
+      day = date.getDate(), //日
+      hour = date.getHours(), //时
+      minute = date.getMinutes(), //分
+      second = date.getSeconds(); //秒
+
+  month >= 1 && month <= 9 ? (month = "0" + month) : "";
+  day >= 0 && day <= 9 ? (day = "0" + day) : "";
+  hour >= 0 && hour <= 9 ? hour : "";
+  minute >= 0 && minute <= 9 ? (minute = "0" + minute) : "";
+  second >= 0 && second <= 9 ? (second = "0" + second) : "";
+
+  if (str.indexOf('y') != -1) {
+      str = str.replace('y', year)
+  }
+  if (str.indexOf('m') != -1) {
+      str = str.replace('m', month)
+  }
+  if (str.indexOf('d') != -1) {
+      str = str.replace('d', day)
+  }
+  if (str.indexOf('h') != -1) {
+      str = str.replace('h', hour)
+  }
+  if (str.indexOf('i') != -1) {
+      str = str.replace('i', minute)
+  }
+  if (str.indexOf('s') != -1) {
+      str = str.replace('s', second)
+  }
+  return str;
+}
 
 function toFixed(n, d) {
   var s = n + "";

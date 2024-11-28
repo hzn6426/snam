@@ -2,10 +2,12 @@ import { showDeleteConfirm } from '@/common/antd';
 import {
     IFooterToolbar,
     IFormItem,
-    IGrid,
-    ISearchForm,
+    IAGrid,
+    XSearchForm,
     IStatus,
-    Permit
+    IButton,
+    Permit,
+    IGridSearch
 } from '@/common/components';
 import {
     INewWindow,
@@ -17,9 +19,9 @@ import {
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined
+    DiffOutlined, RestOutlined, CloudSyncOutlined
 } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, Form, Tooltip, message, Select, Input } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -40,46 +42,59 @@ const StateRenderer = (props) => {
 //列初始化
 const initColumns = [
     {
-        title: '系统名称',
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
+        width: 80,
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
+    },
+    {
+        headerName: '系统名称',
         width: 100,
         align: 'left',
-        dataIndex: 'systemName',
+        field: 'systemName',
     },
     {
-        title: 'APPID',
+        headerName: 'APPID',
         width: 170,
         align: 'left',
-        dataIndex: 'appId',
+        field: 'appId',
     },
     {
-        title: 'APPKEY',
+        headerName: 'APPKEY',
         width: 170,
         align: 'left',
-        dataIndex: 'appKey',
+        field: 'appKey',
     },
     {
-        title: '过期时间',
+        headerName: '过期时间',
         width: 150,
-        dataIndex: 'expireDate',
+        field: 'expireDate',
         valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
     {
-        title: '关联用户',
+        headerName: '关联用户',
         width: 140,
         align: 'center',
-        dataIndex: 'userRealCnName',
+        field: 'userRealCnName',
     },
     {
-        title: '白名单',
+        headerName: '白名单',
         width: 140,
         align: 'center',
-        dataIndex: 'whiteIps',
+        field: 'whiteIps',
     },
     {
-        title: '备注',
+        headerName: '备注',
         width: 140,
         align: 'center',
-        dataIndex: 'note',
+        field: 'note',
     },
 ];
 
@@ -91,6 +106,8 @@ export default (props) => {
     const [searchLoading, setSearchLoading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
+    const [pageNo, setPageNo] = useState(1);
+    const [pageSize, setPageSize] = useState(50);
 
 
     const ref = useRef();
@@ -148,10 +165,10 @@ export default (props) => {
 
 
     //查询
-    const search = (pageNo, pageSize) => {
+    const search = (pageNo, pageSize, params) => {
         setSelectedKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
         api.hmac.searchHmacUser(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
@@ -162,12 +179,14 @@ export default (props) => {
         });
     };
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
     // 列表及弹窗
     return (
         <>
-            <ISearchForm
+            {/* <XSearchForm
                 form={searchForm}
+                rows={1}
                 onReset={() => ref.current.refresh()}
                 onSearch={() => ref.current.refresh()}
             >
@@ -186,42 +205,77 @@ export default (props) => {
                     label="用户"
                     xtype="user"
                 />
-            </ISearchForm>
+            </XSearchForm> */}
 
-            <IGrid
+            <IAGrid
                 ref={ref}
                 title="接入用户列表"
+                height={offsetHeight - 66}
+                gridName="perm_hmac_user_list"
                 // height={tableHight}
-                components={{
-                    stateCellRenderer: StateRenderer,
-                }}
+                // components={{
+                //     stateCellRenderer: StateRenderer,
+                // }}
                 // columnsStorageKey="_cache_role_columns"
-                initColumns={initColumns}
+                columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}
                 dataSource={dataSource}
-                // pageNo={pageNo}
-                // pageSize={pageSize}
+                pageNo={pageNo}
+                pageSize={pageSize}
                 total={total}
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
+                    <IGridSearch defaultValue={'systemName'} size="small" onSearch={(params) => search(1, pageSize, params)}
+                        options={[{ label: '系统名称', value: 'systemName' }, { label: 'AppId', value: 'appId' }]} />,
+                    // <Input.Search
+                    //     style={{ width: 150, marginRight: '5px' }}
+                    //     onSearch={(value) => { }}
+                    //     size="small" key="columnSearch"
+                    //     enterButton
+                    //     placeholder='搜索' allowClear />,
                     <Permit authority="hmac:save" key="save">
+                        <Tooltip title="新建接入用户">
                     <Button
                         key="add"
                         size="small"
-                        type="primary"
-                        icon={<PlusOutlined />}
+                                icon={<DiffOutlined />}
                         onClick={() => onNewClick()}
-                    >
-                        新建
+                            >
                     </Button>
+                        </Tooltip>
                     </Permit>,
 
+                ]}
+                pageToolBarRender={[
+                    <Permit authority="hmac:delete">
+                        <IButton
+                            size="small"
+                            danger
+                            type="primary"
+                            icon={<RestOutlined />}
+                            key="delete"
+                            onClick={() => showDeleteConfirm('确定删除选中的外部用户吗?', () => onDelete(selectedKeys))}
+                        >
+                            删除
+                        </IButton>
+                    </Permit>,
+                    <Permit authority="hmac:refreshCache">
+                        <IButton
+                            size="small"
+                            type="success"
+                            key="delete"
+                            icon={<CloudSyncOutlined />}
+                            onClick={() => onRefreshCache(selectedKeys)}
+                        >
+                            缓存
+                        </IButton>
+                    </Permit>
                 ]}
                 // onClick={(data) => onClicked(data)}
                 clearSelect={searchLoading}
             />
-            <IFooterToolbar visible={!isEmpty(selectedKeys)}>
+            {/* <IFooterToolbar visible={!isEmpty(selectedKeys)}>
                 <Permit authority="hmac:delete">
                     <Button
                         type="danger"
@@ -241,7 +295,7 @@ export default (props) => {
                         刷新缓存
                     </Button>
                 </Permit>
-            </IFooterToolbar>
+            </IFooterToolbar> */}
         </>
     );
 };

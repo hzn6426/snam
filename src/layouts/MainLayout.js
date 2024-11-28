@@ -1,226 +1,288 @@
 import React, { useState, useEffect } from 'react';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Dropdown, Spin, Input, Button, Space, Avatar } from 'antd';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
-import {
-  DashboardOutlined,
-  ClockCircleOutlined,
-  BarsOutlined,
-  SettingOutlined,
-  BlockOutlined,
-  TableOutlined,
-  GiftOutlined,
-  CarryOutOutlined,
-  FormOutlined,
-  TeamOutlined,
-  AimOutlined,
-  ForkOutlined,
-} from '@ant-design/icons';
+import { SyncOutlined, PicCenterOutlined, UngroupOutlined, PicLeftOutlined, PicRightOutlined, SearchOutlined, PlusCircleFilled, GithubFilled } from '@ant-design/icons';
 import defaultSettings from '../../config/defaultSettings';
 import AvatarDropdown from '@/components/Layout/AvatarDropdown';
-// import Language from '@/components/Layout/Language';
 import SettingDrawer from '@/components/Layout/SettingDrawer';
-import { Link, useIntl, history } from 'umi';
-import { KeepAlive, AliveScope, useAliveController } from 'react-activation';
-// import enUS from 'antd/lib/locale/en_US';
-// import zhCN from 'antd/lib/locale/zh_CN';
-// import viVN from 'antd/lib/locale/vi_VN';
-import api from '@/common/service';
-// const intlMap = [
-//   { value: zhCN.locale, lang: zhCN },
-//   { value: enUS.locale, lang: enUS },
-//   { value: viVN.locale, lang: viVN },
-// ];
-
-const tabListInit = [{ key: '/home', tab: '工作台', closable: false }];
-
+// import { wrapObservable, wrapSObservable } from '@/utils/RxjsUtil';
+import { Link, history } from 'umi';
+import KeepAlive, { useAliveController } from 'react-activation';
+import routeCache from '../../config/routerCache.js';
+import { iconEnum } from '@/common/icons';
+// import Logo from '../assets/auth.svg';
+import Logo from '../assets/antd.svg';
+import Header from '@/assets/images/header.jpg';
+import './index.less';
+import { api, constant } from '@/common/utils';
+const tabListInit = [{ key: '/dashboard/blog', tab: '更新日志', closable: false }];
+const { Search } = Input;
 export default (props) => {
-  // const { formatMessage } = useIntl();
-  // const [lang, setLang] = useState(
-  //   intlMap.filter((item) => {
-  //     return item.value == (localStorage.getItem('umi-locale') || 'zh-CN').toLowerCase();
-  //   })[0].lang,
-  // );
-  const [settings, setSettings] = useState(
-    JSON.parse(localStorage.getItem('settings')) || defaultSettings,
-  );
-  const [pathname, setPathname] = useState(props.location.pathname);
-  const [isVisible, setIsVisible] = useState(false);
-  const [tabList, setTabList] = useState(tabListInit);
-  const { dropScope, refresh } = useAliveController();
-  const [loading, setLoading] = useState(false);
-  const [menuData, setMenuData] = useState([]);
+    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));
+    const [pathname, setPathname] = useState(props.location.pathname);
+    const [isVisible, setIsVisible] = useState(false);
+    const [tabList, setTabList] = useState(tabListInit);
+    const [actionTab, setActionTab] = useState('');
+    const { dropScope, refresh, clear } = useAliveController();
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [menuData, setMenuData] = useState([]);
+    const [currentUser, setCurrentUser] = useState({});
 
-  const loadMenu = () => {
-    setLoading(true);
-    api.user
-      .loadUserMenus()
-      .subscribe({
-        next: (data) => {
-          setMenuData(data);
-        },
-      })
-      .add(() => setLoading(false));
-  };
+    const getCurrentUser = () => {
+        api.user.getCurrentUser().subscribe({
+            next: (data) => {
+                setCurrentUser(data[0]);
+                sessionStorage.setItem(constant.KEY_CURRENT_USER, JSON.stringify(data[0]));
+            },
+        });
+    };
 
-  useEffect(() => {
-    loadMenu();
-    // console.log(props.location)
-    setPathname(props.location.pathname);
-    ConfigProvider.config({
-      theme: { primaryColor: settings.primaryColor },
-    });
-  }, [props.location.pathname]);
+    const loadMenu = () => {
+        setLoading(true);
+        api.user
+            .loadUserMenus()
+            .subscribe({
+                next: (data) => {
+                    setMenuData(data[0].children);
+                },
+            })
+            .add(() => setLoading(false));
+    };
 
-  const iconEnum = {
-    workplace: <DashboardOutlined />,
-    material: <BarsOutlined />,
-    recipe: <TableOutlined />,
-    produce: <ClockCircleOutlined />,
-    goods: <GiftOutlined />,
-    approval: <CarryOutOutlined />,
-    supplier: <TeamOutlined />,
-    apply: <FormOutlined />,
-    baseData: <BlockOutlined />,
-    system: <SettingOutlined />,
-    travel: <AimOutlined />,
-    fork: <ForkOutlined />,
-  };
+    useEffect(() => {
+        getCurrentUser();
+        loadMenu();
+    }, []);
 
-  //添加标签
-  const onClickMenu = (menuItem) => {
-    // 切换 路由
-    setPathname(menuItem.path);
+
+
+    useEffect(() => {
+        setPathname(props.location.pathname);
+        // 按钮新建
+        addTab(props.location);
+    }, [props.location.pathname]);
+
+    // TAB右键菜单
+    const menuItems = [
+        { key: '1', label: <span onClick={() => { refreshTab(actionTab) }}>刷新本页</span>, icon: <SyncOutlined /> },
+        { key: '2', label: <span onClick={() => { closeAllTabs() }}>关闭所有</span>, icon: <PicCenterOutlined /> },
+        { key: '3', label: <span onClick={() => { closeOtherTabs(actionTab) }}>关闭其他</span>, icon: <UngroupOutlined /> },
+        { key: '4', label: <span onClick={() => { closeLeftTabs(actionTab) }}>关闭左边</span>, icon: <PicLeftOutlined /> },
+        { key: '5', label: <span onClick={() => { closeRightTabs(actionTab) }}>关闭右边</span>, icon: <PicRightOutlined /> }
+    ];
+
+    // 添加标签
+    const addTab = (addItem) => {
+        setPathname(addItem.pathname);
     // 缓存页面
-    let index = tabList.findIndex((item) => {
-      return item.key == menuItem.path;
-    });
-    if (index < 0) {
-      let newTabs = tabList.concat({ key: menuItem.path, tab: menuItem.name });
-      setTabList(newTabs);
+        let index = tabList.findIndex((item) => { return item.key == addItem.pathname });
+        console.log(index);
+        if (index < 0) {
+            let newTabs = tabList.concat({ key: addItem.pathname, tab: routeCache[addItem.pathname] });
+            setTabList(newTabs);
+        }
     }
-  };
 
-  //关闭标签
-  const editTabs = (v, action) => {
-    if (action == 'remove') {
-      let newPath =
-        tabList[
-          tabList.findIndex((item) => {
-            return item.key == v;
-          }) - 1
-        ].key;
-      if (pathname == v) {
-        setPathname(newPath);
-        history.replace(newPath);
-      }
-      let newTabs = tabList.filter((item) => {
-        return item.key != v;
-      });
-      setTabList(newTabs);
-      dropScope(v);
-    }
-  };
-  //页面刷新
-  const refreshTab = (key) => {
-    refresh(pathname);
-  };
-
-  const menuDataRender = (menuList) => {
-    return menuList.map((item) => {
-      const localItem = {
-        ...item,
-        name: item.name,
-        locale: true,
-        icon: iconEnum[item.icon],
-        routes: item.routes ? menuDataRender(item.routes) : undefined,
-      };
-      return localItem;
-    });
-  };
-
-  return (
-    <AliveScope>
-      <ConfigProvider space={{ size: 'small' }}>
-        <ProLayout
-          {...settings}
-          title="客户管理系统"
-          location={{ pathname }}
-          menu={loading}
-          rightContentRender={() => (
-            <div style={{ width: '110px', display: 'flex' }}>
-              <AvatarDropdown
-                bgColor={settings.primaryColor}
-                onSetting={() => {
-                  setIsVisible(true);
-                }}
-              />
-            </div>
-          )}
-          menuItemRender={(item, dom) =>
-            location.pathname === item.path ? (
-              dom
-            ) : (
-              <Link to={item.path} onClick={() => onClickMenu(item)}>
-                {dom}
-              </Link>
-            )
-          }
-          menuDataRender={() => menuDataRender(menuData || [])}
-          // menuFooterRender={(props) => { return (<AvatarDropdown collapsed={props.collapsed} bgColor={settings.primaryColor} />) }}
-          loading={false}
-        >
-          <PageContainer
-            ghost
-            header={settings.isTabs ? { title: '', breadcrumb: {} } : { title: '' }}
-            //waterMarkProps={{ content: 'PTAH-EIMS' }}
-            tabList={settings.isTabs ? tabList : []}
-            tabProps={{
-              type: 'editable-card',
-              size: 'small',
-              hideAdd: true,
-              tabBarGutter: -1,
-              tabBarStyle: { userSelect: 'none' },
-              activeKey: pathname,
-              onEdit: (v, action) => {
-                editTabs(v, action);
-              },
-              onChange: (v) => {
-                history.replace(v);
-              },
-              renderTabBar: (props, DefaultTabBar) => (
-                <DefaultTabBar {...props}>
-                  {(node) => <span onDoubleClick={refreshTab}>{node}</span>}
-                </DefaultTabBar>
-              ),
-            }}
-            style={
-              settings.isTabs
-                ? { marginTop: '-42px', height: 'calc(100vh - 50px)' }
-                : { height: 'calc(100vh - 65px)' }
+    // 关闭标签
+    const editTabs = (key, action) => {
+        if (action == 'remove') {
+            let newPath = tabList[tabList.findIndex((item) => { return item.key == key }) - 1].key;
+            if (pathname == key) {
+                setPathname(newPath);
+                history.replace(newPath);
             }
-          >
-            {settings.isTabs ? (
-              <KeepAlive name={pathname} id={pathname}>
-                {props.children}
-              </KeepAlive>
-            ) : (
-              props.children
-            )}
-          </PageContainer>
-          <SettingDrawer
-            visible={isVisible}
-            settings={settings}
-            onSettingChange={(v) => {
-              setSettings(v);
-              ConfigProvider.config({
-                theme: { primaryColor: v.primaryColor },
-              });
-            }}
-            closeDrawer={() => setIsVisible(false)}
-            enableDarkTheme={true}
-          />
-        </ProLayout>
-      </ConfigProvider>
-    </AliveScope>
-  );
-};
+            let newTabs = tabList.filter((item) => { return item.key != key });
+            setTabList(newTabs);
+            dropScope(key).then(() => { });
+        }
+    }
+
+    // 右键事件
+    const refreshTab = (key) => {
+        refresh(key).then(() => { });
+    }
+    const closeAllTabs = () => {
+        let newTabs = [].concat(tabList[0]);
+        setPathname(newTabs[0].key);
+        history.replace(newTabs[0].key);
+        setTabList(newTabs);
+        clear().then(() => { });
+    }
+    const closeOtherTabs = (key) => {
+        let index = tabList.findIndex((item) => { return item.key == key });
+        let newTabs = [].concat(tabList[0]);
+        newTabs = newTabs.concat(tabList[index]);
+        setPathname(key);
+        history.replace(key);
+        setTabList(newTabs);
+    }
+    const closeLeftTabs = (key) => {
+        let index = tabList.findIndex((item) => { return item.key == key });
+        let newTabs = tabList.filter((_, itemIndex) => { return itemIndex >= index || itemIndex == 0 });
+        setPathname(key);
+        history.replace(key);
+        setTabList(newTabs);
+    }
+    const closeRightTabs = (key) => {
+        let index = tabList.findIndex((item) => { return item.key == key });
+        let newTabs = tabList.filter((_, itemIndex) => { return itemIndex <= index });
+        setPathname(key);
+        history.replace(key);
+        setTabList(newTabs);
+    }
+    // 菜单重构
+    const menuDataRender = (menuList) => {
+        return menuList.map((item) => {
+            const localItem = {
+                ...item,
+                name: item.name,
+                locale: true,
+                icon: iconEnum(item.icon),
+                routes: item.routes ? menuDataRender(item.routes) : undefined,
+            };
+            return localItem;
+        });
+    };
+
+    return <ConfigProvider space={{ size: 'small' }}>
+        <Spin spinning={loading}>
+            <ProLayout
+                {...settings}
+                logo={Logo}
+                title={constant.SYSTEM_TITLE}
+                location={{ pathname }}
+                menu={{
+                    request: async () => {
+                        return menuData;
+                    },
+                }}
+                avatarProps={{
+                    shape: "square",
+                    ////TODO 用户信息
+                    src: currentUser.avatar || Header,
+                    size: 'small',
+                    title: currentUser.name,
+                    render: (_, dom) => {
+                        return (<AvatarDropdown onSetting={() => { setIsVisible(true) }}>{dom}</AvatarDropdown>)
+                    }
+                }}
+                actionsRender={(props) => {
+                    if (props.isMobile) return [];
+                    if (typeof window === 'undefined') return [];
+                    return [
+                        // props.layout !== 'side' && document.body.clientWidth > 1400 ? (
+                        //     <SearchInput />
+                        // ) : undefined,
+                        // <InfoCircleFilled key="InfoCircleFilled" />,
+                        // <QuestionCircleFilled key="QuestionCircleFilled" />,
+                        // <Avatar shape="square" size={28} icon={<GithubFilled />} style={{ marginLeft: 0, marginRight: -10 }} />
+                        // <GithubFilled key="GithubFilled" shape="square" style={{ fontSize: 23, marginLeft: 0, marginRight: -10 }} />,
+                    ];
+                }}
+                // actionsRender={(props) => {
+                //     if (props.isMobile) return [];
+                //     return [
+                //         props.layout !== 'side' ? (
+                //             <div
+                //                 key="SearchOutlined"
+                //                 aria-hidden
+                //                 style={{
+                //                     display: 'flex',
+                //                     alignItems: 'center',
+                //                     marginInlineEnd: -20,
+                //                 }}
+                //                 onMouseDown={(e) => {
+                //                     e.stopPropagation();
+                //                     e.preventDefault();
+                //                 }}
+                //             >
+                //                 <Space.Compact style={{ width: '100%' }}>
+                //                     <Input
+
+                //                         style={{
+                //                             borderRadius: 4,
+                //                             //   marginInlineEnd: 12,
+                //                             //   backgroundColor:'var(--ant-primary-color)',
+                //                             //   backgroundColor: '#ffffff',
+                //                         }}
+                //                         placeholder="搜索方案"
+
+                //                     />
+                //                     <Button style={{ padding: 0, margin: 0 }} icon={<SearchOutlined />} />
+                //                 </Space.Compact>
+                //                 {/* <PlusCircleFilled
+                //             style={{
+                //               backgroundColor: 'var(--ant-primary-color)',
+                //               fontSize: 24,
+                //             }}
+                //           /> */}
+                //             </div>
+                //         ) : undefined
+                //     ];
+                // }}
+
+                menuItemRender={(item, dom) => (
+                    location.pathname === item.path ? dom : <Link to={item.path} >{dom}</Link>
+                )}
+                menuDataRender={() => menuDataRender(menuData || [])}
+                loading={false}
+                // 自定义折叠 样式
+                collapsed={isCollapsed}
+                onCollapse={() => setIsCollapsed(!isCollapsed)}
+                token={settings.navTheme == "light" && {
+                    header: {
+                        colorBgHeader: 'rgba(250,250,250,0.6)',
+                    },
+                    sider: {
+                        colorMenuBackground: 'rgba(250,250,250,0.2)',
+                    },
+                    pageContainer: {
+                        colorBgPageContainer: 'rgba(255,255,255,0.8)'
+                    }
+                }}
+                className={settings.navTheme == "light" ? settings.theme : ""}
+            >
+                <PageContainer
+                    ghost
+                    header={settings.isTabs ? { title: '', breadcrumb: {} } : { title: '' }}
+                    waterMarkProps={{ content: '' }}
+                    tabList={settings.isTabs ? tabList : []}
+                    tabProps={{
+                        type: 'editable-card',
+                        size: 'small',
+                        hideAdd: true,
+                        tabBarGutter: 1,
+                        tabBarStyle: { userSelect: 'none' },
+                        activeKey: pathname,
+                        onEdit: (v, action) => { editTabs(v, action) },
+                        onChange: (v) => { history.replace(v) },
+                        renderTabBar: (props, DefaultTabBar) =>
+                            <DefaultTabBar {...props}>
+                                {node => (
+                                    <Dropdown
+                                        menu={{ items: menuItems }}
+                                        trigger={['contextMenu']}
+                                        onOpenChange={() => setActionTab(node.key)}
+                                    >
+                                        {node}
+                                    </Dropdown>
+                                )}
+                            </DefaultTabBar>
+                    }}
+                    className={settings.isTabs ? 'cala-body tabPage' : 'cala-body breadcrumb'}
+                >
+                    <div style={{ height: settings.layout == "side" ? 'calc(100vh - 64px)' : 'calc(100vh - 120px)', overflow: 'hidden' }}>
+                        {settings.isTabs ? <KeepAlive name={pathname} key={pathname} id={pathname}>{props.children}</KeepAlive> : props.children}
+                    </div>
+                </PageContainer>
+                <SettingDrawer
+                    visible={isVisible}
+                    settings={settings}
+                    onSettingChange={setSettings}
+                    closeDrawer={() => setIsVisible(false)}
+                />
+            </ProLayout>
+        </Spin>
+    </ConfigProvider>
+}

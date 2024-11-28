@@ -2,10 +2,12 @@ import { showDeleteConfirm } from '@/common/antd';
 import {
   IFooterToolbar,
   IFormItem,
-  IGrid,
-  ISearchForm,
+  IAGrid,
+  XSearchForm,
   IStatus,
-  Permit
+  IGridSearch,
+  Permit,
+  IButton,
 } from '@/common/components';
 import {
   INewWindow,
@@ -21,9 +23,17 @@ import {
   PlusOutlined,
   LockTwoTone,
   UnlockTwoTone,
-  ReloadOutlined 
+  CloudSyncOutlined,
+  SyncOutlined,
+  DiffOutlined,
+  AimOutlined,
+  ApiOutlined,
+  RestOutlined,
+  UserAddOutlined,
+  KeyOutlined,
 } from '@ant-design/icons';
-import { Button, Form, Space, message } from 'antd';
+import { Button, Form, Select, Input, message, Spin, Tooltip } from 'antd';
+
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -56,26 +66,39 @@ const LockRenderer = (props) => {
 //列初始化
 const initColumns = [
   {
-    title: '状态',
+    headerName: '序号',
+    textAlign: 'center',
+    checkboxSelection: true,
+    headerCheckboxSelection: true,
+    lockPosition: 'left',
     width: 80,
-    dataIndex: 'state',
-    cellRenderer: 'stateCellRenderer',
+    cellStyle: { userSelect: 'none' },
+    valueFormatter: (params) => {
+      return `${parseInt(params.node.id) + 1}`;
+    },
+    // rowDrag: true,
   },
   {
-    title: '锁定',
+    headerName: '状态',
+    width: 100,
+    field: 'state',
+    cellRenderer: StateRenderer,
+  },
+  {
+    headerName: '锁定',
     width: 70,
-    dataIndex: 'beLock',
-    cellRenderer:'lockRenderer'
+    field: 'beLock',
+    cellRenderer: LockRenderer
   },
   {
-    title: '角色名称',
+    headerName: '角色名称',
     width: 100,
-    dataIndex: 'roleName',
+    field: 'roleName',
   },
   {
-    title: '备注',
+    headerName: '备注',
     width: 100,
-    dataIndex: 'note',
+    field: 'note',
   }
 ];
 
@@ -87,6 +110,8 @@ export default (props) => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(50);
 
   const [disabledActive, setDisabledActive] = useState(true);
   const [disabledStop, setDisabledStop] = useState(true);
@@ -180,7 +205,7 @@ export default (props) => {
     if (selectedKeys.length !== 1) {
       message.error('只能选择一条角色数据！');
       return;
-  }
+    }
     INewWindow({
       url: '/new/role/assignUser/' + roleId,
       title: '分配用户',
@@ -192,7 +217,7 @@ export default (props) => {
 
   const onResourceClick = (id) => {
     if (selectedKeys.length !== 1) {
-      message.error('只能选择一条用户组数据！');
+      message.error('只能选择一条角色数据！');
       return;
     }
     INewWindow({
@@ -206,10 +231,10 @@ export default (props) => {
 
 
   //查询
-  const search = (pageNo, pageSize) => {
+  const search = (pageNo, pageSize, params) => {
     setSelectedKeys([]);
     setSearchLoading(true);
-    let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+    let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
     api.role.searchRole(param).subscribe({
       next: (data) => {
         setDataSource(data.data);
@@ -221,121 +246,154 @@ export default (props) => {
       });
   };
 
+  const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
+
 
   // 列表及弹窗
   return (
     <>
-      <ISearchForm
-        form={searchForm}
-        onReset={() => ref.current.refresh()}
-        onSearch={() => ref.current.refresh()}
-      >
-        <IFormItem
-          name="roleName"
-          label="角色名称"
-          xtype="input"
-        />
-        <IFormItem
-          name="state"
-          label="状态"
-          xtype="select"
-          options={() => state2Option(roleState)}
-        />
-      </ISearchForm>
+      <Spin spinning={searchLoading}>
+        {/* <XSearchForm
+          form={searchForm}
+          onReset={() => ref.current.refresh()}
+          rows={1}
+          onSearch={(params) => {
+            search(1, 50, params);
+          }}
+        >
+          <IFormItem
+            name="roleName"
+            label="角色名称"
+            xtype="input"
+          />
+          <IFormItem
+            name="state"
+            label="状态"
+            xtype="select"
+            options={() => state2Option(roleState)}
+          />
+        </XSearchForm> */}
 
-      <IGrid
-        ref={ref}
-        title="角色列表"
-        // height={tableHight}
-        components={{
-          stateCellRenderer: StateRenderer,
-          lockRenderer: LockRenderer
-        }}
-        // columnsStorageKey="_cache_role_columns"
-        initColumns={initColumns}
-        request={(pageNo, pageSize) => search(pageNo, pageSize)}
-        dataSource={dataSource}
-        // pageNo={pageNo}
-        // pageSize={pageSize}
-        total={total}
-        onSelectedChanged={onChange}
-        onDoubleClick={(record) => onDoubleClick(record.id)}
-        toolBarRender={[
-          <Space key="space">
-          <Permit key="role:refreshPrivileges" authority="role:refreshPrivileges">
-          <Button
-            key="refresh"
-            size="small"
-            type="danger"
-            loading={loading}
-            icon={<ReloadOutlined />}
-            onClick={() => onRefreshPrivileges()}
-          >
-            刷新权限
-          </Button>
-          </Permit>
-          <Permit key="role:save" authority="role:save">
-          <Button
-            key="add"
-            size="small"
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => onNewClick()}
-          >
-            新建
-          </Button>
-          </Permit>
-          </Space>
+        <IAGrid
+          gridName="perm_role_list"
+          ref={ref}
+          title="角色列表"
+          columns={initColumns}
+          height={offsetHeight - 72}
+          defaultSearch={true}
+          request={(pageNo, pageSize) => search(pageNo, pageSize)}
+          dataSource={dataSource}
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          onSelectedChanged={onChange}
+          onDoubleClick={(record) => onDoubleClick(record.id)}
+          toolBarRender={[
+            <IGridSearch defaultValue={'roleName'}
+              onSearch={(params) => search(1, pageSize, params)}
+              options={[{ label: '角色名', value: 'roleName' }, { label: '状态', value: 'state', xtype: 'select', valueOptions: state2Option(roleState) }]}
+            />,
+            // <Select defaultValue={'roleName'} size="small" options={[{ label: '角色名', value: 'roleName' }]} />,
+            // <Input.Search
+            //   style={{ width: 150, marginRight: '5px' }}
+            //   onSearch={(value) => {}}
+            //   size="small" key="columnSearch"
+            //   enterButton
+            //   placeholder='搜索' allowClear />,
+              <Permit key="role:refreshPrivileges" authority="role:refreshPrivileges">
+                <Tooltip title="刷新权限">
+                <Button
+                  key="refresh"
+                  size="small"
+                  // danger
+                  loading={loading}
+                    icon={<CloudSyncOutlined />}
+                  onClick={() => onRefreshPrivileges()}
+                >
+                  
+                </Button>
+                </Tooltip>
+              </Permit>,
+              <Permit key="role:save" authority="role:save">
+                <Tooltip title="创建角色">
+                <Button
+                  key="add"
+                  size="small"
+                  // type="primary"
+                  icon={<DiffOutlined />}
+                  onClick={() => onNewClick()}
+                >
+                  
+                </Button>
+                </Tooltip>
+              </Permit>
+    
 
-        ]}
-        // onClick={(data) => onClicked(data)}
-        clearSelect={searchLoading}
-      />
-      <IFooterToolbar visible={!isEmpty(selectedKeys)}>
-      <Permit authority="role:use">
-        <Button
-          key="active"
-          onClick={() => onActive(selectedKeys)}
-          disabled={disabledActive}
-          loading={loading}
-        >
-          激活
-        </Button>
-        </Permit>
-        <Permit authority="role:stop">
-        <Button
-          danger
-          key="stop"
-          onClick={() => onStop(selectedKeys)}
-          disabled={disabledStop}
-          loading={loading}
-        >
-          停用
-        </Button>
-        </Permit>
-        <Permit authority="role:delete">
-        <Button
-          type="danger"
-          key="delete"
-          onClick={() => showDeleteConfirm('确定删除选中的角色吗?', () => onDelete(selectedKeys))}
-        >
-          删除
-        </Button>
-        </Permit>
-        <Permit authority="userRole:saveFromRole">
-        <Button type="primary" key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
-          添加用户
-        </Button>
-        </Permit>
-        <Permit authority="role:saveMenuPerm">
-        <Button
-          key="grant"
-          onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}
-        >
-          角色授权
-        </Button>
-        </Permit>
-      </IFooterToolbar>
+          ]}
+          pageToolBarRender={[
+            <Permit authority="role:use">
+              <IButton
+                type="primary"
+                size='small'
+                key="active"
+                onClick={() => onActive(selectedKeys)}
+                disabled={disabledActive}
+                loading={loading}
+                icon={<AimOutlined />}
+              >
+                激活
+              </IButton>
+            </Permit>,
+            <Permit authority="role:stop">
+              <IButton
+                type="warning"
+                key="stop"
+                size="small"
+                onClick={() => onStop(selectedKeys)}
+                disabled={disabledStop}
+                loading={loading}
+                icon={< ApiOutlined />}
+              >
+                停用
+              </IButton>
+            </Permit>,
+            <Permit authority="role:delete">
+              <IButton
+                danger
+                type="primary"
+                icon={<RestOutlined />}
+                size="small"
+                key="delete"
+                onClick={() => showDeleteConfirm('确定删除选中的角色吗?', () => onDelete(selectedKeys))}
+              >
+                删除
+              </IButton>
+            </Permit>,
+            <Permit authority="userRole:saveFromRole">
+              <IButton 
+              size="small"
+                type="success"
+                icon={<UserAddOutlined />}
+              key="saveFromRole" onClick={() => onAssignUser(selectedKeys[selectedKeys.length - 1])}>
+                添加用户
+              </IButton>
+            </Permit>,
+            <Permit authority="role:saveMenuPerm">
+              <IButton
+                key="grant"
+                size="small"
+                type="info"
+                icon={<KeyOutlined />}
+                onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}
+              >
+                授权
+              </IButton>
+            </Permit>
+          ]}
+          // onClick={(data) => onClicked(data)}
+          clearSelect={searchLoading}
+        />
+      </Spin>
     </>
   );
 };

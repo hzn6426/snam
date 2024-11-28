@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { setLocale } from 'umi';
-import { Drawer, Form, Row, Col, Switch, Radio, Input } from 'antd';
-import { SketchPicker } from 'react-color';
+import { Drawer, Form, Row, Col, Switch, Radio, Segmented } from 'antd';
+import { createFromIconfontCN } from '@ant-design/icons';
 import * as R from 'ramda';
+import LayoutBox from './layoutBox';
+import ThemeBox from './themeBox';
+import ColorBox from './colorBox';
 
-// eslint-disable-next-line import/no-anonymous-default-export
+const MyIcon = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_4138236_ruatnx8t8dg.js'
+});
+
 export default (props) => {
-  const [color, setColor] = useState({ primaryColor: props.settings.primaryColor });
   const [settingForm] = Form.useForm();
 
   const changeSettings = (v) => {
     let key = Object.keys(v)[0];
     let value = v[key];
     let n = R.assoc(key, value)(props.settings);
-    if(key=="locale"){      
+    if (key == "locale") {
       setLocale(value, false);
       localStorage.setItem("umi-locale", value);
     }
@@ -25,100 +30,63 @@ export default (props) => {
     props.closeDrawer();
   }
 
-  const onColorChange = (nextColor) => {
-    setColor(nextColor)
-    settingForm.setFieldsValue(nextColor);
-    changeSettings(nextColor);
-  }
 
-  return <Drawer
-    title="系统设置"
-    placement="right"
-    width={320}
-    closable={false}
-    onClose={closeDrawer}
-    visible={props.visible}
-  >
-    <Form
-      form={settingForm}
-      layout="horizontal"
-      initialValues={props.settings}
-      onValuesChange={changeSettings}
+  return (
+    <Drawer
+      title="系统设置"
+      placement="right"
+      width={320}
+      closable={false}
+      onClose={closeDrawer}
+      open={props.visible}
     >
-      <Row>
-        <Col span={24}>
-          <Form.Item label="主题风格" name="navTheme" labelCol={{ span: 6 }} size="small">
-            <Radio.Group buttonStyle="solid" size="small">
-              <Radio.Button value="light">亮色</Radio.Button>
-              <Radio.Button value="dark">暗色</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row style={{ display: 'none' }}>
-        <Col span={12}>
-          <Form.Item label="主 题 色" name="primaryColor" labelCol={{ span: 8 }}>
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <SketchPicker
-            presetColors={['#1890FF', '#F5222D', '#FA541C', '#FAAD14', '#13C2C2', '#52C41A', '#2F54EB', '#722ED1','#8B572A','#808682']}
-            color={color.primaryColor}
-            disableAlpha={true}
-            onChange={({ hex }) => {
-              onColorChange({
-                primaryColor: hex,
-              });
-            }}
-            width={250}
-          />
-        </Col>
-      </Row>
-      <Row style={{ marginTop: '20px' }}>
-        <Col span={24}>
-          <Form.Item label="标签页" name="isTabs" labelCol={{ span: 6 }} valuePropName="checked">
-            <Switch checkedChildren="是" unCheckedChildren="否" />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Form.Item label="导航模式" name="layout" labelCol={{ span: 6 }}>
-            <Radio.Group buttonStyle="solid" size="small">
-              <Radio.Button value="side">侧边</Radio.Button>
-              <Radio.Button value="top">顶部</Radio.Button>
-              <Radio.Button value="mix">混合</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-      </Row>
-
-      {/* <Row>
-        <Col span={24}>
-          <Form.Item label="宽度" name="contentWidth" labelCol={{ span: 6 }}>
-            <Radio.Group buttonStyle="solid" size="small">
-              <Radio.Button value="Fluid">适应</Radio.Button>
-              <Radio.Button value="Fixed">定宽</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-      </Row> */}
-
-      {/* <Row>
-        <Col span={24}>
-          <Form.Item label="语言" name="locale" labelCol={{ span: 6 }} initialValue={localStorage.getItem("umi-locale")}>
-            <Radio.Group buttonStyle="solid" size="small">
-              <Radio.Button value="zh-CN">中 文</Radio.Button>
-              <Radio.Button value="en">ENGLISH</Radio.Button>
-              <Radio.Button value="vi">Tiếng</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-      </Row> */}
-
-    </Form>
-  </Drawer>
+      <Form
+        form={settingForm}
+        // layout="horizontal"
+        initialValues={props.settings}
+        onValuesChange={changeSettings}
+      >
+        <Row gutter={[0,25]}>
+          <Col span={24}>
+            <Form.Item label="模式" name="navTheme" labelCol={{ span: 4 }} size="small">
+              <Segmented
+                options={[
+                  {
+                    label: '白昼',
+                    value: 'light',
+                    icon: <MyIcon type="caladog-day" />,
+                  },
+                  {
+                    label: '暗夜',
+                    value: 'realDark',
+                    icon: <MyIcon type="caladog-night" />,
+                  },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label="标签" name="isTabs" labelCol={{ span: 4 }} valuePropName="checked">
+              <Switch checkedChildren="是" unCheckedChildren="否" />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label="布局" name="layout" labelCol={{ span: 4 }}>
+              <LayoutBox />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label="主题" name="theme" labelCol={{ span: 4 }} size="small">
+              <ThemeBox />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label="颜色" name="colorPrimary" labelCol={{ span: 4 }} size="small">
+              <ColorBox />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </Drawer>
+  )
 };

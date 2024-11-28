@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { api, constant, copyObject, forEach, isEmpty, useAutoObservable, useAutoObservableEvent,produce,startsWith } from '@/common/utils';
+import { api, constant, copyObject, forEach, isEmpty, stringRandom, produce, startsWith } from '@/common/utils';
 import { IFormItem, ILayout, IWindow, IGrid } from '@/common/components';
 import { Button, Col, Form, Input, message, Modal, Row, Radio, Divider,Select, InputNumber, Transfer, Card, Tree, Space, Table, Tabs, Tooltip } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import { zip } from 'rxjs';
 const userOptions = [{ label: '全部', value: 'ALL' }, { label: '指定', value: 'CUSTOMER' }, { label: '特定', value: 'SPECIAL' }];
 const options = [{ label: '全部', value: 'ALL' }, { label: '指定', value: 'CUSTOMER' }];
 const urlOptions = [{ label: '全部', value: 'ALL' }, { label: '指定', value: 'CUSTOMER' }];
+const tenantOptions = [{ label: '全部', value: 'ALL' }, { label: '状态', value: 'STATE' }, { label: '等级', value: 'RANK' }];
 
 export default (props) => {
     const { TabPane } = Tabs;
@@ -32,6 +33,8 @@ export default (props) => {
     const [stagRuleVisible, setSTagRuleVisible] = useState(false);
     const [urlRuleVisible, setUrlRuleVisible] = useState(false);
     const [urlPrefixVisible, setUrlPrefixVisible] = useState(false);
+    const [tenantStateVisible, setTenantStateVisible] = useState(false);
+    const [tenantRankVisible, setTenantRankVisible] = useState(false);
 
     const [disabledNodes, setDisAbledNodes] = useState([]);
     const [utagDataSource, setUTagDataSource] = useState([]);
@@ -39,8 +42,17 @@ export default (props) => {
     const [stagDataSource, setSTagDataSource] = useState([]);
     const [stagKeys, setSTagKeys] = useState([]);
 
+    const [tenantStateDataSource, setTenantStateDataSource] = useState([]);
+    const [tenantStateKeys, setTenantStateKeys] = useState([]);
+
+    const [tenantRankDataSource, setTenantRankDataSource] = useState([]);
+    const [tenantRankKeys, setTenantRankKeys] = useState([]);
+
     const [utagMap, setUTagMap] = useState({});
     const [stagMap, setSTagMap] = useState({});
+
+    const [tenantStateMap, setTenantStateMap] = useState({});
+    const [tenantRankMap, setTenantRankMap] = useState({});
 
     // 组织架构树形结构数据
     const [treeData, setTreeData] = useState([]);
@@ -65,7 +77,28 @@ export default (props) => {
         api.limit.getLimit(id).subscribe({
             next: (datas) => {
                 const data = datas[0];
-                data.ruleUser = data.ruleUser || 'SPECIAL';
+
+                data.ruleTuser = data.ruleTuser || 'ALL';
+                if (data.ruleTuser === 'STATE') {
+                    setTenantStateVisible(true);
+                    setTenantRankVisible(false)
+                    const states = []
+                    forEach((v) => {
+                        states.push(v.limitValue);
+                    }, data.tusers || []);
+                    setTenantStateKeys(states);
+                } else if (data.ruleTuser === 'RANK') {
+                    setTenantStateVisible(false);
+                    setTenantRankVisible(true)
+                    const ranks = []
+                    forEach((v) => {
+                        ranks.push(v.limitValue);
+                    }, data.tusers || []);
+                    setTenantRankKeys(ranks);
+                }
+
+
+                data.ruleUser = data.ruleUser || 'ALL';
                 if (data.ruleUser === 'CUSTOMER') {
                     setUserRuleVisible(true);
                 } else {
@@ -136,14 +169,63 @@ export default (props) => {
 
     const onSaveClick = (limit) => {
         setLoading(true);
+        // limit.ruleUser = limit.ruleUser || 'ALL';
+        // limit.ruleSystemTag = limit.ruleSystemTag || 'ALL';
+        // limit.ruleUserTag = limit.ruleUserTag || 'ALL';
+        // limit.ruleUrl = limit.ruleUrl || 'ALL';
+
+        const stags = [];
+        forEach((v) => {
+            stags.push({ systemName: stagMap[v], systemTag: v });
+        }, stagKeys);
+
+        limit.stags = stags;
+
+        const utags = [];
+        forEach((v) => {
+            utags.push({ tagCode: v, tagName: utagMap[v] });
+        }, utagKeys);
+        limit.utags = utags;
+
+        if (limit.ruleTuser === 'STATE') {
+            const states = []
+            forEach((v) => {
+                states.push({ limitType: 'STATE', limitValue: v, limitName: tenantStateMap[v] });
+            }, tenantStateKeys);
+            limit.tusers = states;
+        } else if (limit.ruleTuser === 'RANK') {
+
+            const ranks = []
+            forEach((v) => {
+                ranks.push({ limitType: 'RANK', limitValue: v, limitName: tenantRankMap[v] });
+            }, tenantRankKeys);
+            limit.tusers = ranks;
+        }
+
+
+
+
+
+
+        const u = [];
+        forEach((v) => {
+            if (v.userId.indexOf('#') !== -1) {
+                // eslint-disable-next-line no-param-reassign
+                const un = R.split('#')(v.userId)[1];
+                v.userId = un;
+                u.push(v);
+            } else {
+                u.push(v);
+            }
+        }, exceptUserDataSource);
+
+        limit.users = u;
+        limit.requests = exceptUrlDataSource;
         api.limit.saveOrUpdateLimit(limit).subscribe({
             next: () => {
-                limit.ruleUser = limit.ruleUser || 'SPECIAL';
-                limit.ruleSystemTag = limit.ruleSystemTag || 'ALL';
-                limit.ruleUserTag = limit.ruleUserTag || 'ALL';
-                limit.ruleUrl = limit.ruleUrl || 'ALL';
+
                 message.success('操作成功!');
-                // window.close();
+                window.close();
                 window.opener.onSuccess();
             }
         }).add(() => setLoading(false));
@@ -168,13 +250,19 @@ export default (props) => {
         } else if (startsWith('/wapi/',url)) {
             o.mode = 'WAPI';
             o.urlPrefix = '';
-        } else if (startsWith('/**')) {
+        } else if (startsWith('/**', url)) {
             o.mode = 'NONE';
             o.urlPrefix = '';
-        } else if (url.indexof ('@') !== -1) {
-            o.mode = 'CUSTOMER';
-            o.urlPrefix = url.substring(0,url.indexOf('@'));
         }
+        if (record.urlPrefix) {
+            o.urlPrefix = record.urlPrefix;
+            o.mode = 'CUSTOMER';
+        }
+        // else if (url.indexof ('@') !== -1) {
+        //     o.mode = 'CUSTOMER';
+        //     o.urlPrefix = url.substring(0,url.indexOf('@'));
+        // }
+
         if (o.mode === 'CUSTOMER') {
             setUrlPrefixVisible(true);
         } else {
@@ -221,6 +309,12 @@ export default (props) => {
             width: 60,
             align: 'center',
             dataIndex: 'method',
+        },
+        {
+            title: 'URL前缀',
+            width: 100,
+            align: 'left',
+            dataIndex: 'urlPrefix',
         },
         {
             title: 'IP',
@@ -379,8 +473,9 @@ export default (props) => {
         // setSTagMap(smap);
         // setSTagDataSource(stags);
         // 权限范围字典 及系统标识字典
-        zip(api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG),api.dict.listChildByParentCode(constant.SYSTEM_POINT_TAG)).subscribe({
-            next: ([data1, data2]) => {
+        zip(api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG), api.dict.listChildByParentCode(constant.SYSTEM_POINT_TAG),
+            api.dict.listChildByParentCode(constant.TENANT_STATE), api.dict.listChildByParentCode(constant.TENANT_RANK)).subscribe({
+                next: ([data1, data2, data3, data4]) => {
                 const utags = [];
                 const umap = {};
                 forEach((v) => {
@@ -398,6 +493,24 @@ export default (props) => {
                 }, data2);
                 setSTagMap(smap);
                 setSTagDataSource(stags);
+
+                    const tmap = {};
+                    const states = [];
+                    forEach((v) => {
+                        states.push({ key: v.dictCode, title: v.dictName });
+                        tmap[v.value] = v.label;
+                    }, data3);
+                    setTenantStateMap(tmap);
+                    setTenantStateDataSource(states);
+
+                    const rmap = {};
+                    const ranks = [];
+                    forEach((v) => {
+                        ranks.push({ key: v.dictCode, title: v.dictName });
+                        rmap[v.value] = v.label;
+                    }, data4);
+                    setTenantRankMap(rmap);
+                    setTenantRankDataSource(ranks);
             }
         });
         loadGroup();
@@ -468,6 +581,7 @@ export default (props) => {
                         setKey(activeKey);
 
                     }}>
+
                     <TabPane tab="用户规则" key="user">
                         <Row style={{ paddingTop: 8 }}>
                             <Col span={24}>
@@ -597,6 +711,75 @@ export default (props) => {
                             </>
                         )}
                     </TabPane>
+                <TabPane tab="租户规则" key="tuser">
+                    <Row style={{ paddingTop: 8 }}>
+                        <Col span={24}>
+                            <Form.Item
+                                labelCol={{ span: 3 }}
+                                name="ruleTuser"
+                                label="租户规则"
+                                rules={[{ whitespace: true, required: false, message: false, max: 50 }]}
+                            >
+                                <Radio.Group
+                                    defaultValue='ALL'
+                                    buttonStyle="solid"
+                                    options={tenantOptions}
+                                    onChange={(e) => {
+                                        const v = e.target.value;
+                                        if (v === 'STATE') {
+                                            setTenantStateVisible(true);
+                                            setTenantRankVisible(false);
+                                        } else if (v === 'RANK') {
+                                            setTenantStateVisible(false);
+                                            setTenantRankVisible(true);
+                                        } else {
+                                            setTenantStateVisible(false);
+                                            setTenantRankVisible(false);
+                                        }
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    {tenantStateVisible && (
+                        <Row>
+                            <Col span={24}>
+                                <Transfer
+                                    titles={['租户状态列表', '已过滤状态']}
+                                    listStyle={{
+                                        width: 350,
+                                        height: 300,
+                                    }}
+                                    render={(item) => item.title}
+                                    dataSource={tenantStateDataSource}
+                                    targetKeys={tenantStateKeys}
+                                    onChange={(targetKeys) => {
+                                        setTenantStateKeys(targetKeys);
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    )}
+                    {tenantRankVisible && (
+                        <Row>
+                            <Col span={24}>
+                                <Transfer
+                                    titles={['租户状态列表', '已过滤状态']}
+                                    listStyle={{
+                                        width: 350,
+                                        height: 300,
+                                    }}
+                                    render={(item) => item.title}
+                                    dataSource={tenantRankDataSource}
+                                    targetKeys={tenantRankKeys}
+                                    onChange={(targetKeys) => {
+                                        setTenantRankKeys(targetKeys);
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                    )}
+                </TabPane>
                     <TabPane tab="业务规则" key="business">
                         <Row style={{ paddingTop: 8 }}>
                             <Col span={24}>
@@ -742,8 +925,7 @@ export default (props) => {
                                             label="请求URL"
                                             rules={[{ whitespace: true, required: false, message: false, max: 50 }]}
                                         >
-                                            <XButton onGetButton={(value) => {
-                                                console.log(value);
+                                        <XButton onGetButton={(value) => {
                                                 urlForm.setFieldsValue({ method: value.reqMethod, buttonName: value.subMenu + '>' + value.buttonName, reqUrl: value.reqUrl });
                                             }} />
                                         </Form.Item>
@@ -831,11 +1013,11 @@ export default (props) => {
                                                             mode:value.mode, method: value.method, ip: value.ip, key: id, resourceId: value.buttonId,priority:value.priority }, ...exceptUrlDataSource];
                                                         if (value.key) {
                                                             const modifyed = produce(exceptUrlDataSource, (draft) => {
-                                                                R.forEach((v) => {
+                                                                forEach((v) => {
                                                                     if (v.key === value.key) {
                                                                         const copy = { resourceName: value.buttonName, url: url,urlPrefix:value.urlPrefix, 
                                                                             mode:value.mode, method: value.method, ip: value.ip, key: id, resourceId: value.buttonId,priority:value.priority };
-                                                                        objectAssign(v, copy);
+                                                                        copyObject(v, copy);
                                                                     }
                                                                 },draft);
                                                             });

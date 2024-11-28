@@ -66,7 +66,7 @@ export default (props) => {
     message.success('登录成功');
     // localStorage.setItem('umi-locale', localStorage.getItem('umi-locale') || 'zh-CN');
     let { redirect } = params;
-    let url = '/dashboard/workplace';
+    let url = '/dashboard/blog';
     if (redirect) {
       const redirectUrlParams = new URL(redirect);
       if (redirectUrlParams.origin === urlParams.origin) {

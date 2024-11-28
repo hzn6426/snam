@@ -30,6 +30,10 @@ import * as position from '@/pages/position/service';
 import * as resource from '@/pages/resource/service';
 import * as uset from '@/pages/uset/service';
 import * as limit from '@/pages/limit/service';
+import * as tenant from '@/pages/tenant/service';
+import * as tmenu from '@/pages/tmenu/service';
+import * as tlog from '@/pages/tlog/service';
+import * as tfunction from '@/pages/tfunction/service';
 
 const api = {
   user,
@@ -63,6 +67,10 @@ const api = {
   hmac,
   mlogger,
   limit,
+  tenant,
+  tmenu,
+  tlog,
+  tfunction,
 };
 
 export default api;

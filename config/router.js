@@ -1,9 +1,9 @@
 export default [
   {
-    path: '/',
-    component: '../layouts/BlankLayout',
-    routes: [
-      {
+    // path: '/',
+    // component: '../layouts/BlankLayout',
+    // routes: [
+    //   {
         path: '/user',
         component: '../layouts/UserLayout',
         routes: [
@@ -25,9 +25,59 @@ export default [
             component: '../layouts/WindowLayout',
             routes: [
               {
+                name: '租户接口',
+                path: '/new/tfunction/:id',
+                component: './tfunction/save',
+              },
+              {
+                name: '编辑租户菜单',
+                path: '/new/tmenu/save',
+                component: './tmenu/save',
+              },
+              {
+                name: '编辑租户按钮',
+                path: '/new/tmenu/button',
+                component: './tmenu/button',
+              },
+              {
+                name: '租户新增',
+                path: '/new/tenant/:id',
+                component: './tenant/save',
+              },
+              {
+                name: '账单管理',
+                path: '/new/tenant/bill/:id',
+                component: './tenant/bill',
+              },
+              {
+                name: '充值管理',
+                path: '/new/tenant/charge/:id',
+                component: './tenant/charge',
+              },
+              {
+                name: '功能管理',
+                path: '/new/tenant/function/:id',
+                component: './tenant/function',
+              },
+              {
+                name: '授权管理',
+                path: '/new/tenant/resource/:id',
+                component: './tenant/resource',
+              },
+              {
                 name: '角色授权',
                 path: '/new/role/resource/:id',
                 component: './role/resource',
+              },
+              {
+                name: '用户授权',
+                path: '/new/user/resource/:id',
+                component: './user/resource',
+              },
+              {
+                name: '用户权限',
+                path: '/new/user/privilege/:id',
+                component: './user/privilege',
               },
               {
                 name: '角色分配用户',
@@ -130,6 +180,11 @@ export default [
                 component: './logger/detail',
               },
               {
+                name: '日志详情',
+                path: '/new/tlog/:id',
+                component: './tlog/detail',
+              },
+              {
                 name: '接入日志详情',
                 path: '/new/mlogger/:id',
                 component: './mlogger/detail',
@@ -145,25 +200,31 @@ export default [
       },
       {
         path: '/',
-        component: '../layouts/TabsLayout',
+        component: '../layouts/MainLayout',
         routes: [
           {
             path: '/',
             name: '首页',
             redirect: '/dashboard/blog',
           },
-          {
-            path: '/dashboard',
-            name: '工作台',
-            icon: 'dashboard',
-            routes: [
+          // {
+          //   // path: '/dashboard',
+          //   // name: '工作台',
+          //   // icon: 'dashboard',
+          //   // routes: [
+
+          //   name: '工作台',
+          //   icon: 'smile',
+          //   path: '/dashboard/workspace',
+          //   component: './dashboard/workspace',
+          // },
               {
                 name: '更新日志',
                 icon: 'smile',
                 path: '/dashboard/blog',
                 component: './dashboard/blog',
-              },
-            ],
+                //   },
+                // ],
           },
           // 系统管理
           {
@@ -259,10 +320,33 @@ export default [
                 path: '/system/limit',
                 component: './limit',
               },
+              {
+                name: '租户管理',
+                icon: 'smile',
+                path: '/system/tenant',
+                component: './tenant',
+              },
+              {
+                name: '租户菜单',
+                icon: 'smile',
+                path: '/system/tmenu',
+                component: './tmenu',
+              },
+              {
+                name: '租户日志',
+                icon: 'smile',
+                path: '/system/tlog',
+                component: './tlog',
+              },
+              {
+                name: '租户接口',
+                icon: 'smile',
+                path: '/system/tfunction',
+                component: './tfunction',
+              },
             ],
           },
         ],
       },
-    ],
-  },
+
 ];

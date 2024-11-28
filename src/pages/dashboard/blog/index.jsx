@@ -9,6 +9,29 @@ export default () => {
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
 
+          <Timeline.Item>
+            <Title level={4}>[3.1.0] 2024.04.06</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新的UI-Antd升级到最新版本(5.x)，前端如果要使用新的UI，请切换newui分支</li>
+                <li><a href="https://gitee.com/ifrog/snam-standalone">单机版</a>发布，不需要任何外部依赖直接启动</li>
+                <li>添加自定义缓存前缀，同一个缓存服务器可以运行多套系统</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化依赖POM，为减少依赖，将对应的依赖打包成一个依赖文件</li>
+                <li>为能够运行，提供对应的依赖(根目录)，可自行安装到本地maven进行本地运行</li>
+                <li>优化docker配置，切换docker镜像能够自动适配服务器内存大小</li>
+                <li>MbaseServiceImpl基础服务优化，优化批量操作方法</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
         <Timeline.Item>
             <Title level={4}>[3.0.9] 2023.11.12</Title>
             <Title level={5}>新增功能</Title>

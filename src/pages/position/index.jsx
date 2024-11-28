@@ -23,10 +23,10 @@ import {
     data2States,
 } from '@/common/utils';
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
-import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Tag } from 'antd';
+import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Tag, Tooltip } from 'antd';
 import {
     IFormItem,
-    IGrid,
+    IAGrid,
     ISearchForm,
     IStatus,
     ITag,
@@ -36,12 +36,18 @@ import {
     ISearchTree,
     ILayout,
     IFieldset,
+    IButton
 } from '@/common/components';
 import {
     SolutionOutlined,
     ApartmentOutlined,
     LockTwoTone,
     UnlockTwoTone,
+    DiffOutlined,
+    SunOutlined,
+    ApiOutlined,
+    RestOutlined,
+    UserAddOutlined,
 } from '@ant-design/icons';
 import {
     concatMap,
@@ -88,7 +94,7 @@ export default () => {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(50);
     const [dataSource, setDataSource] = useState([]);
     const [searchLoading, setSearchLoading] = useState(false);
     const [disabledActive, setDisabledActive] = useState(true);
@@ -105,46 +111,59 @@ const LockRenderer = (props) => {
     //列初始化
     const initColumns = [
         {
-            title: '状态',
+            headerName: '序号',
+            textAlign: 'center',
+            checkboxSelection: true,
+            headerCheckboxSelection: true,
+            lockPosition: 'left',
             width: 80,
-            dataIndex: 'state',
-            cellRenderer: 'stateCellRenderer',
+            cellStyle: { userSelect: 'none' },
+            valueFormatter: (params) => {
+                return `${parseInt(params.node.id) + 1}`;
+            },
+            // rowDrag: true,
         },
         {
-            title: '锁定',
+            headerName: '状态',
+            width: 80,
+            field: 'state',
+            cellRenderer: StateRenderer,
+        },
+        {
+            headerName: '锁定',
             width: 70,
-            dataIndex: 'beLock',
-            cellRenderer:'lockRenderer'
+            field: 'beLock',
+            cellRenderer: LockRenderer
         },
         {
-            title: '职位名称',
+            headerName: '职位名称',
             width: 100,
-            dataIndex: 'postName',
+            field: 'postName',
         },
         {
-            title: '权限范围',
+            headerName: '权限范围',
             width: 160,
-            dataIndex: 'permScope',
+            field: 'permScope',
             valueFormatter: (x) => permScope[x.value],
         },
         {
-            title: '是否主管',
+            headerName: '是否主管',
             width: 100,
-            dataIndex: 'beManager',
-            cellRenderer: 'tagCellRenderer',
+            field: 'beManager',
+            cellRenderer: TagRenderer,
         },
         {
-            title: '备注',
+            headerName: '备注',
             width: 160,
             align: 'left',
-            dataIndex: 'note',
+            field: 'note',
         },
     ];
 
 
     const [onChange, selectedKeys, setSelectedKeys] = useObservableAutoCallback((event) =>
         event.pipe(
-            debounceTime(300),
+            // debounceTime(300),
             distinctUntilChanged(),
             tap((keys) => {
                 setDisabledActive(beHasRowsPropNotEqual('state', 'UNACTIVE', keys));
@@ -301,19 +320,22 @@ const LockRenderer = (props) => {
         searchPositionByGroup(pageNo, pageSize);
     }, [selectedGroupId]);
 
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
+
     return (
         <Row gutter={5}>
-            <Col span={7}>
+            <Col span={6}>
                 <ISearchTree
                     iconRender={loopGroup}
                     treeData={treeData}
                     placeholder="输入组织或职位进行搜索"
                     checkable={false}
                     blockNode={true}
+                    bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
                     onSelect={(keys, { selected }) => {
                         if (selected) {
                             setSelectedGroupId(keys[0]);
-                            searchPositionByGroup(pageNo, pageSize);
+                            // searchPositionByGroup(pageNo, pageSize);
                         }
                     }}
                     titleRender={(node) => (
@@ -325,15 +347,17 @@ const LockRenderer = (props) => {
                     )}
                 />
             </Col>
-            <Col span={17}>
-                <IGrid
+            <Col span={18}>
+                <IAGrid
                     title="职位列表"
-                    initColumns={initColumns}
-                    components={{
-                        stateCellRenderer: StateRenderer,
-                        tagCellRenderer: TagRenderer,
-                        lockRenderer: LockRenderer,
-                    }}
+                    columns={initColumns}
+                    height={offsetHeight - 66}
+                    gridName="perm_position_list"
+                    // components={{
+                    //     stateCellRenderer: StateRenderer,
+                    //     tagCellRenderer: TagRenderer,
+                    //     lockRenderer: LockRenderer,
+                    // }}
                     request={(pageNo, pageSize) => searchPositionByGroup(pageNo, pageSize)}
                     dataSource={dataSource}
                     total={total}
@@ -344,40 +368,49 @@ const LockRenderer = (props) => {
                     onDoubleClick={(record) => onDoubleClick(record)}
                     toolBarRender={[
                         <Permit authority="position:save" key="new">
+                            <Tooltip title="创建职位">
                             <Button
                                 size='small'
-                                type="primary"
+                                icon={<DiffOutlined />}
+                                // type="primary"
                                 onClick={onNewClick}
                             >
-                                新建
+                               
                             </Button>
+                            </Tooltip>
+                        </Permit>
+                    ]}
+                    pageToolBarRender={[
+                        <Permit authority="position:use">
+                            <IButton type="warning"
+                                icon={<SunOutlined />} size="small" key="use" onClick={handleUse} disabled={disabledActive}>
+                                启用
+                            </IButton>
+                        </Permit>,
+                        <Permit authority="position:stop">
+                            <IButton size="small" icon={< ApiOutlined />}
+                                type="warning" key="stop" onClick={handleStop} disabled={disabledStop}>
+                                停用
+                            </IButton>
+                        </Permit>,
+                        <Permit authority="position:delete">
+                            <IButton danger size="small" type="primary"
+                                icon={<RestOutlined />} key="delete" onClick={() => showDeleteConfirm('删除职位后,对应的权限将失效, 确定要删除选中职位吗？', () => handleDelete())}>
+                                删除
+                            </IButton>
+                        </Permit>,
+                        <Permit authority="position:savePositionRole">
+                            <IButton size="small" type="info" icon={<SolutionOutlined />} key="assign" onClick={handleAssignRoles}>
+                                角色
+                            </IButton>
                         </Permit>
                     ]}
                 />
-                {selectedKeys?.length > 0 && (
+                {/* {selectedKeys?.length > 0 && (
                     <IFooterToolbar>
-                        <Permit authority="position:use">
-                            <Button key="use" onClick={handleUse} disabled={disabledActive}>
-                                启用
-                            </Button>
-                        </Permit>
-                        <Permit authority="position:stop">
-                            <Button danger key="stop" onClick={handleStop} disabled={disabledStop}>
-                                停用
-                            </Button>
-                        </Permit>
-                        <Permit authority="position:delete">
-                            <Button type="danger" key="delete" onClick={() => showDeleteConfirm('删除职位后,对应的权限将失效, 确定要删除选中职位吗？', () => handleDelete())}>
-                                删除
-                            </Button>
-                        </Permit>
-                        <Permit authority="position:savePositionRole">
-                            <Button type="danger" key="assign" onClick={handleAssignRoles}>
-                                分配角色
-                            </Button>
-                        </Permit>
+
                     </IFooterToolbar>
-                )}
+                )} */}
             </Col>
         </Row>
 

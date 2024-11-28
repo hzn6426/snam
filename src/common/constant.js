@@ -10,6 +10,8 @@ export default Object.freeze({
   KEY_USER_BUTTON_PERMS: '_USER_BUTTON_PERMS',
   // 用户token存储KEY-sessionStorage
   KEY_USER_TOKEN: 'SNAPPER_USER_TOKEN',
+  // 当前用户
+  KEY_CURRENT_USER: '_CURRENT_USER',
   //词典数据缓存
   KEY_DICT: 'SNAPPER_DICT_',
   //用户数据缓存
@@ -21,7 +23,9 @@ export default Object.freeze({
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
   SYSTEM_LOGIN_TITLE: 'Snapper权限框架系统',
-  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.0.9',
+  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.1.0',
+  // SYSTEM_LOGIN_TITLE: '权限管理系统',
+  // SYSTEM_LOGIN_DESC: '',
   // basicLayout 刷新
   SUBJECT_SYSTEM_REFRESH: '_subject_system_refresh',
   // 用户属性
@@ -34,6 +38,10 @@ export default Object.freeze({
   DICT_RESOURCE_TYPE_TAG: 'RESOURCE_TYPE_TAG',
   // 系统端标识
   SYSTEM_POINT_TAG: 'SYSTEM_POINT_TAG',
+  // 租户状态
+  TENANT_STATE: 'TENANT_STATE',
+  // 租户级别
+  TENANT_RANK: 'TENANT_RANK',
   // 缓存超时时间
   TIME_OUT_FOR_CACHE: 30,
   // localstorage key前缀
@@ -83,6 +91,24 @@ export default Object.freeze({
   API_USER_LIST_GROUP_USER_BY_USET: '/authority/user/listGroupUsersByUset',
   // 获取所有TAG对应的组织列表和用户
   API_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG: '/authority/group/treeAllGroupsAndUsersByTag',
+  // 获取用户拥有的菜单权限
+  API_USER_LIST_PERM_MENUS: '/authority/user/listPermMenus',
+  // 获取用户拥有的按钮权限
+  API_USER_LIST_PERM_BUTTONS: '/authority/user/listPermButtons',
+  // 保存用户菜单权限
+  API_USER_SAVE_PERM_MENU: '/authority/user/saveMenuPerm',
+  // 保存用户按钮权限
+  API_USER_SAVE_PERM_BUTTON: '/authority/user/saveButtonPerm',
+  // 获取用户权限拥有的菜单和按钮
+  API_USER_LIST_PERM_MENUS_AND_BUTTONS: '/authority/user/listPermMenusAndButtons',
+  // 获取用户对应的角色列表
+  API_USER_LIST_ROLES: '/authority/user/listRoles',
+  // 获取用户对应的用户组列表 
+  API_USER_LIST_USETS: '/authority/user/listUsets',
+  // 获取用户对应的职位列表
+  API_USER_LIST_POSITIONS: '/authority/user/listPositions',
+  // 获取ACTION对应的菜单和按钮
+  API_USER_LIST_ACTION_PERM_MENUS_AND_BUTTONS: '/authority/user/listActionPermMenusAndButtons',
   //= ==============================================//
   //                   角色管理                      //
   //= ==============================================//
@@ -116,7 +142,11 @@ export default Object.freeze({
   API_ROLE_BY_POSITION: '/authority/role/listByPosition',
   // 刷新所有角色权限
   API_ROLE_REFRESH_PRIVILEGES: '/authority/role/refreshPrivileges',
-  
+  // 获取系统所有的租户资源信息,以树的方式展示
+  API_ROLE_TREE_ALL_TENANT_MENUS: '/authority/resource/treeAllTenantMenus',
+  // 获取菜单对应的按钮列表
+  API_ROLE_LIST_ALL_TENANT_BUTTONS_BY_MENU: '/authority/resource/listAllTenantButtonsByMenu',
+
   //==============================================================
   // 字典
   //==============================================================
@@ -380,4 +410,64 @@ export default Object.freeze({
   API_LIMIT_STOP: '/authority/gateLimit/stop',
   //刷新缓存
   API_LIMIT_REFRESH_CACHE: '/authority/gateLimit/refreshCache',
+
+  //= ==============================================//
+  //                   租户管理                      //
+  //= ==============================================//
+  // 租户查找
+  API_TENANT_SEARCH: '/authority/tenant/search',
+  // 租户增删改查
+  API_TENANT: '/authority/tenant',
+  // 锁定
+  API_TENANT_LOCK: '/authority/tenant/lock',
+  // 解锁
+  API_TENANT_UNLOCK: '/authority/tenant/unlock',
+  // 分配菜单
+  API_TENANT_ASSIGN_MENUS: '/authority/tenant/assignMenus',
+  // 分配按钮
+  API_TENANT_ASSIGN_BUTTONS: '/authority/tenant/assignButtons',
+  // 根据菜单获取对应按钮
+  API_TENANT_LIST_ALL_BUTTONS_BY_MENU: '/authority/tenant/listAllButtonsByMenu',
+  // 获取所有菜单
+  API_TENANT_LIST_ALL_MENUS: '/authority/tenant/listAllMenus',
+  // 初始化超级用户
+  API_TENANT_DO_INIT_SUSER: '/authority/tenant/doInitSUser',
+  // 充值
+  API_TENANT_CHARGE: '/authority/tenant/charge',
+  // 查询费用
+  API_TENANT_SEARCH_FEE_BY_TENANT: '/authority/tenant/searchTenantFee',
+  // 租户模糊补全
+  API_TENANT_LIST_BY_KEYWORD: '/authority/tenant/listByKeyWord',
+  //= ==============================================//
+  //                      租户菜单管理                //
+  //= ==============================================//
+  API_TMENU_TREE_ALL: '/authority/tmenu/treeAllMenus',
+  API_TMENU_SEARCH_BUTTON_AND_API_BY_MENU: '/authority/tbutton/searchButtonsAndApiByMenu',
+  API_TMENU_SAVE_OR_UPDATE: '/authority/tmenu/saveOrUpdateMenu',
+  API_TMENU: '/authority/tmenu',
+  //= ==============================================//
+  //                      租户按钮管理                //
+  //= ==============================================//
+  API_TBUTTON_SAVE_OR_UPDATE: '/authority/tbutton/saveOrUpdate',
+  API_TBUTTON: '/authority/tbutton',
+  API_TBUTTON_LIST_BY_KEYWORDS: '/authority/tbutton/listByKeyWord',
+  API_TBUTTON_GET_BUTTON_AND_API_BY_ID: '/authority/tbutton/getButtonAndApiById',
+  //= ==============================================//
+  //                租户日志管理                      //
+  //= ==============================================//
+  // 日志查询
+  API_TLOGGER_SEARCH: '/authority/tuserLog/search',
+  //查看详情
+  API_TLOGGER: '/authority/tuserLog',
+  //= ==============================================//
+  //                      租户功能管理                //
+  //= ==============================================//
+  API_FUNCTION_SEARCH: '/authority/function/search',
+  API_FUNCTION: '/authority/function',
+  API_FUNCTION_ONLINE: '/authority/function/doOnline',
+  API_FUNCTION_OFFLINE: '/authority/function/doOffline',
+  API_FUNCTION_OPEN: '/authority/function/openFunction',
+  API_FUNCTION_CLOSE: '/authority/function/closeFunction',
+  API_FUNCTION_LIST_ALL_ONLINE_FUNCTION: '/authority/function/listAllOnlineFunction',
+  API_FUNCTION_LIST_BY_TENANT: '/authority/function/listByTenant',
 });

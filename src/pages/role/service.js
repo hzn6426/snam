@@ -67,3 +67,12 @@ export function saveUserRole(userRole) {
 export function refreshPrivileges() {
   return ipost(constant.API_ROLE_REFRESH_PRIVILEGES);
 }
+
+// 树的方式展示所有租户资源
+export function treeAllTenantMenus() {
+  return iget(constant.API_ROLE_TREE_ALL_TENANT_MENUS);
+}
+// 根据菜单获取按钮列表
+export function listAllTenantButtonsByMenu(menuId) {
+  return iget(`${constant.API_ROLE_LIST_ALL_TENANT_BUTTONS_BY_MENU}?menuId=${menuId}`);
+}

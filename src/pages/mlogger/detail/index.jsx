@@ -11,6 +11,7 @@ import { useParams } from 'umi';
 
 export default (props) => {
     const params = useParams();
+    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? {} : localStorage.getItem("settings"));
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [current, setCurrent] = useAutoObservable((inputs$) =>
@@ -72,7 +73,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exchangeParam}
-                        theme="light"
+                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120px"
@@ -87,7 +88,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.dataContent}
-                        theme="light"
+                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120px"
@@ -103,7 +104,7 @@ export default (props) => {
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exceptionMsg}
-                        theme="light"
+                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120"

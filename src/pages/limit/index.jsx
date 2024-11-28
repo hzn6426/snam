@@ -1,10 +1,11 @@
-import { Button, Form, message } from 'antd';
+import { Button, Form, Tooltip, message } from 'antd';
 import { useRef, useState } from 'react';
 import {
     IFooterToolbar,
     IFormItem,
-    IGrid,
+    IAGrid,
     ISearchForm,
+    IButton,
     IStatus,
     Permit
   } from '@/common/components';
@@ -21,6 +22,10 @@ import {
 import {
     PlusOutlined,
     LockTwoTone,
+    DiffOutlined,
+    RestOutlined,
+    ApiOutlined,
+    SunOutlined,
     UnlockTwoTone 
 } from '@ant-design/icons';
 import { of } from 'rxjs';
@@ -56,80 +61,87 @@ const userOptMap = option2TextObject(userOptions);
 //列初始化
 const initColumns = [
     {
-        title: '#',
-        width: 60,
-        dataIndex: 'rowNo',
-        valueGetter: (params) => params.node.rowIndex + 1
+        headerName: '序号',
+        textAlign: 'center',
+        checkboxSelection: true,
+        headerCheckboxSelection: true,
+        lockPosition: 'left',
+        width: 80,
+        cellStyle: { userSelect: 'none' },
+        valueFormatter: (params) => {
+            return `${parseInt(params.node.id) + 1}`;
+        },
+        // rowDrag: true,
     },
     {
-        title: '状态',
-        width: 70,
-        dataIndex: 'state',
-        cellRenderer:'stateRenderer'
+        headerName: '状态',
+        width: 80,
+        field: 'state',
+        cellRenderer: StateRenderer
     },
     {
-        title: '锁定',
+        headerName: '锁定',
         width: 70,
-        dataIndex: 'beLock',
-        cellRenderer:'lockRenderer'
+        field: 'beLock',
+        cellRenderer: LockRenderer
       },
     {
-        title: '名称',
+        headerName: '名称',
         width: 120,
         align: 'left',
-        dataIndex: 'name',
+        field: 'name',
     },
     {
-        title: '用户规则',
+        headerName: '用户规则',
         width: 90,
         align: 'center',
-        dataIndex: 'ruleUser',
+        field: 'ruleUser',
         valueFormatter: (x) => userOptMap[x.value]
     },
     {
-        title: '业务规则',
+        headerName: '业务规则',
         width: 90,
         align: 'center',
-        dataIndex: 'ruleUserTag',
+        field: 'ruleUserTag',
         valueFormatter: (x) => optMap[x.value]
     },
     {
-        title: '系统规则',
+        headerName: '系统规则',
         width: 90,
         align: 'center',
-        dataIndex: 'ruleSystemTag',
+        field: 'ruleSystemTag',
         valueFormatter: (x) => optMap[x.value]
     },
     {
-        title: '请求规则',
+        headerName: '请求规则',
         width: 90,
         align: 'center',
-        dataIndex: 'ruleUrl',
+        field: 'ruleUrl',
         valueFormatter: (x) => optMap[x.value]
     },
     {
-        title: '单位时间',
+        headerName: '单位时间',
         width: 90,
         align: 'center',
-        dataIndex: 'durationInSecond',
+        field: 'durationInSecond',
     },
     {
-        title: '允许流量',
+        headerName: '允许流量',
         width: 90,
         align: 'center',
-        dataIndex: 'allowVolume',
+        field: 'allowVolume',
     },
     {
-        title: '流速(每秒)',
+        headerName: '流速(每秒)',
         width: 110,
         align: 'center',
-        dataIndex: 'speedInSecond',
+        field: 'speedInSecond',
     },
     {
-        title: '备注',
+        headerName: '备注',
         width: 160,
         align: 'left',
-        dataIndex: 'note',
+        field: 'note',
     }
 ];
 
@@ -233,16 +245,18 @@ export default () => {
         });
     };
 
-
+    const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0];
     return (<>
-        <IGrid
+        <IAGrid
             ref={ref}
             title="限流列表"
-            components={{
-                stateRenderer: StateRenderer,
-                lockRenderer: LockRenderer
-            }}
-            initColumns={initColumns}
+            height={offsetHeight - 66}
+            gridName="perm_limit_list"
+            // components={{
+            //     stateRenderer: StateRenderer,
+            //     lockRenderer: LockRenderer
+            // }}
+            columns={initColumns}
             request={(pageNo, pageSize) => search(pageNo, pageSize)}
             dataSource={dataSource}
             pageNo={pageNo}
@@ -252,21 +266,44 @@ export default () => {
             onDoubleClick={(record) => onDoubleClick(record.id)}
             toolBarRender={[
                 <Permit key="limit:save" authority="limit:save">
+                    <Tooltip title="新建限流">
+
                 <Button
                     key="add"
                     size="small"
-                    type="primary"
-                    icon={<PlusOutlined />}
+                            icon={<DiffOutlined />}
                     onClick={() => onNewClick()}
-                >
-                    新建
+                        >
                 </Button>
+                    </Tooltip>
                 </Permit>,
 
             ]}
+            pageToolBarRender={[
+                <Permit authority="limit:use">
+                    <IButton key="active" type="warning" size='small'
+                        icon={<SunOutlined />} onClick={() => showOperationConfirm('只能启用一条限流规则，本条启用后，其他的启用的将自动停用，确定启用吗？', () => handleUse())} loading={loading} disabled={disabledActive}>
+                        启用
+                    </IButton>
+                </Permit>,
+                <Permit authority="limit:stop">
+                    <IButton type="warning" size='small'
+                        icon={< ApiOutlined />} key="stop" onClick={() => handleStop()} disabled={disabledStop} loading={loading}>
+                        停用
+                    </IButton>
+                </Permit>,
+                <Permit authority="limit:delete">
+                    <IButton danger
+                        size='small'
+                        type="primary"
+                        icon={<RestOutlined />} key="delete" onClick={() => showDeleteConfirm('确定删除选中限流器吗？', () => handleDelete())}>
+                        删除
+                    </IButton>
+                </Permit>
+            ]}
             clearSelect={searchLoading}
         />
-        <IFooterToolbar visible={!isEmpty(selectedKeys)}>
+        {/* <IFooterToolbar visible={!isEmpty(selectedKeys)}>
             <Permit authority="limit:use">
                 <Button key="active" onClick={() => showOperationConfirm('只能启用一条限流规则，本条启用后，其他的启用的将自动停用，确定启用吗？', () => handleUse())} loading={loading} disabled={disabledActive}>
                     启用
@@ -282,7 +319,7 @@ export default () => {
                     删除
                 </Button>
             </Permit>
-        </IFooterToolbar>
+        </IFooterToolbar> */}
     </>)
 
 }

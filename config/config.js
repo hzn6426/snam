@@ -1,25 +1,19 @@
-import { defineConfig } from 'umi'
-import settings from './defaultSettings'
-import router from './router'
-import proxy from './proxy'
-const { REACT_APP_ENV } = process.env
+import { defineConfig } from 'umi';
+import proxy from './proxy';
+import router from './router';
+const { REACT_ENV } = process.env;
 export default defineConfig({
   mfsu: {},
   dynamicImport: {
-    loading: '@/components/PageLoading/index'
+    loading: '@/components/PageLoading',
   },
   routes: router,
   ignoreMomentLocale: true,
-  theme: {
-    'primary-color': settings.primaryColor
-  },
   locale: {
     default: 'zh-CN',
-    antd: true,
-    baseNavigator: false
+    antd: false,
+    baseNavigator: false,
   },
-  proxy: proxy[REACT_APP_ENV || 'dev'],
-  manifest: {
-    basePath: '/'
-  }
+  proxy: proxy[REACT_ENV || 'dev'],
+  // workerLoader:{}
 })
