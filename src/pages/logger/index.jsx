@@ -250,6 +250,7 @@ export default (props) => {
                 ref={ref}
                 title="日志列表"
                 height={offsetHeight - 66}
+                gridName="perm_user_log_list"
                 // components={{
                 //     stateCellRenderer: StateRenderer,
                 // }}

@@ -195,6 +195,7 @@ export default (props) => {
             <IAGrid
                 ref={ref}
                 title="参数列表"
+                gridName="perm_param_list"
                 height={offsetHeight - 66}
                 // columnsStorageKey="_cache_role_columns"
                 columns={initColumns}

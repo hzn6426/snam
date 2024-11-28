@@ -352,6 +352,7 @@ const LockRenderer = (props) => {
                     title="职位列表"
                     columns={initColumns}
                     height={offsetHeight - 66}
+                    gridName="perm_position_list"
                     // components={{
                     //     stateCellRenderer: StateRenderer,
                     //     tagCellRenderer: TagRenderer,

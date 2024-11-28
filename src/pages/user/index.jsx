@@ -510,7 +510,7 @@ export default (props) => {
           <IFormItem name="postName" label="职位" xtype="input" />
         </XSearchForm> */}
         <IAGrid
-          gridName="businessUser_List"
+              gridName="perm_user_list"
           // searchName="businessUser_Search"
           ref={ref}
           title="用户列表"

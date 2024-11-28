@@ -220,6 +220,7 @@ export default () => {
     return (<>
         <IAGrid
             title="用户组列表"
+            gridName="perm_uset_list"
             // components={{
             //     stateCellRenderer: StateRenderer,
             //     lockRenderer: LockRenderer

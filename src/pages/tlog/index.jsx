@@ -203,6 +203,7 @@ export default (props) => {
             <IAGrid
                 ref={ref}
                 title="日志列表"
+                gridName="perm_tenant_log_list"
                 height={offsetHeight - 66}
                 columns={initColumns}
                 request={(pageNo, pageSize) => search(pageNo, pageSize)}

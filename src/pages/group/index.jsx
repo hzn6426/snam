@@ -530,6 +530,7 @@ export default (props) => {
                 <div style={{ marginBottom: '15px', border: 0 }}>
                     <IAGrid
                         title="用户列表"
+                        gridName="perm_group_list"
                         columns={initColumns}
                         request={(pageNo, pageSize) => searchUserByGroup(pageNo, pageSize)}
                         dataSource={dataSource}
@@ -647,6 +648,7 @@ export default (props) => {
                     <div> */}
                 </div>
                 <IAGrid
+                    gridName="perm_group_unassign_list"
                     title="未分配列表"
                     columns={initColumns}
                     request={(pageNo, pageSize) => searchNotAssignedUser(pageNo, pageSize)}

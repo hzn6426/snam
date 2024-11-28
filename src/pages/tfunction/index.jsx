@@ -228,7 +228,7 @@ export default (props) => {
     return (<>
         <Spin spinning={searchLoading}>
             <IAGrid
-                gridName="businessFunction_List"
+                gridName="perm_function_list"
                 title="功能列表"
                 ref={ref}
                 columns={initColumns}

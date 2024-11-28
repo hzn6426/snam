@@ -260,6 +260,7 @@ export default (props) => {
         <>
             <ILayout type="hbox" spans="7 10 7" >
                 <IAGrid
+                    gridName="perm_table_list"
                     toolBarRender={[
                         <Input.Search onSearch={(value) => setTableSearchValue(value)} enterButton type='text'
                             style={{ marginRight: '5px' }}
@@ -284,6 +285,7 @@ export default (props) => {
                             style={{ marginRight: '5px' }}
                             size='small' key="columnSearch" placeholder='输入列名或描述进行搜索' allowClear />]}
                         title="表格列列表"
+                        gridName="perm_column_list"
                         key="column"
                         height={offsetHeight - 66}
                         // components={{
@@ -318,6 +320,7 @@ export default (props) => {
                     <IAGrid
                         title="权限列列表"
                         key="perm"
+                        gridName="perm_column_perm_list"
                         height={offsetHeight - 66}
                         onSelectedChanged={onPermChange}
                         request={false}

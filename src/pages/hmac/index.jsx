@@ -211,6 +211,7 @@ export default (props) => {
                 ref={ref}
                 title="接入用户列表"
                 height={offsetHeight - 66}
+                gridName="perm_hmac_user_list"
                 // height={tableHight}
                 // components={{
                 //     stateCellRenderer: StateRenderer,

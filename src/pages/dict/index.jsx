@@ -426,6 +426,7 @@ export default (props) => {
                         ref={parentRef}
                         title="父字典列表"
                         key="parent"
+                        gridName="perm_dict_parent_list"
                         height={offsetHeight - 66}
                         // components={{
                         //     stateCellRenderer: StateRenderer,
@@ -506,6 +507,7 @@ export default (props) => {
                         ref={childRef}
                         title="子字典列表"
                         key="child"
+                        gridName="perm_dict_child_list"
                         height={offsetHeight - 66}
                         // components={{
                         //     stateCellRenderer: StateRenderer,

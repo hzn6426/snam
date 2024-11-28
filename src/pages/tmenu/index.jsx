@@ -446,6 +446,7 @@ export default (props) => {
                     </ISearchForm> */}
                     <IAGrid
                         ref={ref}
+                        gridName="perm_tenant_button_list"
                         title={<Space>按钮列表
                             {/* <span>按钮列表</span>
                             <Checkbox style={{ marginLeft: '20px' }} size='large' checked={searchChecked} onChange={onChangeSearch}>关联菜单</Checkbox>

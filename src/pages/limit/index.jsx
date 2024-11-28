@@ -251,6 +251,7 @@ export default () => {
             ref={ref}
             title="限流列表"
             height={offsetHeight - 66}
+            gridName="perm_limit_list"
             // components={{
             //     stateRenderer: StateRenderer,
             //     lockRenderer: LockRenderer

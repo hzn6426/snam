@@ -345,7 +345,7 @@ export default (props) => {
                 </XSearchForm> */}
 
                 <IAGrid
-                    gridName="businessTenant_List"
+                    gridName="perm_tenant_list"
                     ref={ref}
                     title="租户列表"
                     columns={initColumns}

@@ -193,6 +193,7 @@ export default (props) => {
             <IAGrid
                 ref={ref}
                 title="日志列表"
+                gridName="perm_hmac_log_list"
                 height={offsetHeight - 66}
                 // components={{
                 //     stateCellRenderer: StateRenderer,

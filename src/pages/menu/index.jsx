@@ -456,6 +456,7 @@ export default (props) => {
                         //     tagActionCellRenderer: TagActionRenderer,
                         //     lockRenderer: LockRenderer
                         // }}
+                        gridName="perm_button_list"
                         columns={initColumns}
                         height={offsetHeight - 66}
                         request={(pageNo, pageSize) => search(pageNo, pageSize)}
