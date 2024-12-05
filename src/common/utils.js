@@ -5,7 +5,7 @@ import { parse } from 'querystring';
 import * as R from 'ramda';
 import { useEffect, useState } from 'react';
 import stringRandom from 'string-random';
-
+import defaultSettings from '../../config/defaultSettings';
 
 
 
@@ -720,9 +720,11 @@ export const INewWindow = (props) => {
 
 
   let settings = localStorage.getItem("settings");
-  console.log(settings);
+  // console.log(settings);
   if (settings) {
     browser.localStorage.setItem("settings", settings);
+  } else {
+    browser.localStorage.setItem("settings", JSON.stringify(defaultSettings));
   }
   const getPageQuery = () => parse(url.split('?')[1]);
   window.getPageQuery = getPageQuery;

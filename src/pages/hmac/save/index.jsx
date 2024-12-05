@@ -11,7 +11,7 @@ export default (props) => {
     const params = useParams();
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
-    const [bindUserType, setBindUserType] = useState('tenant');
+    const [bindUserType, setBindUserType] = useState('user');
 
     const [current, setCurrent] = useAutoObservable((inputs$) =>
         inputs$.pipe(
@@ -21,7 +21,10 @@ export default (props) => {
             map((user) => {
                 const u =  user[0];
                 if (u.bindType === 'user') {
+                    setBindUserType('user');
                     u.userId = u.orgId + '#' + u.userNo;
+                } else {
+                    setBindUserType('tenant');
                 }
                 return u;
             })

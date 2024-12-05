@@ -569,7 +569,6 @@ export default (props) => {
                   disabled={disabledActive}
                   loading={loading}
                   icon={<AimOutlined />}
-
                 >
                   激活
                 </IButton>
@@ -620,6 +619,7 @@ export default (props) => {
                   danger
                   size='small'
                   key="reset"
+                  type="primary"
                   disabled
                   icon={< HistoryOutlined />}
                   onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>

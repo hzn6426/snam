@@ -1,4 +1,3 @@
-import constant from '../src/common/constant';
 
 const proSettings = {
   // navTheme: 'light',
@@ -7,16 +6,15 @@ const proSettings = {
   // contentWidth: 'Fluid',
   // fixedHeader: true,
   // fixSiderbar: true,
-  // title: constant.SYSTEM_TITLE,
   // pwa: false,
-  // iconfontUrl: '',
   // headerHeight: 48,
   // siderWidth: 200,
+  // "colorPrimary": "#1890ff",
   // splitMenus: false,
   // colorWeak: false,
   // isTabs: false,
 
-  "navTheme": "realDark",
+  "navTheme": "light",
   "layout": "side",
   "contentWidth": "Fluid",
   "fixedHeader": true,
@@ -25,8 +23,20 @@ const proSettings = {
   "headerHeight": 40,
   "siderWidth": 200,
   "isTabs": true,
-  "colorPrimary": "#F5222D",
+  "colorPrimary": "#FA541C",
   "splitMenus": false,
-  "theme": "summerTheme"
+
+  // "navTheme": "realDark",
+  // "layout": "side",
+  // "contentWidth": "Fluid",
+  // "fixedHeader": true,
+  // "fixSiderbar": true,
+  // "pwa": false,
+  // "headerHeight": 40,
+  // "siderWidth": 200,
+  // "isTabs": true,
+  // "colorPrimary": "#F5222D",
+  // "splitMenus": false,
+  // "theme": "summerTheme"
 };
 export default proSettings;

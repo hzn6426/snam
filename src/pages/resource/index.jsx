@@ -1185,7 +1185,7 @@ export default () => {
                                         bodyStyle={{ height: offsetHeight - 192, overflow: 'scroll' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
-                                                <Permit authority="resource:saveUsetBusinessPerm">
+                                                {/* <Permit authority="resource:saveUsetBusinessPerm">
                                                     <IButton
                                                         size="small"
                                                     key="cancel"
@@ -1195,7 +1195,7 @@ export default () => {
                                                     onClick={() => resetUserPerm()}
                                                         icon={<IssuesCloseOutlined />}
                                                         style={{ marginRight: '10px' }}>重置</IButton>
-                                                </Permit>
+                                                </Permit> */}
                                                 <Permit authority="resource:saveUsetBusinessPerm">
                                                     <IButton
                                                         size="small"
