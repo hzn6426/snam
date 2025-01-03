@@ -32,6 +32,14 @@ export default (props) => {
         [params.id],
     )
 
+    const onChangeBindType = (v) => {
+        setBindUserType(v);
+        if (v !== current.bindType) {
+            setCurrent({ ...current, userId: '', bindType: v });
+        }
+
+    }
+
     const [onSaveClick] = useAutoObservableEvent([
         tap(() => setLoading(true)),
         switchMap((user) => api.hmac.saveOrUpdateHmacUser(user)),
@@ -90,7 +98,7 @@ export default (props) => {
                     xtype="select"
                     defaultValue={'tenant'}
                     required={true}
-                    onChange={(v) => setBindUserType(v)}
+                    onChange={(v) => onChangeBindType(v)}
                     options={() => [
                         { label: '用户', value: 'user' },
                         { label: '租户', value: 'tenant' },

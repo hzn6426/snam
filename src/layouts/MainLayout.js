@@ -44,7 +44,7 @@ export default (props) => {
             .loadUserMenus()
             .subscribe({
                 next: (data) => {
-                    setMenuData(data[0].children);
+                    setMenuData(data[0]?.children);
                 },
             })
             .add(() => setLoading(false));
@@ -53,6 +53,9 @@ export default (props) => {
     useEffect(() => {
         getCurrentUser();
         loadMenu();
+        return () => {
+            setTabList([]);
+        };
     }, []);
 
 
@@ -77,10 +80,10 @@ export default (props) => {
         setPathname(addItem.pathname);
     // 缓存页面
         let index = tabList.findIndex((item) => { return item.key == addItem.pathname });
-        console.log(index);
         if (index < 0) {
             let newTabs = tabList.concat({ key: addItem.pathname, tab: routeCache[addItem.pathname] });
             setTabList(newTabs);
+            refreshTab(addItem.pathname);
         }
     }
 

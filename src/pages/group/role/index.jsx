@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { api, data2Option, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { IFormItem, ILayout, IWindow } from '@/common/components';
-import { message } from 'antd';
+import { IFormItem, ILayout, IWindow, IIF } from '@/common/components';
+import { message, Alert } from 'antd';
 
 export default (props) => {
     const { clientWidth, clientHeight } = window?.document?.documentElement;
@@ -47,9 +47,14 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="userId" />
             <IFormItem xtype="hidden" name="orgId" />
-            <ILayout type="vbox">
-                <IFormItem xtype='checkbox' name="roleIds" label="角色列表" ruleType='array' options={roles} />
-            </ILayout>
+            <IIF test={roles && roles.length > 0}>
+                <ILayout type="vbox">
+                    <IFormItem xtype='checkbox' name="roleIds" label="角色列表" ruleType='array' options={roles} />
+                </ILayout>
+            </IIF>
+            <IIF test={roles && roles.length == 0}>
+                <Alert message="没有角色数据" type="info" />
+            </IIF>
         </IWindow>
     )
 }

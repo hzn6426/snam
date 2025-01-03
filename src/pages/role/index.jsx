@@ -17,7 +17,8 @@ import {
   pluck,
   state2Option,
   useAutoObservableEvent,
-  useObservableAutoCallback
+  useObservableAutoCallback,
+  dateFormat
 } from '@/common/utils';
 import {
   PlusOutlined,
@@ -94,6 +95,17 @@ const initColumns = [
     headerName: '角色名称',
     width: 100,
     field: 'roleName',
+  },
+  {
+    headerName: '创建人',
+    width: 100,
+    field: 'createUserCnName',
+  },
+  {
+    headerName: '创建时间',
+    width: 160,
+    field: 'createTime',
+    valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
   },
   {
     headerName: '备注',

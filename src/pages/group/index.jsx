@@ -1,5 +1,5 @@
 import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, IButton } from '@/common/components';
-import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, useAutoObservableEvent } from '@/common/utils';
+import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, dateFormat } from '@/common/utils';
 import {
     ApartmentOutlined,
     DeleteOutlined,
@@ -108,6 +108,17 @@ export default (props) => {
             align: 'left',
             width: 150,
             field: 'userEmail',
+        },
+        {
+            headerName: '创建人',
+            width: 90,
+            field: 'createUserCnName',
+        },
+        {
+            headerName: '创建时间',
+            width: 160,
+            field: 'createTime',
+            valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
         },
         {
             headerName: '备注',

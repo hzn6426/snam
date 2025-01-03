@@ -10,6 +10,52 @@ export default () => {
         <Timeline>
 
           <Timeline.Item>
+            <Title level={4}>[3.2.2] 2025.1.4</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 用户头像下拉-刷新权限功能，管理员给当前用户分配权限后，当前用户点击此按钮即可生效</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>添加用户、角色、用户组、职位等系列查询权限，只能查询权限相关数据</li>
+                <li>各功能添加日志，以便进行操作跟踪</li>
+                <li>优化按钮权限，将查询功能按钮进行无权限处理，权限按钮只关注持久化操作</li>
+                <li>优化分配按钮和菜单权限后的缓存操作</li>
+                <li>优化设置按钮为无权限后的缓存操作</li>
+                <li>第三方授权界面优化，角色、用户组、用户添加创建用户及创建时间列</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
+            <Title level={4}>[3.2.0] 2024.11.30</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新的UI美化增强，查询条件简洁化（高级查询开发中...）</li>
+                <li>租户系统功能上线，/eapi/开头访问，包含诸多功能，新建租户、初始化超管、设置功能、账单等</li>
+                <li>添加用户可直接分配角色功能</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化授权过滤器，添加白名单功能</li>
+                <li>优化限流功能，可以生效多个限流器</li>
+                <li>优化第三方接入功能，可以通过租户和用户方式进行接入</li>
+                <li>MbaseServiceImpl优化批量操作方法</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
             <Title level={4}>[3.1.0] 2024.04.06</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>
