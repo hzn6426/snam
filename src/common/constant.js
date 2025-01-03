@@ -23,7 +23,7 @@ export default Object.freeze({
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
   SYSTEM_LOGIN_TITLE: 'Snapper权限框架系统',
-  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.1.0',
+  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.2.2',
   // SYSTEM_LOGIN_TITLE: '权限管理系统',
   // SYSTEM_LOGIN_DESC: '',
   // basicLayout 刷新
