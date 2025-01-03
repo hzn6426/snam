@@ -33,6 +33,30 @@ export default () => {
           </Timeline.Item>
 
           <Timeline.Item>
+            <Title level={4}>[3.2.1] 2024.12.14</Title>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化租户授权拦截器处理（单机版和微服务版）</li>
+                <li>优化第三方授权校验拦截器根据第三方用户绑定类型进行初始化用户</li>
+                <li>优化第三方授权认证拦截器根据第三方用户绑定类型进行认证</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复租户初始化超管时组织ID错误问题</li>
+                <li>修复@TenantAction不生效问题</li>
+                <li>修复租户数据权限SPI调用出错问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
             <Title level={4}>[3.2.0] 2024.11.30</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>
