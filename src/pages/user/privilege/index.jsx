@@ -418,19 +418,47 @@ export default (props) => {
 
     const [bePostSelect, setBePostSelect] = useState(false);
 
+    const [current, setCurrent] = useState();
 
-    const [current, setCurrent] = useAutoObservable((inputs$) =>
-        inputs$.pipe(
-            map(([id]) => split(id, '_')),
-            switchMap(([uid, gid]) => zip(
-                api.user.getUser(uid),
-                api.user.listPermMenusAndButtons(uid, gid),
-                api.user.listRoles(uid, gid),
-                api.user.listUsets(uid, gid),
-                api.user.listPositions(uid, gid),
-                // api.group.treeAllGroupsAndUsers()
-                )),
-            map(([users, menus, roles, usets, positions, pmenus]) => {
+    // const [current, setCurrent] = useAutoObservable((inputs$) =>
+    //     inputs$.pipe(
+    //         map(([id]) => split(id, '_')),
+    //         switchMap(([uid, gid]) => zip(
+    //             api.user.getUser(uid),
+    //             api.user.listPermMenusAndButtons(uid, gid),
+    //             api.user.listRoles(uid, gid),
+    //             api.user.listUsets(uid, gid),
+    //             api.user.listPositions(uid, gid),
+    //             // api.group.treeAllGroupsAndUsers()
+    //             )),
+    //         map(([users, menus, roles, usets, positions, pmenus]) => {
+    //             setUserDataSource(users);
+    //             addIcon(menus);
+    //             setTreeData(menus);
+    //             setRoleDataSource(roles);
+    //             setUsetDataSource(usets);
+    //             setPostDataSource(positions);
+    //             setDataSource(pmenus);
+    //             // setPostTreeData(groupAndUsers);
+    //             const [uid, gid] = split(params.id, '_');
+    //             return { userId: uid, groupId: gid };
+    //         })
+    //     ),
+    //     [params.id],
+    // )
+
+    const init = (id) => {
+        const uid = split(id, '_')[0];
+        const gid = split(id, '_')[1];
+        zip(
+            api.user.getUser(uid),
+            api.user.listPermMenusAndButtons(uid, gid),
+            api.user.listRoles(uid, gid),
+            api.user.listUsets(uid, gid),
+            api.user.listPositions(uid, gid),
+    // api.group.treeAllGroupsAndUsers()
+        ).subscribe({
+            next: ([users, menus, roles, usets, positions, pmenus]) => {
                 setUserDataSource(users);
                 addIcon(menus);
                 setTreeData(menus);
@@ -440,13 +468,14 @@ export default (props) => {
                 setDataSource(pmenus);
                 // setPostTreeData(groupAndUsers);
                 const [uid, gid] = split(params.id, '_');
-                return { userId: uid, groupId: gid };
-            })
-        ),
-        [params.id],
-    )
+                setCurrent({ userId: uid, groupId: gid });
+            }
+        })
+    }
 
-
+    useEffect(() => {
+        init(params.id)
+    }, [params.id])
 
     const loadGroup = () => {
         api.group.treeAllGroupsAndUsers().subscribe({

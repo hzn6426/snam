@@ -198,15 +198,20 @@ const initColumns = [
     field: 'userEmail',
   },
   {
-    headerName: '备注',
-    width: 150,
-    field: 'note',
+    headerName: '创建人',
+    width: 90,
+    field: 'createUserCnName',
   },
   {
-    headerName: '创建日期',
+    headerName: '创建时间',
     width: 160,
     field: 'createTime',
     valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
+  },
+  {
+    headerName: '备注',
+    width: 150,
+    field: 'note',
   },
 ];
 
@@ -216,7 +221,10 @@ const userState = {
   STOPPED: { text: '停用', status: 'Default' },
   LOCKED: { text: '锁定', status: 'Error' },
 };
-
+let cacheParam = {};
+let cacheBeBindGroup = false;
+let cachePageNo = 1;
+let cachePageSize = 50;
 export default (props) => {
   const [searchForm] = Form.useForm();
   const { clientWidth, clientHeight } = window?.document?.documentElement;
@@ -298,7 +306,7 @@ export default (props) => {
       switchMap((keys) => api.user.activeUser(keys)),
       tap(() => {
         message.success('操作成功!');
-        refresh();
+        search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup);
       }),
       shareReplay(1),
     ],
@@ -311,7 +319,7 @@ export default (props) => {
       switchMap((keys) => api.user.stopUser(keys)),
       tap(() => {
         message.success('操作成功!');
-        refresh();
+        search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup);
       }),
       shareReplay(1),
     ],
@@ -324,7 +332,7 @@ export default (props) => {
       switchMap((keys) => api.user.unstopUser(keys)),
       tap(() => {
         message.success('操作成功!');
-        refresh();
+        search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup);
       }),
       shareReplay(1),
     ],
@@ -337,7 +345,7 @@ export default (props) => {
       switchMap((keys) => api.user.deleteUser(keys)),
       tap(() => {
         message.success('操作成功!');
-        refresh();
+        search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup);
       }),
       shareReplay(1),
     ],
@@ -350,7 +358,7 @@ export default (props) => {
       switchMap((keys) => api.user.resetUserPasswd(keys)),
       tap(() => {
         message.success('重置密码成功, 请到对应邮箱查看新密码!');
-        refresh();
+        search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup);
       }),
       shareReplay(1),
     ],
@@ -365,6 +373,10 @@ export default (props) => {
     if (beBindGroup === true) {
       params.groupId = selectedGroupId || '';
     }
+    cacheBeBindGroup = beBindGroup;
+    cacheParam = params;
+    cachePageNo = pageNo;
+    cachePageSize = pageSize;
     api.user
       .searchUser(param)
       .subscribe({
@@ -393,7 +405,7 @@ export default (props) => {
       title: '用户权限',
       width: 1280,
       height: 850,
-      callback: () => refresh()
+      callback: () => search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup)
     });
   }
 
@@ -411,7 +423,7 @@ export default (props) => {
       title: '用户授权',
       width: 1000,
       height: 700,
-      callback: () => refresh()
+      callback: () => search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup)
     });
   }
 
@@ -421,19 +433,19 @@ export default (props) => {
       title: '新建用户',
       width: 700,
       height: 600,
-      callback: () => refresh()
+      callback: () => search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup)
     })
   };
 
-  const [onDoubleClick] = useAutoObservableEvent([
-    tap((id) => INewWindow({
+  const onDoubleClick = (id) => {
+    INewWindow({
       url: '/new/user/' + id,
       title: '编辑用户',
       width: 700,
       height: 600,
-      callback: () => refresh()
-    })),
-  ]);
+      callback: () => search(cachePageNo, cachePageSize, cacheParam, cacheBeBindGroup)
+    })
+  }
 
   const treeAllGroups = () => {
     api.group.treeAllGroups().subscribe({
@@ -510,7 +522,7 @@ export default (props) => {
           <IFormItem name="postName" label="职位" xtype="input" />
         </XSearchForm> */}
         <IAGrid
-              gridName="perm_user_list"
+              // gridName="perm_user_list"
           // searchName="businessUser_Search"
           ref={ref}
           title="用户列表"
@@ -569,7 +581,6 @@ export default (props) => {
                   disabled={disabledActive}
                   loading={loading}
                   icon={<AimOutlined />}
-
                 >
                   激活
                 </IButton>
@@ -620,6 +631,7 @@ export default (props) => {
                   danger
                   size='small'
                   key="reset"
+                  type="primary"
                   disabled
                   icon={< HistoryOutlined />}
                   onClick={() => showOperationConfirm('重置密码后,新密码将发送到用户邮箱,确定重置选中用户密码吗？', () => onResetPasswd(selectedKeys))}>

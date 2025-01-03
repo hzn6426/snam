@@ -15,7 +15,8 @@ export default (props) => {
 
     useEffect(() => {
         if (localStorage.getItem("settings")) {
-            setSettings(JSON.parse(localStorage.getItem("settings")));
+            const json = JSON.parse(localStorage.getItem("settings"));
+            setSettings(json);
         }
     }, []);
 

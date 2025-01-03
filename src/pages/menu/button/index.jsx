@@ -62,8 +62,8 @@ export default (props) => {
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>
                 </IFormItem>
-                <IFormItem name="permAction" label="权限标识" xtype="input" max={30} labelCol={{ flex: '110px' }} tooltip="修改后可能导致数据权限不生效,请谨慎修改!" />
-                <IFormItem name="actionRef" label="权限引用" xtype="input" max={30} labelCol={{ flex: '110px' }} tooltip="引用某个数据权限标识,以满足相同的数据权限!" />
+                <IFormItem name="permAction" label="权限标识" xtype="input" max={50} labelCol={{ flex: '110px' }} tooltip="修改后可能导致数据权限不生效,请谨慎修改!" />
+                <IFormItem name="actionRef" label="权限引用" xtype="input" max={50} labelCol={{ flex: '110px' }} tooltip="引用某个数据权限标识,以满足相同的数据权限!" />
             </ILayout>
         </IWindow>
     )

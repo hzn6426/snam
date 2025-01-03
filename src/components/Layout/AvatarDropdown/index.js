@@ -1,7 +1,8 @@
 import React from 'react';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Dropdown } from 'antd';
+import { LogoutOutlined, SettingOutlined, CloudSyncOutlined } from '@ant-design/icons';
+import { Dropdown, message } from 'antd';
 import { history } from 'umi';
+import { api, constant } from '@/common/utils';
 // import api from '@/services';
 // import { wrapObservable } from '@/utils/RxjsUtil';
 // import { getPageQuery } from '@/utils/utils';
@@ -15,6 +16,15 @@ export default (props) => {
         history.push('/user/login');
       };
 
+    const refreshPrivilege = () => {
+        api.user.loadUserButtons().subscribe({
+            next: (br) => {
+                sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || []);
+                message.success('刷新权限成功');
+            }
+        });
+    }
+
     const items = [
         // {
         //     key: 'center',
@@ -25,6 +35,11 @@ export default (props) => {
             key: 'settings',
             icon: <SettingOutlined />,
             label: <span onClick={() => { props.onSetting() }}>主题布局</span>,
+        },
+        {
+            key: 'refreshPrivilege',
+            icon: <CloudSyncOutlined />,
+            label: <span onClick={() => { refreshPrivilege() }}>刷新权限</span>,
         },
         {
             key: 'logout',

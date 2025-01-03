@@ -11,7 +11,7 @@ export default (props) => {
     const params = useParams();
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
-    const [bindUserType, setBindUserType] = useState('tenant');
+    const [bindUserType, setBindUserType] = useState('user');
 
     const [current, setCurrent] = useAutoObservable((inputs$) =>
         inputs$.pipe(
@@ -21,13 +21,24 @@ export default (props) => {
             map((user) => {
                 const u =  user[0];
                 if (u.bindType === 'user') {
+                    setBindUserType('user');
                     u.userId = u.orgId + '#' + u.userNo;
+                } else {
+                    setBindUserType('tenant');
                 }
                 return u;
             })
         ),
         [params.id],
     )
+
+    const onChangeBindType = (v) => {
+        setBindUserType(v);
+        if (v !== current.bindType) {
+            setCurrent({ ...current, userId: '', bindType: v });
+        }
+
+    }
 
     const [onSaveClick] = useAutoObservableEvent([
         tap(() => setLoading(true)),
@@ -87,7 +98,7 @@ export default (props) => {
                     xtype="select"
                     defaultValue={'tenant'}
                     required={true}
-                    onChange={(v) => setBindUserType(v)}
+                    onChange={(v) => onChangeBindType(v)}
                     options={() => [
                         { label: '用户', value: 'user' },
                         { label: '租户', value: 'tenant' },

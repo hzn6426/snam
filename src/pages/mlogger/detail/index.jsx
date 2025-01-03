@@ -11,7 +11,7 @@ import { useParams } from 'umi';
 
 export default (props) => {
     const params = useParams();
-    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? {} : localStorage.getItem("settings"));
+    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? {} : JSON.parse(localStorage.getItem("settings")));
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [current, setCurrent] = useAutoObservable((inputs$) =>
@@ -91,7 +91,7 @@ export default (props) => {
                         theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
-                        height="120px"
+                        height="160px"
                         basicSetup={{ lineNumbers: false }}
                         extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
                     />

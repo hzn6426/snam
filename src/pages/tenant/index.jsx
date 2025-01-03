@@ -316,6 +316,19 @@ export default (props) => {
         });
     };
 
+    const [onDelete] = useAutoObservableEvent(
+        [
+            tap(() => setLoading(true)),
+            switchMap((keys) => api.tenant.deleteTenant(keys)),
+            tap(() => {
+                message.success('操作成功!');
+                refresh();
+            }),
+            shareReplay(1),
+        ],
+        () => setLoading(false),
+    );
+
     const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
 
@@ -407,6 +420,19 @@ export default (props) => {
                                 loading={loading}
                             >
                                 解锁
+                            </IButton>
+                        </Permit>,
+                        <Permit authority="tenant:delete">
+                            <IButton
+                                danger
+                                type="primary"
+                                key="delete"
+                                size="small"
+                                icon={<RestOutlined />}
+                                onClick={() => showDeleteConfirm('确定删除选中租户吗?', () => onDelete(selectedKeys))}
+                                loading={loading}
+                            >
+                                删除
                             </IButton>
                         </Permit>,
                         <Permit authority="tenant:charge">

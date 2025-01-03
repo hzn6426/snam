@@ -73,16 +73,23 @@ const initColumns = [
         field: 'appKey',
     },
     {
-        headerName: '过期时间',
-        width: 150,
-        field: 'expireDate',
-        valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
+        headerName: '关联类型',
+        width: 80,
+        align: 'center',
+        field: 'bindType',
+        valueFormatter: (x) => x.value === 'user' ? '用户' : '租户',
     },
     {
         headerName: '关联用户',
         width: 140,
         align: 'center',
-        field: 'userRealCnName',
+        field: 'bindUser',
+    },
+    {
+        headerName: '过期时间',
+        width: 150,
+        field: 'expireDate',
+        valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
     {
         headerName: '白名单',

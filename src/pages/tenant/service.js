@@ -55,6 +55,10 @@ export function searchFeeByTenant(condition) {
     return isearch(constant.API_TENANT_SEARCH_FEE_BY_TENANT, condition);
 }
 
+export function deleteTenant(ids) {
+    return idelete(constant.API_TENANT, ids);
+}
+
 export function listByKeyword(keyword) {
     let cacheKey;
     if (!keyword) {

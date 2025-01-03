@@ -274,7 +274,7 @@ export default React.forwardRef((props, ref) => {
   ];
 
   return (
-    <div className="ag-container" style={{ height: height || 300 }}>
+    <div className={"ag-container" + (colorBgBase == '#fff' ? "" : "-dark")} style={{ height: height || 300 }}>
 
       <div className="ag-tools" style={{ display: optionsHide?.topTool ? 'none' : '', }}>
         <div className='ag-tools-left'>
