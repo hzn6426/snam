@@ -163,7 +163,7 @@ const AdvanceSearch = (props) => {
         // width="600px"
         size={size}
         bordered={false}
-        bodyStyle={{ maxHeight: '250px', overflow: 'scroll', paddingRight:'2px' }}
+        bodyStyle={{ maxHeight: '250px', overflow: 'hide', padding: '5px' }}
       // visible={visible}
       >
         <Form form={form} size='small' layout="horizontal" className="snam-form">
@@ -176,7 +176,7 @@ const AdvanceSearch = (props) => {
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Select options={andOr} defaultValue="AND" disabled={idex == 0} onChange={onFormChange} />
+                  <Select options={andOr} defaultValue="AND" disabled={idex == 0 || props.disabled == true} onChange={onFormChange} />
                 </Form.Item>
               </Col>
               <Col span={7}>
@@ -188,6 +188,7 @@ const AdvanceSearch = (props) => {
                 >
                   <Select
                     options={searchColumns}
+                    disabled={props.disabled == true}
                     onChange={(v) => {
                       const comp = dynamicChange(v);
                       setUi(
@@ -207,7 +208,7 @@ const AdvanceSearch = (props) => {
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Select options={cdn} defaultValue="EQ" />
+                  <Select options={cdn} defaultValue="EQ" disabled={props.disabled == true} />
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -217,13 +218,13 @@ const AdvanceSearch = (props) => {
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  {item.component}
+                  {React.cloneElement(item.component, { disabled: props.disabled == true })}
                 </Form.Item>
               </Col>
             </Row>
           ))}
 
-          <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
+          <div style={{ float: 'right', paddingRight: '10px', display: (props.hideButton == true ? 'none' : '') }} key="bottom" >
             <Button
               key="add"
               size='small'
@@ -241,7 +242,7 @@ const AdvanceSearch = (props) => {
 
             <Button
               key="submit"
-              type="danger"
+              danger
               size='small'
               onClick={() => {
                 const rows = produce(ui, (draft) => {

@@ -277,6 +277,7 @@ export default (props) => {
                     onSelectedChanged={onTableChange}
                     clearSelect={searchLoading}
                     showSizeChanger={false}
+                    showQuickJumper={false}
                     // showTotal={false}
                 />
                 <>

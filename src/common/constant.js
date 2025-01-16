@@ -22,8 +22,8 @@ export default Object.freeze({
   SYSTEM_ROUTE_LOGIN: '/user/login',
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
-  SYSTEM_LOGIN_TITLE: 'Snapper权限框架系统',
-  SYSTEM_LOGIN_DESC: '做专业的权限管理 — 演示环境3.2.2',
+  SYSTEM_LOGIN_TITLE: 'Snapper Admin',
+  SYSTEM_LOGIN_DESC: '专业的权限管理—演示环境3.2.2',
   // SYSTEM_LOGIN_TITLE: '权限管理系统',
   // SYSTEM_LOGIN_DESC: '',
   // basicLayout 刷新
@@ -388,6 +388,12 @@ export default Object.freeze({
   API_RESOURCE_SAVE_USET_DATA_PERM: '/authority/resource/saveUsetDataPerm',
   // 保存用户组列权限
   API_RESOURCE_SAVE_USET_COLUMN_PERM: '/authority/resource/saveUsetColumnPerm',
+  // 获取用户按钮数据权限
+  API_RESOURCE_USER_FUNCTION_DATA_PERM: '/authority/resource/getUserFunctionDataPerm',
+  // 获取用户业务数据权限
+  API_RESOURCE_USER_BUSINESS_DATA_PERM: '/authority/resource/getUserBusinessDataPerm',
+  // 获取用户列数据权限
+  API_RESOURCE_USER_COLUMN_DATA_PERM: '/authority/resource/getUserColumnDataPerm',
   //= ==============================================//
   //                   外部用户授权管理                //
   //= ==============================================//

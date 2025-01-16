@@ -1,32 +1,29 @@
-import { IFieldset, IFor, IFormItem, ILayout, IWindow, ISearchTree, IStatus, IAGrid, IIF } from '@/common/components';
+import { IAdvanceSearch, IFieldset, IFormItem, IIF, ILayout, ISearchTree, IStatus, IWindow } from '@/common/components';
 import {
-    api, contains, copyObject, forEach, forEachObject, groupBy, isEmpty, mapObjIndexed, produce, useAutoObservable, useAutoObservableEvent, split, constant
-    , data2Option,
+    api,
+    constant,
+    copyObject,
+    data2Option,
     data2TextObject,
-    moment,
+    forEach, forEachObject,
+    isEmpty,
     isFunction,
-    pluck,
+    moment,
+    split
 } from '@/common/utils';
-import { Button, Card, Checkbox, Col, Space, Tree, message, Tooltip, Tabs, Table, Form, DatePicker, Input, Row, Radio, Switch, Alert } from 'antd';
-import { useRef, useState, useEffect } from 'react';
+import { Alert, Card, Checkbox, Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space, Switch, Table, Tabs, Tooltip, Transfer } from 'antd';
+import { useEffect, useState } from 'react';
 import { zip } from 'rxjs';
-import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
 
 import {
-    BarsOutlined,
     ApartmentOutlined,
-    UserOutlined,
-    SaveOutlined,
+    BarsOutlined,
+    ProjectTwoTone,
     ScheduleOutlined,
-    AppstoreTwoTone,
-    AppstoreOutlined,
     UnorderedListOutlined,
-    ProjectOutlined,
-    ProjectTwoTone
+    UserOutlined
 } from '@ant-design/icons';
-import { use } from '@/pages/position/service';
-import { set } from 'lscache';
 
 
 let permScopes = {};
@@ -55,6 +52,8 @@ const userState = {
     STOPPED: { text: '停用', status: 'Default' },
     LOCKED: { text: '锁定', status: 'Error' },
 };
+
+const dataPermViewOption = [{ label: "全部", value: "ALL" }, { label: "用户", value: "USER" }, { label: "用户组", value: "USET" }]
 
 const UserStateRenderer = (props) => {
     return props.value && <IStatus value={props.value} state={userState} />;
@@ -318,62 +317,63 @@ const addIcon = (data) => {
 };
 
 export default (props) => {
-    const ref = useRef();
     const params = useParams();
-
-   
 
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     // const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
-    const [loading, setLoading] = useState(false);
-    // 表格数据源
-    const [roleDataSource, setRoleDataSource] = useState([])
+    // 角色数据源
+    const [roleOptions, setRoleOptions] = useState([]);
     const [usetDataSource, setUsetDataSource] = useState([])
-    const [userDataSource, setUserDataSource] = useState([])
-    const [postDataSource, setPostDataSource] = useState([])
 
-    const [usetSelectedKeys, setUsetSelectedKeys] = useState([]);
-    const [userSelectedKeys, setUserSelectedKeys] = useState([]);
-    const [postSelectedKeys, setPostSelectedKeys] = useState([]);
+    //数据权限查看维度
+    const [dataPermView, setDataPermView] = useState('ALL');
+    const [selectRoleId, setSelectRoleId] = useState('');
+    //选中的按钮ID
+    const [selectButtionId, setSelectButtionId] = useState('')
+    const [selectButtonPermId, setSelectButtonPermId] = useState('');
+    // 是否过滤权限按钮
+    const [beFilterPermButton, setBeFilterPermButton] = useState(false);
 
-    const [userClearSelect, setUserClearSelect] = useState(false);
-    const [usetClearSelect, setUsetClearSelect] = useState(false);
-    const [postClearSelect, setPostClearSelect] = useState(false);
+    // 树显示
+    const [postTreeVisible, setPostTreeVisible] = useState(true);
+    // 选中的自定义职位权限范围
+    const [permGroupOrUserId, setPermGroupOrUserId] = useState([]);
+    // 用户对应的职位ID
+    const [postitionId, setPostitionId] = useState('');
+    // 职位用户组织树
+    const [postTreeData, setPostTreeData] = useState([]);
+    // 选中的自定义职位权限范围
+    const [postPermGroupOrUserId, setPostPermGroupOrUserId] = useState([]);
+    // 用户选择的用户组ID
+    const [selectedUsetId, setSelectedUsetId] = useState('ALL');
+    //选择的权限按钮对象
+    const [buttonRecord, setButtonRecord] = useState({});
+    // 业务权限按钮渲染
+    const [uiAnd, setUiAnd] = useState([]);
+    const [uiOr, setUiOr] = useState([]);
 
-    // 列表选中数据ID列表
-    const [selectedKeys, setSelectedKeys] = useState([]);
+    const [beHaveAndCondition, setBeHaveAndCondition] = useState(false);
+    const [beHaveOrCondition, setBeHaveOrCondition] = useState(false);
+
+    // 权限范围
+    const [permScope, setPermScope] = useState();
+
     // 组织架构树形结构数据
     const [treeData, setTreeData] = useState([]);
     // 权限范围选择属性结构
     const [permTreeData, setPermTreeData] = useState([]);
-    // 选中的用户ID
-    const [selectedUserId, setSelectedUserId] = useState();
-    // 选中的用户组织ID
-    const [selectedUserGroupId, setSelectedUserGroupId] = useState();
-    // 选中的自定义职位权限范围
-    const [permGroupOrUserId, setPermGroupOrUserId] = useState([]);
     // 表格数据源
     const [dataSource, setDataSource] = useState([]);
     // 排除表格数据源
     const [exceptDataSource, setExceptDataSource] = useState([]);
     const [exceptSelectedKeys, setExceptSelectedKeys] = useState([]);
-    //   // 权限范围可选项
-    //   const [permScopeOptions, setPermScopeOptions] = useState([]);
-    // 权限范围
-    const [permScope, setPermScope] = useState();
-    // 选中功能的权限范围
-    const [originPermScope, setOriginPermScope] = useState();
-    // 选择的权限ID
-    const [selectedPermId, setsSelectedPermId] = useState();
-    // 选中功能的tag
-    const [selectedTag, setSelectedTag] = useState();
-    // 权限类型
-    const [permType, setPermType] = useState('user');
+
 
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
     const [form] = Form.useForm();
-    const [bform] = Form.useForm();
+    const [bformAnd] = Form.useForm();
+    const [bformOr] = Form.useForm();
     const [cform] = Form.useForm();
     const [postForm] = Form.useForm();
 
@@ -388,83 +388,278 @@ export default (props) => {
     const [specialColumns, setSpecialColumns] = useState([]);
 
     const [tableSelectColumns, setTableSelectColumns] = useState({});
-    const [ui, setUi] = useState([]);
+
 
     const [columnUi, setColumnUi] = useState([]);
-    const [selectedRecord, setSelectedRecord] = useState();
 
     const [disabledNodes, setDisAbledNodes] = useState([])
 
-    // 数据权限是否OR条件
-    const [beOrChecked, setBeOrChecked] = useState(false);
-    // 数据权限是否强制追加相同列条件
-    const [beForceChecked, setBeForceChecked] = useState(false);
-
-    // 用户组树节点
-    const [usetTreeData, setUsetTreeData] = useState([]);
-    // 用户选择的用户组ID
-    const [selectedUsetId, setSelectedUsetId] = useState();
 
     const [userKeyMap, setUserKeyMap] = useState({});
     const [userGroupKeyMap, setUserGroupKeyMap] = useState({});
     const [userIdGroupKeyMap, setUserIdGroupKeyMap] = useState({});
 
-    // 分配用户窗口中树的数据
-    const [postTreeData, setPostTreeData] = useState([]);
-    // 树显示
-    const [treeVisible, setTreeVisible] = useState(false);
-    // 选中的自定义职位权限范围
-    const [postPermGroupOrUserId, setPostPermGroupOrUserId] = useState([]);
-
-    const [bePostSelect, setBePostSelect] = useState(false);
 
     const [current, setCurrent] = useState();
 
-    // const [current, setCurrent] = useAutoObservable((inputs$) =>
-    //     inputs$.pipe(
-    //         map(([id]) => split(id, '_')),
-    //         switchMap(([uid, gid]) => zip(
-    //             api.user.getUser(uid),
-    //             api.user.listPermMenusAndButtons(uid, gid),
-    //             api.user.listRoles(uid, gid),
-    //             api.user.listUsets(uid, gid),
-    //             api.user.listPositions(uid, gid),
-    //             // api.group.treeAllGroupsAndUsers()
-    //             )),
-    //         map(([users, menus, roles, usets, positions, pmenus]) => {
-    //             setUserDataSource(users);
-    //             addIcon(menus);
-    //             setTreeData(menus);
-    //             setRoleDataSource(roles);
-    //             setUsetDataSource(usets);
-    //             setPostDataSource(positions);
-    //             setDataSource(pmenus);
-    //             // setPostTreeData(groupAndUsers);
-    //             const [uid, gid] = split(params.id, '_');
-    //             return { userId: uid, groupId: gid };
-    //         })
-    //     ),
-    //     [params.id],
-    // )
+    const onDataPermViewChange = (v) => {
+        setDataPermView(v);
+    }
+
+    //获取职位信息
+    const getPosition = (id) => {
+        zip(api.position.getPosition(id), api.position.listEntrusByPosition(id)).subscribe({
+            next: ([data, data2]) => {
+                setPostPermGroupOrUserId(data2);
+                const position = data[0];
+                postForm.setFieldsValue(position);
+            }
+        });
+    }
+
+    const loadGroup = () => {
+        api.group.treeAllGroupsAndUsers().subscribe({
+            next: (data) => {
+                loopGroup(data, true, true);
+                setPermTreeData(data);
+                setPostTreeData(data);
+            }
+        });
+    };
+
+    const renderBusinessUI = (perm, beAnd) => {
+
+        const aliaNames = [];
+        const ad = {};
+        const adConditionAlias = {};
+        const tableNames = [];
+        const tableAliasMap = {};
+        forEach((v) => {
+            aliaNames.push(v.aliasName);
+            tableNames.push(v.tableName);
+            adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
+            ad[v.tableName] = v.express;
+            tableAliasMap[v.tableName] = v.aliasName;
+        }, perm.searchExpresses || []);
+        // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
+        const obj = {
+            ...ad, ...adConditionAlias, tables: aliaNames,
+            beOrCondition: perm.beOrCondition,
+            permStartTime: perm.permStartTime,
+            permEndTime: perm.permEndTime
+        };
+        const form = beAnd === true ? bformAnd : bformOr;
+        // setBeOrChecked(perm.beOrCondition || false);
+        // setBeForceChecked(perm.beForceCondition || false);
+        fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, beAnd, () => { form.setFieldsValue(obj) });
+    }
+
+    //选中权限按钮
+    const onSelectPermButton = (permId) => {
+        const id = params.id;
+        const uid = split(id, '_')[0];
+        const gid = split(id, '_')[1];
+        if (key === 'buttonPerm') {
+            api.resource.getUserFunctionDataPerm(dataPermView, permId, gid, selectedUsetId).subscribe({
+                next: (data) => {
+                    const dp = data[0];
+                    const data1 = dp?.entrustIds;
+                    form.setFieldsValue(dp);
+                    setPermScope(dp.permScope);
+                    forEach((v) => {
+                        v.disabled = false;
+                    }, disabledNodes || []);
+
+                    const targets = [];
+                    forEach((v) => {
+                        if (userKeyMap[v]) {
+                            targets.push(userKeyMap[v]);
+                        }
+                    }, data1);
+                    setPermGroupOrUserId(targets);
+                    const ds = [];
+                    const disables = [];
+                    const data2 = dp?.exceptEntrustIds;
+                    forEach((v) => {
+                        if (userIdGroupKeyMap[v]) {
+                            const node = userIdGroupKeyMap[v];
+                            node.disabled = true;
+                            disables.push(node);
+                            if (node.parentGroupName) {
+                                ds.push({ title: node.title + '[' + node.parentGroupName + ']', key: node.key });
+                            } else {
+                                ds.push({ title: node.title, key: node.key });
+                            }
+                        }
+                    }, data2);
+                    setExceptDataSource(ds);
+                    setDisAbledNodes(disables);
+                }
+            })
+        } else if (key == 'businessPerm') {
+            api.resource.fetchActionMapperByPerm(permId).subscribe({
+                next: (data) => {
+                    const result = data && data[0];
+                    const options = [];
+                    const aliasMap = {};
+                    const tableMap = {};
+                    const commentMap = {};
+                    if (!result) {
+                        setTableOptions(options);
+                        setAliasTable(aliasMap);
+                        setTableAlias(tableMap);
+                        return;
+                    }
+                    const tables = result.whereTables || [];
+                    forEach((v) => {
+                        options.push({ label: v.tableComment + '[' + v.alias + ']', value: v.alias });
+                        aliasMap[v.alias] = v.table;
+                        tableMap[v.table] = v.alias;
+                        commentMap[v.table] = v.tableComment;
+                    }, tables);
+                    setTableOptions(options);
+                    setAliasTable(aliasMap);
+                    setTableAlias(tableMap);
+                    // setTableComment(commentMap);
+                    tableComment = commentMap;
+
+                    api.resource.getUserBusinessDataPerm(dataPermView, permId, gid, selectedUsetId).subscribe({
+                        next: (data) => {
+                            setBeHaveAndCondition(false);
+                            setBeHaveOrCondition(false);
+                            bformAnd.resetFields();
+                            bformOr.resetFields();
+                            setUiAnd([]);
+                            setUiOr([]);
+                            if (!data) {
+                                return;
+                            }
+                            const orItem = data.filter(item => item.beOrCondition === true);
+                            const andItem = data.filter(item => item.beOrCondition === false);
+                            if (orItem && orItem.length > 0) {
+                                setBeHaveOrCondition(true);
+                                renderBusinessUI(orItem[0], false)
+                            }
+                            if (andItem && andItem.length > 0) {
+                                setBeHaveAndCondition(true);
+                                renderBusinessUI(andItem[0], true)
+                            }
+
+                        }
+                    });
+
+                }
+            });
+        } else if (key === 'columnPerm') {
+
+            cform.resetFields();
+            setColumnPermSelectedTables([]);
+            setColumnUi([]);
+            setExceptTableColumn({});
+            api.resource.fetchColumnActionMapperByPerm(permId).subscribe({
+                next: (data) => {
+                    const result = data && data[0];
+                    const options = [];
+                    const aliasMap = {};
+                    const tableMap = {};
+                    const commentMap = {};
+                    if (!result) {
+                        setColumnPermTableOptions(options);
+                        setAliasTable(aliasMap);
+                        setTableAlias(tableMap);
+                        return;
+                    }
+                    const tables = result.selectTables;
+                    const tableColumn = {};
+                    const specials = []
+                    forEach((v) => {
+                        options.push({ label: v.tableComment + '[' + v.alias + ']', value: v.alias });
+                        aliasMap[v.alias] = v.table;
+                        tableMap[v.table] = v.alias;
+                        commentMap[v.table] = v.tableComment;
+                        const selects = v.columns || [];
+                        const ds = []
+                        forEach((c) => {
+                            ds.push({ key: c.columnName, title: c.columnComment + '[' + c.columnName + ']' })
+                            if (c.ceSpecial === true) {
+                                specials.push(c.columnName);
+                            }
+                        }, selects);
+
+                        tableColumn[v.table] = ds;
+                    }, tables);
+
+                    setColumnPermTableOptions(options);
+                    setAliasTable(aliasMap);
+                    setTableAlias(tableMap);
+                    setTableSelectColumns(tableColumn);
+                    setSpecialColumns(specials);
+                    // setTableComment(commentMap);
+                    tableComment = commentMap;
+
+                    api.resource.getUserColumnDataPerm(dataPermView, permId, gid, selectedUsetId).subscribe({
+                        next: (data) => {
+                            if (!data || data.length === 0) {
+                                return;
+                            }
+                            const aliaNames = [];
+                            const tables = [];
+                            const tableExceptColumns = {};
+                            forEach((v) => {
+                                tables.push(v.alias);
+                                aliaNames.push(v.alias)
+                                const cmns = [];
+                                if (v.columns && v.columns.length > 0) {
+                                    forEach((vv) => {
+                                        cmns.push(vv.columnName);
+                                    }, v.columns);
+                                }
+                                tableExceptColumns[v.table] = cmns;
+                            }, data);
+
+                            setColumnPermSelectedTables(tables);
+                            const obj = { tables: aliaNames };
+                            cform.setFieldsValue(obj);
+                            setExceptTableColumn(tableExceptColumns);
+                        }
+                    });
+
+                }
+            })
+        }
+    }
 
     const init = (id) => {
         const uid = split(id, '_')[0];
         const gid = split(id, '_')[1];
         zip(
             api.user.getUser(uid),
-            api.user.listPermMenusAndButtons(uid, gid),
+            // api.user.listPermMenusAndButtons(uid, gid, false),
             api.user.listRoles(uid, gid),
             api.user.listUsets(uid, gid),
             api.user.listPositions(uid, gid),
-    // api.group.treeAllGroupsAndUsers()
+            // api.group.treeAllGroupsAndUsers()
         ).subscribe({
-            next: ([users, menus, roles, usets, positions, pmenus]) => {
-                setUserDataSource(users);
-                addIcon(menus);
-                setTreeData(menus);
-                setRoleDataSource(roles);
-                setUsetDataSource(usets);
-                setPostDataSource(positions);
+            next: ([users, roles, usets, positions, pmenus]) => {
+                // setUserDataSource(users);
+                if (positions && positions.length > 0) {
+                    setPostitionId(positions[0]?.id)
+                }
+                // addIcon(menus);
+                // setTreeData(menus);
+                const rolesArr = [{ label: '全部', value: 'ALL' }];
+                forEach((r) => {
+                    rolesArr.push({ label: r.roleName, value: r.id });
+                }, roles)
+                setRoleOptions(rolesArr);
+                // setRoleDataSource(roles);
+
+                const usetsArr = [{ label: '全部', value: 'ALL' }];
+                forEach((u) => {
+                    usetsArr.push({ label: u.usetName, value: u.id });
+                }, usets)
+                setUsetDataSource(usetsArr);
+                // setPostDataSource(positions);
                 setDataSource(pmenus);
                 // setPostTreeData(groupAndUsers);
                 const [uid, gid] = split(params.id, '_');
@@ -477,15 +672,50 @@ export default (props) => {
         init(params.id)
     }, [params.id])
 
-    const loadGroup = () => {
-        api.group.treeAllGroupsAndUsers().subscribe({
+    useEffect(() => {
+        if (selectButtonPermId) {
+            onSelectPermButton(selectButtonPermId);
+        }
+    }, [key])
+
+    //监控是否过滤权限按钮及角色列表
+    useEffect(() => {
+        const id = params.id;
+        const uid = split(id, '_')[0];
+        const gid = split(id, '_')[1];
+        api.user.listPermMenusAndButtons(uid, gid, selectRoleId, beFilterPermButton).subscribe({
             next: (data) => {
-                loopGroup(data, true, true);
-                setPermTreeData(data);
-                setPostTreeData(data);
+                addIcon(data);
+                setTreeData(data);
             }
         });
-    };
+    }, [beFilterPermButton, selectRoleId]);
+
+    //监控排除的列表
+    useEffect(() => {
+        renderColumnPermUi(columnPermSelectedTables);
+    }, [exceptTableColumn])
+
+    //监控选择用户组及查看维度
+    useEffect(() => {
+        if (selectButtonPermId) {
+            onSelectPermButton(selectButtonPermId);
+        }
+    }, [selectedUsetId, dataPermView])
+
+    //监控职位ID
+    useEffect(() => {
+        if (postitionId) {
+            getPosition(postitionId);
+        }
+    }, [postitionId]);
+
+    //监控权限按钮选择
+    useEffect(() => {
+        if (selectButtonPermId) {
+            onSelectPermButton(selectButtonPermId);
+        }
+    }, [selectButtonPermId]);
 
     useEffect(() => {
         loadGroup();
@@ -565,99 +795,8 @@ export default (props) => {
     };
 
 
-    // 根据用户加载对应的权限资源
-    const loadPermResourceByUser = (orgId, uid) => {
-        api.resource.listBPermResourcesByUser(orgId, uid).subscribe({
-            next: (data) => setDataSource(data),
-        });
-    };
-
-    // 根据用户组加载对应的权限资源
-    const loadPermResourceByUset = (usetId) => {
-        api.resource.listBPermResourcesByUset(usetId).subscribe({
-            next: (data) => setDataSource(data),
-        });
-    };
-
-    // 根据用户及权限加载对应的业务权限
-    const loadUserPermEntrusts = (orgId, uid, permId) => {
-        zip(
-            api.resource.listPermEntrustsByUser(orgId, uid, permId),
-            api.resource.listPermExceptEntrustsByUser(orgId, uid, permId),
-        ).subscribe({
-            next: ([data1, data2]) => {
-                forEach((v) => {
-                    v.disabled = false;
-                }, disabledNodes || []);
-
-                const targets = [];
-                forEach((v) => {
-                    if (userKeyMap[v]) {
-                        targets.push(userKeyMap[v]);
-                    }
-                }, data1);
-                setPermGroupOrUserId(targets);
-                const ds = [];
-                const disables = [];
-                forEach((v) => {
-                    if (userIdGroupKeyMap[v]) {
-                        const node = userIdGroupKeyMap[v];
-                        node.disabled = true;
-                        disables.push(node);
-                        if (node.parentGroupName) {
-                            ds.push({ title: node.title + '[' + node.parentGroupName + ']', key: node.key });
-                        } else {
-                            ds.push({ title: node.title, key: node.key });
-                        }
-                    }
-                }, data2);
-                setExceptDataSource(ds);
-                setDisAbledNodes(disables);
-            },
-        });
-    };
-
-    // 根据用户组及权限加载对应的业务权限
-    const loadUsetPermEntrusts = (usetId, permId) => {
-        zip(
-            api.resource.listPermEntrustsByUset(usetId, permId),
-            api.resource.listPermExceptEntrustsByUset(usetId, permId)
-        ).subscribe({
-            next: ([data1, data2]) => {
-                forEach((v) => {
-                    v.disabled = false;
-                }, disabledNodes);
-
-                const targets = [];
-                forEach((v) => {
-                    if (userKeyMap[v]) {
-                        targets.push(userKeyMap[v]);
-                    }
-                }, data1);
-                setPermGroupOrUserId(targets);
-                const ds = [];
-                const disables = [];
-                forEach((v) => {
-                    if (userIdGroupKeyMap[v]) {
-                        const node = userIdGroupKeyMap[v];
-                        node.disabled = true;
-                        disables.push(node);
-                        if (node.parentGroupName) {
-                            ds.push({ title: node.title + '[' + node.parentGroupName + ']', key: node.key });
-                        } else {
-                            ds.push({ title: node.title, key: node.key });
-                        }
-                    }
-                }, data2);
-                setExceptDataSource(ds);
-                setDisAbledNodes(disables);
-
-            },
-        });
-    }
-
     //根据表格列表,加载表格对应的权限列--用来配置列条件信息
-    const fetchDataPermColumnsByTable = (tables, tableAliasMap, callback) => {
+    const fetchDataPermColumnsByTable = (tables, tableAliasMap, beAnd, callback) => {
         api.column.listPermColumnsByTables(tables).subscribe({
             next: (data) => {
                 const tc = {};
@@ -688,247 +827,28 @@ export default (props) => {
                                         tooltip="修改表格的名字，为适配子查询重命名，此处允许修改表名，请参考具体SQL进行修改"
                                         rules={[{ whitespace: true, required: false, message: false, max: 50 }]}
                                     >
-                                        <Input placeholder="默认同当前表格名称" />
+                                        <Input placeholder="默认同当前表格名称" disabled />
                                     </Form.Item>
                                 </Col>
                             </Row>
                             <Divider style={{ margin: 0, padding: 0 }} />
                             <Form.Item name={k}>
-                                <IAdvanceSearch size='small' searchColumns={v} table={k} alias={alias} />
+                                <IAdvanceSearch disabled={true} hideButton={true} size='small' searchColumns={v} table={k} alias={alias} />
                             </Form.Item>
                         </IFieldset>)
                 }, tc);
+                if (beAnd === true) {
+                    setUiAnd(mui);
+                } else {
+                    setUiOr(mui);
+                }
 
-                setUi(mui);
                 if (callback && isFunction(callback)) {
                     callback();
                 }
             }
         });
     };
-
-    // 根据用户获取对应的数据权限
-    const loadUserDataPerm = (userId, orgId, permId) => {
-        api.resource.loadUserDataPerm(userId, orgId, permId).subscribe({
-            next: (data) => {
-                // if (!data || data.length === 0) {
-                //     return;
-                // }
-                bform.setFieldsValue({});
-                setBeOrChecked(false);
-                setUi([]);
-
-                const perm = data[0] || {};
-                const aliaNames = [];
-                const ad = {};
-                const adConditionAlias = {};
-                const tableNames = [];
-                const tableAliasMap = {};
-                forEach((v) => {
-                    aliaNames.push(v.aliasName);
-                    tableNames.push(v.tableName);
-                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
-                    ad[v.tableName] = v.express;
-                    tableAliasMap[v.tableName] = v.aliasName;
-                }, perm.searchExpresses || []);
-                // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
-                const obj = {
-                    ...ad, ...adConditionAlias, tables: aliaNames,
-                    // beOrCondition:perm.beOrCondition,
-                    permStartTime: perm.permStartTime,
-                    permEndTime: perm.permEndTime
-                };
-                // setBeOrChecked(perm.beOrCondition || false);
-                // setBeForceChecked(perm.beForceCondition || false);
-                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); setBeOrChecked(perm.beOrCondition || false) });
-            }
-        })
-    }
-
-    // 根据用户组获取对应的数据权限
-    const loadUsetDataPerm = (usetId, permId) => {
-        api.resource.loadUsetDataPerm(usetId, permId).subscribe({
-            next: (data) => {
-                // if (!data || data.length === 0) {
-                //     return;
-                // }
-                bform.setFieldsValue({});
-                setBeOrChecked(false);
-                setUi([]);
-
-                const perm = data[0] || {};
-                const aliaNames = [];
-                const ad = {};
-                const adConditionAlias = {};
-                const tableNames = [];
-                const tableAliasMap = {};
-                forEach((v) => {
-                    aliaNames.push(v.aliasName);
-                    tableNames.push(v.tableName);
-                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
-                    ad[v.tableName] = v.express;
-                    tableAliasMap[v.tableName] = v.aliasName;
-                }, perm.searchExpresses || []);
-                // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
-                const obj = {
-                    ...ad, ...adConditionAlias, tables: aliaNames,
-                    // beOrCondition:perm.beOrCondition,
-                    permStartTime: perm.permStartTime,
-                    permEndTime: perm.permEndTime
-                };
-                // setBeOrChecked(perm.beOrCondition || false);
-                // setBeForceChecked(perm.beForceCondition || false);
-                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj); setBeOrChecked(perm.beOrCondition || false); });
-
-            }
-        });
-    }
-
-    // 根据permId 加载权限对应的表格
-    const loadTablesByPerm = (userId, orgId, permId, callback) => {
-        api.resource.fetchActionMapperByPerm(permId).subscribe({
-            next: (data) => {
-                const result = data && data[0];
-                const options = [];
-                const aliasMap = {};
-                const tableMap = {};
-                const commentMap = {};
-                if (!result) {
-                    setTableOptions(options);
-                    setAliasTable(aliasMap);
-                    setTableAlias(tableMap);
-                    return;
-                }
-                const tables = result.whereTables || [];
-                forEach((v) => {
-                    options.push({ label: v.tableComment + '[' + v.alias + ']', value: v.alias });
-                    aliasMap[v.alias] = v.table;
-                    tableMap[v.table] = v.alias;
-                    commentMap[v.table] = v.tableComment;
-                }, tables);
-                setTableOptions(options);
-                setAliasTable(aliasMap);
-                setTableAlias(tableMap);
-                // setTableComment(commentMap);
-                tableComment = commentMap;
-                if (callback && isFunction(callback)) {
-                    callback();
-                }
-
-            }
-        });
-    }
-
-
-    // 根据permId 加载权限对应的表格--列权限
-    const loadColumnPermTablesByPerm = (permId, callback) => {
-        api.resource.fetchColumnActionMapperByPerm(permId).subscribe({
-            next: (data) => {
-                const result = data && data[0];
-                const options = [];
-                const aliasMap = {};
-                const tableMap = {};
-                const commentMap = {};
-                if (!result) {
-                    setColumnPermTableOptions(options);
-                    setAliasTable(aliasMap);
-                    setTableAlias(tableMap);
-                    return;
-                }
-                const tables = result.selectTables;
-                const tableColumn = {};
-                const specials = []
-                forEach((v) => {
-                    options.push({ label: v.tableComment + '[' + v.alias + ']', value: v.alias });
-                    aliasMap[v.alias] = v.table;
-                    tableMap[v.table] = v.alias;
-                    commentMap[v.table] = v.tableComment;
-                    const selects = v.columns || [];
-                    const ds = []
-                    forEach((c) => {
-                        ds.push({ key: c.columnName, title: c.columnComment + '[' + c.columnName + ']' })
-                        if (c.ceSpecial === true) {
-                            specials.push(c.columnName);
-                        }
-                    }, selects);
-
-                    tableColumn[v.table] = ds;
-                }, tables);
-
-                setColumnPermTableOptions(options);
-                setAliasTable(aliasMap);
-                setTableAlias(tableMap);
-                setTableSelectColumns(tableColumn);
-                setSpecialColumns(specials);
-                // setTableComment(commentMap);
-                tableComment = commentMap;
-                if (callback && isFunction(callback)) {
-                    callback();
-                }
-
-            }
-        })
-    }
-
-    //加载用户列权限
-    const loadUserColumnPerm = (userId, orgId, permId) => {
-        api.resource.loadUserColumnPerm(userId, orgId, permId).subscribe({
-            next: (data) => {
-                if (!data || data.length === 0) {
-                    return;
-                }
-                const aliaNames = [];
-                const tables = [];
-                const tableExceptColumns = {};
-                forEach((v) => {
-                    tables.push(v.alias);
-                    aliaNames.push(v.alias)
-                    const cmns = [];
-                    if (v.columns && v.columns.length > 0) {
-                        forEach((vv) => {
-                            cmns.push(vv.columnName);
-                        }, v.columns);
-                    }
-                    tableExceptColumns[v.table] = cmns;
-                }, data);
-
-                setColumnPermSelectedTables(tables)
-                const obj = { tables: aliaNames };
-                cform.setFieldsValue(obj);
-                setExceptTableColumn(tableExceptColumns);
-            }
-        });
-    }
-
-    //加载用户组列权限
-    const loadUsetColumnPerm = (usetId, permId) => {
-        api.resource.loadUsetColumnPerm(usetId, permId).subscribe({
-            next: (data) => {
-                if (!data || data.length === 0) {
-                    return;
-                }
-                const aliaNames = [];
-                const tables = [];
-                const tableExceptColumns = {};
-                forEach((v) => {
-                    tables.push(v.alias);
-                    aliaNames.push(v.alias)
-                    const cmns = [];
-                    if (v.columns && v.columns.length > 0) {
-                        forEach((vv) => {
-                            cmns.push(vv.columnName);
-                        }, v.columns);
-                    }
-                    tableExceptColumns[v.table] = cmns;
-                }, data);
-
-                setColumnPermSelectedTables(tables)
-                const obj = { tables: aliaNames };
-                cform.setFieldsValue(obj);
-                setExceptTableColumn(tableExceptColumns);
-            }
-        })
-    }
 
     //重新渲染列权限组件
     const renderColumnPermUi = (selectTables) => {
@@ -948,189 +868,16 @@ export default (props) => {
                         titles={['查询列', '排除列']}
                         dataSource={v.columns}
                         listStyle={{
-                            width: 250,
+                            width: 350,
                             height: 260,
                         }}
                         render={(item) => item.title}
                         targetKeys={exceptTableColumn[v.table]}
-                        // onChange={(targetKeys) => {
-                        //     const ecolumns = produce(exceptTableColumn, (draft) => {
-                        //         draft[v.table] = targetKeys;
-                        //     });
-                        //     setExceptTableColumn(ecolumns);
-                        // }}
                     />
                 </IFieldset>)
         }, tables);
         setColumnUi(mui);
     }
-
-    // 功能表格选择事件
-    const onSelect = (record, ak) => {
-        setSelectedRecord(record);
-        setSelectedKeys([record.id]);
-        setSelectedTag(record.tag);
-        if (record.tag === 'MENU') {
-            setSelectedRecord(undefined);
-            return;
-        }
-        form.resetFields();
-        bform.resetFields();
-        if (!record.permId) return;
-
-        setsSelectedPermId(record.permId);
-        setPermScope(record.permScope);
-        setOriginPermScope(record.permScope);
-        if (ak === 'buttonPerm') {
-            const buttonFormValue = {
-                orgId: selectedUserGroupId,
-                userId: selectedUserId,
-                usetId: selectedUsetId,
-                permId: record.permId,
-                permScope: record.permScope,
-            };
-            if (record.permStartTime && record.permEndTime) {
-                copyObject(buttonFormValue, {
-                    timeRange: [moment(record.permStartTime), moment(record.permEndTime)],
-                });
-            }
-            form.setFieldsValue(buttonFormValue);
-            if (permType === 'user') {
-                loadUserPermEntrusts(selectedUserGroupId, selectedUserId, record.permId);
-            } else if (permType === 'uset') {
-                loadUsetPermEntrusts(selectedUsetId, record.permId);
-            }
-        } else if (ak === 'businessPerm') {
-            const businessFormValue = {
-                orgId: selectedUserGroupId,
-                userId: selectedUserId,
-                usetId: selectedUsetId,
-                permId: record.permId,
-            };
-            setBeForceChecked(false);
-            setBeOrChecked(false);
-            setUi([]);
-            bform.setFieldsValue(businessFormValue);
-            loadTablesByPerm(selectedUserId, selectedUserGroupId, record.permId, () => {
-                if (permType === 'user') {
-                    loadUserDataPerm(selectedUserId, selectedUserGroupId, record.permId);
-                } else if (permType === 'uset') {
-                    loadUsetDataPerm(selectedUsetId, record.permId);
-                }
-            });
-        } else if (ak === 'columnPerm') {
-            const businessFormValue = {
-                orgId: selectedUserGroupId,
-                userId: selectedUserId,
-                usetId: selectedUsetId,
-                permId: record.permId,
-            };
-            cform.resetFields();
-            cform.setFieldsValue(businessFormValue);
-            setColumnPermSelectedTables([]);
-            setColumnUi([]);
-            setExceptTableColumn({});
-            loadColumnPermTablesByPerm(record.permId, () => {
-                if (permType === 'user') {
-                    loadUserColumnPerm(selectedUserId, selectedUserGroupId, record.permId);
-                } else if (permType === 'uset') {
-                    loadUsetColumnPerm(selectedUsetId, record.permId);
-                }
-            });
-
-        }
-    }
-
-    //用户选择
-    // const onUserSelect = (node) => {
-    //     let uid = current.userId;
-    //     setSelectedUserId(uid);
-    //     loadPermResourceByUser(current.groupId, uid);
-    //     setSelectedUserGroupId(current.groupId);
-    //     setSelectedKeys([]);
-    //     setSelectedTag('');
-    //     setPermType('user');
-    // };
-
-    const onUserSelectionChanged = (selectedRows) => {
-        setUsetClearSelect(false);
-        setPostClearSelect(false);
-        setUserClearSelect(false);
-        
-        if (selectedRows.length > 0) {
-            var ids = pluck('id', selectedRows);
-            setUserSelectedKeys(ids);
-            const uid = selectedRows[selectedRows.length - 1].id;
-            setSelectedUserId(uid);
-            loadPermResourceByUser(current.groupId, uid);
-            setSelectedUserGroupId(current.groupId);
-            setSelectedKeys([]);
-            setSelectedTag('');
-            setPermType('user');
-
-            setUsetClearSelect(true);
-            setPostClearSelect(true);
-            setBePostSelect(false);
-        }
-    }
-
-    const onUsetSelectionChanged = (selectedRows) => {
-        setUsetClearSelect(false);
-        setPostClearSelect(false);
-        setUserClearSelect(false);
-        if (selectedRows.length > 0) {
-            var ids = pluck('id', selectedRows);
-            setUsetSelectedKeys(ids);
-            const uset = selectedRows[selectedRows.length -1].id;
-            const usetId = uset.id;
-            loadPermResourceByUset(usetId);
-            setPermType('uset');
-            setSelectedUsetId(usetId);
-            setSelectedTag('');
-            setSelectedKeys([]);
-
-            setUserClearSelect(true);
-            setPostClearSelect(true);
-            setBePostSelect(false);
-        }
-    }
-
-    const onPostSelectionChanged = (selectedRows) => {
-        setUsetClearSelect(false);
-        setPostClearSelect(false);
-        setUserClearSelect(false);
-        postForm.resetFields();
-        if (selectedRows.length > 0) {
-            var ids = pluck('id', selectedRows);
-            setPostSelectedKeys(ids);
-            var position = selectedRows[selectedRows.length - 1];
-            if (position.permScope === 'CUSTOMER_SPECIFIED') {
-                setTreeVisible(true);
-            } else {
-                setTreeVisible(false);
-            }
-            api.position.listEntrusByPosition(ids[0]).subscribe({
-                next: (data) => {
-                    setPostPermGroupOrUserId(data);
-                },
-            });
-            setUsetClearSelect(true);
-            setUserClearSelect(true);
-            setBePostSelect(true);
-            postForm.setFieldsValue(position);
-        }
-    }
-
-    // const onUsetSelect = (e) => {
-    //     const usetId = node.key;
-    //     loadPermResourceByUset(usetId);
-    //     setPermType('uset');
-    //     setSelectedUsetId(usetId);
-    //     setSelectedTag('');
-    //     setSelectedKeys([]);
-    // };
-
-
 
 
     return (
@@ -1142,7 +889,6 @@ export default (props) => {
             width={clientWidth}
             height={clientHeight}
             bodyStyle={{ padding: 0 }}
-            //onSubmit={(params) => onSaveClick(params)}
             onCancel={() => {
                 window.close();
                 window.opener.onSuccess();
@@ -1150,570 +896,393 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="userId" />
             <IFormItem xtype="hidden" name="groupId" />
-            <Tabs size="small" type="card" tabPosition="top" >
-                <TabPane size='small' tab="资源权限" key="resourcePerm">
-                    <ILayout type="hbox" spans="8 8 8" gutter="8">
-                        <Card
-                            size="small"
-                            bordered={true}
-                            title={
-                                <>
-                                    <span>资源权限列表</span>
-                                </>
+            <ILayout type="hbox" spans="8 16" gutter="8">
+                <Card
+                    size="small"
+                    bordered={true}
+                    style={{ borderRadius: 10 }}
+                    title={
+                        <>
+                            <Space>角色列表:<Select size='small' defaultValue="ALL" onChange={(v) => setSelectRoleId(v)} options={roleOptions} style={{ width: 160 }} />  <Checkbox onChange={(e) => setBeFilterPermButton(e.target.checked)}>数据权限</Checkbox></Space>
+                        </>
+                    }
+                    bodyStyle={{
+                        height: clientHeight - 140, paddingLeft: 5,
+                        paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'scroll',
+                    }}
+                >
+                    <ISearchTree
+                        iconRender={loop}
+                        treeData={treeData}
+                        placeholder="输入菜单或按钮进行搜索"
+                        blockNode={true}
+                        bodyStyle={{ height: clientHeight - 200, margin: 0, }}
+                        // checkable
+                        // checkedKeys={userPerms}
+                        // onCheck={(checked) => setUserPerms(checked)}
+                        onSelect={(keys, { selected, node }) => {
+                            if (selected && node.isLeaf) {
+                                setSelectButtionId(keys[0]);
+                                setButtonRecord(node);
+                                console.log(node);
+                                if (node.permId) {
+                                    setSelectButtonPermId(node.permId);
+                                }
                             }
-                            bodyStyle={{
-                                height: clientHeight - 180, paddingLeft: 5,
-                                paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'scroll'
-                            }}
-                        >
-                            <ISearchTree
-                                iconRender={loop}
-                                treeData={treeData}
-                                placeholder="输入菜单或按钮进行搜索"
-                                blockNode={true}
-                                bodyStyle={{ height: clientHeight - 250, margin: 0, }}
-                                // checkable
-                                // checkedKeys={userPerms}
-                                // onCheck={(checked) => setUserPerms(checked)}
-                                onSelect={(keys, { selected, node }) => {
-                                    // if (selected && node.isLeaf) {
-                                    //     onClickMenu([keys[0], current.userId, current.groupId]);
-                                    //     // loadPermButtons(keys[0]);
-                                    //     setMenuId(keys[0]);
-                                    //     setMenuName(node.title);
-                                    // }
-                                }}
-                                titleRender={(node) => (
-                                    <div style={{ width: '100%' }}>
-                                        <div style={{ float: 'left' }}>
-                                            {node.icon} {node.title}
-                                        </div>
-                                    </div>
-                                )}
-                            />
-                        </Card>
-                        <Card
-                            size="small"
-                            bordered={true}
-                            bodyStyle={{
-                                height: clientHeight - 180, paddingLeft: 5, paddingTop: 5,
-                                paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'scroll'
-                            }}
-                            title={
-                                <>
-                                    <span>角色列表</span>
-                                </>
-                            }
-                        >
-                            <IAGrid
-                                title={false}
-                                columns={initRoleColumns}
-                                height={clientHeight - 195}
-                                defaultSearch={false}
-                                dataSource={roleDataSource}
-                                optionsHide={{ topTool: true, pagination: true }}
-                            />
-                        </Card>
-                        <ILayout type="vbox" spans="12 12" gutter="8">
-                            <Card
-                                size="small"
-                                bordered={true}
-                                bodyStyle={{
-                                    height: (clientHeight / 2) - 135, paddingLeft: 5, paddingTop: 5,
-                                    paddingRight: 0, paddingBottom: 0, marginBottom: 0, overflow: 'scroll'
-                                }}
-                                style={{ marginBottom: 5 }}
-                                title={
-                                    <>
-                                        <span>用户组列表</span>
-                                    </>
-                                }
-                            >
-                                <IAGrid
-                                    title={false}
-                                    columns={initUsetColumns}
-                                    height={(clientHeight / 2) - 147}
-                                    defaultSearch={false}
-                                    dataSource={usetDataSource}
-                                    optionsHide={{ topTool: true, pagination: true }}
-                                />
-                            </Card>
-                            <Card
-                                size="small"
-                                bordered={true}
-                                bodyStyle={{
-                                    height: (clientHeight / 2) - 89, paddingLeft: 5, paddingTop: 5,
-                                    paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'scroll'
-                                }}
-                                title={
-                                    <>
-                                        <span>职位列表</span>
-                                    </>
-                                }
-                            >
-                                <IAGrid
-                                    title={false}
-                                    columns={initPositionColumns}
-                                    height={(clientHeight / 2) - 105}
-                                    defaultSearch={false}
-                                    dataSource={postDataSource}
-                                    optionsHide={{ topTool: true, pagination: true }}
-                                />
-                            </Card>
-                        </ILayout>
-                    </ILayout>
-                </TabPane>
-                <TabPane size='small' tab="数据权限" key="dataPerm">
-                    <ILayout type="hbox" spans="6 10 8" gutter="8">
-                        <ILayout type="vbox" spans="8 8 8" gutter="8">
-                            <Card
-                                size="small"
-                                bordered={true}
-                                bodyStyle={{
-                                    height: (clientHeight / 3) - 115, paddingLeft: 5, paddingTop: 5,
-                                    paddingRight: 0, paddingBottom: 0, marginBottom: 0, overflow: 'scroll'
-                                }}
-                                style={{ marginBottom: 5 }}
-                                title={
-                                    <>
-                                        <span>用户列表</span>
-                                    </>
-                                }
-                            >
-                                <IAGrid
-                                    title={false}
-                                    columns={initUserColumns}
-                                    onSelectedChanged={(data) => onUserSelectionChanged(data)}
-                                    // onClick={()=>onUserSelect()}
-                                    height={(clientHeight / 3) - 127}
-                                    defaultSearch={false}
-                                    dataSource={userDataSource}
-                                    clearSelect={userClearSelect}
-                                    optionsHide={{ topTool: true, pagination: true }}
-                                />
-                            </Card>
-                            <Card
-                                size="small"
-                                bordered={true}
-                                bodyStyle={{
-                                    height: (clientHeight / 3) - 95, paddingLeft: 5, paddingTop: 5,
-                                    paddingRight: 0, paddingBottom: 0, marginBottom: 0, overflow: 'scroll'
-                                }}
-                                style={{ marginBottom: 5 }}
-                                title={
-                                    <>
-                                        <span>用户组列表</span>
-                                    </>
-                                }
-                            >
-                                <IAGrid
-                                    title={false}
-                                    columns={initUsetColumns}
-                                    height={(clientHeight / 3) - 107}
-                                    defaultSearch={false}
-                                    onSelectedChanged={(data) => onUsetSelectionChanged(data)}
-                                    dataSource={usetDataSource}
-                                    clearSelect={usetClearSelect}
-                                    optionsHide={{ topTool: true, pagination: true }}
-                                />
-                            </Card>
-                            <Card
-                                size="small"
-                                bordered={true}
-                                bodyStyle={{
-                                    height: (clientHeight / 3) - 70, paddingLeft: 5, paddingTop: 5,
-                                    paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'scroll'
-                                }}
-                                title={
-                                    <>
-                                        <span>职位列表</span>
-                                    </>
-                                }
-                            >
-                                <IAGrid
-                                    title={false}
-                                    columns={initPositionColumns}
-                                    height={(clientHeight / 3) - 90}
-                                    defaultSearch={false}
-                                    onSelectedChanged={(data) => onPostSelectionChanged(data)}
-                                    dataSource={postDataSource}
-                                    clearSelect={postClearSelect}
-                                    optionsHide={{ topTool: true, pagination: true }}
-                                />
-                            </Card>
-                        </ILayout>
-                        {bePostSelect === false && (
-                        <Card
-                            size='small'
-                            title={
-                                <div style={{ verticalAlign: 'top' }}>
-                                    <Space>
-                                        功能列表
-                                        <span style={{ fontSize: 14, color: '#C5C5C5' }}>权限范围只作用于按钮功能</span>
-                                    </Space>
+                        }}
+                        titleRender={(node) => (
+                            <div style={{ width: '100%' }}>
+                                <div style={{ float: 'left' }}>
+                                    {node.icon} {node.title}
                                 </div>
-                            }
-                            bordered={true}
-                            bodyStyle={{ height: clientHeight - 180, overflow: 'scroll' }}
-                        >
-                            <Table
-                                size="small"
-                                bordered
-                                rowKey="id"
-                                columns={columns}
-                                search={false}
-                                dataSource={dataSource}
-                                rowSelection={{
-                                    columnTitle: '选择',
-                                    columnWidth: 80,
-                                    selectedRowKeys: selectedKeys,
-                                    type: 'radio',
-                                    onSelect: (record) => {
-                                        onSelect(record, key);
-                                    },
-                                }}
-                                pagination={false}
-                                onRow={(record) => {
-                                    return {
-                                        onClick: () => {
-                                            onSelect(record, key);
-                                        },
-                                    };
-                                }}
-                            />
-                        </Card>)}
-                        {bePostSelect === true && (
+                            </div>
+                        )}
+                    />
+                </Card>
+                <Card
+                    size='small'
+                    bordered={true}
+                    title={
+                        <>
+                            <Space>查看维度:<Select size='small' defaultValue="ALL" options={dataPermViewOption} style={{ width: 160 }} onChange={(v) => onDataPermViewChange(v)} />
+                                <IIF test={dataPermView == 'USET'}><Space>用户组:<Select size='small' defaultValue="ALL" options={usetDataSource} style={{ width: 160 }} onChange={(v) => setSelectedUsetId(v)} /></Space></IIF></Space>
+                        </>
+                    }
+                    bodyStyle={{ padding: 5, height: clientHeight - 140, overflow: 'scroll' }} >
+                    <Tabs
+                        activeKey={key}
+                        size="small"
+                        type="card"
+                        tabPosition={'top'}
+                        onChange={(activeKey) => {
+                            setKey(activeKey);
+                        }}>
+                        <TabPane tab="职位数据权限" key="positionPerm" style={{ padding: 0 }} >
                             <Card
-                                bordered={true}
+                                bordered={false}
                                 size='small'
-                                bodyStyle={{ height: clientHeight - 180, overflow: 'scroll' }}
-                                title={
-                                    <div style={{ verticalAlign: 'top' }}>
-                                        <Space>
-                                            功能数据权限
-                                            <span style={{ fontSize: 14, color: '#C5C5C5' }}>职位功能数据权限对所有有权限的功能生效</span>
-                                        </Space>
-                                    </div>
-                                }
+                                bodyStyle={{ height: clientHeight - 210, overflow: 'scroll', padding: '5px' }}
                             >
-                                <Form form={postForm} size='small' layout="horizontal" className="odm-form">
-                                    <ILayout type="vbox">
-                                        <IFormItem
-                                            name="postName"
-                                            label="职位名称"
-                                            xtype="input"
-                                            required={true}
-                                            max={50}
-                                        />
-                                        <IFormItem
-                                            name="permScope"
-                                            label="权限范围"
-                                            xtype="dict"
-                                            tag={constant.DICT_POSITION_PERM_SCOPE_TAG}
-                                            required={true}
-                                        />
-                                    </ILayout>
-                                    {treeVisible && (
-                                        <ISearchTree
-                                            bodyStyle={{ height: 280, overflow: 'scroll' }}
-                                            iconRender={(data) => loopGroup(data, false, false)}
-                                            showIcon={true}
-                                            treeData={postTreeData}
-                                            checkable
-                                            checkedKeys={postPermGroupOrUserId}
-                                        />
-                                    )}
-                                    <ILayout type="vbox">
-                                        <IFormItem xtype="radio" name="beManager" label="是否主管" defaultValue={false} >
-                                            <Radio value={false}>否</Radio>
-                                            <Radio value={true}>是</Radio>
-                                        </IFormItem>
-
-                                        <IFormItem
-                                            name="note"
-                                            label="备注说明"
-                                            xtype="textarea"
-                                            rows={4}
-                                            max={200}
-                                        />
-                                    </ILayout>
-                                </Form>
+                                <IIF test={!postitionId}>
+                                    <Alert message="该用户没有分配职位，无法展示职位信息！" type="warning" showIcon />
+                                </IIF>
+                                <IIF test={!!postitionId}>
+                                    <Form form={postForm} size='small' layout="horizontal" className="odm-form">
+                                        <ILayout type="vbox">
+                                            <IFormItem
+                                                name="postName"
+                                                label="职位名称"
+                                                xtype="input"
+                                                disabled={true}
+                                                max={50}
+                                            />
+                                            <IFormItem
+                                                name="permScope"
+                                                label="权限范围"
+                                                xtype="dict"
+                                                tag={constant.DICT_POSITION_PERM_SCOPE_TAG}
+                                                disabled={true}
+                                            />
+                                        </ILayout>
+                                        {postTreeVisible && (
+                                            <ISearchTree
+                                                bodyStyle={{ height: 'calc(100vh - 345px)', overflow: 'scroll' }}
+                                                iconRender={loopGroup}
+                                                showIcon={true}
+                                                treeData={postTreeData}
+                                                checkable
+                                                checkedKeys={postPermGroupOrUserId}
+                                                onCheck={(checked) => {
+                                                    setPostPermGroupOrUserId(checked);
+                                                }}
+                                            />
+                                        )}
+                                    </Form>
+                                </IIF>
                             </Card>
-                        )}
-                        {((selectedTag && selectedTag === 'BUTTON') && bePostSelect === false) && (
-                                <Card
-                                    size='small'
-                                    bordered={true}
-                                    bodyStyle={{ padding: 5, height: clientHeight - 66, overflow: 'scroll' }} >
-                                    <Tabs
-                                        activeKey={key}
-                                        size="small"
-                                        type="card"
-                                        onChange={(activeKey) => {
-                                            setKey(activeKey);
-                                            onSelect(selectedRecord, activeKey);
-                                        }}>
+                        </TabPane>
+                        <TabPane size="small" tab="功能数据权限" key="buttonPerm" style={{ padding: 0 }}>
+                            <Card
+                                bordered={false}
+                                size='small'
+                                bodyStyle={{ height: clientHeight - 210, overflow: 'scroll', padding: '5px 10px 5px 10px' }}
+                            >
+                                <IIF test={!selectButtonPermId}>
+                                    <Alert message="请选择一个带数据权限（即有@Action注解）的按钮，可通过“数据权限”选择框进行过滤数据权限的按钮！" type="warning" showIcon />
+                                </IIF>
+                                <IIF test={!!selectButtonPermId}>
+                                    <Form form={form} size='small' layout="horizontal" className="odm-form">
 
-                                        <TabPane tab="功能数据权限" key="buttonPerm" style={{ padding: 0 }}>
-                                        <IIF test={!bePostSelect}>
-                                            <Card
-                                                bordered={false}
-                                                size='small'
-                                            bodyStyle={{ height: clientHeight - 192, overflow: 'scroll' }}
-                                            >
-                                                <Form form={form} size='small' layout="horizontal" className="odm-form">
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="permId" label="permId">
-                                                            <Input />
-                                                        </Form.Item>
+                                        <Row gutter={12}>
+                                            <Col span={24}>
+                                                <Form.Item
+                                                    labelCol={{ span: 3 }}
+                                                    name="permScope"
+                                                    tooltip="所能看到的数据范围"
+                                                    label="权限范围"
+                                                >
+                                                    <Radio.Group
+                                                        disabled={true}
+                                                        buttonStyle="solid"
+                                                        style={{ width: '240px' }}
+                                                        options={permScopeOptions}
+                                                        onChange={(e) => {
+                                                            setPermScope(e.target.value);
+                                                        }}
+                                                    />
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                        {permScope && permScope !== 'CURRENT_USER' && (
+                                            <Row>
+                                                <Col span={24}>
+                                                    <Form.Item
+                                                        labelCol={{ span: 3 }}
+                                                        name="timeRange"
+                                                        label="授权时效"
+                                                        tooltip="不填写为永久授权"
+                                                        rules={[{ required: false, message: false }]}
+                                                    >
+                                                        <RangePicker
+                                                            disabled={true}
+                                                            style={{ width: '240px' }}
+                                                            ranges={{
+                                                                今天: [moment(), moment()],
+                                                                本月: [moment().startOf('month'), moment().endOf('month')],
+                                                            }}
+                                                            // showTime
+                                                            format="YYYY-MM-DD"
+                                                        />
                                                     </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="userId" label="userId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="orgId" label="orgId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="usetId" label="usetId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+                                        )}
+                                    </Form>
+                                    {permScope === 'CUSTOMER_SPECIFIED' && (
+                                        <>
+                                            <Row gutter={5}>
+                                                <Col span={24}>
+                                                    <Card
+                                                        size='small'
+                                                        bordered={true}
+                                                        bodyStyle={{ height: 280, overflow: 'scroll' }}
+                                                        title={<div>指定范围列表</div>}
+                                                    >
+                                                        <ISearchTree
+                                                            bodyStyle={{ height: 320, overflow: 'scroll' }}
+                                                            iconRender={(data) => loopGroup(data, false, false)}
+                                                            size="small"
+                                                            bordered
+                                                            blockNode={true}
+                                                            treeData={permTreeData}
+                                                            checkable
+                                                            checkedKeys={permGroupOrUserId}
+                                                            onCheck={(checked) => {
+                                                                setPermGroupOrUserId(checked);
+                                                            }}
+                                                        />
+                                                    </Card>
+                                                </Col>
+                                            </Row>
+                                            <Row gutter={5}>
+                                                <Col span={24}>
+                                                    <Table
+                                                        size="small"
+                                                        style={{ marginTop: '5px' }}
+                                                        title={() => <><b>排除组织/用户列表</b></>}
+                                                        scroll={{ y: 195, }}
+                                                        bordered
+                                                        rowKey="key"
+                                                        columns={exceptColumns}
+                                                        search={false}
+                                                        dataSource={exceptDataSource}
+                                                        rowSelection={{
+                                                            onChange: (rowKeys) => {
+                                                                setExceptSelectedKeys(rowKeys);
+                                                            },
+                                                        }}
+                                                        pagination={false}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    )}
+                                </IIF>
+                            </Card>
+                        </TabPane>
 
-                                                    <Row gutter={12}>
-                                                        <Col span={24}>
-                                                            <Form.Item
-                                                                labelCol={{ span: 6 }}
-                                                                name="permScope"
-                                                                label="权限范围"
-                                                                rules={[{ required: true, message: false }]}
-                                                            >
-                                                                <Radio.Group
-                                                                    disabled={true}
-                                                                    buttonStyle="solid"
-                                                                    style={{ width: '260px' }}
-                                                                    options={permScopeOptions}
-                                                                    onChange={(e) => {
-                                                                        setPermScope(e.target.value);
-                                                                    }}
-                                                                />
-                                                            </Form.Item>
-                                                        </Col>
-                                                    </Row>
-                                                    {permScope && permScope !== 'CURRENT_USER' && (
-                                                        <Row>
-                                                            <Col span={24}>
-                                                                <Form.Item
-                                                                    labelCol={{ span: 6 }}
-                                                                    name="timeRange"
-                                                                    label="授权时效"
-                                                                    tooltip="不填写为永久授权"
-                                                                    rules={[{ required: false, message: false }]}
-                                                                >
-                                                                    <RangePicker
-                                                                        disabled={true}
-                                                                        style={{ width: '240px' }}
-                                                                        ranges={{
-                                                                            今天: [moment(), moment()],
-                                                                            本月: [moment().startOf('month'), moment().endOf('month')],
-                                                                        }}
-                                                                        // showTime
-                                                                        format="YYYY-MM-DD"
-                                                                    />
-                                                                </Form.Item>
-                                                            </Col>
-                                                        </Row>
-                                                    )}
-                                                </Form>
-                                                {permScope === 'CUSTOMER_SPECIFIED' && (
-                                                    <>
-                                                        <Row gutter={5}>
-                                                            <Col span={24}>
-                                                                <Card
-                                                                    size='small'
-                                                                    bordered={true}
-                                                                    bodyStyle={{ height: 280, overflow: 'scroll' }}
-                                                                    title={<div>指定范围列表</div>}
-                                                                >
-                                                                    <ISearchTree
-                                                                        bodyStyle={{ height: 320, overflow: 'scroll' }}
-                                                                        iconRender={(data) => loopGroup(data, false, false)}
-                                                                        size="small"
-                                                                        bordered
-                                                                        blockNode={true}
-                                                                        treeData={permTreeData}
-                                                                        checkable
-                                                                        checkedKeys={permGroupOrUserId}
-                                                                        onCheck={(checked) => {
-                                                                            setPermGroupOrUserId(checked);
-                                                                        }}
-                                                                    />
-                                                                </Card>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row gutter={5}>
-                                                            <Col span={24}>
-                                                                <Table
-                                                                    size="small"
-                                                                    style={{ marginTop: '5px' }}
-                                                                    title={() => <><b>排除组织/用户列表</b></>}
-                                                                    scroll={{ y: 195, }}
-                                                                    bordered
-                                                                    rowKey="key"
-                                                                    columns={exceptColumns}
-                                                                    search={false}
-                                                                    dataSource={exceptDataSource}
-                                                                    rowSelection={{
-                                                                        onChange: (rowKeys) => {
-                                                                            setExceptSelectedKeys(rowKeys);
-                                                                        },
-                                                                    }}
-                                                                    pagination={false}
-                                                                />
-                                                            </Col>
-                                                        </Row>
-                                                    </>
-                                                )}
-                                            </Card>
-                                        </IIF>
-                                        
-                                        </TabPane>
-                                    <TabPane tab="业务数据权限" key="businessPerm" style={{ padding: 0 }} disabled={bePostSelect === true}>
-                                            <Card
-                                                bordered={false}
-                                                size='small'
-                                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
-                                            >
-                                                <Form form={bform} size='small' layout="horizontal" className="odm-form">
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="permId" label="permId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="userId" label="userId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="orgId" label="orgId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="usetId" label="usetId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Row>
-                                                        <Col span={24}>
-                                                            <Form.Item
-                                                                labelCol={{ span: 6 }}
-                                                                name="beOrCondition"
-                                                                label="OR条件"
-                                                                rules={[{ required: false, message: false }]}
-                                                            >
+                        <TabPane tab="业务数据权限" key="businessPerm" style={{ padding: 0 }} >
+                            <Card
+                                bordered={false}
+                                size='small'
+                                bodyStyle={{ height: clientHeight - 210, overflow: 'scroll', padding: '5px' }}
+                            >
+                                <IIF test={!selectButtonPermId}>
+                                    <Alert message="请选择一个带数据权限（即有@Action注解）的按钮，可通过“数据权限”选择框进行过滤数据权限的按钮！" type="warning" showIcon />
+                                </IIF>
+                                <IIF test={!!selectButtonPermId}>
+                                    <IIF test={beHaveAndCondition == false && beHaveOrCondition == false}>
+                                        <Alert message="该用户未配置业务数据权限！" type="warning" showIcon />
+                                    </IIF>
+                                    <IIF test={beHaveAndCondition == true}>
+                                        <Card
+                                            bordered={true}
+                                            size='small'
+                                            bodyStyle={{ overflow: 'visible', padding: '2px' }}
+                                        >
+                                            <Form form={bformAnd} size='small' layout="horizontal" className="odm-form">
+                                                <Row>
+                                                    <Col span={24}>
+                                                        <Form.Item
+                                                            labelCol={{ span: 3 }}
+                                                            name="beOrCondition"
+                                                            label="条件关系"
+                                                            rules={[{ required: false, message: false }]}
+                                                        >
                                                             <Switch checkedChildren="OR" unCheckedChildren="AND" disabled={true} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col span={24}>
-                                                            <Form.Item
-                                                                labelCol={{ span: 6 }}
-                                                                name="timeRange"
-                                                                label="授权时效"
-                                                                tooltip="不填写为永久授权"
-                                                                rules={[{ required: false, message: false }]}
-                                                            >
-                                                                <RangePicker
-                                                                    disabled={true}
-                                                                    style={{ width: '240px' }}
-                                                                    ranges={{
-                                                                        今天: [moment(), moment()],
-                                                                        本月: [moment().startOf('month'), moment().endOf('month')],
-                                                                    }}
-                                                                    // showTime
-                                                                    format="YYYY-MM-DD"
-                                                                />
-                                                            </Form.Item>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col span={24}>
-                                                            <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="注意: 若勾选表格未出现选择列信息,请先到 [数据列管理] 中配置对应的表!" type="warning" showIcon={true} />
-                                                            <Form.Item
-                                                                labelCol={{ span: 4 }}
-                                                                name="tables"
-                                                                label="表格列表"
-                                                                rules={[{ required: false, message: false, type: 'array' }]}
-                                                            >
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col span={24}>
+                                                        <Form.Item
+                                                            labelCol={{ span: 3 }}
+                                                            name="timeRange"
+                                                            label="授权时效"
+                                                            tooltip="不填写为永久授权"
+                                                            rules={[{ required: false, message: false }]}
+                                                        >
+                                                            <RangePicker
+                                                                disabled={true}
+                                                                style={{ width: '240px' }}
+                                                                ranges={{
+                                                                    今天: [moment(), moment()],
+                                                                    本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                }}
+                                                                // showTime
+                                                                format="YYYY-MM-DD"
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col span={24}>
+                                                        {/* <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="注意: " type="warning" showIcon={true} /> */}
+                                                        <Form.Item
+                                                            labelCol={{ span: 3 }}
+                                                            tooltip="若勾选表格未出现选择列信息,请先到 [数据列管理] 中配置对应的表!"
+                                                            name="tables"
+                                                            label="表格列表"
+                                                            rules={[{ required: false, message: false, type: 'array' }]}
+                                                        >
                                                             <Checkbox.Group options={tableOptions} disabled={true} />
-                                                            </Form.Item>
-                                                        </Col>
-                                                    </Row>
-                                                    {ui.map((item) => (<>{item}</>))}
-                                                </Form>
-                                            </Card>
-                                        </TabPane>
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                {uiAnd.map((item) => (<>{item}</>))}
+                                            </Form>
+                                        </Card>
+                                    </IIF>
+                                    <IIF test={beHaveOrCondition == true}>
+                                        <Card
+                                            bordered={true}
+                                            size='small'
+                                            style={{ marginTop: 10 }}
+                                            bodyStyle={{ overflow: 'visible', padding: '2px' }}
+                                        >
+                                            <Form form={bformOr} size='small' layout="horizontal" className="odm-form">
+                                                <Row>
+                                                    <Col span={24}>
+                                                        <Form.Item
+                                                            labelCol={{ span: 3 }}
+                                                            name="beOrCondition"
+                                                            label="条件关系"
+                                                            rules={[{ required: false, message: false }]}
+                                                        >
+                                                            <Switch checkedChildren="OR" unCheckedChildren="AND" disabled={true} />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col span={24}>
+                                                        <Form.Item
+                                                            labelCol={{ span: 3 }}
+                                                            name="timeRange"
+                                                            label="授权时效"
+                                                            tooltip="不填写为永久授权"
+                                                            rules={[{ required: false, message: false }]}
+                                                        >
+                                                            <RangePicker
+                                                                disabled={true}
+                                                                style={{ width: '240px' }}
+                                                                ranges={{
+                                                                    今天: [moment(), moment()],
+                                                                    本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                }}
+                                                                // showTime
+                                                                format="YYYY-MM-DD"
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col span={24}>
+                                                        {/* <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="注意: " type="warning" showIcon={true} /> */}
+                                                        <Form.Item
+                                                            labelCol={{ span: 3 }}
+                                                            tooltip="若勾选表格未出现选择列信息,请先到 [数据列管理] 中配置对应的表!"
+                                                            name="tables"
+                                                            label="表格列表"
+                                                            rules={[{ required: false, message: false, type: 'array' }]}
+                                                        >
+                                                            <Checkbox.Group options={tableOptions} disabled={true} />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                {uiOr.map((item) => (<>{item}</>))}
+                                            </Form>
+                                        </Card>
+                                    </IIF>
+                                </IIF>
+                            </Card>
+                        </TabPane>
 
-                                    <TabPane tab="列数据权限" key="columnPerm" style={{ padding: 0 }} disabled={bePostSelect === true}>
-                                            <Card
-                                                bordered={false}
-                                                size='small'
-                                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
-                                            >
-                                                <Form form={cform} size='small' layout="horizontal" className="odm-form">
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="permId" label="permId">
-                                                            <Input />
-                                                        </Form.Item>
+                        <TabPane tab="列数据权限" key="columnPerm" style={{ padding: 0 }}>
+                            <Card
+                                bordered={false}
+                                size='small'
+                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '5px' }}
+                            >
+                                <IIF test={!selectButtonPermId}>
+                                    <Alert message="请选择一个带数据权限（即有@Action注解）的按钮，可通过“数据权限”选择框进行过滤数据权限的按钮！" type="warning" showIcon />
+                                </IIF>
+                                <IIF test={!!selectButtonPermId}>
+                                    <Form form={cform} size='small' layout="horizontal" className="odm-form">
+                                        <Row>
+                                            <Col span={24}>
+                                                {columnPermTableOptions && columnPermTableOptions.length >= 1 && (
+                                                    <Form.Item
+                                                        labelCol={{ span: 4 }}
+                                                        name="tables"
+                                                        label="表格列表"
+                                                        rules={[{ required: false, message: false, type: 'array' }]}
+                                                    >
+                                                        <Checkbox.Group options={columnPermTableOptions} disabled={true} />
                                                     </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="userId" label="userId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="orgId" label="orgId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: 'none' }}>
-                                                        <Form.Item name="usetId" label="usetId">
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Form.Item>
-                                                    <Row>
-                                                        <Col span={24}>
-                                                            {columnPermTableOptions && columnPermTableOptions.length >= 1 && (
-                                                                <Form.Item
-                                                                    labelCol={{ span: 4 }}
-                                                                    name="tables"
-                                                                    label="表格列表"
-                                                                    rules={[{ required: false, message: false, type: 'array' }]}
-                                                                >
-                                                                <Checkbox.Group options={columnPermTableOptions} disabled={true} />
-                                                                </Form.Item>
-                                                            )}
-                                                            {(!columnPermTableOptions || columnPermTableOptions.length < 1) && (
-                                                                <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="此功能不支持列配置(只有一列时,不支持列配置)!" type="error" showIcon={true} />
-                                                            )}
-                                                        </Col>
-                                                    </Row>
-                                                    {columnUi.map((item) => (<>{item}</>))}
-                                                </Form>
-                                            </Card>
-                                        </TabPane>
-                                    </Tabs>
-                                </Card>
-                        )}
-                    </ILayout>
-                </TabPane>
-            </Tabs>
+                                                )}
+                                                {(!columnPermTableOptions || columnPermTableOptions.length < 1) && (
+                                                    <Alert size="small" message="此功能不支持列配置(只有一列时或非查询功能,不支持列配置)!" type="info" showIcon={true} />
+                                                )}
+                                            </Col>
+                                        </Row>
+                                        {columnUi.map((item) => (<>{item}</>))}
+                                    </Form>
+                                </IIF>
+                            </Card>
+                        </TabPane>
+                    </Tabs>
+                </Card>
+            </ILayout>
         </IWindow>
     )
 }

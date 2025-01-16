@@ -481,7 +481,7 @@ export default (props) => {
                                 </Tooltip>
                             </Permit>,
                                 <Permit authority="menu:saveOrUpdateButton" key="copyButton">
-                                <Tooltip title="复制新建菜单">
+                                    <Tooltip title="复制新建按钮">
                                     <Button key="copyButton" icon={<DiffOutlined />} size="small" onClick={handleCopyButton}></Button>
                                 </Tooltip>
                             </Permit>,
