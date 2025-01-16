@@ -48,16 +48,30 @@ export default (props) => {
   };
 
   const handleRemeberMe = (values) => {
-    const { userName, userPasswd, autoLogin, groupId } = values;
+    const { userName, originPassword, autoLogin } = values;
     var exp = new Date();
     exp.setTime(exp.getTime() + 7 * 24 * 60 * 60 * 1000);
-    document.cookie = constant.SYSTEM_AVATAR_NAME + 'userName=' + escape(userName) + ';expires=' + exp.toGMTString();
+
     if (autoLogin) {
-      document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape(values.originPassword) + ";expires=" + exp.toGMTString();
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'userName' + "=" + escape(userName) + ';expires=' + exp.toGMTString();
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape(originPassword) + ";expires=" + exp.toGMTString();
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'autoLogin' + "=" + escape(autoLogin) + ";expires=" + exp.toGMTString();
     } else {
       exp.setTime(exp.getTime() - 1);
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'userName' + "=" + escape('') + ';expires=' + exp.toGMTString();
       document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape('') + ";expires=" + exp.toGMTString();
+      document.cookie = constant.SYSTEM_AVATAR_NAME + 'autoLogin' + "=" + escape('') + ";expires=" + exp.toGMTString();
     }
+    // const { userName, userPasswd, autoLogin, groupId } = values;
+    // var exp = new Date();
+    // exp.setTime(exp.getTime() + 7 * 24 * 60 * 60 * 1000);
+    // document.cookie = constant.SYSTEM_AVATAR_NAME + 'userName=' + escape(userName) + ';expires=' + exp.toGMTString();
+    // if (autoLogin) {
+    //   document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape(values.originPassword) + ";expires=" + exp.toGMTString();
+    // } else {
+    //   exp.setTime(exp.getTime() - 1);
+    //   document.cookie = constant.SYSTEM_AVATAR_NAME + 'userPasswd' + "=" + escape('') + ";expires=" + exp.toGMTString();
+    // }
   };
 
   const handleRedirect = () => {
@@ -192,6 +206,7 @@ export default (props) => {
             // onBlur={delayedQuery}
             prefix={<UserOutlined className={styles.prefixIcon} />}
             placeholder="请输入账号"
+            style={{ background: 'rgba(255, 255, 255, 0.5)', backdropFilter: '5px' }}
           />
         </Form.Item>
         <Form.Item name="userPasswd" label="密码" rules={[
@@ -204,6 +219,7 @@ export default (props) => {
             // onBlur={delayedQuery}
             prefix={<LockTwoTone className={styles.prefixIcon} />}
             placeholder="请输入密码"
+            style={{ background: 'rgba(255, 255, 255, 0.5)', backdropFilter: '5px' }}
           />
         </Form.Item>
         {/* <Form.Item name="groupId" label="组织" rules={[{ required: true, message: "请选择组织!" }]}>

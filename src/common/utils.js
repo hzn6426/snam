@@ -678,7 +678,7 @@ export const INewWindow = (props) => {
   var itop = (window.screen.height - 30 - (height || 0)) / 2;       //获得窗口的垂直位置;
   var ileft = (window.screen.width - 10 - (width || 0)) / 2;
   let browser = window.self;
-  let popup = null;
+
 
   browser = window.self
   browser.onSuccess = (message) => {
@@ -728,12 +728,25 @@ export const INewWindow = (props) => {
   }
   const getPageQuery = () => parse(url.split('?')[1]);
   window.getPageQuery = getPageQuery;
-  popup = browser.open(url, title, opts)
+  var popup = browser.open(url, title, opts)
 
-  
-  setTimeout(function () { popup.document.title = title }, 300);
+  // setWindowTitle(popup, title);
+  // console.log(title);
+  // setWindowTitle(popup, title)
+  // popup.document.title = title;
+  // popup.document.write('<title>My PDF File Title</title>')
+  setTimeout(function () { popup.document.title = title }, 1000);
 
 };
+
+function setWindowTitle(mapWin, title) {
+  if (mapWin.document) {// If loaded
+    mapWin.document.title = title;
+  } else {// If not loaded yet
+
+    setTimeout(() => setWindowTitle(mapWin, title), 1000); // Recheck again every 10 ms
+  }
+}
 
 
 //格式化数字
@@ -827,23 +840,10 @@ function toFixed(n, d) {
   return this + "";
 };
 
-export { produce };
-export { stringRandom };
-export { md5 };
-export { PubSub };
-export { moment };
 export {
-  useRefFn,
-  useObservable,
+  PubSub, api, constant, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, iupload, md5, moment, pluckCurrentTargetChecked,
+  pluckCurrentTargetValue, pluckFirst, produce, removeCache, setCache, stringRandom, useObservable,
   useObservableCallback,
-  useObservableState,
-  useSubscription,
-  pluckFirst,
-  pluckCurrentTargetChecked,
-  pluckCurrentTargetValue,
+  useObservableState, useRefFn, useSubscription
 };
-export { isearch, ipost, iput, iget, idelete, iupload, idownload, ilogin };
-export { removeCache, getCache, setCache, hasCache };
-export { api };
-export { constant };
 

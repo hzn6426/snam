@@ -77,3 +77,15 @@ export function saveUserColumnPerm(perm) {
 export function saveUsetColumnPerm(perm) {
     return ipost(constant.API_RESOURCE_SAVE_USET_COLUMN_PERM, perm);
 }
+// 获取用户按钮数据权限
+export function getUserFunctionDataPerm(viewType, permId, orgId, usetId) {
+    return iget(`${constant.API_RESOURCE_USER_FUNCTION_DATA_PERM}?viewType=${viewType}&permId=${permId}&orgId=${orgId}&usetId=${usetId}`)
+}
+// 获取用户业务数据权限
+export function getUserBusinessDataPerm(viewType, permId, orgId, usetId) {
+    return iget(`${constant.API_RESOURCE_USER_BUSINESS_DATA_PERM}?viewType=${viewType}&permId=${permId}&orgId=${orgId}&usetId=${usetId}`)
+}
+// 获取用户列数据权限
+export function getUserColumnDataPerm(viewType, permId, orgId, usetId) {
+    return iget(`${constant.API_RESOURCE_USER_COLUMN_DATA_PERM}?viewType=${viewType}&permId=${permId}&orgId=${orgId}&usetId=${usetId}`)
+}
