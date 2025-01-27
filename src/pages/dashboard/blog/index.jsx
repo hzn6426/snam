@@ -1,5 +1,4 @@
-import React from 'react';
-import { Typography, Card, Timeline } from 'antd';
+import { Card, Timeline, Typography } from 'antd';
 const { Title, Paragraph, Text } = Typography;
 
 export default () => {
@@ -8,6 +7,40 @@ export default () => {
     <>
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
+
+        <Timeline.Item>
+            <Title level={4}>[3.2.3] 2025.1.27</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 根据用户查看对应的资源权限和数据权限信息（职位权限、功能权限、业务权限、列权限信息）</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化登录界面</li>
+                <li>优化表格列调整后无法保存问题</li>
+                <li>优化FieldSet样式</li>
+                <li>优化列管理功能分页样式</li>
+                <li>优化项目启动时刷新限流缓存</li>
+                <li>优化列管理中添加系统表</li>
+                <li>优化登录失败时的提示信息</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复获取权限报错后可能导致权限上下文无法清理</li>
+                <li>修复获取用户数据权限对应的功能列表时可能导致获取完整问题</li>
+                <li>修复内存模式时二次登录失败问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
 
           <Timeline.Item>
             <Title level={4}>[3.2.2] 2025.1.4</Title>
