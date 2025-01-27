@@ -1,12 +1,12 @@
-import React, { useState, useMemo, useRef, useEffect, useImperativeHandle } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import { Typography, Button, Space, Drawer, Pagination, message, theme } from 'antd';
-import { SettingOutlined, SyncOutlined, FullscreenOutlined, DiffOutlined, InteractionOutlined, AppstoreOutlined, ControlOutlined } from '@ant-design/icons';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
-import './index.less';
 import { forEach, isEmpty, isFunction } from '@/common/utils';
+import { AppstoreOutlined, InteractionOutlined } from '@ant-design/icons';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { AgGridReact } from 'ag-grid-react';
+import { Button, Drawer, Pagination, Space, Typography, message, theme } from 'antd';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import './index.less';
 
 
 export default React.forwardRef((props, ref) => {
@@ -131,7 +131,7 @@ export default React.forwardRef((props, ref) => {
 
   const gridReady = (params) => {
     setGridApi(params.api);
-    setGridColumnApi(params.columnApi);
+    setGridColumnApi(gridRef.current?.columnApi);
     let customColumn = JSON.parse(localStorage.getItem(localPrefix + gridName));
     if (customColumn) {
       let initColumn = [], hideColumn = [];
@@ -151,7 +151,7 @@ export default React.forwardRef((props, ref) => {
 
       setGridColumns(initColumn);
       hideColumn.forEach((node) => {
-        gridColumnApi.setColumnVisible(node, false);
+        gridRef.current?.columnApi.setColumnVisible(node, false);
       })
     }
   }
@@ -295,7 +295,7 @@ export default React.forwardRef((props, ref) => {
 
       <div className={"ag-body ag-theme-balham" + (colorBgBase == '#fff' ? "" : "-dark")} >
         <AgGridReact
-          ref={ref}
+          ref={gridRef}
           rowData={dataSource} // 表格数据
           columnDefs={gridColumns} // 列数据
           defaultColDef={defaultCol} // 列属性设置
