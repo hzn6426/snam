@@ -57,6 +57,10 @@ export const useWindowSize = () => {
   return windowSize;
 };
 
+export const debounce = (fun, wait, options) => {
+  return _.debounce(fun, wait, options);
+}
+
 //==========================================
 // const fn = () => {}
 // isFunction(fn) //=> true
@@ -841,8 +845,8 @@ function toFixed(n, d) {
 };
 
 export {
-  PubSub, api, constant, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, iupload, md5, moment, pluckCurrentTargetChecked,
-  pluckCurrentTargetValue, pluckFirst, produce, removeCache, setCache, stringRandom, useObservable,
+  api, constant, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, iupload, md5, moment, pluckCurrentTargetChecked,
+  pluckCurrentTargetValue, pluckFirst, produce, PubSub, removeCache, setCache, stringRandom, useObservable,
   useObservableCallback,
   useObservableState, useRefFn, useSubscription
 };

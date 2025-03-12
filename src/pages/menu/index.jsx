@@ -1,32 +1,32 @@
-import { IFooterToolbar, IAGrid, ISearchTree, IStatus, Permit, ISearchForm, IFormItem } from '@/common/components';
+import { IAGrid, ISearchTree, IStatus, Permit } from '@/common/components';
 import { INewWindow, api, copyObject, forEach, isEmpty, pluck } from '@/common/utils';
 import {
     AppstoreOutlined,
     AppstoreTwoTone,
     DeleteOutlined,
-    FormOutlined,
-    PlusOutlined,
-    LockTwoTone,
-    UnlockTwoTone,
     DiffOutlined,
     FolderAddOutlined,
+    FormOutlined,
+    LockTwoTone,
+    PlusOutlined,
+    PlusSquareOutlined,
     RestOutlined,
-    PlusSquareOutlined
+    UnlockTwoTone
 } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 
 import { showDeleteConfirm } from '@/common/antd';
 import {
     Button,
+    Checkbox,
     Col,
     Form,
     Input,
     Row,
     Space,
     Tag,
-    message,
-    Checkbox,
-    Tooltip
+    Tooltip,
+    message
 } from 'antd';
 import objectAssign from 'object-assign';
 
@@ -279,6 +279,8 @@ export default (props) => {
     // 查询button
     const search = (pageNo, pageSize, beInMenu) => {
         setSelectedKeys([]);
+        setPageNo(pageNo);
+        setPageSize(pageSize);
         let param = { dto: {}, pageNo: pageNo, pageSize: pageSize };
         param.dto.menuId = beInMenu === true ? selectedMenuId : '';
         param.dto.keyword = tableSearchValue;

@@ -2,6 +2,10 @@
 //                 SYSTEM CONST                  //
 //= ==============================================//
 export default Object.freeze({
+  //tags
+  TAG_USER_SALLER: 'SALLER',
+  TAG_USER_KEEPER: 'KEEPER',
+  TAG_USER_SERVICE: 'SERVICE',
   // 登录路径
   ROUTE_LOGIN: '/user/login',
   //授权码登录
@@ -476,4 +480,18 @@ export default Object.freeze({
   API_FUNCTION_CLOSE: '/authority/function/closeFunction',
   API_FUNCTION_LIST_ALL_ONLINE_FUNCTION: '/authority/function/listAllOnlineFunction',
   API_FUNCTION_LIST_BY_TENANT: '/authority/function/listByTenant',
+
+  //= ==============================================//
+  //           订单管理 - 演示权限                     //
+  //= ==============================================//
+  API_ORDER_SEARCH: '/authority/order/search',
+  API_ORDER: '/authority/order',
+  //= ==============================================//
+  //                   商品管理                      //
+  //= ==============================================//
+  API_ITEM_SEARCH: '/authority/item/search',
+  API_ITEM: '/authority/item',
+  //关键字查询
+  API_ITEM_LIST_BY_KEY_WORD: '/authority/item/listByKeyWord',
 });
+

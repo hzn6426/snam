@@ -22,18 +22,20 @@ import * as role from '@/pages/role/service';
 import * as column from '@/pages/column/service';
 import * as group from '@/pages/group/service';
 import * as hmac from '@/pages/hmac/service';
+import * as item from '@/pages/item/service';
+import * as limit from '@/pages/limit/service';
 import * as logger from '@/pages/logger/service';
 import * as menu from '@/pages/menu/service';
 import * as mlogger from '@/pages/mlogger/service';
+import * as order from '@/pages/order/service';
 import * as param from '@/pages/param/service';
 import * as position from '@/pages/position/service';
 import * as resource from '@/pages/resource/service';
-import * as uset from '@/pages/uset/service';
-import * as limit from '@/pages/limit/service';
 import * as tenant from '@/pages/tenant/service';
-import * as tmenu from '@/pages/tmenu/service';
-import * as tlog from '@/pages/tlog/service';
 import * as tfunction from '@/pages/tfunction/service';
+import * as tlog from '@/pages/tlog/service';
+import * as tmenu from '@/pages/tmenu/service';
+import * as uset from '@/pages/uset/service';
 
 const api = {
   user,
@@ -71,6 +73,8 @@ const api = {
   tmenu,
   tlog,
   tfunction,
+  order,
+  item,
 };
 
 export default api;

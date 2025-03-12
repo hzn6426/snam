@@ -104,9 +104,9 @@ export function listPermButtons(userId, groupId, menuId) {
   return iget(`${constant.API_USER_LIST_PERM_BUTTONS}?uid=${userId}&gid=${groupId}&mid=${menuId}`);
 }
 // 获取权限菜单按钮
-export function listPermMenusAndButtons(userId, groupId, roleId, beFilterPerm) {
+export function listPermMenusAndButtons(userId, groupId, roleId, beFilterPerm, beFilterUnAuthPerm) {
   let rid = roleId == 'all' ? '' : roleId;
-  return iget(`${constant.API_USER_LIST_PERM_MENUS_AND_BUTTONS}?uid=${userId}&gid=${groupId}&rid=${rid}&fp=${!!beFilterPerm}`);
+  return iget(`${constant.API_USER_LIST_PERM_MENUS_AND_BUTTONS}?uid=${userId}&gid=${groupId}&rid=${rid}&fp=${!!beFilterPerm}&np=${!!beFilterUnAuthPerm}`);
 }
 // 获取角色列表
 export function listRoles(userId, groupId) {

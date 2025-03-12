@@ -333,6 +333,7 @@ export default (props) => {
     const [selectButtonPermId, setSelectButtonPermId] = useState('');
     // 是否过滤权限按钮
     const [beFilterPermButton, setBeFilterPermButton] = useState(false);
+    const [beFilterUnAuthButton, setBeFilterUnAuthButton] = useState(false);
 
     // 树显示
     const [postTreeVisible, setPostTreeVisible] = useState(true);
@@ -683,13 +684,13 @@ export default (props) => {
         const id = params.id;
         const uid = split(id, '_')[0];
         const gid = split(id, '_')[1];
-        api.user.listPermMenusAndButtons(uid, gid, selectRoleId, beFilterPermButton).subscribe({
+        api.user.listPermMenusAndButtons(uid, gid, selectRoleId, beFilterPermButton,beFilterUnAuthButton).subscribe({
             next: (data) => {
                 addIcon(data);
                 setTreeData(data);
             }
         });
-    }, [beFilterPermButton, selectRoleId]);
+    }, [beFilterPermButton,beFilterUnAuthButton, selectRoleId]);
 
     //监控排除的列表
     useEffect(() => {
@@ -903,7 +904,9 @@ export default (props) => {
                     style={{ borderRadius: 10 }}
                     title={
                         <>
-                            <Space>角色列表:<Select size='small' defaultValue="ALL" onChange={(v) => setSelectRoleId(v)} options={roleOptions} style={{ width: 160 }} />  <Checkbox onChange={(e) => setBeFilterPermButton(e.target.checked)}>数据权限</Checkbox></Space>
+                            <Space>角色列表:<Select size='small' defaultValue="ALL" onChange={(v) => setSelectRoleId(v)} options={roleOptions} style={{ width: 120 }} />  
+                                <Checkbox onChange={(e) => setBeFilterPermButton(e.target.checked)}>数据权限</Checkbox>
+                                <Checkbox onChange={(e) => setBeFilterUnAuthButton(e.target.checked)}>无权限</Checkbox></Space>
                         </>
                     }
                     bodyStyle={{

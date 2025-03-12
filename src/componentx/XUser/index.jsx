@@ -1,10 +1,10 @@
-import React, { useState,useEffect } from 'react';
-import { TreeSelect } from 'antd';
-import {api, forEach, copyObject, isEmpty} from '@/common/utils';
+import { api, copyObject, forEach, isEmpty } from '@/common/utils';
 import {
-    ApartmentOutlined,
-    UserOutlined,
+  ApartmentOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
+import { TreeSelect } from 'antd';
+import { useEffect, useState } from 'react';
 const XUser = (props) => {
   const [treeData, setTreeData] = useState([]);
 
@@ -25,13 +25,14 @@ const XUser = (props) => {
             loop(v.children);
         }
     }, data);
+    return data;
 };
   //查询
   const loadGroup = () => {
     api.user.treeAllGroupsAndUsersByTag(props.tag || '').subscribe({
         next: (data) => {
-          loop(data)
-            setTreeData(data);
+          
+          setTreeData(loop(data));
         },
     });
 };
@@ -43,6 +44,13 @@ const XUser = (props) => {
     <TreeSelect
       showSearch
       allowClear
+      // titleRender={(node) => (
+      //   <div style={{ width: '100%' }}>
+      //     <div style={{ float: 'left' }}>
+      //       {node.icon} {node.title}
+      //     </div>
+      //   </div>
+      // )}
     //   multiple
       // treeDefaultExpandAll      
       value={props.value}

@@ -15,7 +15,7 @@ const proSettings = {
   // isTabs: false,
 
   "navTheme": "light",
-  "layout": "side",
+  "layout": "mix",
   "contentWidth": "Fluid",
   "fixedHeader": true,
   "fixSiderbar": true,

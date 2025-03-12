@@ -194,6 +194,11 @@ export default [
                 path: '/new/limit/:id',
                 component: './limit/save',
               },
+              {
+                name: '编辑提单',
+                path: '/new/order/:id',
+                component: './order/save',
+              },
             ]
           }
         ]
@@ -235,6 +240,12 @@ export default [
               {
                 path: '/',
                 redirect: '/system/user',
+              },
+              {
+                name: '提单演示',
+                icon: 'smile',
+                path: '/system/order',
+                component: './order',
               },
               {
                 name: '用户管理',

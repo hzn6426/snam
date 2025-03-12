@@ -1,9 +1,7 @@
 import {
-    IFormItem,
     IAGrid,
-    XSearchForm,
-    IStatus,
-    IGridSearch
+    IGridSearch,
+    IStatus
 } from '@/common/components';
 import {
     INewWindow,
@@ -12,7 +10,7 @@ import {
     pluck,
     useObservableAutoCallback
 } from '@/common/utils';
-import { Form, Select, Input } from 'antd';
+import { Form } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -192,6 +190,8 @@ export default (props) => {
     const search = (pageNo, pageSize, params) => {
         setSelectedKeys([]);
         setSearchLoading(true);
+        setPageNo(pageNo);
+        setPageSize(pageSize);
         let param = { dto: params || {}, pageNo: pageNo, pageSize: pageSize };
         api.logger.searchLogger(param).subscribe({
             next: (data) => {
