@@ -9,6 +9,35 @@ export default () => {
         <Timeline>
 
         <Timeline.Item>
+            <Title level={4}>[3.2.4] 2025.3.14</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 提单演示-通过切换用户来获取对应数据，验证权限有效性</li>
+                <li>新增 工作流(即将到来) - 使工作流更简单<a href="https://flow.baomibing.com">snapper-flow （仅前端演示）</a></li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化权限启动器，支持多个包的@Action扫描</li>
+                <li>优化授权管理中用户和用户获取权限，不再获取无权限数据</li>
+                <li>用户权限中添加无权限按钮支持及修复全角色获取数据问题</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复mybatis-plus构建查询情况下，配置排除列失效的问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+        <Timeline.Item>
             <Title level={4}>[3.2.3] 2025.1.27</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>

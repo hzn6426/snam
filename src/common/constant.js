@@ -486,6 +486,7 @@ export default Object.freeze({
   //= ==============================================//
   API_ORDER_SEARCH: '/authority/order/search',
   API_ORDER: '/authority/order',
+  API_ORDER_TOKEN: '/authority/order/tokens',
   //= ==============================================//
   //                   商品管理                      //
   //= ==============================================//

@@ -32,7 +32,7 @@ import {
 } from 'observable-hooks';
 
 
-import { idelete, idownload, iget, ilogin, ipost, iput, isearch, iupload } from './request';
+import { idelete, idownload, iget, ilogin, ipost, iput, isearch, isearchByToken, iupload } from './request';
 
 
 import { getCache, hasCache, removeCache, setCache } from './cache';
@@ -845,7 +845,7 @@ function toFixed(n, d) {
 };
 
 export {
-  api, constant, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, iupload, md5, moment, pluckCurrentTargetChecked,
+  api, constant, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, isearchByToken, iupload, md5, moment, pluckCurrentTargetChecked,
   pluckCurrentTargetValue, pluckFirst, produce, PubSub, removeCache, setCache, stringRandom, useObservable,
   useObservableCallback,
   useObservableState, useRefFn, useSubscription

@@ -73,7 +73,9 @@ service.interceptors.request.use((config) => {
     return config;
   }
   if (token) {
-    objectAssign(config.headers, { Authorization: `${token}` });
+    if (!config.headers['Authorization']) {
+      objectAssign(config.headers, { Authorization: `${token}` });
+    }
   }
   return config;
 }, err);
@@ -147,6 +149,21 @@ export async function wpost(purl, param) {
   return service.post(purl, param, {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
+    },
+  });
+}
+
+/**
+ * 封装post请求方法
+ * @param {*} purl 请求Url
+ * @param {*} param 请求参数
+ * @returns
+ */
+export async function wpostByToken(token, purl, param) {
+  return service.post(purl, param, {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      Authorization: `Bearer ${token}`,
     },
   });
 }

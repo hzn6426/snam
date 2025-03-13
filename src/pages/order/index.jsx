@@ -3,19 +3,21 @@ import {
     IAGrid,
     IButton,
     IGridSearch,
+    IIF,
     Permit
 } from '@/common/components';
 import {
     INewWindow,
     api,
     dateFormat,
+    forEach,
     pluck
 } from '@/common/utils';
 import {
     PlusOutlined, RestOutlined
 } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
-import { useRef, useState } from 'react';
+import { Alert, Button, Form, message } from 'antd';
+import { useEffect, useRef, useState } from 'react';
 
 //列初始化
 const initColumns = [
@@ -85,6 +87,7 @@ const initColumns = [
     }
 ];
 
+let tokenMap = {};
 
 export default (props) => {
     const [searchForm] = Form.useForm();
@@ -94,6 +97,8 @@ export default (props) => {
     const [pageNo, setPageNo] = useState(1);
     const [pageSize, setPageSize] = useState(50);
     const [selectedKeys, setSelectedKeys] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [note, setNote] = useState('');
 
     const ref = useRef();
 
@@ -135,11 +140,14 @@ export default (props) => {
 
 
     //查询
-    const search = (pageNo, pageSize) => {
+    const search = (pageNo, pageSize, token) => {
+        if (!token) {
+            return;
+        }
         setSelectedKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
-        api.order.searchOrder(param).subscribe({
+        let param = { dto: {}, pageNo: pageNo, pageSize: pageSize };
+        api.order.searchOrder(token, param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
                 setTotal(data.total);
@@ -149,6 +157,30 @@ export default (props) => {
         });
     };
     const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
+
+    const onTokenChange = (v) => {
+        const map = tokenMap[v];
+        const token = map.token;
+        const note = map.description;
+        setNote(note);
+        search(pageNo, pageSize, token);
+    }
+    useEffect(() => {
+        api.order.tokens().subscribe({
+            next: (data) => {
+                const opt = [];
+                forEach((v => {
+                    opt.push({
+                        label: v.userCnName,
+                        value: v.userNo,
+                        xtype:"hidden",
+                    });
+                    tokenMap[v.userNo] = v;
+                }),data);
+                setOptions(opt);
+            }
+        });
+    },[])
 
     // 列表及弹窗
     return (
@@ -169,6 +201,9 @@ export default (props) => {
                     xtype="input"
                 />
             </ISearchForm> */}
+            <IIF test = {note}>
+            <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message={note} type="info" showIcon={true} />
+            </IIF>
             <IAGrid
                 ref={ref}
                 title="商品列表"
@@ -183,13 +218,13 @@ export default (props) => {
                 onSelectedChanged={onChange}
                 onDoubleClick={(record) => onDoubleClick(record.id)}
                 toolBarRender={[
-                    <IGridSearch defaultValue={'itemName'} size="small" onSearch={(params) => search(1, pageSize, params)}
-                        options={[{ label: '商品名称', value: 'itemName' }, { label: '客服', value: 'service' }, { label: '销售', value: 'seller' }]} />,
+                    <IGridSearch defaultPlaceholder="选择用户查看权限" selectWidth={150}  size="small" hiddenField={true} onSearch={(params) => search(1, pageSize, params)} onChange={(v) => onTokenChange(v)}
+                        options={options} />,
                     <Permit authority="param:save" key="save">
                     <Button
                         key="add"
                         size="small"
-                        type="primary"
+                        type="default"
                         icon={<PlusOutlined />}
                         onClick={() => onNewClick()}
                     >

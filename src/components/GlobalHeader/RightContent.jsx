@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // import { connect } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 // import NoticeIconView from './NoticeIconView';
+import { api } from '@/common/utils';
 import Department from './Department';
-import { api, PubSub } from '@/common/utils';
-
 const GlobalHeaderRight = (props) => {
   const { theme, layout, change } = props;
 
