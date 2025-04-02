@@ -297,6 +297,13 @@ export const forEach = (fn, list) => {
 };
 
 //==========================================
+// every((v)=>{}, array); return false stop loop
+//==========================================
+export const every = (fn, list) => {
+  return _.every(list,fn);
+};
+
+//==========================================
 // map((v)=>{}, array); return the new list;
 //==========================================
 export const rmap = (fn, list) => {

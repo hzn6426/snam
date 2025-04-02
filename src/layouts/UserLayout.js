@@ -1,10 +1,11 @@
 import { constant } from '@/common/utils';
+import { ApplicationStateProvider } from "@/store/state";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import logo from '../assets/auth.svg';
 import styles from './UserLayout.less';
-
 const UserLayout = (props) => {
     return (
+        <ApplicationStateProvider>
         <HelmetProvider>
             <Helmet>
                 <title>系统登录</title>
@@ -23,6 +24,7 @@ const UserLayout = (props) => {
                 </div>
             </div>
         </HelmetProvider>
+        </ApplicationStateProvider>
     );
 };
 export default UserLayout;

@@ -1,9 +1,5 @@
 export default [
-  {
-    // path: '/',
-    // component: '../layouts/BlankLayout',
-    // routes: [
-    //   {
+    {
         path: '/user',
         component: '../layouts/UserLayout',
         routes: [
@@ -17,6 +13,18 @@ export default [
           },
         ],
       },
+      {
+        path: '/condition',
+        component: '../layouts/BlankLayout',
+        routes: [
+          {
+            name: '条件',
+            path: '/condition',
+            component: './rule',
+          },
+        ],
+      },
+
       {
         path: '/new',
         routes: [
@@ -359,5 +367,5 @@ export default [
           },
         ],
       },
-
+      
 ];

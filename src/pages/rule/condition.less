@@ -1,0 +1,124 @@
+
+
+.rule-condition {
+    display: flex;
+    font-size: 12px;
+    position: relative;
+  }
+  
+
+  .rule-condition_last {
+    &::before {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 100%;
+      background-color: #fff;
+      z-index: 9;
+      top: 16px;
+      left: -16px - 1px;
+    }
+  }
+
+
+  .condition_wrapper {
+    border-left: 1px solid  #ebebf0;
+  }
+  
+  .condition_container {
+    position: relative;
+    padding: 3px 16px;
+  
+    &:first-child {
+       margin-top: 1px;
+    }
+  }
+
+  .toolbar {
+    background-color: #fff;
+    padding: 8px;
+    overflow: hidden;
+  }
+  
+  .toolbar_wrapper {
+    margin-right: 16px;
+  }
+  
+  .toolbar_container_has_children {
+    position: relative;
+  
+    &::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 1px;
+      background-color:  #ebebf0;
+      top: 12px; // 这个无法计算，除非写死每个item的高度
+      right: -16px;
+    }
+  }
+  
+  .toolbar_container {
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    margin-bottom: 4px;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 1px;
+      margin: auto;
+      background-color:  #ebebf0;
+      top: 0;
+      bottom: 0;
+      left: -16px - 1px;
+    }
+  }
+
+  .toolbar_container_first {
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    margin-bottom: 4px;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 1px;
+      margin: auto;
+      background-color:  #ebebf0;
+      top: -8px;
+      bottom: 0;
+      left: -16px - 1px;
+    }
+  }
+  
+  // .toolbar_container_no_border {
+  //   &::before {
+  //     display: none;
+  //   }
+  // }
+  
+
+  
+  .condition_line {
+    position: absolute;
+    width: 1px;
+    height: 50%;
+    background-color: #fff;
+    z-index: 9;
+  }
+  
+  .condition_line_top {
+    top: -2px;
+    left: -1px;
+  }
+  
+  .condition_line_bottom {
+    bottom: 1px;
+    left: -1px;
+  }
+  
