@@ -179,7 +179,7 @@ export default (props) => {
                         // ) : undefined,
                         // <InfoCircleFilled key="InfoCircleFilled" />,
                         // <QuestionCircleFilled key="QuestionCircleFilled" />,
-                        // <Avatar shape="square" size={28} icon={<GithubFilled />} style={{ marginLeft: 0, marginRight: -10 }} />
+                        // <Avatar shape="square" size={28} icon={<GithubFilled />} style={{ marginLeft: 0, marginRight: 0, }} />
                         // <GithubFilled key="GithubFilled" shape="square" style={{ fontSize: 23, marginLeft: 0, marginRight: -10 }} />,
                     ];
                 }}

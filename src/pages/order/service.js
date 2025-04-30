@@ -1,8 +1,8 @@
-import { constant, idelete, iget, ipost, iput, isearch } from '@/common/utils';
+import { constant, idelete, iget, ipost, iput, isearchByToken } from '@/common/utils';
 
 //条件查询
-export function searchOrder(conditions) {
-    return isearch(constant.API_ORDER_SEARCH, conditions);
+export function searchOrder(token, conditions) {
+    return isearchByToken(token, constant.API_ORDER_SEARCH, conditions);
 }
 
 //保存或更新
@@ -18,4 +18,8 @@ export function getOrder(id) {
 //删除供应商
 export function deleteOrder(ids) {
     return idelete(constant.API_ORDER, ids);
+}
+
+export function tokens() {
+    return iget(constant.API_ORDER_TOKEN);
 }

@@ -4,6 +4,7 @@ import {
   wfileUpload,
   wget,
   wpost,
+  wpostByToken,
   wpostWithheaders,
   wput,
   wrapObservable,
@@ -13,6 +14,10 @@ import {
 
 export const isearch = (url, condition) => {
   return wrapSearchObservable(wpost, url, condition);
+};
+
+export const isearchByToken = (token, url, condition) => {
+  return wrapSearchObservable(wpostByToken, token, url, condition);
 };
 
 export const ilogin = (url, param, headers) => {
