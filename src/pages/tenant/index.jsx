@@ -1,43 +1,37 @@
 import { showDeleteConfirm } from '@/common/antd';
 import {
-    IFooterToolbar,
-    IFormItem,
     IAGrid,
-    XSearchForm,
     IButton,
+    IGridSearch,
     IStatus,
-    Permit,
-    IGridSearch
+    Permit
 } from '@/common/components';
 import {
     INewWindow,
-    dateFormat,
     api,
     beHasRowsPropNotEqual,
+    dateFormat,
+    formatNumber,
     isEmpty,
     pluck,
     state2Option,
     useAutoObservableEvent,
-    useObservableAutoCallback,
-    formatNumber
+    useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined,
-    LockTwoTone,
+    ClusterOutlined,
     DiffOutlined,
-    RestOutlined,
+    FilePdfOutlined,
     GatewayOutlined,
-    TransactionOutlined,
     KeyOutlined,
     LockOutlined,
+    LockTwoTone,
+    RestOutlined,
+    TransactionOutlined,
     UnlockOutlined,
-    ClusterOutlined,
-    FilePdfOutlined,
-    ApiOutlined,
-    SunOutlined,
     UnlockTwoTone
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin, Tag, Tooltip, Select, Input } from 'antd';
+import { Button, Form, Spin, Tag, Tooltip, message } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -214,7 +208,7 @@ export default (props) => {
             title: '接口管理',
             width: 900,
             height: 600,
-            callback: () => { }
+            callback: () => refresh()
         })),
     ]);
 

@@ -1,42 +1,31 @@
 import { showDeleteConfirm } from '@/common/antd';
 import {
-    IFooterToolbar,
-    IFormItem,
     IAGrid,
-    XSearchForm,
-    IStatus,
     IButton,
+    IStatus,
     Permit
 } from '@/common/components';
 import {
     INewWindow,
-    dateFormat,
     api,
     beHasRowsPropNotEqual,
-    isEmpty,
+    dateFormat,
     pluck,
-    state2Option,
     useAutoObservableEvent,
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    DiffOutlined,
-    RestOutlined,
-    LockTwoTone,
     CloudDownloadOutlined,
     CloudUploadOutlined,
-    UnlockTwoTone,
-    CloudSyncOutlined,
-    SyncOutlined,
-    ReloadOutlined
+    DiffOutlined,
+    RestOutlined
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin, Select, Input, Tooltip } from 'antd';
+import { Button, Spin, Tooltip, message } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
     debounceTime,
     distinctUntilChanged,
-    filter,
     shareReplay,
     switchMap,
     tap
@@ -94,8 +83,8 @@ const initColumns = [
         width: 140,
         field: 'feeType',
         valueFormatter: (x) => {
-            if (x.value === 'YEAR') {
-                return '年付费';
+            if (x.value === 'MONTH') {
+                return '按月付费';
             } else if (x.value === 'REQUEST') {
                 return '请求付费';
             }
