@@ -1,10 +1,7 @@
-import { showDeleteConfirm } from '@/common/antd';
 import {
     IAGrid,
-    IButton,
     IGridSearch,
-    IIF,
-    Permit
+    IIF
 } from '@/common/components';
 import {
     INewWindow,
@@ -13,10 +10,7 @@ import {
     forEach,
     pluck
 } from '@/common/utils';
-import {
-    PlusOutlined, RestOutlined
-} from '@ant-design/icons';
-import { Alert, Button, Form, message } from 'antd';
+import { Alert, Form, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
 //列初始化
@@ -119,13 +113,13 @@ export default (props) => {
     }
 
     const onDoubleClick = (id) => {
-        INewWindow({
-            url: '/new/order/' + id,
-            title: '编辑提单',
-            width: 700,
-            height: 600,
-            callback: () => refresh()
-        });
+        // INewWindow({
+        //     url: '/new/order/' + id,
+        //     title: '编辑提单',
+        //     width: 700,
+        //     height: 600,
+        //     callback: () => refresh()
+        // });
     }
 
     const onNewClick = () => {
@@ -220,34 +214,34 @@ export default (props) => {
                 toolBarRender={[
                     <IGridSearch defaultPlaceholder="选择用户查看权限" selectWidth={150}  size="small" hiddenField={true} onSearch={(params) => search(1, pageSize, params)} onChange={(v) => onTokenChange(v)}
                         options={options} />,
-                    <Permit authority="param:save" key="save">
-                    <Button
-                        key="add"
-                        size="small"
-                        type="default"
-                        icon={<PlusOutlined />}
-                        onClick={() => onNewClick()}
-                    >
-                    </Button>
-                    </Permit>,
+                    // <Permit authority="param:save" key="save">
+                    // <Button
+                    //     key="add"
+                    //     size="small"
+                    //     type="default"
+                    //     icon={<PlusOutlined />}
+                    //     onClick={() => onNewClick()}
+                    // >
+                    // </Button>
+                    // </Permit>,
 
                 ]}
                 // onClick={(data) => onClicked(data)}
                 clearSelect={searchLoading}
                 pageToolBarRender={[
-                    <Permit authority="order:delete">
-                    <IButton
-                            danger
-                            type="primary"
-                            icon={<RestOutlined />}
-                            size="small"
-                            key="delete"
-                            loading={searchLoading}
-                            onClick={() => showDeleteConfirm('确定删除选中的订单吗?', () => onDelete(selectedKeys))}
-                        >
-                            删除
-                        </IButton>
-                    </Permit>
+                    // <Permit authority="order:delete">
+                    // <IButton
+                    //         danger
+                    //         type="primary"
+                    //         icon={<RestOutlined />}
+                    //         size="small"
+                    //         key="delete"
+                    //         loading={searchLoading}
+                    //         onClick={() => showDeleteConfirm('确定删除选中的订单吗?', () => onDelete(selectedKeys))}
+                    //     >
+                    //         删除
+                    //     </IButton>
+                    // </Permit>
                 ]}
             />
         </>

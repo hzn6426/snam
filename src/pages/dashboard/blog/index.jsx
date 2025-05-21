@@ -1,10 +1,36 @@
-import { Card, Timeline, Typography } from 'antd';
+import { Card, Modal, Timeline, Typography } from 'antd';
+import { useEffect } from 'react';
 const { Title, Paragraph, Text } = Typography;
 
 export default () => {
+
+
+  const info = () => {
+    Modal.info({
+      title: '点赞',
+      content: (
+        <div>
+          <p>喜欢该项目就点个赞吧，您的支持是对我最大的鼓励，也是支持我前进的动力！</p>
+        </div>
+      ),
+      onOk() {window.open('https://gitee.com/ifrog/snam-standalone',"_blank")},
+    });
+  };
   const { clientHeight } = window?.document?.documentElement;
+
+  useEffect(() => {
+    const lastFetchTime = localStorage.getItem('lastFetchTime');
+    const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
+    const now = new Date().getTime();
+ 
+    if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
+      localStorage.setItem('lastFetchTime', now.toString());
+      info();
+    }
+  },[]);
   return (
     <>
+      
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
 
@@ -14,7 +40,7 @@ export default () => {
             <Paragraph>
               <ul className="snam-li">
                 <li>新增 提单演示-通过切换用户来获取对应数据，验证权限有效性</li>
-                <li>新增 工作流(即将到来) - 使工作流更简单<a href="https://flow.baomibing.com">snapper-flow （仅前端演示）</a></li>
+                <li>新增 工作流(即将到来) - 使工作流更简单<a href="https://flow.baomibing.com" target='_blank'>snapper-flow(仅前端演示)</a></li>
               </ul>
             </Paragraph>
             <Title level={5} type="success">
@@ -33,6 +59,8 @@ export default () => {
             <Paragraph type="warning">
               <ul className="snam-li">
                 <li>修复mybatis-plus构建查询情况下，配置排除列失效的问题</li>
+                <li>修复在只过滤公司的情况下，配置业务数据权限失效的问题</li>
+                <li>修复拦截器在某些情况下会进行转义，导致错误的问题</li>
               </ul>
             </Paragraph>
           </Timeline.Item>
