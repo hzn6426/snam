@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { TButton } from '@/common/componentx';
 import { api, copyObject, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { IFormItem, IIF, ILayout, IWindow } from '@/common/components';
-import { TButton } from '@/common/componentx'
-import { InputNumber, message, Form, Input, Select, } from 'antd';
+import { Form, Input, InputNumber, message, Select, } from 'antd';
+import { useRef, useState } from 'react';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
 
@@ -96,7 +96,7 @@ export default (props) => {
                     label="付费方式"
                     rules={[{ whitespace: true, required: true, message: false }]}
                 >
-                    <Select allowClear options={[{ label: '按年付费', value: 'YEAR' }, { label: '请求付费', value: 'REQUEST' }]} />
+                    <Select allowClear options={[{ label: '按月付费', value: 'MONTH' }, { label: '请求付费', value: 'REQUEST' }]} />
                 </Form.Item>
                 <Form.Item
                     labelCol={{ span: 3 }}

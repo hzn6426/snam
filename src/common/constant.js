@@ -478,6 +478,7 @@ export default Object.freeze({
   API_FUNCTION_OFFLINE: '/authority/function/doOffline',
   API_FUNCTION_OPEN: '/authority/function/openFunction',
   API_FUNCTION_CLOSE: '/authority/function/closeFunction',
+  API_FUNCTION_DEFER: '/authority/function/deferFunction',
   API_FUNCTION_LIST_ALL_ONLINE_FUNCTION: '/authority/function/listAllOnlineFunction',
   API_FUNCTION_LIST_BY_TENANT: '/authority/function/listByTenant',
 
