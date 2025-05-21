@@ -33,9 +33,9 @@ export default (props) => {
         snamModalForm
             .validateFields()
             .then((values) => {
-                const params = { ...values };
-                props.onSubmit(params);
+                props.onSubmit(values);
                 unload();
+               
             })
             .catch(() => unload());
     };

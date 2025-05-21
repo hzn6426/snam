@@ -1,11 +1,11 @@
-import { ApplicationStateProvider } from "@/store/state";
 const BlankLayout = (props) => {
-    return (
-        <ApplicationStateProvider>
+    return (<>
+        
         
             {props.children}
               
-        </ApplicationStateProvider>
+       
+        </>
     );
 };
 export default BlankLayout;

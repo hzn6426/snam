@@ -14,13 +14,18 @@ export default [
         ],
       },
       {
-        path: '/condition',
+        path: '/tree',
         component: '../layouts/BlankLayout',
         routes: [
+          // {
+          //   name: '条件',
+          //   path: '/condition',
+          //   component: './rule',
+          // },
           {
             name: '条件',
-            path: '/condition',
-            component: './rule',
+            path: '/tree/rule',
+            component: './tree',
           },
         ],
       },
@@ -206,6 +211,12 @@ export default [
                 name: '编辑提单',
                 path: '/new/order/:id',
                 component: './order/save',
+              },
+
+              {
+                name: '编辑变量',
+                path: '/new/rule/variable/:id',
+                component: './tree/variable',
               },
             ]
           }

@@ -41,7 +41,6 @@ export default (props) => {
   } = props;
 
   const [ui, setUi] = useState(<></>);
-
   const renderComponent = () => {
     let ioptions = isFunction(options) ? options() : options;
     let beFormItem = true;
@@ -186,7 +185,7 @@ export default (props) => {
         name={name}
         label={label}
         labelCol={labelWrap ? { span: 24 } : labelCol || { flex: '80px' }}
-        tooltip={tooltip || false}
+        tooltip={tooltip}
         rules={[
           {
             required: required || false,
