@@ -1,2 +1,4 @@
 import Tree from './tree'
-export default Tree
+export default () => {
+    return <><Tree /></>
+}

@@ -8,17 +8,8 @@ export default (props) => {
     const [current, setCurrent] = useState({});
 
     const onSaveClick = (v) => {
-        let express;
-        let desc;
-        if (v.value) {
-            desc = <>定义<span className='desc'> {v.type} </span>类型变量 <span className='desc'>{v.name} = {v.value}</span></>;
-            express = format("{0} {1} = {2};", v.type, v.name, v.value);
-        } else {
-            desc = <>定义<span className='desc'>{v.type}</span>类型变量 <span className='desc'>{v.name}</span></>;
-            express = format("{0} {1};", v.type, v.name);
-        }
-        v.desc = desc;
-        v.express = express;
+        v.desc = <>将对象变量<span className='desc'>{v.source}</span>转换成Json字符串，保存到变量<span className='desc'>{v.variableObject}</span></>;;
+        v.express = format("def {1} = json({0})", v.source, v.variableObject);
         window.close();
         window.opener.onSuccess(v);
     }
@@ -40,7 +31,7 @@ export default (props) => {
         <IWindow
             current={current}
             className="snam-modal"
-            title='编辑变量'
+            title='对象转Json'
             width={clientWidth}
             height={clientHeight}
             onSubmit={(params) => onSaveClick(params)}
@@ -51,9 +42,8 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="index" />
             <ILayout type="vbox">
-                <IFormItem xtype='input' name="name" label="变量名"  required={true} />
-                <IFormItem xtype='select' name="type" label="变量类型"  options={variableType} required={true} />
-                <IFormItem xtype='textarea' name="value" label="变量值"  tooltip="支持groovy脚本" />
+                <IFormItem labelCol={{ span: 4 }} xtype='input' name="source" label="源变量"  required={true} />
+                <IFormItem labelCol={{ span: 4 }} xtype='input' name="variableObject" label="保存到变量" required={true} />
             </ILayout>
         </IWindow>
     )

@@ -216,7 +216,87 @@ export default [
               {
                 name: '编辑变量',
                 path: '/new/rule/variable/:id',
-                component: './tree/variable',
+                component: './tree/Variable',
+              },
+              {
+                name: '对象赋值',
+                path: '/new/rule/assign/:id',
+                component: './tree/Assign',
+              },
+              {
+                name: '对象转换',
+                path: '/new/rule/objectConvert/:id',
+                component: './tree/ObjectConvert',
+              },
+              {
+                name: 'Json转换成对象',
+                path: '/new/rule/jsonToObject/:id',
+                component: './tree/JsonToObject',
+              },
+              {
+                name: '转换为Json文本',
+                path: '/new/rule/objectToJson/:id',
+                component: './tree/ObjectToJson',
+              },
+              {
+                name: 'IF条件',
+                path: '/new/rule/ifCondition/:id',
+                component: './tree/IFCondition',
+              },
+              {
+                name: 'ELSE IF条件',
+                path: '/new/rule/elseIfCondition/:id',
+                component: './tree/ElseIFCondition',
+              },
+              {
+                name: 'Groovy代码段',
+                path: '/new/rule/groovyCode/:id',
+                component: './tree/GroovyCode',
+              },
+              {
+                name: 'While循环',
+                path: '/new/rule/whileLoop/:id',
+                component: './tree/WhileLoop',
+              },
+              {
+                name: 'For次数循环',
+                path: '/new/rule/forNumberLoop/:id',
+                component: './tree/ForNumberLoop',
+              },
+              {
+                name: 'For列表循环',
+                path: '/new/rule/forItemLoop/:id',
+                component: './tree/ForItemLoop',
+              },
+              {
+                name: '返回数据',
+                path: '/new/rule/returnData/:id',
+                component: './tree/ReturnData',
+              },
+              {
+                name: 'Catch异常',
+                path: '/new/rule/catchException/:id',
+                component: './tree/CatchException',
+              },
+              {
+                name: 'Throw异常',
+                path: '/new/rule/throwException/:id',
+                component: './tree/ThrowException',
+              },
+              {
+                name: 'Select查询',
+                path: '/new/rule/selectSqlCode/:id',
+                component: './tree/SelectSqlCode',
+              },
+              {
+                name: '代码预览',
+                path: '/new/rule/previewCode',
+                component: './tree/PreviewCode',
+              },
+              {
+                name: '全局变量',
+                path: '/new/rule/globalVariable/:id',
+                component: './tree/GlobalVariable',
               },
             ]
           }

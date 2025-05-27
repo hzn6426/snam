@@ -57,7 +57,7 @@ const icons = {
     loop: <ClockCircleOutlined />,
 }
 
-const menuIcon = {
+export const menuIcon = {
     icon_root: <ApiOutlined />,
     icon_condition:<ForkOutlined />,
     icon_loop: <ClockCircleOutlined />,

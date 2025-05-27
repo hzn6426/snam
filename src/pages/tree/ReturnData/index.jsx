@@ -10,12 +10,12 @@ export default (props) => {
     const onSaveClick = (v) => {
         let express;
         let desc;
-        if (v.value) {
-            desc = <>定义<span className='desc'> {v.type} </span>类型变量 <span className='desc'>{v.name} = {v.value}</span></>;
-            express = format("{0} {1} = {2};", v.type, v.name, v.value);
+        if (v.variableObject) {
+            desc = <>返回变量<span className='desc'> {v.variableObject} </span></>;
+            express = format("return {0};", v.variableObject);
         } else {
-            desc = <>定义<span className='desc'>{v.type}</span>类型变量 <span className='desc'>{v.name}</span></>;
-            express = format("{0} {1};", v.type, v.name);
+            desc = <>直接返回</>;
+            express = format("return;");
         }
         v.desc = desc;
         v.express = express;
@@ -40,7 +40,7 @@ export default (props) => {
         <IWindow
             current={current}
             className="snam-modal"
-            title='编辑变量'
+            title='返回变量'
             width={clientWidth}
             height={clientHeight}
             onSubmit={(params) => onSaveClick(params)}
@@ -51,9 +51,7 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="index" />
             <ILayout type="vbox">
-                <IFormItem xtype='input' name="name" label="变量名"  required={true} />
-                <IFormItem xtype='select' name="type" label="变量类型"  options={variableType} required={true} />
-                <IFormItem xtype='textarea' name="value" label="变量值"  tooltip="支持groovy脚本" />
+                <IFormItem xtype='input' name="variableObject" label="变量名"  required={false} />
             </ILayout>
         </IWindow>
     )

@@ -8,17 +8,8 @@ export default (props) => {
     const [current, setCurrent] = useState({});
 
     const onSaveClick = (v) => {
-        let express;
-        let desc;
-        if (v.value) {
-            desc = <>定义<span className='desc'> {v.type} </span>类型变量 <span className='desc'>{v.name} = {v.value}</span></>;
-            express = format("{0} {1} = {2};", v.type, v.name, v.value);
-        } else {
-            desc = <>定义<span className='desc'>{v.type}</span>类型变量 <span className='desc'>{v.name}</span></>;
-            express = format("{0} {1};", v.type, v.name);
-        }
-        v.desc = desc;
-        v.express = express;
+        v.desc = <>从<span className='desc'>{v.start}</span>开始到<span className='desc'>{v.end}</span>结束，递增值为<span className='desc'>{v.incr}</span>，将当前循环值保存到{v.variableObject}</>;
+        v.express = format("def {0} = {1}; {0} <= {2}; {0}={0} + {3}", v.variableObject, v.start, v.end, v.incr);
         window.close();
         window.opener.onSuccess(v);
     }
@@ -40,7 +31,7 @@ export default (props) => {
         <IWindow
             current={current}
             className="snam-modal"
-            title='编辑变量'
+            title='For次数循环'
             width={clientWidth}
             height={clientHeight}
             onSubmit={(params) => onSaveClick(params)}
@@ -51,9 +42,10 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="index" />
             <ILayout type="vbox">
-                <IFormItem xtype='input' name="name" label="变量名"  required={true} />
-                <IFormItem xtype='select' name="type" label="变量类型"  options={variableType} required={true} />
-                <IFormItem xtype='textarea' name="value" label="变量值"  tooltip="支持groovy脚本" />
+                <IFormItem labelCol={{ span: 4 }} xtype='input' name="start" label="起始数"  required={true} />
+                <IFormItem labelCol={{ span: 4 }} xtype='input' name="end" label="结束数"  required={true} />
+                <IFormItem labelCol={{ span: 4 }} xtype='input' name="incr" label="递增值"  required={true} />
+                <IFormItem labelCol={{ span: 4 }} xtype='input' name="variableObject" label="循环项变量" required={true} />
             </ILayout>
         </IWindow>
     )

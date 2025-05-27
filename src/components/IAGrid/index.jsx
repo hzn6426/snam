@@ -368,6 +368,7 @@ export default React.forwardRef((props, ref) => {
           defaultPageSize={pageSize || 50}
           current={pageNo}
           total={total}
+          align='end'
           showTotal={showTotal === false ? false : (total, range) => `第${range[0]}-${range[1] || 0}条/共${total}条`}
           pageSizeOptions={pageSizeList || [50, 100, 500, 1000, 3000, 5000]}
           onChange={(page, pageSize) => {

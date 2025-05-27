@@ -1,22 +1,27 @@
+import ICodeEditor from "@/components/ICodeEditor";
 import React, { useEffect, useRef, useState } from 'react';
 import { format } from '@/common/utils';
 import { IFormItem, ILayout, IWindow, IIF } from '@/common/components';
 import { message, Alert } from 'antd';
 import {variableType} from '../types'
+import { set } from "lscache";
 export default (props) => {
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [current, setCurrent] = useState({});
+    const [valueScript, setValueScript] = useState('');
 
     const onSaveClick = (v) => {
-        let express;
-        let desc;
-        if (v.value) {
-            desc = <>定义<span className='desc'> {v.type} </span>类型变量 <span className='desc'>{v.name} = {v.value}</span></>;
-            express = format("{0} {1} = {2};", v.type, v.name, v.value);
-        } else {
-            desc = <>定义<span className='desc'>{v.type}</span>类型变量 <span className='desc'>{v.name}</span></>;
-            express = format("{0} {1};", v.type, v.name);
-        }
+        let express = valueScript;
+        let desc = <>执行Groovy代码语句: <span className='desc'> {valueScript} </span></>
+        // let express;
+        // let desc;
+        // if (v.value) {
+        //     desc = <>定义<span className='desc'> {v.type} </span>类型变量 <span className='desc'>{v.name} = {v.value}</span></>;
+        //     express = format("{0} {1} = {2};", v.type, v.name, v.value);
+        // } else {
+        //     desc = <>定义<span className='desc'>{v.type}</span>类型变量 <span className='desc'>{v.name}</span></>;
+        //     express = format("{0} {1};", v.type, v.name);
+        // }
         v.desc = desc;
         v.express = express;
         window.close();
@@ -33,6 +38,7 @@ export default (props) => {
         // loadRoles();
         const item = window.opener.onGetParams();
         const data = {...item.data, index:item.index};
+        setValueScript(data.express);
         setCurrent(data);
     }, []);
 
@@ -40,7 +46,7 @@ export default (props) => {
         <IWindow
             current={current}
             className="snam-modal"
-            title='编辑变量'
+            title='编辑Groovy'
             width={clientWidth}
             height={clientHeight}
             onSubmit={(params) => onSaveClick(params)}
@@ -51,10 +57,9 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="index" />
             <ILayout type="vbox">
-                <IFormItem xtype='input' name="name" label="变量名"  required={true} />
-                <IFormItem xtype='select' name="type" label="变量类型"  options={variableType} required={true} />
-                <IFormItem xtype='textarea' name="value" label="变量值"  tooltip="支持groovy脚本" />
+                <ICodeEditor width="600" height="calc(100vh - 120px)"  value={valueScript} onChange={(value) => {setValueScript(value)}} />
             </ILayout>
         </IWindow>
     )
 }
+

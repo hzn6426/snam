@@ -12,4 +12,21 @@ export const variableType = [{
     value:'Object', label:'对象'
 }, {
     value:'def', label:'任意类型'
-}]
+}];
+
+export const andOrMap = {
+    'and' : ' && ',
+    'or' : ' || '
+}
+
+export const exceptionType = [{
+    value:'runtimeException', label:'运行异常'
+}, {
+    value:'serverRunTimeException', label:'业务异常'
+}];
+
+export const selectReturnType = [{
+    value:'sigle', label:'单个对象'
+}, {
+    value:'list', label:'列表对象'
+}];
