@@ -1,8 +1,16 @@
-<div align="center"><img src="auth.svg" width="200" height="180"/></div>
+<div align="center"><img src="logo1.png" width="200" height="180"/></div>
 <div align="center"><h2>权限功能的UI端，基于React、Antd，开箱即用</h2></div>
 <hr/>
 <h2>概要</h2>
-<p>本项目为<a href="https://gitee.com/ifrog/snam-boot">Snapper权限框架系统</a>的UI配置端，基于React、Antd，开箱即用，提供完整的权限配置功能</p>
+<p>本项目为Snapper权限的UI端，基于React、Antd，开箱即用，提供完整的权限配置功能</p>
+<h2>相关链接</h2>
+<ul>
+    <li><a href="https://baomibing.com">官网</a></li>
+    <li><a href="https://baomibing.com/pages/the-quick-start/">项目使用介绍</a></li>
+    <li><a href="https://admin.baomibing.com/user/login">演示环境</a></li>
+    <li><a href="https://gitee.com/ifrog/snapper-boot">微服务版</a></li>
+    <li><a href="https://gitee.com/ifrog/snapper-standalone">单机版</a></li>
+</ul>
 <hr/>
 <h2>相关命令</h2>
 <ul>
