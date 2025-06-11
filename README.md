@@ -1,5 +1,5 @@
-<div align="center"><img src="logo1.png" width="200" height="180"/></div>
-<div align="center"><h2>权限功能的UI端，基于React、Antd，开箱即用</h2></div>
+<div align="center"><img src="logo1.png" width="200" height="160"/></div>
+<div align="center"><h2>Snapper权限的UI端，基于React、Antd，开箱即用</h2></div>
 <hr/>
 <h2>概要</h2>
 <p>本项目为Snapper权限的UI端，基于React、Antd，开箱即用，提供完整的权限配置功能</p>
