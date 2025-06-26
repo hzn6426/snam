@@ -199,6 +199,11 @@ export default [
                 path: '/new/order/:id',
                 component: './order/save',
               },
+              {
+                name: '编辑Action',
+                path: '/new/action/:id',
+                component: './action/save',
+              },
             ]
           }
         ]
@@ -354,6 +359,12 @@ export default [
                 icon: 'smile',
                 path: '/system/tfunction',
                 component: './tfunction',
+              },
+              {
+                name: '权限动作',
+                icon: 'smile',
+                path: '/system/action',
+                component: './action',
               },
             ],
           },

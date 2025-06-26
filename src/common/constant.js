@@ -422,6 +422,19 @@ export default Object.freeze({
   API_LIMIT_STOP: '/authority/gateLimit/stop',
   //刷新缓存
   API_LIMIT_REFRESH_CACHE: '/authority/gateLimit/refreshCache',
+  //= ==============================================//
+  //                   功能Action管理                //
+  //= ==============================================//
+  // Action查找
+  API_ACTION_SEARCH: '/authority/action/search',
+  // Action增删改查
+  API_ACTION: '/authority/action',
+  // 启用
+  API_ACTION_USE: '/authority/action/use',
+  // 停用
+  API_ACTION_STOP: '/authority/action/stop',
+  // 刷新缓存
+  API_ACTION_REFRESH_CACHE: '/authority/action/refreshActionCache',
 
   //= ==============================================//
   //                   租户管理                      //

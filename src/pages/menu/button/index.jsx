@@ -1,4 +1,4 @@
-import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { IFormItem, IIF, ILayout, IWindow } from '@/common/components';
 import { api } from '@/common/utils';
 import { Radio, Select, message } from 'antd';
 import { useEffect, useState } from 'react';
@@ -11,6 +11,8 @@ export default (props) => {
     const [buttonDisabled, setButtonDisabled] = useState(false);
 
     const [current, setCurrent] = useState({});
+
+    const [beNoAuth, setBeNoAuth] = useState(false);
 
     const onSaveClick = (button) => {
         api.menu.saveOrUpdateButton(button).subscribe({
@@ -26,6 +28,7 @@ export default (props) => {
         const param = window.opener.onGetParams();
         if (param.id) {
             setButtonDisabled(true);
+            setBeNoAuth(param.beUnauth || false)
         }
         setCurrent(param);
     }, []);
@@ -49,7 +52,7 @@ export default (props) => {
                 <IFormItem name="menuName" label="菜单名称" xtype="input" disabled labelCol={{ flex: '110px' }} />
                 <IFormItem name="id" label="按钮ID" xtype="input" disabled={buttonDisabled} required max={50} labelCol={{ flex: '110px' }} tooltip="格式为 菜单ID:按钮功能" />
                 <IFormItem name="buttonName" label="按钮名称" xtype="input" required max={50} labelCol={{ flex: '110px' }} />
-                <IFormItem name="subMenu" label="子菜单名称" xtype="input" required max={50} labelCol={{ flex: '110px' }} tooltip="权限按钮所在的菜单分组" />
+                <IFormItem name="subMenu" label="子菜单名称" xtype="input" required = {false} max={50} labelCol={{ flex: '110px' }} tooltip="权限按钮所在的菜单分组" />
                 <IFormItem name="reqUrl" label="请求URL" xtype="input" required max={100} labelCol={{ flex: '110px' }} />
                 <IFormItem name="reqMethod" label="请求方法" xtype="select" required labelCol={{ flex: '110px' }} >
                     <Option value="POST">POST</Option>
@@ -58,10 +61,17 @@ export default (props) => {
                     <Option value="GET">GET</Option>
                 </IFormItem>
 
-                <IFormItem name="beUnauth" label="忽略授权" xtype="radio" defaultValue={false} labelCol={{ flex: '110px' }}>
+                <IFormItem name="beUnauth" label="忽略授权" xtype="radio" defaultValue={false} 
+                labelCol={{ flex: '110px' }} onChange={(e) => setBeNoAuth(e.target.value)}>
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>
                 </IFormItem>
+                <IIF test={beNoAuth == true}>
+                <IFormItem name="beLoginUnauth" label="忽略鉴权" xtype="radio" defaultValue={false} labelCol={{ flex: '110px' }}>
+                    <Radio value={false}>否</Radio>
+                    <Radio value={true}>是</Radio>
+                </IFormItem>
+                </IIF>
                 <IFormItem name="permAction" label="权限标识" xtype="input" max={50} labelCol={{ flex: '110px' }} tooltip="修改后可能导致数据权限不生效,请谨慎修改!" />
                 <IFormItem name="actionRef" label="权限引用" xtype="input" max={50} labelCol={{ flex: '110px' }} tooltip="引用某个数据权限标识,以满足相同的数据权限!" />
             </ILayout>

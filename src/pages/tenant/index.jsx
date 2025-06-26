@@ -99,14 +99,14 @@ const initColumns = [
         width: 160,
         field: 'name',
     },
-    {
-        headerName: '账户余额',
-        width: 80,
-        field: 'balance',
-        valueFormatter: (params) => {
-            return params.value && formatNumber(params.value, 2);
-        },
-    },
+    // {
+    //     headerName: '账户余额',
+    //     width: 80,
+    //     field: 'balance',
+    //     valueFormatter: (params) => {
+    //         return params.value && formatNumber(params.value, 2);
+    //     },
+    // },
     {
         headerName: '标识',
         width: 80,
@@ -429,14 +429,14 @@ export default (props) => {
                                 删除
                             </IButton>
                         </Permit>,
-                        <Permit authority="tenant:charge">
-                            <IButton danger type="primary"
-                                size="small"
-                                icon={<TransactionOutlined />}
-                                key="charge" onClick={() => onChargeClick(selectedKeys[selectedKeys.length - 1])}>
-                                充值
-                            </IButton>
-                        </Permit>,
+                        // <Permit authority="tenant:charge">
+                        //     <IButton danger type="primary"
+                        //         size="small"
+                        //         icon={<TransactionOutlined />}
+                        //         key="charge" onClick={() => onChargeClick(selectedKeys[selectedKeys.length - 1])}>
+                        //         充值
+                        //     </IButton>
+                        // </Permit>,
                         <Permit authority="tenant:assignMenus">
                             <IButton
                                 type="success"
@@ -468,17 +468,17 @@ export default (props) => {
                             </Tooltip>
                         </Permit>,
 
-                        <Permit authority="tenant:searchTenantFee">
-                            <IButton
-                                type="info"
-                                size="small"
-                                icon={<FilePdfOutlined />}
-                                key="searchTenantFee"
-                                onClick={() => onBillClick(selectedKeys[selectedKeys.length - 1])}
-                            >
-                                账单
-                            </IButton>
-                        </Permit>,
+                        // <Permit authority="tenant:searchTenantFee">
+                        //     <IButton
+                        //         type="info"
+                        //         size="small"
+                        //         icon={<FilePdfOutlined />}
+                        //         key="searchTenantFee"
+                        //         onClick={() => onBillClick(selectedKeys[selectedKeys.length - 1])}
+                        //     >
+                        //         账单
+                        //     </IButton>
+                        // </Permit>,
                         
                     ]}
                     // onClick={(data) => onClicked(data)}

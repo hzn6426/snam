@@ -29,37 +29,37 @@ export default (props) => {
         const beOpen = contains(record.functionId, functionIds);
         if (beOpen) {
         
-            if (record.feeType === 'MONTH') {
-                return <Space><Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
-                    e.stopPropagation();
-                    Modal.confirm({
-                        title: "关闭该功能后，接口不可用，并且可能涉及到退费事项，您确认关闭该功能吗？",
-                        okText: '确认',
-                        okType: 'danger',
-                        cancelText: '取消',
-                        onOk() {
-                            api.tfunction.close({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
-                                next: (x) => {
-                                    message.success('关闭成功');
-                                    doRefresh();
-                                }
-                            });
-                        }
-                      });
+            // if (record.feeType === 'MONTH') {
+            //     return <Space><Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
+            //         e.stopPropagation();
+            //         Modal.confirm({
+            //             title: "关闭该功能后，接口不可用，并且可能涉及到退费事项，您确认关闭该功能吗？",
+            //             okText: '确认',
+            //             okType: 'danger',
+            //             cancelText: '取消',
+            //             onOk() {
+            //                 api.tfunction.close({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+            //                     next: (x) => {
+            //                         message.success('关闭成功');
+            //                         doRefresh();
+            //                     }
+            //                 });
+            //             }
+            //           });
                     
-                }} >关闭功能</Tag>
-                <Tag color="#2db7f5" style={{ width: 90, cursor: 'pointer' }} icon={<ClockCircleOutlined  title='延期功能' />} onClick={(e) => {
-                    e.stopPropagation();
-                    api.tfunction.defer({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
-                        next: (x) => {
-                            message.success('延期成功');
-                            doRefresh();
-                        }
-                    });
-                }} >延期功能</Tag>
-                </Space>;
-            } else {
-                    return <Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
+            //     }} >关闭功能</Tag>
+            //     <Tag color="#2db7f5" style={{ width: 90, cursor: 'pointer' }} icon={<ClockCircleOutlined  title='延期功能' />} onClick={(e) => {
+            //         e.stopPropagation();
+            //         api.tfunction.defer({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+            //             next: (x) => {
+            //                 message.success('延期成功');
+            //                 doRefresh();
+            //             }
+            //         });
+            //     }} >延期功能</Tag>
+            //     </Space>;
+            // } else {
+                    return <Space><Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
                         e.stopPropagation();
                         api.tfunction.close({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
                             next: (x) => {
@@ -68,14 +68,24 @@ export default (props) => {
                             }
                         });
                     }} >关闭功能</Tag>
-                }
+                    <Tag color="#2db7f5" style={{ width: 90, cursor: 'pointer' }} icon={<ClockCircleOutlined  title='延期功能' />} onClick={(e) => {
+                        e.stopPropagation();
+                        api.tfunction.defer({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+                            next: (x) => {
+                                message.success('延期成功');
+                                doRefresh();
+                            }
+                        });
+                    }} >延期功能</Tag>
+                    </Space>
+                // }
             
         }
             
         return <Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CheckCircleOutlined title='开通功能' />} onClick={(e) => {
             e.stopPropagation();
             Modal.confirm({
-                title: "开通功能会从租户账户扣除开通费用，请保证账户有足够的金额，您确认开通该功能吗？",
+                title: "您确认开通该功能吗？",
                 okText: '确认',
                 okType: 'danger',
                 cancelText: '取消',
@@ -134,24 +144,24 @@ export default (props) => {
             width: 80,
             field: 'requestMethod',
         },
-        {
-            headerName: '费用类型',
-            width: 80,
-            field: 'feeType',
-            valueFormatter: (x) => {
-                if (x.value === 'MONTH') {
-                    return '月付费';
-                } else if (x.value === 'REQUEST') {
-                    return '请求付费';
-                }
-                return '';
-            },
-        },
-        {
-            headerName: '单价',
-            width: 60,
-            field: 'unitPrice',
-        },
+        // {
+        //     headerName: '费用类型',
+        //     width: 80,
+        //     field: 'feeType',
+        //     valueFormatter: (x) => {
+        //         if (x.value === 'MONTH') {
+        //             return '月付费';
+        //         } else if (x.value === 'REQUEST') {
+        //             return '请求付费';
+        //         }
+        //         return '';
+        //     },
+        // },
+        // {
+        //     headerName: '单价',
+        //     width: 60,
+        //     field: 'unitPrice',
+        // },
         {
             headerName: '过期时间',
             field: 'expireTime',

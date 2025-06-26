@@ -1,7 +1,7 @@
 import { IFormItem, ILayout, IWindow } from '@/common/components';
 import { TButton } from '@/common/componentx';
 import { api, copyObject, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { Form, Input, InputNumber, message, Select, } from 'antd';
+import { DatePicker, Form, Input, InputNumber, message, Select, } from 'antd';
 import { useRef, useState } from 'react';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
@@ -92,6 +92,14 @@ export default (props) => {
                 </Form.Item>
                 <Form.Item
                     labelCol={{ span: 3 }}
+                    name="expireTime"
+                    label="过期时间"
+                    rules={[{ whitespace: true, required: true, message: false }]}
+                >
+                    <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD"   />
+                </Form.Item>
+                {/* <Form.Item
+                    labelCol={{ span: 3 }}
                     name="feeType"
                     label="付费方式"
                     rules={[{ whitespace: true, required: true, message: false }]}
@@ -105,7 +113,7 @@ export default (props) => {
                     rules={[{ required: true, message: true }]}
                 >
                     <InputNumber style={{ width: '100%' }} precision={2} min={1} max={99999999} onChange={() => { }} />
-                </Form.Item>
+                </Form.Item> */}
             </ILayout>
         </IWindow>
     )

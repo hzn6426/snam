@@ -41,6 +41,19 @@ const TagRenderer = (props) => {
     return <Tag color="#2db7f5">否</Tag>;
 }
 
+const MethodRenderer = (props) => {
+    if (props.value === 'POST') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#87d068">{props.value}</Tag>;
+    } else if (props.value === 'GET') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#2db7f5">{props.value}</Tag>;
+    } else if (props.value === 'PUT') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#f1982f">{props.value}</Tag>;
+    } else if (props.value === 'DELETE') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#E8333c">{props.value}</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
+}
+
 const TagActionRenderer = (props) => {
     if (props.value) {
         return <Tag color="#108ee9">{props.value}</Tag>;
@@ -86,7 +99,7 @@ const initColumns = [
     },
     {
         headerName: '子菜单',
-        width: 70,
+        width: 90,
         align: 'center',
         field: 'subMenu',
     },
@@ -114,6 +127,7 @@ const initColumns = [
         align: 'center',
         width: 90,
         field: 'reqMethod',
+        cellRenderer: MethodRenderer
     },
     {
         headerName: '权限标识',

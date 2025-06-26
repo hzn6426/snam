@@ -25,7 +25,7 @@ export const ilogin = (url, param, headers) => {
 }
 
 export const ipost = (url, param) => {
-  return wrapObservable(wpost, url, param);
+  return wrapObservable(wpost, url, param || null);
 };
 
 export const iget = (url, param) => {
