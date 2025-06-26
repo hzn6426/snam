@@ -110,9 +110,16 @@ const initColumns = [
         field: 'buttonName',
     },
     {
-        headerName: '忽略权限',
+        headerName: '忽略登录权限',
         align: 'center',
-        width: 80,
+        width: 100,
+        field: 'beLoginUnauth',
+        cellRenderer: TagRenderer
+    },
+    {
+        headerName: '忽略资源权限',
+        align: 'center',
+        width: 100,
         field: 'beUnauth',
         cellRenderer: TagRenderer
     },

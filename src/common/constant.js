@@ -27,7 +27,7 @@ export default Object.freeze({
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
   SYSTEM_LOGIN_TITLE: 'Admin 权限系统',
-  SYSTEM_LOGIN_DESC: '专业的权限管理—演示环境3.2.5',
+  SYSTEM_LOGIN_DESC: '专业的权限管理—演示环境3.2.6',
   // SYSTEM_LOGIN_TITLE: '权限管理系统',
   // SYSTEM_LOGIN_DESC: '',
   // basicLayout 刷新
