@@ -7,7 +7,7 @@
 <ul>
     <li><a href="https://baomibing.com">官网</a></li>
     <li><a href="https://baomibing.com/pages/the-quick-start/">项目使用介绍</a></li>
-    <li><a href="https://admin.baomibing.com/user/login">演示环境</a></li>
+    <li><a href="https://admin.baomibing.com/user/login">演示环境(ximen/123456)</a></li>
     <li><a href="https://gitee.com/ifrog/snapper-boot">微服务版</a></li>
     <li><a href="https://gitee.com/ifrog/snapper-standalone">单机版</a></li>
 </ul>
