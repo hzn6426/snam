@@ -26,14 +26,16 @@ export default Object.freeze({
   SYSTEM_ROUTE_LOGIN: '/user/login',
   // 系统标题
   SYSTEM_TITLE: '权限管理系统',
-  SYSTEM_LOGIN_TITLE: 'Snapper Admin',
-  SYSTEM_LOGIN_DESC: '专业的权限管理—演示环境3.2.4',
+  SYSTEM_LOGIN_TITLE: 'Admin 权限系统',
+  SYSTEM_LOGIN_DESC: '专业的权限管理—演示环境3.2.5',
   // SYSTEM_LOGIN_TITLE: '权限管理系统',
   // SYSTEM_LOGIN_DESC: '',
   // basicLayout 刷新
   SUBJECT_SYSTEM_REFRESH: '_subject_system_refresh',
   // 用户属性
   DICT_USER_BUSINEESS_TAG: 'USER_BUSINESS_TAG',
+  // 系统端
+  DICT_SYSTEM_POINT_TAG: 'SYSTEM_POINT_TAG',
   // 职位权限范围
   DICT_POSITION_PERM_SCOPE_TAG: 'POSITION_PERM_SCOPE_TAG',
   // 业务权限范围

@@ -58,14 +58,18 @@ import { on } from 'ramda';
 // //初始化角色,用户属性
 let roles = [];
 let userTags = [];
+let pointTags = [];
 const roleSource = api.role.listAll();
 const userTagSource = api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG);
-zip(roleSource, userTagSource)
+const pointTagSource = api.dict.listChildByParentCode(constant.DICT_SYSTEM_POINT_TAG);
+zip(roleSource, userTagSource, pointTagSource)
   .pipe(
-    map(([data1, data2]) => {
+    map(([data1, data2, data3]) => {
       roles = data2Option('id', 'roleName', data1);
 
       userTags = data2Option('dictCode', 'dictName', data2);
+
+      pointTags = data2Option('dictCode', 'dictName', data3);
     }),
   )
   .subscribe();
@@ -77,7 +81,15 @@ const StateRenderer = (props) => {
 const TagRenderer = (props) => {
   return (
     props.value ? (
-      <ITag values={split(props.value)} options={userTags} multiColor={false} />
+      <ITag values={split(props.value)} options={userTags} multiColor={true} />
+    ) : <span>-</span>
+  );
+};
+
+const PointTagRenderer = (props) => {
+  return (
+    props.value ? (
+      <ITag values={split(props.value)} options={pointTags} multiColor={true} />
     ) : <span>-</span>
   );
 };
@@ -186,6 +198,13 @@ const initColumns = [
     field: 'userTag',
     // cellRenderer: 'tagCellRenderer',
     cellRenderer: TagRenderer,
+  },
+  {
+    headerName: '登录终端',
+    width: 150,
+    field: 'pointTag',
+    // cellRenderer: 'tagCellRenderer',
+    cellRenderer: PointTagRenderer,
   },
   {
     headerName: '手机',

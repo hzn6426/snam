@@ -5,7 +5,7 @@ import { For } from 'react-loops';
 export default (props) => {
   const { onClick, options, values, multiColor, color } = props;
   const optionMap = option2States(options);
-  const colors = ['#1890FF', '#52C41A', '#FF4D4F', '#FAAD14', '#983680', '#BDAEAD'];
+  const colors = [ '#FF4D4F', '#FAAD14', '#983680', '#BDAEAD', '#9A4C5B', '#52C41A',];
   return (
     <>
       {options && (
@@ -16,7 +16,7 @@ export default (props) => {
             ) : (
               <Tag
                 color={(multiColor && colors[index % colors.length]) || optionMap[value]?.color}
-                style={{ width: '65px', textAlign: 'center' }}
+                style={{ width: '55px', textAlign: 'center' }}
                 onClick={onClick && onClick(value)}
               >
                 {optionMap[value]?.text + ' '}

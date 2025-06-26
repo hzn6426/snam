@@ -67,10 +67,10 @@ export function stopChildDictionary(ids) {
  * @param {*} parentCode 字典父编码
  * @returns
  */
-export function listChildByParentCode(parentCode) {
+export function listChildByParentCode(parentCode, beNotCache = false) {
     let cacheKey;
     let pcode = parentCode || '';
-    if (pcode) {
+    if (pcode && !beNotCache) {
         cacheKey = constant.KEY_DICT + pcode;
         if (hasCache(cacheKey)) {
             const v = getCache(cacheKey);
