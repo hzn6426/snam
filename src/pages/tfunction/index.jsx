@@ -78,24 +78,30 @@ const initColumns = [
         width: 80,
         field: 'requestMethod',
     },
-    {
-        headerName: '费用类型',
-        width: 140,
-        field: 'feeType',
-        valueFormatter: (x) => {
-            if (x.value === 'MONTH') {
-                return '按月付费';
-            } else if (x.value === 'REQUEST') {
-                return '请求付费';
-            }
-            return '';
-        },
+     {
+        headerName: '过期时间',
+        width: 150,
+        field: 'expireTime',
+        valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
-    {
-        headerName: '单价',
-        width: 80,
-        field: 'unitPrice',
-    },
+    // {
+    //     headerName: '费用类型',
+    //     width: 140,
+    //     field: 'feeType',
+    //     valueFormatter: (x) => {
+    //         if (x.value === 'MONTH') {
+    //             return '按月付费';
+    //         } else if (x.value === 'REQUEST') {
+    //             return '请求付费';
+    //         }
+    //         return '';
+    //     },
+    // },
+    // {
+    //     headerName: '单价',
+    //     width: 80,
+    //     field: 'unitPrice',
+    // },
     {
         headerName: '创建人',
         width: 100,
