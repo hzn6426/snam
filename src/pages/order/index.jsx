@@ -92,7 +92,7 @@ export default (props) => {
     const [pageSize, setPageSize] = useState(50);
     const [selectedKeys, setSelectedKeys] = useState([]);
     const [options, setOptions] = useState([]);
-    const [note, setNote] = useState('');
+    const [note, setNote] = useState('请在右侧选择对应的用户, 列表将展示不同的用户对应的权限数据, 同时展示该用户如何实现权限分配信息!');
 
     const ref = useRef();
 
@@ -196,7 +196,7 @@ export default (props) => {
                 />
             </ISearchForm> */}
             <IIF test = {note}>
-            <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message={note} type="info" showIcon={true} />
+            <Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message={note} type="warning" showIcon={true} />
             </IIF>
             <IAGrid
                 ref={ref}
