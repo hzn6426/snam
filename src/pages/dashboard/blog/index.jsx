@@ -13,7 +13,7 @@ export default () => {
           <p>喜欢该项目就点个赞吧，您的支持是对我最大的鼓励，也是支持我前进的动力！</p>
         </div>
       ),
-      onOk() {window.open('https://gitee.com/ifrog/snam-standalone',"_blank")},
+      onOk() {window.open('https://gitee.com/ifrog/snapper-standalone',"_blank")},
     });
   };
   const { clientHeight } = window?.document?.documentElement;
@@ -33,6 +33,58 @@ export default () => {
       
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
+
+          <Timeline.Item>
+            <Title level={4}>[3.2.6] 2025.6.26</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 权限动作,能够动态的控制@Action内容,配置后无需重启</li>
+                <li>新增 按钮添加无鉴权(登录)和授权(资源授权)支持</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化租户相关功能,优化接口,去掉无关选项</li>
+                <li>菜单按钮列表样式优化</li>
+                <li>表格分页样式优化</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复POST请求在请求体为空时,Content-Type无效问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+         <Timeline.Item>
+            <Title level={4}>[3.2.5] 2025.6.17</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 用户添加登录终端属性，能控制用于允许登录的终端</li>
+                <li>新增 添加find_in_set选项支持</li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snapper-dependence' target='_blank'>项目依赖地址</a></li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snapper-standalone' target='_blank'>单机版地址</a></li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snapper-boot' target='_blank'>微服务版地址</a></li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snam' target='_blank'>前端UI地址</a></li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化租户拦截处理相关功能</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
 
         <Timeline.Item>
             <Title level={4}>[3.2.4] 2025.3.14</Title>

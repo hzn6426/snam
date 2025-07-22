@@ -10,7 +10,7 @@ import {
     pluck,
     useObservableAutoCallback
 } from '@/common/utils';
-import { Form } from 'antd';
+import { Form, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -32,6 +32,19 @@ const StateRenderer = (props) => {
     }
     return <>{props.value}</>
 };
+
+const MethodRenderer = (props) => {
+    if (props.value === 'POST') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#87d068">{props.value}</Tag>;
+    } else if (props.value === 'GET') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#2db7f5">{props.value}</Tag>;
+    } else if (props.value === 'PUT') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#f1982f">{props.value}</Tag>;
+    } else if (props.value === 'DELETE') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#E8333c">{props.value}</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
+}
 
 
 //列初始化
@@ -117,9 +130,10 @@ const initColumns = [
     },
     {
         headerName: '请求方法',
-        width: 80,
+        width: 90,
         align: 'left',
         field: 'exchangeMethod',
+        cellRenderer: MethodRenderer
     },
     {
         headerName: '请求地址',

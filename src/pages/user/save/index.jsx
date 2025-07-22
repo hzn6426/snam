@@ -12,6 +12,7 @@ export default (props) => {
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [options, setOptions] = useState([]);
+    const [systemPointOptions, setSystemPointOptions] = useState([]);
     const [multiLogin, setMultiLogin] = useState(false);
     // const [current, setCurrent] = useState({});
 
@@ -43,6 +44,9 @@ export default (props) => {
         if (user.userTag && isArray(user.userTag)) {
             user.userTag = user.userTag.join(',');
         }
+        if (user.pointTag && isArray(user.pointTag)) {
+            user.pointTag = user.pointTag.join(',');
+        }
         api.user.saveOrUpdateUser(user).subscribe({
             next: () => {
                 message.success('操作成功!');
@@ -61,8 +65,18 @@ export default (props) => {
         });
     }
 
+    const loadSystemPointTags = () => {
+        api.dict.listChildByParentCode(constant.DICT_SYSTEM_POINT_TAG).subscribe({
+            next: (t2) => {
+                const dicts = data2Option('dictCode', 'dictName', t2);
+                setSystemPointOptions(dicts);
+            }
+        });
+    }
+
     useEffect(() => {
         loadUserTags();
+        loadSystemPointTags();
     }, []);
 
     return (
@@ -151,6 +165,9 @@ export default (props) => {
             </ILayout>
             <ILayout type="hbox" spans="24">
                 <IFormItem name="userTag" label="用户属性" xtype="checkbox" options={options} />
+            </ILayout>
+            <ILayout type="hbox" spans="24">
+                <IFormItem name="pointTag" label="登录终端" xtype="checkbox" options={systemPointOptions} />
             </ILayout>
             <ILayout type="hbox" spans="24">
                 <IFormItem

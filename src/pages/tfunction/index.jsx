@@ -177,7 +177,7 @@ export default (props) => {
             url: '/new/tfunction/' + id,
             title: '编辑租户接口',
             width: 700,
-            height: 400,
+            height: 580,
             callback: () => refresh()
         })),
     ]);
@@ -213,7 +213,7 @@ export default (props) => {
             url: '/new/tfunction/ADD',
             title: '新建租户接口',
             width: 700,
-            height: 400,
+            height: 580,
             callback: () => refresh()
         })
     };
