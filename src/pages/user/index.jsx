@@ -550,13 +550,6 @@ export default (props) => {
               { label: '属性', value: 'userTag', xtype: "select", valueOptions: { userTags } },
               { label: '手机', value: 'userMobile' }, { label: '角色', value: 'roleName' }, { label: '职位', value: 'postName' }]}
               width={150} />,
-            // <Select defaultValue={'userName'} size="small" options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' }]} />,
-            // <Input.Search
-            //   style={{ width: 150, marginRight: '5px' }}
-            //   onSearch={(value) => setColumnSearchValue(value)}
-            //   size="small" key="columnSearch"
-            //   enterButton
-            //   placeholder='搜索' allowClear />,
             <Permit key="user:save" authority="user:save">
               <Button
                 key="add"

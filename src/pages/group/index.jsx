@@ -1,5 +1,5 @@
-import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, IButton } from '@/common/components';
-import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, dateFormat } from '@/common/utils';
+import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, IButton, IGridSearch } from '@/common/components';
+import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, dateFormat, data2Option } from '@/common/utils';
 import {
     ApartmentOutlined,
     DeleteOutlined,
@@ -24,7 +24,12 @@ const TagRenderer = (props) => {
     }
     return <>员工</>;
 }
-
+let userTags = [];
+api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG).subscribe({
+    next: (data) => {
+        userTags = data2Option('dictCode', 'dictName', data);
+    }
+});
 //组件
 const LockRenderer = (props) => {
     return props.value ? (
@@ -281,10 +286,10 @@ export default (props) => {
     };
 
     // 查询 用户信息
-    const searchUserByGroup = (pageNo, pageSize) => {
+    const searchUserByGroup = (pageNo, pageSize, params) => {
         setSelectedGroupUserKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params||{}, pageNo: pageNo, pageSize: pageSize };
         param.dto.groupId = selectedGroupId;
         return api.group.searchUserByGroup(param).subscribe({
             next: (data) => {
@@ -496,29 +501,29 @@ export default (props) => {
                                     <Space>
                                         <Permit authority="group:addDepartment" key="addDepartment">
                                             <Tooltip title="添加子部门">
-                                            <PlusOutlined
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleAddGroup(node);
-                                                }}
-                                            />
+                                                <PlusOutlined
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleAddGroup(node);
+                                                    }}
+                                                />
                                             </Tooltip>
                                         </Permit>
                                         <Permit authority="group:update" key="update">
                                             <Tooltip title="编辑该部门">
-                                            <FormOutlined
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleEditGroup(node);
-                                                }}
-                                            />
+                                                <FormOutlined
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditGroup(node);
+                                                    }}
+                                                />
                                             </Tooltip>
                                         </Permit>
                                         <Permit authority="group:delete" key="delete">
                                             <Tooltip title="删除该部门">
-                                            <DeleteOutlined
-                                                onClick={(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？', () => handleDeleteGroup(node))}
-                                            />
+                                                <DeleteOutlined
+                                                    onClick={(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？', () => handleDeleteGroup(node))}
+                                                />
                                             </Tooltip>
                                         </Permit>
 
@@ -558,8 +563,12 @@ export default (props) => {
                         //     lockRenderer: LockRenderer
                         // }}
                         toolBarRender={[
-                           
-                                <Permit authority="group:addUsers" key="new">
+                            <IGridSearch defaultValue={'userName'} onSearch={(params) => searchUserByGroup(1, pageSize, params)}
+                                options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' },
+                                { label: '属性', value: 'userTag', xtype: "select", valueOptions: { userTags } },
+                                { label: '手机', value: 'userMobile' }, { label: '角色', value: 'roleName' }, { label: '职位', value: 'postName' }]}
+                                width={150} />,
+                            <Permit authority="group:addUsers" key="new">
                                 <Tooltip title="添加成员">
                                     <Button
                                         key="addUser"
@@ -567,26 +576,26 @@ export default (props) => {
                                         icon={<UserAddOutlined />}
                                         onClick={handleAddUser}></Button>
                                 </Tooltip>
-                                </Permit>,
-                                <Permit authority="group:addCompany" key="addCompany">
-                                    <Tooltip title="添加分公司">
-                                        <Button
-                                            key="addCompany"
+                            </Permit>,
+                            <Permit authority="group:addCompany" key="addCompany">
+                                <Tooltip title="添加分公司">
+                                    <Button
+                                        key="addCompany"
                                         size="small"
-                                            icon={<MergeOutlined />}
-                                            onClick={handleAddCompany}></Button>
-                                    </Tooltip>
-                                </Permit>,
-                                <Permit authority="userRole:saveFromUser" key="assignRole">
-                                    <Tooltip title="分配角色">
-                                        <Button
-                                            key="assignRole"
+                                        icon={<MergeOutlined />}
+                                        onClick={handleAddCompany}></Button>
+                                </Tooltip>
+                            </Permit>,
+                            <Permit authority="userRole:saveFromUser" key="assignRole">
+                                <Tooltip title="分配角色">
+                                    <Button
+                                        key="assignRole"
                                         size="small"
-                                            icon={<SolutionOutlined />}
-                                            onClick={handleAssignRoles}></Button>
-                                    </Tooltip>
-                                </Permit>
-                           
+                                        icon={<SolutionOutlined />}
+                                        onClick={handleAssignRoles}></Button>
+                                </Tooltip>
+                            </Permit>
+
 
                         ]}
                         pageToolBarRender={[
