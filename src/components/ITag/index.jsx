@@ -16,7 +16,7 @@ export default (props) => {
             ) : (
               <Tag
                 color={(multiColor && colors[index % colors.length]) || optionMap[value]?.color}
-                style={{ width: '55px', textAlign: 'center' }}
+                style={{ width: 'fit-content', textAlign: 'center' }}
                 onClick={onClick && onClick(value)}
               >
                 {optionMap[value]?.text + ' '}

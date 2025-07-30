@@ -35,6 +35,29 @@ export default () => {
         <Timeline>
 
           <Timeline.Item>
+            <Title level={4}>[3.2.7] 2025.7.15</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 全新<a href='https://rule.baomibing.com' target='_blank'>规则设计器-可动态配置脚本(用户名ximen/123456)</a>上线, 完全开源(项目及文档正在整理)</li>
+                <li>新增 snapper-rule-starter规则模块,支持规则设计器运行时</li>
+                <li>新增 @RuleEvent 规则设计器支持,动态配置规则</li>
+                <li>新增 RuleInvoker 编程式调用规则执行器支持</li>
+                <li>新增 IP锁定机制, 超过5次登录错误后, IP进行锁定(防止恶意登录) </li>
+                <li>新增 官方文档更新中, 具体查看<a href='https://www.baomibing.com/pages/the-quick-start/' target='_blank'>文档-快速开始</a> </li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化订单演示模块 - 选择王凤 运行规则设计器对应的规则, 演示规则显示器的运行</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
             <Title level={4}>[3.2.6] 2025.6.26</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>

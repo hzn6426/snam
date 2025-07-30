@@ -1,8 +1,8 @@
 import AvatarDropdown from '@/components/Layout/AvatarDropdown';
 import SettingDrawer from '@/components/Layout/SettingDrawer';
-import { PicCenterOutlined, PicLeftOutlined, PicRightOutlined, SyncOutlined, UngroupOutlined } from '@ant-design/icons';
+import { PicCenterOutlined, PicLeftOutlined, PicRightOutlined, SyncOutlined, UngroupOutlined,HomeOutlined ,GithubFilled } from '@ant-design/icons';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
-import { ConfigProvider, Dropdown, Input, Spin } from 'antd';
+import { ConfigProvider, Dropdown, Input, Spin,Avatar } from 'antd';
 import { useEffect, useState } from 'react';
 import defaultSettings from '../../config/defaultSettings';
 // import { wrapObservable, wrapSObservable } from '@/utils/RxjsUtil';
@@ -166,8 +166,9 @@ export default (props) => {
                     src: currentUser.avatar || Header,
                     size: 'small',
                     title: currentUser.name,
+                    // style: {marginRight:-50},
                     render: (_, dom) => {
-                        return (<AvatarDropdown onSetting={() => { setIsVisible(true) }}>{dom}</AvatarDropdown>)
+                        return (<AvatarDropdown onSetting={() => { setIsVisible(true) }}><div style={{marginRight:'-25px',marginTop:'-3px', fontWeight:'bold'}}>{dom}</div></AvatarDropdown>)
                     }
                 }}
                 actionsRender={(props) => {
@@ -179,7 +180,8 @@ export default (props) => {
                         // ) : undefined,
                         // <InfoCircleFilled key="InfoCircleFilled" />,
                         // <QuestionCircleFilled key="QuestionCircleFilled" />,
-                        // <Avatar shape="square" size={28} icon={<GithubFilled />} style={{ marginLeft: 0, marginRight: 0, }} />
+                        <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={28} icon={<HomeOutlined />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: 4, }} />,
+                        <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: -20 }} />
                         // <GithubFilled key="GithubFilled" shape="square" style={{ fontSize: 23, marginLeft: 0, marginRight: -10 }} />,
                     ];
                 }}

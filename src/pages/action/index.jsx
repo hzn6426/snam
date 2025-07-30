@@ -115,12 +115,12 @@ const initColumns = [
   },
   {
     headerName: '忽略公司权限TAG',
-    width: 110,
+    width: 120,
     field: 'actionIgnoreCompanyScopeTags',
   },
   {
     headerName: '只过滤公司TAG',
-    width: 100,
+    width: 110,
     field: 'actionOnlyFilterCompanyTags',
   },
   {

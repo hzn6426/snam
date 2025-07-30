@@ -51,29 +51,29 @@ export default (props) => {
         >
             <IFormItem xtype="id" />
             <ILayout type="vbox">
-                <IFormItem name="actionValue" label="权限动作" xtype="input"  labelCol={{ flex: '110px' }} required={true} />
-                <IFormItem name="actionIgnoreUserScope" label="忽略用户权限" xtype="radio" labelCol={{ flex: '110px' }} defaultValue={false} >
+                <IFormItem name="actionValue" label="权限动作" xtype="input"  labelCol={{ flex: '120px' }} required={true} />
+                <IFormItem name="actionIgnoreUserScope" label="忽略用户权限" xtype="radio" labelCol={{ flex: '120px' }} defaultValue={false} >
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>
                 </IFormItem>
-                <IFormItem name="actionIgnoreGroupScope" label="忽略组织权限" xtype="radio" labelCol={{ flex: '110px' }} defaultValue={false} >
+                <IFormItem name="actionIgnoreGroupScope" label="忽略组织权限" xtype="radio" labelCol={{ flex: '120px' }} defaultValue={false} >
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>
                 </IFormItem>
-                <IFormItem name = "actionIgnoreCompanyScopeTags" label="忽略公司权限TAG" labelCol={{ flex: '110px' }} size = "small" xtype="textarea" rows={1}/>
-                <IFormItem name = "actionOnlyFilterCompanyTags" label="只过滤公司TAG" labelCol={{ flex: '110px' }} xtype="textarea" rows={1}/>
-                <IFormItem name="connectValue" label="动作连接" xtype="input" labelCol={{ flex: '110px' }} required={true} />
-                <IFormItem name = "connectIgnoreUserScopeTags" label="忽略用户权限TAG" labelCol={{ flex: '110px' }} xtype="textarea" rows={1}/>
-                <IFormItem name = "connectIgnoreGroupScopeTags" label="忽略组织权限TAG" labelCol={{ flex: '110px' }} xtype="textarea" rows={1}/>
-                <IFormItem name="connectBeAlwaysFilterCreateUserColumn" label="过滤用户列" labelCol={{ flex: '110px' }} xtype="radio" defaultValue={true} >
+                <IFormItem name = "actionIgnoreCompanyScopeTags" label="忽略公司权限TAG" labelCol={{ flex: '120px' }} size = "small" xtype="textarea" rows={1}/>
+                <IFormItem name = "actionOnlyFilterCompanyTags" label="只过滤公司TAG" labelCol={{ flex: '120px' }} xtype="textarea" rows={1}/>
+                <IFormItem name="connectValue" label="动作连接" xtype="textarea" rows={1} labelCol={{ flex: '120px' }} required={true} />
+                <IFormItem name = "connectIgnoreUserScopeTags" label="忽略用户权限TAG" labelCol={{ flex: '120px' }} xtype="textarea" rows={1}/>
+                <IFormItem name = "connectIgnoreGroupScopeTags" label="忽略组织权限TAG" labelCol={{ flex: '120px' }} xtype="textarea" rows={1}/>
+                <IFormItem name="connectBeAlwaysFilterCreateUserColumn" label="过滤用户列" labelCol={{ flex: '120px' }} xtype="radio" defaultValue={true} >
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>
                 </IFormItem>
-                <IFormItem name = "connectUserAuthColumn" label="用户权限列" labelCol={{ flex: '110px' }} xtype="textarea" rows={1}/>
-                <IFormItem name = "connectGroupAuthColumn" label="组织权限列" labelCol={{ flex: '110px' }} xtype="textarea" rows={1}/>
-                <IFormItem name="connectTableNameWithAuthInject" label="权限注入表名" labelCol={{ flex: '110px' }} xtype="input" required={false} />
-                <IFormItem name="connectTableNameWithColumnInject" label="列权限注入表名" labelCol={{ flex: '110px' }} xtype="input" required={false} />
-                <IFormItem name="note" label="备注" xtype="textarea" rows={1} labelCol={{ flex: '110px' }}/>
+                <IFormItem name = "connectUserAuthColumn" label="用户权限列" labelCol={{ flex: '120px' }} xtype="textarea" rows={1}/>
+                <IFormItem name = "connectGroupAuthColumn" label="组织权限列" labelCol={{ flex: '120px' }} xtype="textarea" rows={1}/>
+                <IFormItem name="connectTableNameWithAuthInject" label="权限注入表名" labelCol={{ flex: '120px' }} xtype="input" required={false} />
+                <IFormItem name="connectTableNameWithColumnInject" label="列权限注入表名" labelCol={{ flex: '120px' }} xtype="input" required={false} />
+                <IFormItem name="note" label="备注" xtype="textarea" rows={1} labelCol={{ flex: '120px' }}/>
             </ILayout>
         </IWindow>
     )

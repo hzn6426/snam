@@ -181,7 +181,12 @@ export default React.forwardRef((props, ref) => {
   const defaultCol = useMemo(() => {
     return {
       resizable: true,
+      sortable: true,
       minWidth: 60,
+      enableRowGroup: true,
+      enablePivot: true,
+      enableValue: true,
+      pinned:''
     };
   }, []);
 

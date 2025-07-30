@@ -198,7 +198,7 @@ const initColumns = [
   },
   {
     headerName: '登录终端',
-    width: 150,
+    width: 220,
     field: 'pointTag',
     // cellRenderer: 'tagCellRenderer',
     cellRenderer: PointTagRenderer,
