@@ -30,7 +30,6 @@ import {
     ISearchForm,
     IStatus,
     ITag,
-    IModal,
     Permit,
     IFooterToolbar,
     ISearchTree,

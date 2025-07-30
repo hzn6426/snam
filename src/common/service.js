@@ -37,6 +37,7 @@ import * as tlog from '@/pages/tlog/service';
 import * as tmenu from '@/pages/tmenu/service';
 import * as uset from '@/pages/uset/service';
 import * as action from '@/pages/action/service';
+import * as flow from '@/pages/flow/service';
 
 const api = {
   user,
@@ -77,6 +78,7 @@ const api = {
   order,
   item,
   action,
+  flow,
 };
 
 export default api;

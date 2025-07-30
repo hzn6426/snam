@@ -3,7 +3,7 @@ import proxy from './proxy';
 import router from './router';
 const { REACT_ENV } = process.env;
 export default defineConfig({
-  mfsu: {},
+  mfsu: false,
   dynamicImport: {
     loading: '@/components/PageLoading',
   },

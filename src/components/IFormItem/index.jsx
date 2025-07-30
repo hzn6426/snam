@@ -186,7 +186,7 @@ export default (props) => {
         name={name}
         label={label}
         labelCol={labelWrap ? { span: 24 } : labelCol || { flex: '80px' }}
-        tooltip={tooltip || false}
+        tooltip={tooltip}
         rules={[
           {
             required: required || false,

@@ -3,15 +3,12 @@ import {
   IFormItem,
   IGrid,
   IAGrid,
-  ISearchForm,
-  // XSearchForm,
   IStatus,
   ITag,
   Permit,
   IGridSearch,
   ISearchTree
 } from '@/common/components';
-import XSearchForm from '@/components/XSearchForm';
 import {
   INewWindow,
   api,

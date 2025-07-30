@@ -510,5 +510,24 @@ export default Object.freeze({
   API_ITEM: '/authority/item',
   //关键字查询
   API_ITEM_LIST_BY_KEY_WORD: '/authority/item/listByKeyWord',
+  //= ==============================================//
+  //                  工作流演示                      //
+  //= ==============================================//
+  //查询工作流
+  API_FLOW_SEARCH: '/authority/flow/searchActive',
+  //根据工作流查询实例
+  API_FLOW_INSTANCE_SEARCH: '/authority/flow/searchInstanceByFlow',
+  //开始工作流
+  API_FLOW_START: '/authority/flow/start',
+  //获取实例流程图
+  API_FLOW_GET_INSTANCE_CHART: '/authority/flow/getInstanceChart',
+  //执行流程
+  API_FLOW_EXECUTE: '/authority/flow/execute',
+  //驳回流程
+  API_FLOW_REJECT: '/authority/flow/reject',
+  //正在执行任务
+  API_FLOW_TASK_RUNNING: '/authority/flow/listExecutingTaskByInstance',
+  //流程报表
+  API_FLOW_CHART: '/authority/flow/getFlowChart',
 });
 

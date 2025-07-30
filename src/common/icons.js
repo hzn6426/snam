@@ -19,7 +19,8 @@ import {
     UnorderedListOutlined,
     UserOutlined,
     UserSwitchOutlined,
-    ThunderboltOutlined
+    ThunderboltOutlined,
+    NodeIndexOutlined
 } from '@ant-design/icons';
 
 const icons = {
@@ -43,7 +44,8 @@ const icons = {
     tlog: <SolutionOutlined />,
     tfunction: <MergeCellsOutlined />,
     order:<ShoppingCartOutlined />,
-    action:<ThunderboltOutlined />
+    action:<ThunderboltOutlined />,
+    flow:<NodeIndexOutlined />
 };
 
 export const iconEnum = (item) => {

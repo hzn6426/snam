@@ -24,6 +24,8 @@ export default (props) => {
     }
     props.onSettingChange(n);
     localStorage.setItem("settings", JSON.stringify(n));
+    //发送事件
+    window.dispatchEvent(new Event("storage"));
   }
 
   const closeDrawer = () => {
