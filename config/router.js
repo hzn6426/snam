@@ -1,9 +1,9 @@
 export default [
   {
-    // path: '/',
-    // component: '../layouts/BlankLayout',
-    // routes: [
-    //   {
+    path: '/',
+    component: '../layouts/StateLayout',
+    routes: [
+      {
         path: '/user',
         component: '../layouts/UserLayout',
         routes: [
@@ -247,6 +247,12 @@ export default [
                 redirect: '/system/user',
               },
               {
+                name: '流程演示',
+                icon: 'smile',
+                path: '/system/flow',
+                component: './flow',
+              },
+              {
                 name: '提单演示',
                 icon: 'smile',
                 path: '/system/order',
@@ -370,5 +376,5 @@ export default [
           },
         ],
       },
-
+    ]}
 ];

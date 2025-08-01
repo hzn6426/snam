@@ -2,22 +2,16 @@ import { IIF, IStatus, IWindow } from '@/common/components';
 import { api, dateFormat, useAutoObservable } from '@/common/utils';
 import { javascript } from "@codemirror/lang-javascript";
 import CodeMirror from '@uiw/react-codemirror';
+import {json} from "@codemirror/lang-json";
 import { Descriptions } from 'antd';
 import { EditorView } from "codemirror";
 import { useRef, useState, useEffect } from 'react';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { useParams } from 'umi';
-
+import { useApplicationState } from "@/store/state";
 
 export default (props) => {
-
-    const [settings, setSettings] = useState({});
-
-    useEffect(() => {
-        if (localStorage.getItem("settings")) {
-            setSettings(JSON.parse(localStorage.getItem("settings")));
-        }
-    }, []);
+    const [navTheme] = useApplicationState(s => [s.view.navTheme]);
 
     const ref = useRef();
     const params = useParams();
@@ -99,48 +93,41 @@ export default (props) => {
 
             </Descriptions>
             <br />
-            <IIF test={current && current.exchangeParam}>
                 <div className="snam-label">请求参数</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exchangeParam}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
-                        language="json"
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         readOnly={true}
                         height="120px"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping, json(), javascript({ jsx: true })]}
                     />
                 </div>
-            </IIF>
             <br />
-            <IIF test={current && current.responseData}>
                 <div className="snam-label">返回信息</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.responseData}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
-                        language="json"
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         readOnly={true}
-                        height="120px"
+                        height="140px"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping, json(), javascript({ jsx: true })]}
                     />
                 </div>
-            </IIF>
             <br />
 
-            <IIF test={current && current.exceptionMsg}>
+            <IIF test={!!current.exceptionMsg}>
                 <div className="snam-label">错误信息</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exceptionMsg}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
-                        language="json"
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         readOnly={true}
                         height="120"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping, json(), javascript({ jsx: true })]}
                     />
                 </div>
             </IIF>

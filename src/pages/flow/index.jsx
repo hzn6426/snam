@@ -29,7 +29,8 @@ import {
 } from '@/common/components';
 import { showDeleteConfirm } from '@/common/antd';
 import { Form, Button, Tag, message, Splitter, Input, Tooltip, Card, Space } from 'antd';
-import defaultSettings from '../../../config/defaultSettings';
+// import defaultSettings from '../../../config/defaultSettings';
+import { useApplicationState } from "@/store/state";
 import {
     concatMap,
     debounceTime,
@@ -228,7 +229,11 @@ const trackColumns = [
 ];
 
 export default (props) => {
+    const [theme] = useApplicationState(s => [s.view.navTheme]);
 
+    useEffect(() => {
+        console.log('monitor theme...:', theme)
+    },[theme])
     const OperateRenderer = (props) => {
     const record = props.data;
 
@@ -288,7 +293,7 @@ const parentColumns = [
 
     const [searchParentForm] = Form.useForm();
 
-    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));
+    // const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));
     // const [selectedKeys, setSelectedKeys] = useState([]);
     const [parentDataSource, setParentDataSource] = useState([]);
     const [childDataSource, setChildDataSource] = useState([]);
@@ -320,7 +325,6 @@ const parentColumns = [
 
     const [trackDataSource, setTrackDataSource] = useState([]);
 
-    const [theme, setTheme] = useState(settings.navTheme == 'light' ? 'light' : 'dark')
 
 
 
@@ -525,11 +529,11 @@ const parentColumns = [
     };
 
     //监控LocalStorage更改
-    window.addEventListener('storage', () => {
-        const settings = JSON.parse(localStorage.getItem("settings"))
-        const navTheme = settings.navTheme == "light" ? "light" : "dark";
-        setTheme(navTheme);
-    })
+    // window.addEventListener('storage', () => {
+    //     const settings = JSON.parse(localStorage.getItem("settings"))
+    //     const navTheme = settings.navTheme == "light" ? "light" : "dark";
+    //     setTheme(navTheme);
+    // })
 
     
 
@@ -541,7 +545,7 @@ const parentColumns = [
             setBottomHeight(sizes[1]);
             }} style={{ height: 'calc(100vh - 50px)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
             <Splitter.Panel >
-                <UFlow data={chartData} theme={theme} style={{ height: topHeight }} />
+                <UFlow data={chartData} theme={theme == 'realDark' ? 'dark' : theme } style={{ height: topHeight }} />
             </Splitter.Panel>
             <Splitter.Panel defaultSize={bottomHeight}>
                 <ILayout type="hbox" spans="5 5 4 5 5" style={{marginTop:'8px'}} gutter="0">

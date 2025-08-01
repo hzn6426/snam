@@ -40,63 +40,54 @@ export default (props) => {
             .catch(() => unload());
     };
 
-    return (
-        <Card
-            style={{
-                height: clientHeight - 0 + 'px',
-                overflow: 'auto',
-                padding: '0 10px 10px 10px',
-            }}
+    return (<Card
+        style={{
+            height: clientHeight - 0 + 'px',
+            overflow: 'auto',
+            padding: '0 10px 10px 10px',
+            borderRadius: '0px',
+        }}
+    >
+        <Form
+            name="basic"
+            initialValues={{ remember: true }}
+            autoComplete="off"
+            size="small"
+            className="snam-form"
+            scrollToFirstError={true}
+            form={snamModalForm}
         >
-            <Form
-                name="basic"
-                initialValues={{ remember: true }}
-                autoComplete="off"
-                size="small"
-                className="snam-form"
-                scrollToFirstError={true}
-                form={snamModalForm}
-            >
-                {props.children}
-            </Form>
-            <IFooterToolbar
-                visible={true}
-            // style={{
-            //     position: 'fixed',
-            //     bottom: '1px',
-            //     width: '100%',
-            //     padding: '5px 0 5px 25px',
-            //     background: '#f0f0f0',
-            //     marginLeft: '-20px',
-            // }}
-            >
-                <Space>
-                    <IIF test={saveVisible !== false}>
-                        <Button
-                            icon={<SaveOutlined />}
-                            type="primary"
-                            htmlType="submit"
-                            loading={confirmLoading}
-                            onClick={() => {
-                                doSubmit();
-                            }}
-                        >
-                            保存
-                        </Button>
-                    </IIF>
+            <>{props.children}</>
+        </Form>
+        <IFooterToolbar
+            visible={true}
+        >
+            <Space>
+                <IIF test={saveVisible !== false}>
                     <Button
-                        icon={<CloseOutlined />}
-                        danger
+                        icon={<SaveOutlined />}
+                        type="primary"
                         htmlType="submit"
                         loading={confirmLoading}
                         onClick={() => {
-                            props.onCancel();
+                            doSubmit();
                         }}
                     >
-                        关闭
+                        保存
                     </Button>
-                </Space>
-            </IFooterToolbar>
-        </Card>
-    );
+                </IIF>
+                <Button
+                    icon={<CloseOutlined />}
+                    danger
+                    htmlType="submit"
+                    loading={confirmLoading}
+                    onClick={() => {
+                        props.onCancel();
+                    }}
+                >
+                    关闭
+                </Button>
+            </Space>
+        </IFooterToolbar>
+    </Card>);
 };

@@ -1,5 +1,6 @@
 import { history } from 'umi';
 import { constant } from '@/common/utils';
+import "@/assets/theme.css";
 
 const token = sessionStorage.getItem(constant.KEY_USER_TOKEN);
 

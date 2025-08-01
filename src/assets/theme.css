@@ -1,0 +1,7 @@
+[data-theme="light"] {
+    --scrollbar-bg:#f5f5fb;
+}
+
+[data-theme="dark"] {
+    --scroll-bar: #353535;
+}

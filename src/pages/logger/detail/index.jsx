@@ -1,40 +1,32 @@
-import { IIF, IStatus, IWindow } from '@/common/components';
-import { api, dateFormat, useAutoObservable } from '@/common/utils';
+import { IIF, IStatus, IWindow, ICodeEditor,IFormItem,ILayout } from '@/common/components';
+import { api, dateFormat,useAutoObservable } from '@/common/utils';
 import { javascript } from "@codemirror/lang-javascript";
-import CodeMirror from '@uiw/react-codemirror';
+import {json} from "@codemirror/lang-json";
 import { Descriptions } from 'antd';
+import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from "codemirror";
 import { useRef, useState, useEffect } from 'react';
-import { filter, map, switchMap } from 'rxjs/operators';
 import { useParams } from 'umi';
+import { useApplicationState } from "@/store/state";
 
 
 export default (props) => {
+    const [current, setCurrent] = useState({});
 
-    const [settings, setSettings] = useState({});
+    const [navTheme] = useApplicationState(s => [s.view.navTheme]);
 
-    useEffect(() => {
-        if (localStorage.getItem("settings")) {
-            const json = JSON.parse(localStorage.getItem("settings"));
-            setSettings(json);
-        }
-    }, []);
-
-    const ref = useRef();
     const params = useParams();
     const { clientWidth, clientHeight } = window?.document?.documentElement;
-    const [loading, setLoading] = useState(false);
-    const [current, setCurrent] = useAutoObservable((inputs$) =>
-        inputs$.pipe(
-            map(([id]) => id),
-            filter(id => id !== 'ADD'),
-            switchMap((id) => api.logger.getLogger(id)),
-            map((logger) => {
-                return logger[0];
+    useEffect(() => {
+        if (params.id) {
+            api.logger.getLogger(params.id).subscribe({
+                next: (data) => {
+                    setCurrent(data[0]);
+                }
             })
-        ),
-        [params.id],
-    )
+        }
+    },[params.id])
+
 
     const loggerState = {
         FAILURE: { text: '失败', status: 'Error' },
@@ -58,10 +50,46 @@ export default (props) => {
         return '';
     }
 
+    const items = [{
+        label:'请求',
+        key:'request',
+        span:24,
+        children: <>{dateFormat(current.exchangeTime, 'yyyy-MM-dd hh:mm:ss')} {current.exchangeMethod}  {current.exchangeUrl}</>
+    },{
+        label:'状态',
+        key:'status',
+        span:24,
+        children: <><IStatus value={current.state} state={loggerState} /> 耗时:{current.executeTimer}秒</>
+    },{
+        label:'操作人',
+        key:'operator',
+        span:1,
+        children: <>{current.createUserCnName} {current.ipAddress}</>
+    },{
+        label:'浏览器信息',
+        key:'browser',
+        span:2,
+        children: <>{current.os}-{current.browser}</>
+    }, {
+        label:'来源系统',
+        key:'system',
+        span:1,
+        children: <>{sourceFrom(current.systemTag)}</>
+    },
+    {
+        label:'日志类型',
+        key:'type',
+        span:2,
+        children: <>{current.logTypeCode}</>
+    },{
+        label:'调用模块',
+        key:'module',
+        span:3,
+        children: <>{current.executeModuleName}  {current.executeMethod}</>
+    }
+];
 
-    return (
-        <IWindow
-            // ref={ref}
+    return  (<IWindow
             current={current}
             className="snam-modal"
             title={(current && current.id) ? '查看日志' : '查看日志'}
@@ -73,78 +101,51 @@ export default (props) => {
                 window.opener.onSuccess();
             }}
         >
-            <Descriptions size='small' bordered>
+            <Descriptions layout="vertical" size='small'  bordered items={items}/>
 
-                <Descriptions.Item label="请求" span={24}>
-                    {dateFormat(current.exchangeTime, 'yyyy-MM-dd hh:mm:ss')} {current.exchangeMethod}  {current.exchangeUrl}
-                </Descriptions.Item>
-                <Descriptions.Item label="状态" span={24}>
-                    <IStatus value={current.state} state={loggerState} /> 耗时:{current.executeTimer}秒
-                </Descriptions.Item>
-
-                <Descriptions.Item label="操作人" span={1}>
-                    {current.createUserCnName} {current.ipAddress}
-                </Descriptions.Item>
-                <Descriptions.Item label="浏览器信息" span={2}>
-                    {current.os}-{current.browser}
-                </Descriptions.Item>
-                <Descriptions.Item label="来源系统" span={1}>
-                    {sourceFrom(current.systemTag)}
-                </Descriptions.Item>
-                <Descriptions.Item label="日志类型" span={2}>
-                    {current.logTypeCode}
-                </Descriptions.Item>
-                <Descriptions.Item label="调用模块" span={3}>
-                    {current.executeModuleName}  {current.executeMethod}
-                </Descriptions.Item>
-
-            </Descriptions>
-            <br />
-            <IIF test={current && current.exchangeParam}>
+            <br/>
                 <div className="snam-label">请求参数</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exchangeParam}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
-                        language="json"
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         readOnly={true}
+                        width="100%"
                         height="120px"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping,json(), javascript({ jsx: true })]}
                     />
                 </div>
-            </IIF>
             <br />
-            <IIF test={current && current.responseData}>
                 <div className="snam-label">返回信息</div>
-                <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
+                <div style={{ border: '1px solid rgba(0, 0, 0, .06)',  }}>
                     <CodeMirror
-                        value={current.responseData}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
+                        value={current.responseData}
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
+                        width="100%"
                         readOnly={true}
-                        height="120px"
+                        height="140px"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping,json(), javascript({ jsx: true })]}
                     />
                 </div>
-            </IIF>
             <br />
 
-            <IIF test={current && current.exceptionMsg}>
+            <IIF test={!!current.exceptionMsg}>
                 <div className="snam-label">错误信息</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exceptionMsg}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
-                        height="120"
+                        height="120px"
+                        width="100%"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping,json(), javascript({ jsx: true })]}
                     />
                 </div>
             </IIF>
-        </IWindow>
-    )
+        </IWindow>)
 }

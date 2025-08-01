@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { setLocale } from 'umi';
 import { Drawer, Form, Row, Col, Switch, Radio, Segmented } from 'antd';
 import { createFromIconfontCN } from '@ant-design/icons';
+import { useApplicationState } from "@/store/state";
 import * as R from 'ramda';
 import LayoutBox from './layoutBox';
 import ThemeBox from './themeBox';
@@ -14,6 +15,8 @@ const MyIcon = createFromIconfontCN({
 export default (props) => {
   const [settingForm] = Form.useForm();
 
+  const [setViewSetting] = useApplicationState(s => [s.actions.view.setViewSetting]);
+
   const changeSettings = (v) => {
     let key = Object.keys(v)[0];
     let value = v[key];
@@ -22,7 +25,7 @@ export default (props) => {
       setLocale(value, false);
       localStorage.setItem("umi-locale", value);
     }
-    props.onSettingChange(n);
+    setViewSetting(n);
     localStorage.setItem("settings", JSON.stringify(n));
     //发送事件
     window.dispatchEvent(new Event("storage"));
@@ -77,11 +80,11 @@ export default (props) => {
               <LayoutBox />
             </Form.Item>
           </Col>
-          <Col span={24}>
+          {/* <Col span={24}>
             <Form.Item label="主题" name="theme" labelCol={{ span: 4 }} size="small">
               <ThemeBox />
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col span={24}>
             <Form.Item label="颜色" name="colorPrimary" labelCol={{ span: 4 }} size="small">
               <ColorBox />

@@ -1,13 +1,25 @@
 import { ConfigProvider, theme  } from 'antd';
 import {useEffect, useState} from 'react'
+import { useApplicationState } from "@/store/state";
 export default (props) => {
+    const [setNavTheme] = useApplicationState(s => [s.actions.view.setNavTheme]);
 
     const [settings, setSettings] = useState({});
-    useEffect(() => {
+    const changeTheme = () => {
         if (localStorage.getItem("settings")) {
-            setSettings(JSON.parse(localStorage.getItem("settings")));
+            const localSettings = JSON.parse(localStorage.getItem("settings"));
+            setSettings(localSettings);
+            setNavTheme(localSettings.navTheme);
         }
+    }
+    useEffect(() => {
+       changeTheme();
     }, []);
+
+     //监控LocalStorage更改
+    window.addEventListener('storage', () => {
+        changeTheme();
+    })
     return (
         <>
         <ConfigProvider space={{ size: 'small' }} 
