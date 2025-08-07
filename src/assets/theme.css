@@ -1,7 +1,11 @@
 [data-theme="light"] {
-    --scrollbar-bg:#f5f5fb;
+    --scrollbar-bg: #faf5f3;
+    --grid-bd:#f0f0f0;
+    --split-bg:#fff;
 }
 
 [data-theme="dark"] {
-    --scroll-bar: #353535;
+    --scrollbar-bg: #353535;
+    --grid-bd:#303030;
+    --split-bg:#000;
 }

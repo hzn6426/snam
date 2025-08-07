@@ -5,8 +5,10 @@ export default (props) => {
     
 
     return (
-        
-            <ProMainLayout {...props} />
+            <ApplicationStateProvider>
+                <ProMainLayout {...props} />
+            </ApplicationStateProvider>
+            
             
         )
 }

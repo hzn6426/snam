@@ -32,6 +32,12 @@ export default (props) => {
 
     const [viewSetting] = useApplicationState(s => [s.view]);
     
+    useEffect(() => {
+        if (viewSetting.navTheme) {
+            const theme = viewSetting.navTheme == 'realDark' ? 'dark' : viewSetting.navTheme;
+            document.documentElement.setAttribute("data-theme", theme);
+        }
+    }, [viewSetting]);
     const getCurrentUser = () => {
         api.user.getCurrentUser().subscribe({
             next: (data) => {
@@ -233,18 +239,18 @@ export default (props) => {
                 // 自定义折叠 样式
                 collapsed={isCollapsed}
                 onCollapse={() => setIsCollapsed(!isCollapsed)}
-                // token={settings.navTheme == "light" && {
-                //     header: {
-                //         colorBgHeader: 'rgba(250,250,250,0.6)',
-                //     },
-                //     sider: {
-                //         colorMenuBackground: 'rgba(250,250,250,0.2)',
-                //     },
-                //     pageContainer: {
-                //         colorBgPageContainer: 'rgba(255,255,255,0.8)'
-                //     }
-                // }}
-                // className={settings.navTheme == "light" ? settings.theme : ""}
+                token={viewSetting.navTheme == "light" && {
+                    header: {
+                        colorBgHeader: 'rgba(250,250,250,0.6)',
+                    },
+                    sider: {
+                        colorMenuBackground: 'rgba(255,255,255,0.8)',
+                    },
+                    pageContainer: {
+                        colorBgPageContainer: 'rgba(255,255,255,0.8)'
+                    }
+                }}
+                className={viewSetting.navTheme == "light" ? viewSetting.theme : ""}
             >
                 <PageContainer
                     ghost

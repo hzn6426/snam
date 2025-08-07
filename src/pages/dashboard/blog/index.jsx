@@ -18,21 +18,52 @@ export default () => {
   };
   const { clientHeight } = window?.document?.documentElement;
 
-  useEffect(() => {
-    const lastFetchTime = localStorage.getItem('lastFetchTime');
-    const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
-    const now = new Date().getTime();
+  // useEffect(() => {
+  //   const lastFetchTime = localStorage.getItem('lastFetchTime');
+  //   const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
+  //   const now = new Date().getTime();
  
-    if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
-      localStorage.setItem('lastFetchTime', now.toString());
-      info();
-    }
-  },[]);
+  //   if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
+  //     localStorage.setItem('lastFetchTime', now.toString());
+  //     info();
+  //   }
+  // },[]);
   return (
     <>
       
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
+
+          <Timeline.Item>
+            <Title level={4}>[3.2.8] 2025.8.9</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 全新<a href='https://flow.baomibing.com' target='_blank'>流程设计器-让流程设计更简单(用户名ximen/123456)</a>上线, 完全开源(项目正在整理)</li>
+                <li>新增 UFlow（@ifrog/uflow）组件，基于React，用于展示流程</li>
+                <li>新增 流程演示，用于演示工作流，可以在流程设计器中设计流程，在演示中执行流程</li>
+                <li>新增 IP锁定机制，包括登录锁定及恶意刷接口锁定</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化前端展示，添加zustand状态支持，用于设置主题</li>
+                <li>优化业务权限，构造条件添加左括号和右括号，能支持复杂嵌套条件</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复解析权限SQL时类型判断错误，导致解析SQL失败</li>
+                <li>修复日志双击查看详情时出错问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
 
           <Timeline.Item>
             <Title level={4}>[3.2.7] 2025.7.15</Title>

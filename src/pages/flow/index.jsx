@@ -108,7 +108,7 @@ const childColumns = [
     // },
     {
         headerName: '流程名称',
-        width: 100,
+        width: 95,
         align: 'left',
         field: 'name',
     },
@@ -120,7 +120,7 @@ const childColumns = [
     // },
     {
         headerName: '流程版本',
-        width: 80,
+        width: 75,
         align: 'left',
         field: 'flowVersion',
     },
@@ -237,7 +237,7 @@ export default (props) => {
     const OperateRenderer = (props) => {
     const record = props.data;
 
-    return <Tag size="small" loading={openLoading} color="var(--antd-primary-color)" style={{ width: 85, cursor: 'pointer' }} icon={<EyeOutlined title='流程设计' />} onClick={(e) => {
+    return <Tag size="small"  color="var(--antd-primary-color)" style={{ width: 60, cursor: 'pointer' }} icon={<EyeOutlined title='流程设计' />} onClick={(e) => {
       e.stopPropagation();
       setOpenLoading(true);
       api.flow.getFlowChart(record.id).subscribe({
@@ -248,7 +248,7 @@ export default (props) => {
       // setCurrentFlow({id:record.id, name: record.name,flowVersion: record.flowVersion})
       // window.location.href = "/?ruleId=" + record.id;
       //   history.push('/business/ruleEditor/' + record.id + "?tabTitle=" + record.ruleName + "_" + record.ruleVersion);
-    }} >预览流程</Tag>
+    }} >预览</Tag>
   }
     //列初始化
 const parentColumns = [
@@ -273,19 +273,19 @@ const parentColumns = [
     },
     {
         headerName: '流程名称',
-        width: 100,
+        width: 85,
         align: 'left',
         field: 'name',
     },
     {
         headerName: '版本',
-        width: 70,
+        width: 50,
         align: 'left',
         field: 'flowVersion',
     },
     {
       headerName: '操作',
-      width: 110,
+      width: 80,
       field: 'operate',
       cellRenderer: OperateRenderer
     },
@@ -304,7 +304,7 @@ const parentColumns = [
     const [childTotal, setChildTotal] = useState(0);
     const [openLoading, setOpenLoading] = useState(false);
 
-    const [chartData, setChartData] = useState(data);
+    const [chartData, setChartData] = useState({});
 
     const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
@@ -540,26 +540,17 @@ const parentColumns = [
     // 列表及弹窗
     return (
         <>
-        <Splitter layout="vertical" onResizeEnd={sizes => {
+        <Splitter layout="vertical"  onResizeEnd={sizes => {
             setTopHeight(sizes[0]);
             setBottomHeight(sizes[1]);
-            }} style={{ height: 'calc(100vh - 50px)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
+            }} style={{ height: 'calc(100vh - 50px)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', overflow: 'hidden',backgroundColor:'var(--split-bg)' }}>
             <Splitter.Panel >
                 <UFlow data={chartData} theme={theme == 'realDark' ? 'dark' : theme } style={{ height: topHeight }} />
             </Splitter.Panel>
-            <Splitter.Panel defaultSize={bottomHeight}>
-                <ILayout type="hbox" spans="5 5 4 5 5" style={{marginTop:'8px'}} gutter="0">
-                    {/* <List
-                    pagination={{ position:'position', align:'end',pageSize:50, total:parentTotal }}
-                    size="small"
-                    header={<div>流程列表</div>}
-                    // footer={<div>Footer</div>}
-                    bordered
-                    dataSource={parentDataSource}
-                    renderItem={item => <List.Item>{item}</List.Item>}
-                    /> */}
+            <Splitter.Panel defaultSize={bottomHeight} >
+                <ILayout type="hbox"  spans="5 5 4 5 5" style={{marginTop:'8px'}} gutter="0">
                     <IAGrid
-                        
+                        style={{marginLeft:0}}
                         ref={parentRef}
                         title="流程列表"
                         key="parent"
@@ -578,7 +569,7 @@ const parentColumns = [
                             //     ]} />,
                         ]}
                         pageToolBarRender={[
-                            <Permit authority="flow:start">
+                            <Permit key="flow:start" authority="flow:start">
                                 <IButton type="warning" size="small" 
                                     icon={<PlayCircleOutlined />} key="use" onClick={() => onStart(selectedParentKeys)} loading={loading}>
                                     开始
@@ -588,6 +579,7 @@ const parentColumns = [
                         clearSelect={searchLoading}
                     />
                     <IAGrid
+                        style={{marginLeft:0}}
                         ref={childRef}
                         title="实例列表"
                         key="child"
@@ -619,6 +611,7 @@ const parentColumns = [
                     />
 
                     <IAGrid
+                        style={{marginLeft:0}}
                         optionsHide={{pagination:false}}
                         // ref={childRef}
                         title="正在执行任务"
@@ -739,6 +732,7 @@ const parentColumns = [
                         </Form>
                     </Card>
                     <IAGrid
+                        style={{marginRight:0}}
                         optionsHide={{pagination:false}}
                         // ref={childRef}
                         title="流程执行日志"

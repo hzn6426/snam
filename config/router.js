@@ -1,9 +1,9 @@
 export default [
   {
-    path: '/',
-    component: '../layouts/StateLayout',
-    routes: [
-      {
+    // path: '/',
+    // component: '../layouts/StateLayout',
+    // routes: [
+    //   {
         path: '/user',
         component: '../layouts/UserLayout',
         routes: [
@@ -376,5 +376,5 @@ export default [
           },
         ],
       },
-    ]}
+    // ]}
 ];
