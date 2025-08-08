@@ -1,15 +1,15 @@
 import { ConfigProvider, theme  } from 'antd';
 import {useEffect, useState} from 'react'
-import { useApplicationState } from "@/store/state";
+// import { useApplicationState } from "@/store/state";
 export default (props) => {
-    const [setNavTheme] = useApplicationState(s => [s.actions.view.setNavTheme]);
+    // const [setNavTheme] = useApplicationState(s => [s.actions.view.setNavTheme]);
 
     const [settings, setSettings] = useState({});
     const changeTheme = () => {
         if (localStorage.getItem("settings")) {
             const localSettings = JSON.parse(localStorage.getItem("settings"));
             setSettings(localSettings);
-            setNavTheme(localSettings.navTheme);
+            // setNavTheme(localSettings.navTheme);
         }
     }
     useEffect(() => {

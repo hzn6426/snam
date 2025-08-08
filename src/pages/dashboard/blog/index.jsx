@@ -35,7 +35,7 @@ export default () => {
         <Timeline>
 
           <Timeline.Item>
-            <Title level={4}>[3.2.8] 2025.8.9</Title>
+            <Title level={4}>[3.2.8] 2025.8.8</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>
               <ul className="snam-li">
