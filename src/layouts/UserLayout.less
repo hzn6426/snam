@@ -1,16 +1,23 @@
-
-
 .container {
     display: flex;
+    align-items: center;
+    // justify-content: center;
     flex-direction: column;
     height: 100vh;
-    overflow: auto;
-    
-
-    padding-top: 10%;
-    background: url('../assets/bgs/beat_sea.jpg') top center;
-    background-repeat: no-repeat;
+    // overflow: auto;
+    padding-top: 5%;
+    background: url('../assets/bgs/gaoshan.jpg') no-repeat center center scroll;
+    // object-fit: cover;
+    // background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
+    position: relative;
+    width: 100%;
+    // height: 110vh;
+    // margin-bottom: 0px;
+    // right: 0;
     // background: @layout-body-background;
 }
 
@@ -28,22 +35,22 @@
 .content {
     padding: 40px 10px;
     width: 380px;
-        backdrop-filter: blur(10px);
-            min-height: 300px;
-        margin: 0 auto;
-        background: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
+    backdrop-filter: blur(3px);
+    min-height: 300px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
 }
 
 // @media (min-width: @screen-md-min) {
-    // .container {
-    //     padding-top: 10%;
-    //     background: url('../assets/loginbg.jpeg') top center;
-    //     background-repeat: no-repeat;
-    //     background-size: cover;
-    // }
+// .container {
+//     padding-top: 10%;
+//     background: url('../assets/loginbg.jpeg') top center;
+//     background-repeat: no-repeat;
+//     background-size: cover;
+// }
 
-   
+
 // }
 
 .top {
@@ -71,7 +78,7 @@
     font-weight: 600;
     font-size: 28px;
     top: 18px;
-    left:-10px;
+    left: -10px;
     font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
@@ -79,8 +86,8 @@
     margin-top: 19px;
     margin-right: 30px;
     margin-bottom: 30px;
-        color: #999;
-        font-size: 14px;
+    color: #999;
+    font-size: 14px;
     // color: @text-color-secondary;
     // font-size: @font-size-base;
     text-align: right;

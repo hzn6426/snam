@@ -36,6 +36,12 @@ export default Object.freeze({
   DICT_USER_BUSINEESS_TAG: 'USER_BUSINESS_TAG',
   // 系统端
   DICT_SYSTEM_POINT_TAG: 'SYSTEM_POINT_TAG',
+
+  // 租户属性
+  DICT_TENANT_BUSINEESS_TAG: 'TENANT_BUSINESS_TAG',
+  // 租户系统端
+  DICT_TENANT_POINT_TAG: 'TENANT_POINT_TAG',
+
   // 职位权限范围
   DICT_POSITION_PERM_SCOPE_TAG: 'POSITION_PERM_SCOPE_TAG',
   // 业务权限范围
@@ -55,8 +61,6 @@ export default Object.freeze({
 
   // 登录
   API_LOGIN: '/authority/oauth/token',
-  // 登录
-  API_GROUP: '/authority/group',
   // 登出
   API_LOGOUT: '/authority/oauth/logout',
   // 当前登录用户信息
@@ -174,28 +178,6 @@ export default Object.freeze({
   API_DICT_CHILD_STOP: '/authority/dictionaryChild/stop',
   // 字典匹配
   API_DICT_CHILD_LIST: '/authority/dictionaryChild/listByParentCode',
-  //==============================================================
-  // 基础数据
-  //==============================================================
-  // 港口模糊补全
-  API_PORT_LIST_BY_KEYWORD: '/booker/port/listByKeyword',
-  // 船公司模糊补全
-  API_SHIP_COMPANY_LIST_BY_KEYWORD: '/booker/shipCompany/listByKeyword',
-  //包装模糊补全
-  API_PACK_LIST_BY_KEYWORD: '/booker/pack/listByKeyword',
-  //国家模糊补全
-  API_COUNTRY_LIST_BY_KEYWORD: '/booker/country/listByKeyword',
-  //箱型模糊补全
-  API_CONTAINER_LIST_BY_KEYWORD: '/booker/container/listByKeyword',
-  //船代模糊补全
-  API_ENTRUST_SHIP_COMPANY_LIST_BY_KEYWORD: '/booker/entrustShipCompany/listByKeyword',
-  //船模糊匹配
-  API_SHIP_LIST_BY_KEYWORD: '/booker/ship/listByKeyword',
-
-  //舱单日志查询
-  API_CABIN_IN_LOG_SEARCH: '/booker/cabininlog/search',
-  //舱单日志详情
-  API_CABIN_IN_LOG: '/booker/cabininlog',
 
   //==============================================================//
   // 发送日志                                                      //
@@ -295,6 +277,8 @@ export default Object.freeze({
   API_GROUP_TREE_ALL_GROUPS_AND_USERS: '/authority/group/treeAllGroupsAndUsers',
   // 获取所有组织和职位列表
   API_GROUP_TREE_ALL_GROUPS_AND_POSITIONS: '/authority/group/treeAllGroupsAndPositions',
+  // 组织
+  API_GROUP: '/authority/group',
   // 更新 保存
   API_GROUP_SAVE_OR_UPDATE: '/authority/group',
   // 删除
@@ -529,5 +513,128 @@ export default Object.freeze({
   API_FLOW_TASK_RUNNING: '/authority/flow/listExecutingTaskByInstance',
   //流程报表
   API_FLOW_CHART: '/authority/flow/getFlowChart',
+
+  //= ==============================================//
+  //                租户用户管理                     //
+  //= ==============================================//
+  // 用户权限菜单
+  EAPI_USER_MENUS: '/authority/tuser/listAdminMenus',
+  // 用户查询
+  EAPI_USER_SEARCH: '/authority/tuser/search',
+  // 用户增删改查
+  EAPI_USER: '/authority/tuser',
+  // 用户激活
+  EAPI_USER_ACTIVE: '/authority/tuser/active',
+  // 用户重置密码
+  EAPI_USER_RESET_PASSWD: '/authority/tuser/resetPasswd',
+  // 用户停用
+  EAPI_USER_STOP: '/authority/tuser/stop',
+  // 用户启用
+  EAPI_USER_UNSTOP: '/authority/tuser/unstop',
+  // 用户设置角色
+  EAPI_USER_SAVE_ROLE: '/authority/tuserRole/saveFromUser',
+  // 根据组织获取用户列表
+  EAPI_USER_BY_GROUP: '/authority/tuser/listByGroup',
+  // 用户模糊补全
+  EAPI_USER_LIST_BY_KEYWORD: '/authority/tuser/listByTagAndKeyWord',
+  // 根据code查用户
+  EAPI_USER_LIST_BY_CODE: '/authority/tuser/listByUserNoStr',
+  // 用户更新自己的个人信息
+  EAPI_USER_UPDATE_SELF: '/authority/tuser/updateSelfUser',
+  // 用户组织列表
+  EAPI_USER_DEPARTMENTS: '/authority/tgroup/userDepartments',
+  // 根据角色获取组织用户列表
+  EAPI_USER_LIST_GROUP_USER_BY_ROLE: '/authority/tuser/listGroupUsersByRole',
+  // 根据用户组获取组织用户列表
+  EAPI_USER_LIST_GROUP_USER_BY_USET: '/authority/tuser/listGroupUsersByUset',
+  // 获取所有TAG对应的组织列表和用户
+  EAPI_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG: '/authority/tgroup/treeAllGroupsAndUsersByTag',
+  // 获取用户拥有的菜单权限
+  EAPI_USER_LIST_PERM_MENUS: '/authority/tuser/listPermMenus',
+  // 获取用户拥有的按钮权限
+  EAPI_USER_LIST_PERM_BUTTONS: '/authority/tuser/listPermButtons',
+  // 保存用户菜单权限
+  EAPI_USER_SAVE_PERM_MENU: '/authority/tuser/saveMenuPerm',
+  // 保存用户按钮权限
+  EAPI_USER_SAVE_PERM_BUTTON: '/authority/tuser/saveButtonPerm',
+  // 获取用户权限拥有的菜单和按钮
+  EAPI_USER_LIST_PERM_MENUS_AND_BUTTONS: '/authority/tuser/listPermMenusAndButtons',
+  // 获取用户对应的角色列表
+  EAPI_USER_LIST_ROLES: '/authority/tuser/listRoles',
+  // 获取用户对应的用户组列表 
+  EAPI_USER_LIST_USETS: '/authority/tuser/listUsets',
+  // 获取用户对应的职位列表
+  EAPI_USER_LIST_POSITIONS: '/authority/tuser/listPositions',
+  // 获取ACTION对应的菜单和按钮
+  EAPI_USER_LIST_ACTION_PERM_MENUS_AND_BUTTONS: '/authority/tuser/listActionPermMenusAndButtons',
+
+  //==============================================================//
+  // 租户组织架构                                                      //
+  //==============================================================//
+
+  //以树的方式获取所有组织和用户
+  EAPI_GROUP_TREE_ALL_GROUPS_AND_USERS: '/authority/tgroup/treeAllGroupsAndUsers',
+  // 获取所有组织和职位列表
+  EAPI_GROUP_TREE_ALL_GROUPS_AND_POSITIONS: '/authority/tgroup/treeAllGroupsAndPositions',
+  // 更新 保存
+  EAPI_GROUP_SAVE_OR_UPDATE: '/authority/tgroup',
+  // 组织
+  EAPI_GROUP: '/authority/tgroup',
+  // 删除
+  EAPI_GROUP_DELETE: '/authority/tgroup',
+  // 增加子组织
+  EAPI_GROUP_ADD_DEPARTMENT: '/authority/tgroup/addDepartment',
+  // 根据分组查询用户
+  EAPI_SEARCH_USER_BY_GROUP: '/authority/tgroup/searchUser',
+  // 查询未分配的用户信息
+  EAPI_SEARCH_UNASSIGNED_USER: '/authority/tgroup/searchNotAssignUser',
+  // 添加分公司
+  EAPI_SAVE_COMPANY: '/authority/tgroup/addCompany',
+  // 添加组织成员
+  EAPI_GROUP_ADD_USER: '/authority/tgroup/addUsers',
+  // 分配职位
+  EAPI_GROUP_ASSIGN_POSITION: '/authority/tgroup/assignPosition',
+  // 移动组织成员
+  EAPI_GROUP_MOVE_USERS: '/authority/tgroup/moveUsers',
+  // 删除组织成员
+  EAPI_GROUP_DELETE_USERS: '/authority/tgroup/removeUsers',
+  // 分配角色 给用户赋予角色
+  EAPI_SAVE_USER_AND_ROLE: '/authority/tuserRole/saveUserAndRole',
+  // 获取所有组织列表
+  EAPI_GROUP_TREE_ALL_GROUPS: '/authority/tgroup/treeAllGroups',
+
+   //= ==============================================//
+  //                   租户角色管理                      //
+  //= ==============================================//
+  // 角色查询
+  EAPI_ROLE_SEARCH: '/authority/trole/search',
+  // 角色增删改查
+  EAPI_ROLE: '/authority/trole',
+  // 角色激活
+  EAPI_ROLE_USE: '/authority/trole/use',
+  // 角色停用
+  EAPI_ROLE_STOP: '/authority/trole/stop',
+  // 根据用户获取ID列表
+  EAPI_ROLE_BY_USER: '/authority/trole/listByUser',
+  // 获取所有角色列表
+  EAPI_ROLE_LIST_ALL: '/authority/trole/listAll',
+  // 用户设置角色
+  EAPI_ROLE_SAVE_USER: '/authority/tuserRole/saveFromRole',
+  // 获取系统所有的资源信息,以树的方式展示
+  EAPI_ROLE_TREE_ALL_MENUS: '/authority/tresource/treeAllMenus',
+  // 获取菜单对应的按钮列表
+  EAPI_ROLE_LIST_ALL_BUTTONS_BY_MENU: '/authority/tresource/listAllButtonsByMenu',
+  // 获取角色拥有权限的菜单ID列表
+  EAPI_ROLE_PERM_MENU_LIST: '/authority/tresource/listPermMenus',
+  // 获取角色拥有权限的按钮ID列表
+  EAPI_ROLE_PERM_BUTTON_LIST: '/authority/tresource/listPermButtons',
+  // 角色菜单权限保存
+  EAPI_ROLE_PERM_MENU_SAVE: '/authority/tresource/saveMenuPerm',
+  // 角色按钮权限保存
+  EAPI_ROLE_PERM_BUTTON_SAVE: '/authority/tresource/saveButtonPerm',
+  // 根据职位获取角色列表
+  EAPI_ROLE_BY_POSITION: '/authority/trole/listByPosition',
+  // 刷新所有角色权限
+  EAPI_ROLE_REFRESH_PRIVILEGES: '/authority/trole/refreshPrivileges',
 });
 

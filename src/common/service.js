@@ -39,6 +39,10 @@ import * as uset from '@/pages/uset/service';
 import * as action from '@/pages/action/service';
 import * as flow from '@/pages/flow/service';
 
+import * as tuser from '@/pages/tenant/user/service';
+import * as tgroup from '@/pages/tenant/group/service';
+import * as trole from '@/pages/tenant/role/service';
+
 const api = {
   user,
   // customer,
@@ -79,6 +83,10 @@ const api = {
   item,
   action,
   flow,
+
+  tuser,
+  tgroup,
+  trole,
 };
 
 export default api;

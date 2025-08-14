@@ -203,6 +203,56 @@ export default [
                 name: '编辑Action',
                 path: '/new/action/:id',
                 component: './action/save',
+              },{
+                name: '租户权限',
+                path: '/new/tenant/perm/:id',
+                component: './tenant/perm',
+              },
+
+              {
+                name: '租户用户新增',
+                path: '/new/tuser/:id',
+                component: './tenant/user/save',
+              },
+              {
+                name: '租户角色新增',
+                path: '/new/trole/:id',
+                component: './tenant/role/save',
+              },
+              {
+                name: '租户角色授权',
+                path: '/new/trole/resource/:id',
+                component: './tenant/role/resource',
+              },
+              {
+                name: '租户角色分配用户',
+                path: '/new/trole/assignUser/:id',
+                component: './tenant/role/user',
+              },
+              {
+                name: '租户组织编辑',
+                path: '/new/tgroup/save',
+                component: './tenant/group/save',
+              },
+              {
+                name: '租户组织用户编辑',
+                path: '/new/tgroup/user',
+                component: './tenant/group/user',
+              },
+              {
+                name: '租户组织用户移动',
+                path: '/new/tgroup/move',
+                component: './tenant/group/move',
+              },
+              {
+                name: '租户公司编辑',
+                path: '/new/tgroup/company',
+                component: './tenant/group/company',
+              },
+              {
+                name: '租户组织用户角色',
+                path: '/new/tgroup/role',
+                component: './tenant/group/role',
               },
             ]
           }

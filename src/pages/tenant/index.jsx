@@ -253,33 +253,47 @@ export default (props) => {
         () => setLoading(false),
     );
 
-    const onChargeClick = (id) => {
-        if (selectedKeys.length !== 1) {
-            message.error('只能选择一条用户数据！');
-            return;
-        }
-        INewWindow({
-            url: '/new/tenant/charge/' + id,
-            title: '余额充值',
-            width: 500,
-            height: 250,
-            callback: () => refresh()
-        });
-    }
+    // const onChargeClick = (id) => {
+    //     if (selectedKeys.length !== 1) {
+    //         message.error('只能选择一条用户数据！');
+    //         return;
+    //     }
+    //     INewWindow({
+    //         url: '/new/tenant/charge/' + id,
+    //         title: '余额充值',
+    //         width: 500,
+    //         height: 250,
+    //         callback: () => refresh()
+    //     });
+    // }
 
-    const onBillClick = (id) => {
-        if (selectedKeys.length !== 1) {
+    const onPermClick = (id) => {
+         if (selectedKeys.length !== 1) {
             message.error('只能选择一条用户数据！');
             return;
         }
         INewWindow({
-            url: '/new/tenant/bill/' + id,
-            title: '账单查看',
-            width: 900,
-            height: 600,
+            url: '/new/tenant/perm/' + id,
+            title: '权限配置',
+            width: window.screen.width - 200,
+            height: window.screen.height - 300,
             // callback: () => refresh()
         });
     }
+
+    // const onBillClick = (id) => {
+    //     if (selectedKeys.length !== 1) {
+    //         message.error('只能选择一条用户数据！');
+    //         return;
+    //     }
+    //     INewWindow({
+    //         url: '/new/tenant/bill/' + id,
+    //         title: '账单查看',
+    //         width: 900,
+    //         height: 600,
+    //         // callback: () => refresh()
+    //     });
+    // }
 
     const onResourceClick = (id) => {
         if (selectedKeys.length !== 1) {
@@ -467,7 +481,15 @@ export default (props) => {
                                 </IButton>
                             </Tooltip>
                         </Permit>,
-
+                        <IButton
+                                type="success"
+                                size='small'
+                                icon={<KeyOutlined />}
+                                key="perm"
+                                onClick={() => onPermClick(selectedKeys[selectedKeys.length - 1])}
+                            >
+                                权限
+                            </IButton>
                         // <Permit authority="tenant:searchTenantFee">
                         //     <IButton
                         //         type="info"

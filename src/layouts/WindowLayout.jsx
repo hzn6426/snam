@@ -1,5 +1,6 @@
 import { ConfigProvider, theme  } from 'antd';
 import {useEffect, useState} from 'react'
+import zhCN from 'antd/locale/zh_CN';
 // import { useApplicationState } from "@/store/state";
 export default (props) => {
     // const [setNavTheme] = useApplicationState(s => [s.actions.view.setNavTheme]);
@@ -23,6 +24,7 @@ export default (props) => {
     return (
         <>
         <ConfigProvider space={{ size: 'small' }} 
+        locale={zhCN}
         theme={{
             algorithm: settings.navTheme === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm,
             token: {

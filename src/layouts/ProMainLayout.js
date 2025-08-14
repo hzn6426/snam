@@ -11,11 +11,12 @@ import { iconEnum } from '@/common/icons';
 import KeepAlive, { useAliveController } from 'react-activation';
 import { Link, history } from 'umi';
 import routeCache from '../../config/routerCache.js';
-import Logo from '../assets/logo.png';
-// import Logo from '../assets/antd.svg';
+// import Logo from '../assets/logo.png';
+import Logo from '../assets/antd.svg';
 import Header from '@/assets/images/header.jpg';
 import { api, constant } from '@/common/utils';
 import './index.less';
+import zhCN from 'antd/locale/zh_CN';
 const tabListInit = [{ key: '/dashboard/blog', tab: '更新日志', closable: false }];
 export default (props) => {
 
@@ -156,7 +157,9 @@ export default (props) => {
             return localItem;
         });
     };
-    return (<ConfigProvider space={{ size: 'small' }}><Spin spinning={loading}>
+    return (<ConfigProvider 
+        locale={zhCN}
+        space={{ size: 'small' }}><Spin spinning={loading}>
         <ProLayout
                 {...viewSetting}
                 logo={Logo}

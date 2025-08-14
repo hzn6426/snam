@@ -17,6 +17,7 @@ import { showDeleteConfirm } from '@/common/antd';
 import { Button, Col, Form, message, Row, Space, Tag, Tooltip } from 'antd';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, switchMap, tap, filter } from 'rxjs/operators';
+import tenant from '..';
 
 const TagRenderer = (props) => {
     if (props.value) {
@@ -217,7 +218,7 @@ export default (props) => {
     //查询
     const loadGroup = () => {
         let param = { dto: searchForm.getFieldValue() };
-        api.group.treeAllGroupsAndUsers(param).subscribe({
+        api.tgroup.treeAllGroupsAndUsers(props.tenantId).subscribe({
             next: (data) => {
                 setTreeData(data);
             },
@@ -230,9 +231,9 @@ export default (props) => {
         const parent = node.parentId;
         setSelectedGroupId(parent);
         if (parent === constant.ROOT_OF_GROUP) {
-            const param = { id: node.key, groupName: node.text }
+            const param = { id: node.key, groupName: node.text, tenantId: props.tenantId }
             INewWindow({
-                url: '/new/group/company',
+                url: '/new/tgroup/company',
                 title: '编辑公司',
                 width: 600,
                 height: 300,
@@ -244,9 +245,10 @@ export default (props) => {
                 id: node.key,
                 groupName: node.text,
                 parentName: node.parentGroupName,
+                tenantId: props.tenantId
             };
             INewWindow({
-                url: '/new/group/save',
+                url: '/new/tgroup/save',
                 title: '编辑组织',
                 width: 600,
                 height: 300,
@@ -262,10 +264,11 @@ export default (props) => {
             groupName: '',
             parentId: node.key,
             parentName: node.text,
+            tenantId: props.tenantId
         }
         setSelectedParentId(node.key)
         INewWindow({
-            url: '/new/group/save',
+            url: '/new/tgroup/save',
             title: '添加子组织',
             width: 600,
             height: 300,
@@ -276,7 +279,7 @@ export default (props) => {
     // 删除 组织架构
     const handleDeleteGroup = (node) => {
         const id = node.key;
-        api.group.deleteGroup(id).subscribe({
+        api.tgroup.deleteGroup(id, props.tenantId).subscribe({
             next: (data) => {
                 setSelectedGroupId(node.parentId);
                 reloadTree();
@@ -291,7 +294,8 @@ export default (props) => {
         setSearchLoading(true);
         let param = { dto: params||{}, pageNo: pageNo, pageSize: pageSize };
         param.dto.groupId = selectedGroupId;
-        return api.group.searchUserByGroup(param).subscribe({
+        param.dto.tenantId = props.tenantId;
+        return api.tgroup.searchUserByGroup(param).subscribe({
             next: (data) => {
                 setDataSource(data.data);
                 setTotal(data.total);
@@ -303,8 +307,8 @@ export default (props) => {
 
     // 查询 未分配的用户信息
     const searchNotAssignedUser = (pageNo, pageSize) => {
-        let param = { dto: {}, pageNo: pageNo, pageSize: pageSize };
-        return api.group.searchNotAssignedUser(param).subscribe({
+        let param = { dto: {tenantId:props.tenantId}, pageNo: pageNo, pageSize: pageSize };
+        return api.tgroup.searchNotAssignedUser(param).subscribe({
             next: (data) => {
                 setNotAssignedDataSource(data.data);
                 setTotal(data.total);
@@ -317,7 +321,7 @@ export default (props) => {
 
     const onActive = () => {
         setLoading(true);
-        api.user.activeUser(selectedGroupUserKeys).subscribe({
+        api.tuser.activeUser(selectedGroupUserKeys).subscribe({
             next: (data) => {
                 message.success('操作成功!');
                 reloadTree();
@@ -328,7 +332,7 @@ export default (props) => {
 
     const onStop = () => {
         setLoading(true);
-        api.user.stopUser(selectedGroupUserKeys).subscribe({
+        api.tuser.stopUser(selectedGroupUserKeys).subscribe({
             next: (data) => {
                 message.success('操作成功!');
                 reloadTree();
@@ -339,7 +343,7 @@ export default (props) => {
 
     const onUnStop = () => {
         setLoading(true);
-        api.user.unstopUser(selectedGroupUserKeys).subscribe({
+        api.tuser.unstopUser(selectedGroupUserKeys).subscribe({
             next: (data) => {
                 message.success('操作成功!');
                 reloadTree();
@@ -356,9 +360,10 @@ export default (props) => {
             groupName: selectedGroupName,
             userId: record.id,
             positionId: record.positionId,
+            tenantId: props.tenantId
         };
         INewWindow({
-            url: '/new/group/user',
+            url: '/new/tgroup/user',
             title: '编辑用户',
             width: 600,
             height: 300,
@@ -373,9 +378,9 @@ export default (props) => {
             message.error('请先选择一个部门或者公司!');
             return;
         }
-        const param = { groupId: selectedGroupId, groupName: selectedGroupName }
+        const param = { groupId: selectedGroupId, groupName: selectedGroupName, tenantId: props.tenantId }
         INewWindow({
-            url: '/new/group/user',
+            url: '/new/tgroup/user',
             title: '编辑用户',
             width: 600,
             height: 300,
@@ -386,8 +391,8 @@ export default (props) => {
 
     // 从组织中删除用户
     const onDeleteUser = () => {
-        const userGroup = { groupId: selectedGroupId, users: selectedGroupUserKeys };
-        api.group.deleteUsers(userGroup).subscribe({
+        const userGroup = { groupId: selectedGroupId, users: selectedGroupUserKeys, tenantId: props.tenantId };
+        api.tgroup.deleteUsers(userGroup).subscribe({
             next: () => {
                 message.success('操作成功！');
                 setSelectedGroupUserKeys([]);
@@ -404,9 +409,9 @@ export default (props) => {
             message.error('请至少选择一个要移动的用户！');
             return;
         }
-        const param = { groupId: selectedGroupId, users: selectedGroupUserKeys.join(',') };
+        const param = { groupId: selectedGroupId, users: selectedGroupUserKeys.join(','), tenantId: props.tenantId };
         INewWindow({
-            url: '/new/group/move',
+            url: '/new/tgroup/move',
             title: '移动用户',
             width: 700,
             height: 600,
@@ -422,8 +427,8 @@ export default (props) => {
             message.error('请先选择一个部门或者公司!');
             return;
         }
-        const userGroup = { groupId: selectedGroupId, users: selectedNotAssignUserKeys };
-        api.group.addOrUpdateUser(userGroup).subscribe({
+        const userGroup = { groupId: selectedGroupId, users: selectedNotAssignUserKeys, tenantId: props.tenantId };
+        api.tgroup.addOrUpdateUser(userGroup).subscribe({
             next: () => {
                 message.success('操作成功！');
                 searchUserByGroup(pageNo, pageSize);
@@ -437,12 +442,12 @@ export default (props) => {
     // 添加分公司
     const handleAddCompany = () => {
         INewWindow({
-            url: '/new/group/company',
+            url: '/new/tgroup/company',
             title: '添加公司',
             width: 600,
             height: 300,
             callback: () => reloadTree(),
-            callparam: () => { },
+            callparam: () => {tenantId: props.tenantId },
         });
     };
 
@@ -453,15 +458,15 @@ export default (props) => {
             return;
         }
         const uid = selectedGroupUserKeys[0];
-        api.group.listRoleByUser(uid, selectedGroupId).subscribe({
+        api.tgroup.listRoleByUser(uid, selectedGroupId, props.tenantId).subscribe({
             next: (data) => {
                 const arr = [];
                 forEach((v) => {
                     arr.push(v.id);
                 }, data || []);
-                const param = { userId: uid, roleIds: arr, orgId: selectedGroupId };
+                const param = { userId: uid, roleIds: arr, orgId: selectedGroupId, tenantId: props.tenantId };
                 INewWindow({
-                    url: '/new/group/role',
+                    url: '/new/tgroup/role',
                     title: '分配角色',
                     width: 700,
                     height: 600,

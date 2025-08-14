@@ -391,6 +391,7 @@ export default (props) => {
     }, [selectedMenuId])
 
     useEffect(() => {
+        console.log(111);
         search(pageNo, pageSize, searchChecked);
     }, [tableSearchValue])
 
