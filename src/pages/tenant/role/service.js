@@ -28,8 +28,8 @@ export function stopRole(ids) {
   return ipost(constant.EAPI_ROLE_STOP, ids);
 }
 // 根据职位获取角色列表
-export function listByPosition(pid) {
-  return iget(`${constant.EAPI_ROLE_BY_POSITION}?pid=${pid}`);
+export function listByPosition(pid, tid) {
+  return iget(`${constant.EAPI_ROLE_BY_POSITION}?pid=${pid}&tid=${tid}`);
 }
 // 用户设置角色
 export function saveFromRole(id) {

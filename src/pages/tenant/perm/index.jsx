@@ -13,6 +13,8 @@ import objectAssign from "object-assign";
 import User from '../user';
 import Role from '../role';
 import Group from '../group';
+import USet from '../uset';
+import Position from '../position';
 import TabPane from "antd/es/tabs/TabPane";
 import { set } from "lscache";
 import { useParams } from 'umi';
@@ -52,19 +54,21 @@ export default () => {
     };
     // 添加标签
     const addTab = (addItem) => {
-        console.log(addItem);
     //     setPathname(addItem.pathname);
     // // 缓存页面
         let items = tabList.filter((item) => { return item.key == addItem.key });
         if (items.length == 0) {
             const tab = { key: addItem.key, tab: addItem.name }
-            console.log(tab);
             if (tab.key === 'user') {
                 tab.component = <User tenantId={params.id}/>
             } else if (tab.key === 'role') {
                 tab.component = <Role tenantId={params.id}/>
             } else if (tab.key === 'group') {
                 tab.component = <Group tenantId={params.id}/>
+            } else if (tab.key === 'uset') {
+                tab.component = <USet tenantId={params.id}/>
+            } else if (tab.key === 'position') {
+                tab.component = <Position tenantId={params.id}/>
             }
             setActionTab(tab);
             let newTabs = tabList.concat(tab);

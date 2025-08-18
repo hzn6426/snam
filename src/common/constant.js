@@ -636,5 +636,88 @@ export default Object.freeze({
   EAPI_ROLE_BY_POSITION: '/authority/trole/listByPosition',
   // 刷新所有角色权限
   EAPI_ROLE_REFRESH_PRIVILEGES: '/authority/trole/refreshPrivileges',
+  //= ==============================================//
+  //                租户职位管理                      //
+  //= ==============================================//
+  // 根据条件查询职位
+  EAPI_POSITION_SEARCH: '/authority/tposition/search',
+  // 职位增删改查
+  EAPI_POSITION: '/authority/tposition',
+  // 职位启用
+  EAPI_POSITION_USE: '/authority/tposition/use',
+  // 职位停用
+  EAPI_POSITION_STOP: '/authority/tposition/stop',
+  // 组织ID获取可用的职位列表
+  EAPI_POSITION_LIST_ACTIVED_BY_GROUP: '/authority/tposition/listActiveByGroup',
+  // 组织ID获取对应的委托列表
+  EAPI_POSITION_LIST_ENTRUSTS: '/authority/tposition/listEntrusIdsByPosition',
+  // 保存职位角色
+  EAPI_POSITION_SAVE_POSITION_ROLES: '/authority/tposition/savePositionRole',
+  //= ==============================================//
+  //                   租户用户组管理                  //
+  //= ==============================================//
+  EAPI_USET_SEARCH: '/authority/tuset/search',
+  // 用户组增删改查
+  EAPI_USET: '/authority/tuset',
+  // 用户组激活
+  EAPI_USET_USE: '/authority/tuset/use',
+  // 用户组停用
+  EAPI_USET_STOP: '/authority/tuset/stop',
+  // 用户设置用户组
+  EAPI_USET_SAVE_USER: '/authority/tuserUset/saveFromUset',
+  // 用户组获取角色
+  EAPI_USET_LIST_ROLES: '/authority/tusetRole/listRolesByUset',
+  // 用户组保存角色列表
+  EAPI_USET_SAVE_USET_ROLES: '/authority/tusetRole/saveFromUset',
+  // 树方式获取所有用户组列表
+  EAPI_USET_TREE_ALL: '/authority/tuset/treeAllUset',
+  //= ==============================================//
+  //                租户授权管理                      //
+  //= ==============================================//
+  // 根据用户获取业务资源及业务权限范围
+  EAPI_RESOURCE_BPERM_BY_USER: '/authority/tresource/listResourcesForBPermByUser',
+  // 根据客户和权限加载用户业务权限
+  EAPI_RESOURCE_PERM_ENTRUST_BY_USER: '/authority/tresource/listPermEntrustsByUser',
+  // 根据客户和权限加载用户排除的业务权限
+  EAPI_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USER: '/authority/tresource/listPermExceptEntrustsByUser',
+  // 保存用户业务权限
+  EAPI_RESOURCE_SAVE_USER_PERM: '/authority/tresource/saveBusinessPerm',
+  // 根据用户组获取业务资源及业务权限范围
+  EAPI_RESOURCE_BPERM_BY_USET: '/authority/tresource/listResourcesForBPermByUset',
+
+  // 根据客户和权限加载用户组业务权限
+  EAPI_RESOURCE_PERM_ENTRUST_BY_USET: '/authority/tresource/listPermEntrustsByUset',
+  // 根据客户和权限加载用户组排除的业务权限
+  EAPI_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USET: '/authority/tresource/listPermExceptEntrustsByUset',
+  // 保存用户组业务权限
+  EAPI_RESOURCE_SAVE_USET_PERM: '/authority/tresource/saveUsetBusinessPerm',
+  // 根据权限获取对应的业务表列表
+  EAPI_RESOURCE_PERM_TABLE: '/authority/tresource/fetchActionMapperByPerm',
+  // 根据权限获取对应的列权限业务表列表
+  EAPI_RESOURCE_PERM_COLUMN_TABLE: '/authority/tresource/fetchColumnActionMapperByPerm',
+  // 根据表格获取对应的列信息
+  EAPI_RESOURCE_TABLE_COLUMN: '/authority/tresource/fetchColumnByTable',
+  // 保存用户数据权限
+  EAPI_RESOURCE_SAVE_USER_DATA_PERM: '/authority/tresource/saveDataPerm',
+  // 保存用户列权限
+  EAPI_RESOURCE_SAVE_USER_COLUMN_PERM: '/authority/tresource/saveUserColumnPerm',
+  // 获取用户的数据权限
+  EAPI_RESOURCE_LOAD_USER_DATA_PERM: '/authority/tresource/getUserDataPerm',
+  // 获取用户的列权限
+  EAPI_RESOURCE_LOAD_USER_COLUMN_PERM: '/authority/tresource/listUserColumnPerm',
+  // 获取用户组的数据权限
+  EAPI_RESOURCE_LOAD_USET_DATA_PERM: '/authority/tresource/getUsetDataPerm',
+  // 获取用户组的列权限
+  EAPI_RESOURCE_LOAD_USET_COLUMN_PERM: '/authority/tresource/listUsetColumnPerm',
+  // 保存用户组数据权限
+  EAPI_RESOURCE_SAVE_USET_DATA_PERM: '/authority/tresource/saveUsetDataPerm',
+  // 保存用户组列权限
+  EAPI_RESOURCE_SAVE_USET_COLUMN_PERM: '/authority/tresource/saveUsetColumnPerm',
+  // 获取用户按钮数据权限
+  EAPI_RESOURCE_USER_FUNCTION_DATA_PERM: '/authority/tresource/getUserFunctionDataPerm',
+  // 获取用户业务数据权限
+  EAPI_RESOURCE_USER_BUSINESS_DATA_PERM: '/authority/tresource/getUserBusinessDataPerm',
+  // 获取用户列数据权限
+  EAPI_RESOURCE_USER_COLUMN_DATA_PERM: '/authority/tresource/getUserColumnDataPerm',
 });
 

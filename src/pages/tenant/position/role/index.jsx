@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { api, data2Option, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
+import { api, data2Option, useAutoObservableEvent } from '@/common/utils';
 import { IFormItem, ILayout, IWindow, IIF } from '@/common/components';
 import { message, Alert } from 'antd';
 
@@ -9,9 +9,9 @@ export default (props) => {
     const [current, setCurrent] = useState({});
     const [roles, setRoles] = useState([])
 
-    const onSaveClick = (userRole) => {
+    const onSaveClick = (positionRole) => {
         setLoading(true);
-        api.tuser.saveUserRole(userRole).subscribe({
+        api.tposition.savePositionRoles(positionRole).subscribe({
             next: () => {
                 message.success('操作成功!');
                 window.close();
@@ -27,7 +27,6 @@ export default (props) => {
     }
 
     useEffect(() => {
-        
         const item = window.opener.onGetParams();
         loadRoles(item.tenantId);
         setCurrent(item);
@@ -37,7 +36,7 @@ export default (props) => {
         <IWindow
             current={current}
             className="snam-modal"
-            title='分配组织角色'
+            title='分配职位角色'
             width={clientWidth}
             height={clientHeight}
             onSubmit={(params) => onSaveClick(params)}
@@ -46,13 +45,12 @@ export default (props) => {
                 window.opener.onSuccess();
             }}
         >
-            <IFormItem xtype="hidden" name="userId" />
-            <IFormItem xtype="hidden" name="orgId" />
+            <IFormItem xtype="hidden" name="positionId" />
             <IFormItem xtype="hidden" name="tenantId" />
             <IIF test={roles && roles.length > 0}>
-                <ILayout type="vbox">
-                    <IFormItem xtype='checkbox' name="roleIds" label="角色列表" ruleType='array' options={roles} />
-                </ILayout>
+            <ILayout type="vbox">
+                <IFormItem xtype='checkbox' name="roleIds" label="角色列表" ruleType='array' options={roles} />
+            </ILayout>
             </IIF>
             <IIF test={roles && roles.length == 0}>
                 <Alert message="没有角色数据" type="info" />

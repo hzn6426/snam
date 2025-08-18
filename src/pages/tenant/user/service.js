@@ -46,9 +46,9 @@ export function saveUserRole(userRole) {
 export function listGroupUsersByRole(rid, tid) {
   return iget(`${constant.EAPI_USER_LIST_GROUP_USER_BY_ROLE}?rid=${rid}&tid=${tid}`);
 }
-//用户组获取用户
-export function listGroupUsersByUset(usetId) {
-  return iget(`${constant.EAPI_USER_LIST_GROUP_USER_BY_USET}?usetId=${usetId}`);
+//用户组获取用户 - 
+export function listGroupUsersByUset(usetId, tid) {
+  return iget(`${constant.EAPI_USER_LIST_GROUP_USER_BY_USET}?usetId=${usetId}&tid=${tid}`);
 }
 //根据TAG获取组织和用户
 export function treeAllGroupsAndUsersByTag(tag) {
@@ -92,4 +92,26 @@ export function listActionMenusAndButtons(userId, groupId) {
   return iget(`${constant.EAPI_USER_LIST_ACTION_PERM_MENUS_AND_BUTTONS}?uid=${userId}&gid=${groupId}`);
 }
 
-
+// 用户模糊匹配
+export function listByKeyword(tag, keyword, tid) {
+  let cacheKey;
+  if (!keyword) {
+    cacheKey = constant.KEY_USER + tid + tag;
+    if (hasCache(cacheKey)) {
+      return from(getCache(cacheKey));
+    }
+  }
+  return iget(`${constant.EAPI_USER_LIST_BY_KEYWORD}?userTag=${tag}&keyWord=${keyword}&tid=${tid}`).pipe(
+    map((data) => {
+      const theData = data || [];
+      return rmap(
+        (item) => ({
+          label: `${item.userRealCnName}`,
+          value: `${item.id}`,
+        }),
+        theData,
+      );
+    }),
+    tap((v) => cacheKey && setCache(cacheKey, v)),
+  );
+}

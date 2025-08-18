@@ -5,9 +5,9 @@ export function treeAllGroupsAndUsers(tid) {
   return iget(`${constant.EAPI_GROUP_TREE_ALL_GROUPS_AND_USERS}?tid=${tid}`);
 }
 
-// 以树的方式获取组织职位列表
-export function treeAllGroupsAndPositions() {
-  return iget(constant.EAPI_GROUP_TREE_ALL_GROUPS_AND_POSITIONS);
+// 以树的方式获取组织职位列表 -
+export function treeAllGroupsAndPositions(tid) {
+  return iget(`${constant.EAPI_GROUP_TREE_ALL_GROUPS_AND_POSITIONS}?tid=${tid}`);
 }
 
 // 以树的方式获取所有组织列表

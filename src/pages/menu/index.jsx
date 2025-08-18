@@ -298,7 +298,7 @@ export default (props) => {
     };
 
     // 查询button
-    const search = (pageNo, pageSize, beInMenu) => {
+    const search = (pageNo, pageSize, beInMenu = searchChecked ) => {
         setSelectedKeys([]);
         setPageNo(pageNo);
         setPageSize(pageSize);
@@ -391,7 +391,6 @@ export default (props) => {
     }, [selectedMenuId])
 
     useEffect(() => {
-        console.log(111);
         search(pageNo, pageSize, searchChecked);
     }, [tableSearchValue])
 
@@ -451,6 +450,7 @@ export default (props) => {
                             if (selected) {
                                 setSelectedMenuId(node.key);
                                 setSelectedMenuName(node.text);
+                                setSearchChecked(true);
                             }
                         }}
                     />

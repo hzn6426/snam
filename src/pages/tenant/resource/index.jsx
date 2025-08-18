@@ -105,6 +105,8 @@ export default (props) => {
         [params.id],
     )
 
+    
+
     const [onClickMenu] = useAutoObservableEvent(
         [
             tap(() => setLoading(true)),

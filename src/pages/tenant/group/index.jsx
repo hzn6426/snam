@@ -231,7 +231,7 @@ export default (props) => {
         const parent = node.parentId;
         setSelectedGroupId(parent);
         if (parent === constant.ROOT_OF_GROUP) {
-            const param = { id: node.key, groupName: node.text, tenantId: props.tenantId }
+            const param = { id: node.key, groupName: node.text, tenantId: props.tenantId, parentId:parent }
             INewWindow({
                 url: '/new/tgroup/company',
                 title: '编辑公司',
@@ -245,7 +245,8 @@ export default (props) => {
                 id: node.key,
                 groupName: node.text,
                 parentName: node.parentGroupName,
-                tenantId: props.tenantId
+                tenantId: props.tenantId,
+                parentId: node.parentId,
             };
             INewWindow({
                 url: '/new/tgroup/save',
@@ -415,7 +416,10 @@ export default (props) => {
             title: '移动用户',
             width: 700,
             height: 600,
-            callback: () => reloadTree(),
+            callback: () => {
+                reloadTree();
+                searchUserByGroup(pageNo, pageSize);
+            },
             callparam: () => param,
         });
     }
@@ -441,13 +445,14 @@ export default (props) => {
 
     // 添加分公司
     const handleAddCompany = () => {
+        const param = {tenantId: props.tenantId};
         INewWindow({
             url: '/new/tgroup/company',
             title: '添加公司',
             width: 600,
             height: 300,
             callback: () => reloadTree(),
-            callparam: () => {tenantId: props.tenantId },
+            callparam: () => param,
         });
     };
 

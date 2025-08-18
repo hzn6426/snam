@@ -42,6 +42,9 @@ import * as flow from '@/pages/flow/service';
 import * as tuser from '@/pages/tenant/user/service';
 import * as tgroup from '@/pages/tenant/group/service';
 import * as trole from '@/pages/tenant/role/service';
+import * as tposition from '@/pages/tenant/position/service';
+import * as tuset from '@/pages/tenant/uset/service';
+import * as tresource from '@/pages/tenant/privilege/service';
 
 const api = {
   user,
@@ -87,6 +90,9 @@ const api = {
   tuser,
   tgroup,
   trole,
+  tposition,
+  tuset,
+  tresource,
 };
 
 export default api;

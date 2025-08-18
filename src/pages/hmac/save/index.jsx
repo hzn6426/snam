@@ -115,8 +115,8 @@ export default (props) => {
                 <IIF test={bindUserType === 'tenant'}>
                     <IFormItem
                         name="userId"
-                        label="关联用户"
-                        xtype="tuser"
+                        label="关联租户"
+                        xtype="tenant"
                         required={true}
                     />
                 </IIF>

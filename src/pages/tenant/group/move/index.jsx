@@ -29,8 +29,8 @@ export default (props) => {
             }
         });
     }
-    const loadTree = () => {
-        api.tgroup.treeAllGroups(current.tenantId).subscribe({
+    const loadTree = (tid) => {
+        api.tgroup.treeAllGroups(tid).subscribe({
             next: (data) => setTreeData(data)
         });
     }
@@ -38,7 +38,7 @@ export default (props) => {
     useEffect(() => {
         const item = window.opener.onGetParams();
         setCurrent(item);
-        loadTree();
+        loadTree(item.tenantId);
     }, []);
 
     return (

@@ -230,7 +230,7 @@ export default (props) => {
         const parent = node.parentId;
         setSelectedGroupId(parent);
         if (parent === constant.ROOT_OF_GROUP) {
-            const param = { id: node.key, groupName: node.text }
+            const param = { id: node.key, groupName: node.text,parentId: parent }
             INewWindow({
                 url: '/new/group/company',
                 title: '编辑公司',
@@ -243,6 +243,7 @@ export default (props) => {
             const param = {
                 id: node.key,
                 groupName: node.text,
+                parentId: node.parentId,
                 parentName: node.parentGroupName,
             };
             INewWindow({
@@ -410,7 +411,10 @@ export default (props) => {
             title: '移动用户',
             width: 700,
             height: 600,
-            callback: () => reloadTree(),
+            callback: () => {
+                reloadTree();
+                searchUserByGroup(pageNo, pageSize);
+            },
             callparam: () => param,
         });
     }

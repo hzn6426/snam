@@ -38,6 +38,7 @@ export default (props) => {
             }}
         >
             <IFormItem xtype="id" />
+            <IFormItem xtype="hidden" name="parentId"/>
             <ILayout type="vbox">
                 <IFormItem xtype='input' name="groupName" label="分公司名称" labelCol={{flex:'90px'}}  max={50} required />
             </ILayout>

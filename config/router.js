@@ -254,6 +254,31 @@ export default [
                 path: '/new/tgroup/role',
                 component: './tenant/group/role',
               },
+              {
+                name: '租户用户组分配角色',
+                path: '/new/tuset/role/:id',
+                component: './tenant/uset/role',
+              },
+              {
+                name: '租户用户组分配用户',
+                path: '/new/tuset/user/:id',
+                component: './tenant/uset/user',
+              },
+              {
+                name: '租户用户组编辑',
+                path: '/new/tuset/:id',
+                component: './tenant/uset/save',
+              },
+              {
+                name: '职位分配角色',
+                path: '/new/tposition/role',
+                component: './tenant/position/role',
+              },
+              {
+                name: '用户编辑职位',
+                path: '/new/tposition/:id',
+                component: './tenant/position/save',
+              },
             ]
           }
         ]
