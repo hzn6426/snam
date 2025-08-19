@@ -15,6 +15,7 @@ import Role from '../role';
 import Group from '../group';
 import USet from '../uset';
 import Position from '../position';
+import Privilege from "../privilege";
 import TabPane from "antd/es/tabs/TabPane";
 import { set } from "lscache";
 import { useParams } from 'umi';
@@ -69,6 +70,8 @@ export default () => {
                 tab.component = <USet tenantId={params.id}/>
             } else if (tab.key === 'position') {
                 tab.component = <Position tenantId={params.id}/>
+            } else if (tab.key === 'resource') {
+                tab.component = <Privilege tenantId={params.id}/>
             }
             setActionTab(tab);
             let newTabs = tabList.concat(tab);
