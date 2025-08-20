@@ -50,9 +50,9 @@ export function listGroupUsersByRole(rid, tid) {
 export function listGroupUsersByUset(usetId, tid) {
   return iget(`${constant.EAPI_USER_LIST_GROUP_USER_BY_USET}?usetId=${usetId}&tid=${tid}`);
 }
-//根据TAG获取组织和用户
-export function treeAllGroupsAndUsersByTag(tag) {
-  return iget(`${constant.EAPI_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG}?utag=${tag}`);
+//根据TAG获取组织和用户 -
+export function treeAllGroupsAndUsersByTag(tag, tid) {
+  return iget(`${constant.EAPI_USER_TREE_ALL_GROUPS_AND_USERS_BY_TAG}?utag=${tag}&tid=${tid}`);
 }
 //保存菜单权限
 export function saveMenuPerm(perm) {
@@ -106,8 +106,8 @@ export function listByKeyword(tag, keyword, tid) {
       const theData = data || [];
       return rmap(
         (item) => ({
-          label: `${item.userRealCnName}`,
-          value: `${item.id}`,
+          label: `[${item.groupName}]-${item.userRealCnName}`,
+          value: `${item.id}#${item.groupId}`,
         }),
         theData,
       );

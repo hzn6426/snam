@@ -85,6 +85,12 @@ const initColumns = [
         field: 'bindUser',
     },
     {
+        headerName: '租户名称',
+        width: 120,
+        align: 'center',
+        field: 'tenantName',
+    },
+    {
         headerName: '过期时间',
         width: 150,
         field: 'expireDate',
@@ -101,6 +107,18 @@ const initColumns = [
         width: 140,
         align: 'center',
         field: 'note',
+    },
+    {
+        headerName: '创建人',
+        width: 90,
+        align: 'center',
+        field: 'createUserCnName',
+    },
+    {
+        headerName: '创建',
+        width: 150,
+        field: 'createTime',
+        valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
 ];
 

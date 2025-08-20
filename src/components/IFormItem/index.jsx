@@ -1,5 +1,5 @@
 import { IStatus, XInput } from '@/common/components';
-import { BItem, Department, Dict, Tenant, User, XUser, TenantUser } from '@/common/componentx';
+import { BItem, Department, Dict, Tenant, User, XUser, TenantUser, TUser } from '@/common/componentx';
 import { isFunction } from '@/common/utils';
 
 import {
@@ -154,6 +154,9 @@ export default (props) => {
         break;
       case 'xuser':
         item = <XUser tag={tag} {...others} />;
+        break;
+       case 'tuser':
+        item = <TUser tag={tag} {...others} />;
         break;
       case 'tenant':
         item = <Tenant {...others} />;

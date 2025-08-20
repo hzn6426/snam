@@ -1,7 +1,9 @@
 import { IFormItem, IIF, ILayout, IWindow } from '@/common/components';
-import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
+import { api, copyObject, isEmpty, split, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
+import tenant from '@/pages/tenant';
 import { message } from 'antd';
-import { useRef, useState } from 'react';
+import { set } from 'lscache';
+import { useEffect, useRef, useState } from 'react';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
 
@@ -12,44 +14,81 @@ export default (props) => {
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [bindUserType, setBindUserType] = useState('user');
+    const [current, setCurrent] = useState({});
+    // const [current, setCurrent] = useAutoObservable((inputs$) =>
+    //     inputs$.pipe(
+    //         map(([id]) => id),
+    //         filter(id => id !== 'ADD'),
+    //         switchMap((id) => api.hmac.getHmacUser(id)),
+    //         map((user) => {
+    //             const u =  user[0];
+    //             if (u.bindType === 'user') {
+    //                 setBindUserType('user');
+    //                 setTenantId('');
+    //                 u.userId = u.orgId + '#' + u.userId;
+    //             } else {
+    //                 setBindUserType('tenant');
+    //                 setTenantId(u.tenantId);
+    //                 u.userId = u.orgId + '#' + u.userId;
+    //             }
+    //             return u;
+    //         })
+    //     ),
+    //     [params.id],
+    // )
 
-    const [current, setCurrent] = useAutoObservable((inputs$) =>
-        inputs$.pipe(
-            map(([id]) => id),
-            filter(id => id !== 'ADD'),
-            switchMap((id) => api.hmac.getHmacUser(id)),
-            map((user) => {
+    useEffect(() => {
+        const id = params.id;
+        if (id == 'ADD') {
+            return;
+        }
+        api.hmac.getHmacUser(id).subscribe({
+            next:(user) => {
                 const u =  user[0];
-                if (u.bindType === 'user') {
-                    setBindUserType('user');
-                    u.userId = u.orgId + '#' + u.userNo;
-                } else {
+                 if (u.bindType === 'tenant') {
                     setBindUserType('tenant');
+                    u.userId = u.orgId + '#' + u.userId;
+                } else {
+                    setBindUserType('user');
+                    u.userId = u.orgId + '#' + u.userId;
                 }
-                return u;
-            })
-        ),
-        [params.id],
-    )
+                setCurrent(u);
+            }
+
+        })
+    },params.id)
 
     const onChangeBindType = (v) => {
         setBindUserType(v);
-        if (v !== current.bindType) {
-            setCurrent({ ...current, userId: '', bindType: v });
-        }
+        // if (v !== current.bindType) {
+        //     setCurrent({ ...current, userId: '', bindType: v });
+        // }
 
     }
 
-    const [onSaveClick] = useAutoObservableEvent([
-        tap(() => setLoading(true)),
-        switchMap((user) => api.hmac.saveOrUpdateHmacUser(user)),
-        tap(() => {
-            message.success('操作成功!');
-            window.close();
-            window.opener.onSuccess();
-        }),
-        shareReplay(1),
-    ], () => setLoading(false));
+    const onSaveClick = (user) => {
+        setLoading(true);
+        const [orgI, uid] = split(user.userId, '#');
+        user.userId = uid;
+        user.orgId = orgI;
+        api.hmac.saveOrUpdateHmacUser(user).subscribe({
+            next:() => {
+                message.success('操作成功!');
+                window.close();
+                window.opener.onSuccess();
+            }
+        }).add(() => setLoading(false));
+    }
+    // const [onSaveClick] = useAutoObservableEvent([
+    //     tap(() => setLoading(true)),
+    //     switchMap((user) => api.hmac.saveOrUpdateHmacUser(user)),
+    //     tap(() => {
+    //         message.success('操作成功!');
+    //         window.close();
+    //         window.opener.onSuccess();
+    //     }),
+    //     shareReplay(1),
+    // ], () => setLoading(false));
 
     return (
         <IWindow
@@ -66,6 +105,7 @@ export default (props) => {
             }}
         >
             <IFormItem xtype="id" />
+            <IFormItem xtype="hidden" name="tenantName" />
             <ILayout type="vbox">
                 <IFormItem
                     name="systemName"
@@ -96,7 +136,7 @@ export default (props) => {
                     name="bindType"
                     label="关联类型"
                     xtype="select"
-                    defaultValue={'tenant'}
+                    value={bindUserType}
                     required={true}
                     onChange={(v) => onChangeBindType(v)}
                     options={() => [
@@ -114,9 +154,27 @@ export default (props) => {
                 </IIF>
                 <IIF test={bindUserType === 'tenant'}>
                     <IFormItem
-                        name="userId"
+                        name="tenantId"
                         label="关联租户"
                         xtype="tenant"
+                        required={true}
+                        getTenant={(v) => {
+                            const c = {};
+                            const values = ref.current.getFieldsValue();
+                            console.log(values);
+                            copyObject(c, values, {tenantName: v.label, tenantId: v.value});
+                            console.log(c);
+                            setCurrent(c);
+                            // setCurrent(...current,{tenantName: v.label})
+                        }}
+                    />
+                </IIF>
+                <IIF test={!isEmpty(current.tenantId)}>
+                    <IFormItem
+                        name="userId"
+                        label="租户用户"
+                        tenantId={current.tenantId}
+                        xtype="tuser"
                         required={true}
                     />
                 </IIF>

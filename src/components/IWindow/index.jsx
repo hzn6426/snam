@@ -2,9 +2,9 @@ import { IFooterToolbar, IIF } from '@/common/components';
 import { useWindowSize } from '@/common/utils';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Space } from 'antd';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState,useImperativeHandle } from 'react';
 import './index.less';
-export default (props) => {
+export default React.forwardRef((props, ref) => {
     const { saveVisible } = props;
     //窗口大小
     const { clientWidth, clientHeight } = useWindowSize();
@@ -16,6 +16,15 @@ export default (props) => {
     const [snamModalForm] = Form.useForm();
     const [confirmLoading, setConfirmLoading] = useState(false);
 
+    useImperativeHandle(ref, () => ({
+        setFieldsValue: (params) => {
+          // 这里可以加自己的逻辑哦
+          snamModalForm.setFieldValue(params);
+        },
+        getFieldsValue: () => {
+          return snamModalForm.getFieldsValue();
+        },
+      }), []);
 
     useEffect(() => {
         snamModalForm.resetFields();
@@ -90,4 +99,4 @@ export default (props) => {
             </Space>
         </IFooterToolbar>
     </Card>);
-};
+});

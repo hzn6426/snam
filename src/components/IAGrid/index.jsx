@@ -402,7 +402,7 @@ useEffect(() => {
           rowData={dataSource} // 表格数据
           columnDefs={gridColumns} // 列数据
           defaultColDef={defaultCol} // 列属性设置
-          rowSelection={rowSelection || 'single'} // 行选择设置
+          rowSelection={rowSelection || 'multiple'} // 行选择设置
           onSelectionChanged={(e) => {
             const nodes = e.api.getSelectedNodes() || [];
             const datas = [];

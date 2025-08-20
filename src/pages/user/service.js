@@ -138,8 +138,8 @@ export function listByKeyword(tag, keyword) {
       const theData = data || [];
       return rmap(
         (item) => ({
-          label: `${item.userRealCnName}`,
-          value: `${item.id}`,
+          label: `[${item.groupName}]-${item.userRealCnName}`,
+          value: `${item.id}#${item.groupId}`,
         }),
         theData,
       );

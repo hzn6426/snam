@@ -9,6 +9,8 @@ import {
   isArray,
   stringRandom,
   data2Option,
+  forEach,
+  split,
 } from '@/common/utils';
 import { tap } from 'rxjs/operators';
 
@@ -33,9 +35,13 @@ export default (props) => {
   }, [displayName, value]);
 
   const fetchUser = (id) => {
+    // const [gid,uid] = split(id, '#');
     api.tuser.getUser(id).subscribe({
       next:(data) => {
         const u = data2Option('id','userRealCnName',data);
+        // forEach((v) => {
+        //   v.value = gid + '#' + v.value;
+        // },u)
         setOptionData(u);
         setKeyword(u[0]);
       }

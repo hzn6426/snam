@@ -7,8 +7,9 @@ import User from '@/componentx/User';
 import XButton from '@/componentx/XButton';
 import XUser from '@/componentx/XUser';
 import TenantUser from '@/componentx/TenantUser';
+import TUser from '@/componentx/TUser';
 
 
 
-export { BItem, Department, Dict, TButton, Tenant, User, XButton, XUser, TenantUser };
+export { BItem, Department, Dict, TButton, Tenant, User, XButton, XUser,TUser, TenantUser };
 

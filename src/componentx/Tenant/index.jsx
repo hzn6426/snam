@@ -27,15 +27,14 @@ export default (props) => {
       setOptionData(option);
       setKeyword(labelInValue);
     } else if (value) {
-      console.log(value);
-      fetchUser(value);
+      fetchTenant(value);
     }
   }, [displayName, value]);
 
-  const fetchUser = (id) => {
+  const fetchTenant = (id) => {
     api.tenant.getTenant(id).subscribe({
       next:(data) => {
-        const u = data2Option('id','name',data);
+        const u = data2Option('id','simpleName',data);
         setOptionData(u);
         setKeyword(u[0]);
       }
@@ -50,26 +49,32 @@ export default (props) => {
     ),
   );
 
-  const [doOnChange] = useObservableAutoCallback((event) =>
-    event.pipe(
-      tap((v) => setBeTrigger(false)),
-      tap((v) => setKeyword(v || {})),
-      tap((v) => onChange && onChange(v?.value || '')),
-      tap((v) => getTenant && getTenant(v || {})),
-    ),
-  );
+  const doOnChange = (v) => {
+    setBeTrigger(false);
+    setKeyword(v || {});
+    onChange && onChange(v?.value || '');
+    getTenant && getTenant(v || {});
+  }
+  // const [doOnChange] = useObservableAutoCallback((event) =>
+  //   event.pipe(
+  //     tap((v) => setBeTrigger(false)),
+  //     tap((v) => setKeyword(v || {})),
+  //     tap((v) => onChange && onChange(v?.value || '')),
+  //     tap((v) => getTenant && getTenant(v || {})),
+  //   ),
+  // );
 
   return (
     <Select
       showSearch
       labelInValue
-      allowClear
+      allowClear={false}
       showArrow={false}
       value={keyword}
       placeholder={placeholder}
       filterOption={false}
       onSearch={onSearch}
-      onChange={doOnChange}
+      onSelect={doOnChange}
       style={style}
       {...others}
     >
