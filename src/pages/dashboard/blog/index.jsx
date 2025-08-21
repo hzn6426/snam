@@ -35,6 +35,42 @@ export default () => {
         <Timeline>
 
           <Timeline.Item>
+            <Title level={4}>[3.2.9] 2025.8.22</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph type='danger'>
+              <ul className="snam-li">
+                <li>新增 租户管理-用户管理 用于在租户中进行人员的管理</li>
+                <li>新增 租户管理-角色管理 在租户中角色管理 权限分配</li>
+                <li>新增 租户管理-组织管理 租户中人员加入组织（支持同一人员加入多个组织）及职位分配</li>
+                <li>新增 租户管理-职位管理 租户中管理职位进行角色分配及数据权限配置</li>
+                <li>新增 租户管理-授权管理 更深层次进行业务数据权限 功能数据权限 列数据权限管理</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化接入用户 通过租户绑定和用户绑定来实现接入系统后转化成对应的租户和用户，通过对应的角色、职位等来分配资源权限和数据权限</li>
+                <li>优化接入用户的授权和鉴权</li>
+                <li>优化日志展示 接入日志、租户日志、用户日志展示样式</li>
+                <li>优化组织添加用户 - 添加成员可实现一个用户添加到多个组织中</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复日志明细展示错误问题</li>
+                <li>修复删除职位时，未解除职位关联关系问题</li>
+                <li>修复用户模糊匹配选择时，未展示对应组织信息（人员位于多个组织无法确认组织）</li>
+                <li>修复用户组添加单个人员后，无法去掉人员的问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
             <Title level={4}>[3.2.8] 2025.8.8</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph>

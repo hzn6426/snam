@@ -32,6 +32,11 @@ export default (props) => {
         SUCCESS: { text: '成功', status: 'Success' },
     };
 
+    const userType = {
+        TENANT:'租户',
+        USER:'用户'
+    }
+
 
 
     return (
@@ -55,7 +60,9 @@ export default (props) => {
                 <Descriptions.Item label="状态" span={24}>
                     <IStatus value={current.state} state={loggerState} />
                 </Descriptions.Item>
-
+                <Descriptions.Item label="用户类型" span={24}>
+                    {userType[current.bindType]} {current.tenantName}
+                </Descriptions.Item>
                 <Descriptions.Item label="操作人" span={1}>
                     {current.createUserCnName} {current.ipAddress}
                 </Descriptions.Item>

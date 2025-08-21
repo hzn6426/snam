@@ -679,9 +679,20 @@ export const INewWindow = (props) => {
   const iwidth = width || sWidth;
   const iheight = height || sHeight
 
-  var itop = (window.screen.height - 30 - (height || 0)) / 2;       //获得窗口的垂直位置;
-  var ileft = (window.screen.width - 10 - (width || 0)) / 2;
-  let browser = window.self;
+  // var itop = (window.screen.height - 30 - (height || 0)) / 2;       //获得窗口的垂直位置;
+  // var ileft = (window.screen.width - 10 - (width || 0)) / 2;
+
+  // Fixes dual-screen position                             Most browsers      Firefox
+    const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX;
+    const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY;
+
+    const uwidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    const uheight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    const systemZoom = uwidth / window.screen.availWidth;
+    const ileft = (uwidth - iwidth) / 2 / systemZoom + dualScreenLeft
+    const itop = (uheight - iheight) / 2 / systemZoom + dualScreenTop
+    let browser = window.self;
 
 
   browser = window.self

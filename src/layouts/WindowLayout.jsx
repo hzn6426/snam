@@ -1,6 +1,7 @@
 import { ConfigProvider, theme  } from 'antd';
 import {useEffect, useState} from 'react'
 import zhCN from 'antd/locale/zh_CN';
+import { ApplicationStateProvider } from "@/store/state";
 // import { useApplicationState } from "@/store/state";
 export default (props) => {
     // const [setNavTheme] = useApplicationState(s => [s.actions.view.setNavTheme]);
@@ -22,7 +23,7 @@ export default (props) => {
         changeTheme();
     })
     return (
-        <>
+        <ApplicationStateProvider>
         <ConfigProvider space={{ size: 'small' }} 
         locale={zhCN}
         theme={{
@@ -34,6 +35,6 @@ export default (props) => {
         >
             {props.children}
         </ConfigProvider>
-        </>
+        </ApplicationStateProvider>
     )
 }

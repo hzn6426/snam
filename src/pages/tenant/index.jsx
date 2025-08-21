@@ -27,7 +27,7 @@ import {
     LockOutlined,
     LockTwoTone,
     RestOutlined,
-    TransactionOutlined,
+    AppstoreOutlined,
     UnlockOutlined,
     UnlockTwoTone
 } from '@ant-design/icons';
@@ -276,7 +276,7 @@ export default (props) => {
             url: '/new/tenant/perm/' + id,
             title: '权限配置',
             width: window.screen.width - 200,
-            height: window.screen.height - 300,
+            height: window.screen.height - 200,
             // callback: () => refresh()
         });
     }
@@ -481,15 +481,18 @@ export default (props) => {
                                 </IButton>
                             </Tooltip>
                         </Permit>,
+                        <Permit authority="tenant:doInitSUser">
                         <IButton
-                                type="success"
-                                size='small'
-                                icon={<KeyOutlined />}
-                                key="perm"
-                                onClick={() => onPermClick(selectedKeys[selectedKeys.length - 1])}
-                            >
-                                权限
+                            danger 
+                            type="primary"
+                            size='small'
+                            icon={<AppstoreOutlined />}
+                            key="perm"
+                            onClick={() => onPermClick(selectedKeys[selectedKeys.length - 1])}
+                        >
+                                管理
                             </IButton>
+                            </Permit>
                         // <Permit authority="tenant:searchTenantFee">
                         //     <IButton
                         //         type="info"

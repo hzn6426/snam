@@ -37,7 +37,7 @@ import {
   RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined, HistoryOutlined,
   AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, EyeOutlined
 } from '@ant-design/icons';
-import { Form, message, Tooltip, Spin, Input, Row, Col, Divider, Button } from 'antd';
+import { Form, message, Tooltip, Spin, Input, Row, Col, Tag, Button } from 'antd';
 import { IButton } from '@/common/components';
 import { of, zip } from 'rxjs';
 import {
@@ -90,6 +90,13 @@ const PointTagRenderer = (props) => {
     ) : <span>-</span>
   );
 };
+
+const PostTagRenderer = (props) => {
+    if (props.value) {
+        return <Tag color="#f50">{props.value}</Tag>;
+    }
+    return <>员工</>;
+}
 //组件
 const LockRenderer = (props) => {
   return props.value ? (
@@ -165,16 +172,6 @@ const initColumns = [
     field: 'userSex',
   },
   {
-    headerName: '角色',
-    width: 150,
-    field: 'userRoles',
-  },
-  {
-    headerName: '用户组',
-    width: 150,
-    field: 'userSets',
-  },
-  {
     headerName: '公司',
     width: 100,
     field: 'userParentGroups',
@@ -188,6 +185,7 @@ const initColumns = [
     headerName: '职位',
     width: 90,
     field: 'userPosts',
+    cellRenderer: PostTagRenderer
   },
   {
     headerName: '属性',
@@ -202,6 +200,16 @@ const initColumns = [
     field: 'pointTag',
     // cellRenderer: 'tagCellRenderer',
     cellRenderer: PointTagRenderer,
+  },
+  {
+    headerName: '角色',
+    width: 150,
+    field: 'userRoles',
+  },
+  {
+    headerName: '用户组',
+    width: 150,
+    field: 'userSets',
   },
   {
     headerName: '手机',
