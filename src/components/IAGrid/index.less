@@ -28,6 +28,14 @@
        display: flex;
        justify-content: flex-end;
       padding-bottom: 0;
+      
+      // 为工具栏按钮添加毛玻璃效果
+      .ant-btn {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(0.5px);
+        -webkit-backdrop-filter: blur(0.5px);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      }
      }
    }
 
@@ -220,3 +228,80 @@
      }
    }
  }
+ 
+ // 玻璃模式下的样式
+.glass-theme .ag-container {
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+  border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+}
+
+// 玻璃模式下表格内容的样式
+.glass-theme .ag-theme-balham {
+  background: transparent !important;
+}
+
+.glass-theme .ag-header {
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+.glass-theme .ag-row {
+  background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+.glass-theme .ag-row-even {
+  background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+.glass-theme .ag-row-odd {
+  background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+.glass-theme .ag-row-hover {
+  background: rgba(24, 144, 255, 0.1) !important;
+}
+
+.glass-theme .ag-row-selected {
+  background: rgba(24, 144, 255, 0.2) !important;
+}
+
+.glass-theme .ag-cell {
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.glass-theme .ag-pinned-left-header,
+.glass-theme .ag-pinned-right-header {
+  background: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+.glass-theme .ag-pinned-left-cols-container,
+.glass-theme .ag-pinned-right-cols-container {
+  background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+}
+
+// 修复表格容器透明度
+.glass-theme .ag-root-wrapper {
+  background: transparent !important;
+  border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+}
+
+.glass-theme .ag-center-cols-clipper {
+  background: transparent !important;
+}
+
+.glass-theme .ag-center-cols-container {
+  background: transparent !important;
+}

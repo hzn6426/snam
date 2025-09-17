@@ -33,12 +33,119 @@ export default (props) => {
 
     const [viewSetting] = useApplicationState(s => [s.view]);
     
+    // 根据主题模式设置毛玻璃效果
+    const getGlassTheme = () => {
+      if (viewSetting.navTheme === 'glass') {
+        return {
+          components: {
+            Card: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(0.5px)',
+              WebkitBackdropFilter: 'blur(0.5px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)'
+            },
+            ProLayout: {
+              sider: {
+                colorMenuBackground: 'rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(0.5px)',
+                WebkitBackdropFilter: 'blur(0.5px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+              },
+              header: {
+                colorBgHeader: 'rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(0.5px)',
+                WebkitBackdropFilter: 'blur(0.5px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+              },
+              pageContainer: {
+                colorBgPageContainer: 'rgba(255,255,255,0.3)',
+                backdropFilter: 'blur(0.5px)',
+                WebkitBackdropFilter: 'blur(0.5px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+              }
+            },
+            // 添加Table组件的毛玻璃效果
+            Table: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(0.5px)',
+              WebkitBackdropFilter: 'blur(0.5px)',
+              border: '1px solid #f0f0f0'
+            },
+            // 添加Tabs组件的毛玻璃效果
+            Tabs: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(0.5px)',
+              WebkitBackdropFilter: 'blur(0.5px)',
+              colorBorder: '#f0f0f0'
+            },
+            // 添加Tree组件的毛玻璃效果
+            Tree: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(0.5px)',
+              WebkitBackdropFilter: 'blur(0.5px)',
+              colorBorder: '#f0f0f0'
+            },
+            // 添加Input组件的毛玻璃效果
+            Input: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(0.5px)',
+              WebkitBackdropFilter: 'blur(0.5px)',
+              colorBorder: '#f0f0f0'
+            },
+            // 添加Select组件的毛玻璃效果
+            Select: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(0.5px)',
+              WebkitBackdropFilter: 'blur(0.5px)',
+              colorBorder: '#f0f0f0'
+            }
+          }
+        };
+      }
+      return {};
+    };
+    
+    // 获取主题相关的CSS类名
+    const getThemeClassName = () => {
+      if (viewSetting.navTheme === 'glass') {
+        return 'glass-theme';
+      }
+      return viewSetting.navTheme === "light" ? viewSetting.theme : "";
+    };
+    
     useEffect(() => {
         if (viewSetting.navTheme) {
             const theme = viewSetting.navTheme == 'realDark' ? 'dark' : viewSetting.navTheme;
             document.documentElement.setAttribute("data-theme", theme);
+            // 确保玻璃主题类名添加到body上
+            if (viewSetting.navTheme === 'glass') {
+                document.body.classList.add('glass-theme');
+                // 确保背景图显示
+                document.body.style.backgroundImage = "url('../assets/back/bg-6.jpg')";
+                document.body.style.backgroundSize = "cover";
+                document.body.style.backgroundPosition = "center";
+                document.body.style.backgroundAttachment = "fixed";
+            } else {
+                document.body.classList.remove('glass-theme');
+                // 清除背景图样式
+                document.body.style.backgroundImage = "";
+                document.body.style.backgroundSize = "";
+                document.body.style.backgroundPosition = "";
+                document.body.style.backgroundAttachment = "";
+            }
         }
     }, [viewSetting]);
+    
+    // 添加一个useEffect来处理主题颜色变化
+    useEffect(() => {
+        // 当主题颜色改变时，更新CSS变量
+        if (viewSetting.colorPrimary) {
+            document.documentElement.style.setProperty('--ant-primary-color', viewSetting.colorPrimary);
+            // 同时更新左侧菜单的主题颜色
+            document.documentElement.style.setProperty('--ant-menu-item-color', viewSetting.colorPrimary);
+            document.documentElement.style.setProperty('--ant-menu-highlight-color', viewSetting.colorPrimary);
+        }
+    }, [viewSetting.colorPrimary]);
     const getCurrentUser = () => {
         api.user.getCurrentUser().subscribe({
             next: (data) => {
@@ -159,7 +266,10 @@ export default (props) => {
     };
     return (<ConfigProvider 
         locale={zhCN}
-        space={{ size: 'small' }}><Spin spinning={loading}>
+        space={{ size: 'small' }}
+        theme={getGlassTheme()}
+      >
+      <Spin spinning={loading}>
         <ProLayout
                 {...viewSetting}
                 logo={Logo}
@@ -253,7 +363,7 @@ export default (props) => {
                         colorBgPageContainer: 'rgba(255,255,255,0.8)'
                     }
                 }}
-                className={viewSetting.navTheme == "light" ? viewSetting.theme : ""}
+                className={getThemeClassName()}
             >
                 <PageContainer
                     ghost

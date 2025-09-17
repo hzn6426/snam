@@ -1,102 +1,14 @@
-.springTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/spring.jpg');
-    }
-}
-.summerTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/summer.jpg');
-    }
-}
-.autumnTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/autumn.jpg');
-    }
-}
-.winterTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/winter.jpg');
-    }
-}
-
-.tabPage {
-    .ant-page-header {
-        padding-inline-start: 0px;
-        padding-inline-end: 0px;
-        padding-block-end: 4px;
-
-        .ant-page-header-footer {
-            margin-block-start: 0;
-
-            .ant-tabs-nav {
-                margin-bottom: 0;
-
-                .ant-tabs-nav-list {
-                    margin-left: 20px;
-                }
-            }
-        }
-    }
-
-    .ant-pro-page-container-children-content {
-        padding-inline: 10px;
-    }
-}
-.breadcrumb {
-    .ant-page-header {
-        padding-inline-start: 0px;
-        padding-inline-end: 0px;
-        padding-block-end: 4px;
-
-        .ant-breadcrumb {
-            line-height: 36px;
-            padding-left: 20px;
-        }
-
-        .ant-page-header-footer {
-            margin-block-start: 0;
-
-            .ant-tabs-nav {
-                margin-bottom: 0;
-            }
-        }
-    }
-
-    .ant-pro-page-container-children-content {
-        padding-inline: 10px;
-    }
-}
-
-.ant-pro-page-container-children-container {
-    padding-block: 8px;
-    padding-inline: 10px;
-}
-
-// 添加全局玻璃主题样式
-html.glass-theme, body.glass-theme {
+// WindowLayout的玻璃效果样式
+.glass-theme {
+  // 设置背景图片 - 在根元素上设置
   background-image: url('../assets/back/bg-6.jpg') !important;
   background-size: cover !important;
   background-position: center !important;
   background-attachment: fixed !important;
-  background-repeat: no-repeat !important;
-  // 确保背景图在最底层
-  z-index: -1;
-  position: relative;
-}
-
-// 毛玻璃效果样式
-.glass-theme {
-  // 设置背景图片 - 只在body上设置，不在每个组件上重复设置
-  // 组件通过backdrop-filter实现毛玻璃效果，背景图由body提供
   
   // 确保根元素也有背景设置
   #root {
     background: transparent !important;
-    // 确保根元素不会阻挡背景图
     position: relative;
     z-index: 0;
   }
@@ -116,23 +28,13 @@ html.glass-theme, body.glass-theme {
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    border-top: 0px !important;
-  }
-  
-  // ProLayout菜单折叠按钮的透明效果
-  .ant-pro-sider-collapsed-button {
-    background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    border-radius: 4px !important;
   }
   
   .ant-layout-header {
     background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; // 与IAGrid边框颜色一致
+    border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
   }
   
   // 表格容器的毛玻璃效果（同IAGrid边框样式）
@@ -145,26 +47,18 @@ html.glass-theme, body.glass-theme {
   
   // Tab组件的毛玻璃效果（同IAGrid边框样式）
   .ant-tabs {
-    // background: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     
     .ant-tabs-nav {
       background: rgba(255, 255, 255, 0.3) !important;
-    //   border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
-    }
-
-    .ant-tabs-nav::before {
-        position: absolute;
-        right: 0;
-        left: 0;
-        border-bottom: transparent !important;
-        content: '';
+      border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
     }
     
     .ant-tabs-content-holder {
       background: rgba(255, 255, 255, 0.3) !important;
-    //   border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+      border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
       border-top: none; // Tab内容区域顶部不需要边框
     }
   }
@@ -174,9 +68,9 @@ html.glass-theme, body.glass-theme {
   .ant-input-affix-wrapper,
   .ant-select-selector,
   .ant-picker,
-//   .ant-tree-list-holder-inner,
-//   .ant-tree,
-  .ant-cascader-picker {
+  .ant-cascader-picker,
+  .ant-tree,
+  .ant-tree-list-holder-inner {
     background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
@@ -195,11 +89,10 @@ html.glass-theme, body.glass-theme {
   
   // 树形组件的毛玻璃效果
   .ant-tree {
-    // background: rgba(255, 255, 255, 0.3) !important;
-    background: transparent !important;
+    background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
-    border: 1px solid rgba(255, 255, 255, 0.3) !important; // 与IAGrid边框颜色一致
+    border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
   }
   
   .ant-tree-treenode {
@@ -249,9 +142,9 @@ html.glass-theme, body.glass-theme {
   .ant-pro-layout-content {
     background: transparent !important;
   }
-   .ant-pro-layout-bg-list {
-        background: transparent;
-        // background: url('../assets/images/spring.jpg');
-    }
   
+  // 修复ProLayout背景
+  .ant-pro-layout-bg-list {
+    // 背景图由body提供，这里不需要重复设置
+  }
 }

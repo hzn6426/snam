@@ -66,6 +66,11 @@ export default (props) => {
                     value: 'realDark',
                     icon: <MyIcon type="caladog-night" />,
                   },
+                  {
+                    label: '玻璃',
+                    value: 'glass',
+                    icon: <MyIcon type="caladog-glass" />,
+                  },
                 ]}
               />
             </Form.Item>
