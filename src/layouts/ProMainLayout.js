@@ -40,64 +40,92 @@ export default (props) => {
           components: {
             Card: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               border: '1px solid rgba(255, 255, 255, 0.3)'
             },
             ProLayout: {
               sider: {
                 colorMenuBackground: 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(0.5px)',
-                WebkitBackdropFilter: 'blur(0.5px)',
+                backdropFilter: 'blur(3px)',
+                WebkitBackdropFilter: 'blur(3px)',
                 border: '1px solid rgba(255, 255, 255, 0.3)'
               },
               header: {
                 colorBgHeader: 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(0.5px)',
-                WebkitBackdropFilter: 'blur(0.5px)',
+                backdropFilter: 'blur(3px)',
+                WebkitBackdropFilter: 'blur(3px)',
                 border: '1px solid rgba(255, 255, 255, 0.3)'
               },
               pageContainer: {
                 colorBgPageContainer: 'rgba(255,255,255,0.3)',
-                backdropFilter: 'blur(0.5px)',
-                WebkitBackdropFilter: 'blur(0.5px)',
+                backdropFilter: 'blur(3px)',
+                WebkitBackdropFilter: 'blur(3px)',
                 border: '1px solid rgba(255, 255, 255, 0.3)'
               }
             },
             // 添加Table组件的毛玻璃效果
             Table: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               border: '1px solid #f0f0f0'
             },
             // 添加Tabs组件的毛玻璃效果
             Tabs: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
             },
             // 添加Tree组件的毛玻璃效果
             Tree: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
             },
             // 添加Input组件的毛玻璃效果
             Input: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
             },
             // 添加Select组件的毛玻璃效果
             Select: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
+            },
+            // 添加Checkbox组件的毛玻璃效果
+            Checkbox: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: 'rgba(255, 255, 255, 0.5)'
+            },
+            // 添加Radio组件的毛玻璃效果
+            Radio: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: 'rgba(255, 255, 255, 0.5)'
+            },
+            // 添加Textarea组件的毛玻璃效果
+            InputTextArea: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: '#f0f0f0'
+            },
+            // 添加FooterToolbar组件的毛玻璃效果
+            FooterToolbar: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: 'rgba(255, 255, 255, 0.3)'
             }
           }
         };
@@ -141,9 +169,73 @@ export default (props) => {
         // 当主题颜色改变时，更新CSS变量
         if (viewSetting.colorPrimary) {
             document.documentElement.style.setProperty('--ant-primary-color', viewSetting.colorPrimary);
-            // 同时更新左侧菜单的主题颜色
-            document.documentElement.style.setProperty('--ant-menu-item-color', viewSetting.colorPrimary);
-            document.documentElement.style.setProperty('--ant-menu-highlight-color', viewSetting.colorPrimary);
+            
+            // 更新ProLayout的token配置
+            const style = document.documentElement.style;
+            
+            // 为左侧菜单添加颜色适配（所有模式）
+            // 设置菜单项选中时的背景色（使用纯主题色，不淡化）
+            style.setProperty('--ant-menu-item-selected-bg', viewSetting.colorPrimary); // 使用纯主题色
+            // 设置菜单项选中时的字体颜色为白色（确保在所有模式下都清晰可见）
+            style.setProperty('--ant-menu-item-selected-color', '#ffffff');
+            // 设置菜单项悬停时的背景色（稍微淡一点）
+            style.setProperty('--ant-menu-item-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            // 设置菜单项默认字体颜色
+            style.setProperty('--ant-menu-item-color', 'rgba(0, 0, 0, 0.85)');
+            // 设置菜单高亮颜色
+            style.setProperty('--ant-menu-highlight-color', viewSetting.colorPrimary);
+            // 设置菜单暗色模式下选中项背景色
+            style.setProperty('--ant-menu-dark-item-selected-bg', viewSetting.colorPrimary); // 使用纯主题色
+            // 设置菜单暗色模式下激活项背景色
+            style.setProperty('--ant-menu-dark-item-active-bg', viewSetting.colorPrimary); // 使用纯主题色
+            
+            // 为分页栏当前页面设置颜色
+            style.setProperty('--ant-pagination-item-active-bg', viewSetting.colorPrimary);
+            style.setProperty('--ant-pagination-item-active-border', viewSetting.colorPrimary);
+            // 确保分页工具栏中的当前页号也使用主题色
+            style.setProperty('--ant-pagination-item-active-color', '#ffffff');
+            
+            // 为IAGrid右上角按钮设置主题色
+            style.setProperty('--ant-btn-primary-bg', viewSetting.colorPrimary);
+            style.setProperty('--ant-btn-primary-border', viewSetting.colorPrimary);
+            
+            // 确保按钮在不同状态下的颜色也正确设置
+            style.setProperty('--ant-btn-primary-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            style.setProperty('--ant-btn-primary-hover-border', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            style.setProperty('--ant-btn-primary-active-bg', `${viewSetting.colorPrimary}99`); // 60%透明度
+            style.setProperty('--ant-btn-primary-active-border', `${viewSetting.colorPrimary}99`); // 60%透明度
+            
+            // 为ProLayout侧边栏背景设置主题色
+            style.setProperty('--ant-pro-layout-sider-background', viewSetting.colorPrimary);
+            
+            // 为Tree组件设置主题色
+            style.setProperty('--ant-tree-node-selected-bg', viewSetting.colorPrimary);
+            style.setProperty('--ant-tree-node-selected-color', '#ffffff');
+            // 为Tree组件设置悬停色（稍微淡一点）
+            style.setProperty('--ant-tree-node-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            
+            // 为Select组件设置主题色
+            style.setProperty('--ant-select-item-selected-bg', viewSetting.colorPrimary);
+            style.setProperty('--ant-select-item-selected-color', '#ffffff');
+            // 为Select组件设置悬停色（稍微淡一点）
+            style.setProperty('--ant-select-item-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            
+            // 为Form组件设置主题色
+            style.setProperty('--ant-form-item-label-color', viewSetting.colorPrimary);
+            
+            // 为IAGrid选中行设置主题色（使用纯主题色，不淡化）
+            style.setProperty('--ant-aggrid-row-selected-bg', viewSetting.colorPrimary); // 使用纯主题色
+            style.setProperty('--ant-aggrid-row-selected-color', '#ffffff');
+            // 为IAGrid设置悬停色（稍微淡一点）
+            style.setProperty('--ant-aggrid-row-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            
+            // 为Input组件设置悬停和焦点颜色
+            style.setProperty('--ant-input-hover-border-color', viewSetting.colorPrimary);
+            style.setProperty('--ant-input-focus-border-color', viewSetting.colorPrimary);
+            
+            // 为Button组件设置悬停颜色（稍微淡一点）
+            style.setProperty('--ant-btn-default-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            style.setProperty('--ant-btn-default-hover-border', viewSetting.colorPrimary);
         }
     }, [viewSetting.colorPrimary]);
     const getCurrentUser = () => {
@@ -288,7 +380,13 @@ export default (props) => {
                     title: currentUser.name,
                     // style: {marginRight:-50},
                     render: (_, dom) => {
-                        return (<AvatarDropdown onSetting={() => { setIsVisible(true) }}><div style={{marginRight:'-25px',marginTop:'-3px', fontWeight:'bold'}}>{dom}</div></AvatarDropdown>)
+                        return (
+                            <AvatarDropdown onSetting={() => { setIsVisible(true) }}>
+                                <div style={{marginRight:'-25px',marginTop:'-3px', fontWeight:'bold', color: viewSetting.navTheme === 'glass' ? 'white' : 'inherit'}}>
+                                    {dom}
+                                </div>
+                            </AvatarDropdown>
+                        )
                     }
                 }}
                 actionsRender={(props) => {

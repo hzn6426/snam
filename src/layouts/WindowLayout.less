@@ -6,6 +6,9 @@
   background-position: center !important;
   background-attachment: fixed !important;
   
+  // 设置默认字体颜色为白色
+  color: white !important;
+  
   // 确保根元素也有背景设置
   #root {
     background: transparent !important;
@@ -21,6 +24,7 @@
     -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 10px !important; // 与IAGrid相同的圆角
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-pro-sider {
@@ -28,6 +32,7 @@
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-layout-header {
@@ -35,14 +40,63 @@
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+    color: white !important; // 设置字体颜色为白色
   }
   
   // 表格容器的毛玻璃效果（同IAGrid边框样式）
   .ant-table-container {
     background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+    color: white !important; // 设置字体颜色为白色
+  }
+  
+  // FooterToolBar的毛玻璃效果
+  .ant-pro-footer-bar {
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important; // 设置字体颜色为白色
+    
+    // FooterToolBar中的按钮也应用毛玻璃效果
+    .ant-btn {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+    }
+    
+    // 主要按钮使用主题色
+    .ant-btn-primary {
+      background: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
+      color: white !important;
+    }
+  }
+  
+  // IAGrid标题的字体颜色
+  .ag-container {
+    .ag-tools {
+      .ag-tools-left {
+        color: white !important;
+        
+        .ant-typography {
+          color: white !important;
+        }
+      }
+    }
+  }
+  
+  // 用户名称字体颜色
+  .ant-pro-global-header {
+    .ant-pro-global-header-logo {
+      .ant-pro-global-header-logo-title {
+        color: white !important;
+      }
+    }
   }
   
   // Tab组件的毛玻璃效果（同IAGrid边框样式）
@@ -50,16 +104,34 @@
     background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
+    color: white !important; // 设置字体颜色为白色
     
     .ant-tabs-nav {
       background: rgba(255, 255, 255, 0.3) !important;
-      border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+      color: white !important; // 设置字体颜色为白色
+    }
+
+    .ant-tabs-nav::before {
+        position: absolute;
+        right: 0;
+        left: 0;
+        border-bottom: transparent !important;
+        content: '';
     }
     
     .ant-tabs-content-holder {
       background: rgba(255, 255, 255, 0.3) !important;
-      border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+      color: white !important; // 设置字体颜色为白色
       border-top: none; // Tab内容区域顶部不需要边框
+    }
+    
+    // Tab标签页文字颜色
+    .ant-tabs-tab {
+      color: rgba(255, 255, 255, 0.85) !important;
+    }
+    
+    .ant-tabs-tab-active {
+      color: white !important;
     }
   }
   
@@ -68,13 +140,93 @@
   .ant-input-affix-wrapper,
   .ant-select-selector,
   .ant-picker,
-  .ant-cascader-picker,
-  .ant-tree,
-  .ant-tree-list-holder-inner {
+  .ant-cascader-picker {
     background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+    color: white !important; // 设置字体颜色为白色
+    
+    // 输入框文字颜色
+    input {
+      color: white !important;
+    }
+    
+    // 占位符文字颜色
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.65) !important;
+    }
+  }
+  
+  // Checkbox组件的毛玻璃效果
+  .ant-checkbox-wrapper {
+    color: white !important;
+  }
+  
+  .ant-checkbox {
+    // Checkbox框的毛玻璃效果
+    .ant-checkbox-inner {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    // 选中状态的Checkbox
+    &.ant-checkbox-checked {
+      .ant-checkbox-inner {
+        background: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
+      }
+      
+      &::after {
+        border-color: var(--ant-primary-color) !important;
+      }
+    }
+  }
+  
+  // Radio组件的毛玻璃效果
+  .ant-radio-wrapper {
+    color: white !important;
+  }
+  
+  .ant-radio {
+    // Radio框的毛玻璃效果
+    .ant-radio-inner {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      
+      // 选中状态的圆点
+      &::after {
+        background-color: white !important;
+      }
+    }
+    
+    // 选中状态的Radio
+    &.ant-radio-checked {
+      .ant-radio-inner {
+        border-color: var(--ant-primary-color) !important;
+        background: var(--ant-primary-color) !important;
+      }
+    }
+  }
+  
+  // Textarea组件的毛玻璃效果
+  .ant-input-textarea {
+    textarea.ant-input {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid #f0f0f0 !important;
+      color: white !important;
+      
+      // 占位符文字颜色
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.65) !important;
+      }
+    }
   }
   
   // 下拉菜单的毛玻璃效果
@@ -82,69 +234,202 @@
   .ant-picker-dropdown,
   .ant-cascader-menus {
     background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+    color: white !important; // 设置字体颜色为白色
   }
   
   // 树形组件的毛玻璃效果
   .ant-tree {
-    background: rgba(255, 255, 255, 0.3) !important;
+    background: transparent !important;
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
-    border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+    border: 1px solid rgba(255, 255, 255, 0.3) !important; // 与IAGrid边框颜色一致
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-tree-treenode {
     background: transparent !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-tree-node-content-wrapper {
     background: transparent !important;
     border-radius: 2px;
+    color: white !important; // 设置字体颜色为白色
     // 添加毛玻璃效果
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
+    // 防止闪烁，确保过渡效果平滑
+    transition: background-color 0.3s, color 0.3s;
   }
   
   .ant-tree-node-content-wrapper:hover {
-    background: rgba(24, 144, 255, 0.1) !important;
+    background: var(--ant-tree-node-hover-bg, rgba(24, 144, 255, 0.8)) !important; // 稍微淡一点的主题色
+    color: white !important; // 设置字体颜色为白色
     // 添加毛玻璃效果
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
+    // 防止闪烁，确保过渡效果平滑
+    transition: background-color 0.3s, color 0.3s;
   }
   
   .ant-tree-node-content-wrapper.ant-tree-node-selected {
-    background: rgba(24, 144, 255, 0.2) !important;
+    background: var(--ant-tree-node-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
+    color: var(--ant-tree-node-selected-color, white) !important; // 使用主题色
     // 添加毛玻璃效果
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
+    // 防止闪烁，确保过渡效果平滑
+    transition: background-color 0.3s, color 0.3s;
   }
   
   // 确保内容区域也有毛玻璃效果
   .ant-pro-page-container {
     background: transparent !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-pro-page-container-children-content {
     background: transparent !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   // 为整个布局设置背景
   .ant-layout {
     background: transparent !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-pro-layout-container {
     background: transparent !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   .ant-pro-layout-content {
     background: transparent !important;
+    color: white !important; // 设置字体颜色为白色
   }
   
   // 修复ProLayout背景
   .ant-pro-layout-bg-list {
     // 背景图由body提供，这里不需要重复设置
+  }
+  
+  // IFooterToolBar的毛玻璃效果
+  .ant-pro-footer-bar {
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important; // 设置字体颜色为白色
+    
+    // FooterToolBar中的按钮也应用毛玻璃效果
+    .ant-btn {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      
+      &.ant-btn-primary {
+        background: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
+        color: white !important;
+      }
+    }
+  }
+  
+  // 确保IFooterToolBar在任何情况下都应用玻璃效果
+  .glass-theme .ant-pro-footer-bar {
+    background: rgba(255, 255, 255, 0.3) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    
+    .ant-btn {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      
+      &.ant-btn-primary {
+        background: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
+        color: white !important;
+      }
+    }
+  }
+  
+  // 分页组件样式
+  .ant-pagination {
+    // 分页当前页使用主题色
+    .ant-pagination-item-active {
+      background-color: var(--ant-pagination-item-active-bg, var(--ant-primary-color)) !important;
+      border-color: var(--ant-pagination-item-active-border, var(--ant-primary-color)) !important;
+      
+      a {
+        color: var(--ant-pagination-item-active-color, #ffffff) !important;
+      }
+    }
+  }
+  
+  // Select组件样式
+  .ant-select {
+    // 下拉选项选中时使用主题色
+    .ant-select-item-option-selected {
+      background-color: var(--ant-select-item-selected-bg, var(--ant-primary-color)) !important;
+      color: var(--ant-select-item-selected-color, #ffffff) !important;
+    }
+    
+    // 下拉选项悬停时使用稍微淡一点的主题色
+    .ant-select-item-option:hover {
+      background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+    }
+  }
+  
+  // 表单组件样式
+  .ant-form-item-label > label {
+    color: var(--ant-form-item-label-color, rgba(0, 0, 0, 0.85)) !important;
+  }
+  
+  // IAGrid选中行样式
+  .ag-theme-balham {
+    .ag-row-selected {
+      background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
+      color: var(--ant-aggrid-row-selected-color, white) !important;
+      // 防止闪烁，确保过渡效果平滑
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .ag-row-hover {
+      background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.8)) !important; // 稍微淡一点的主题色
+      color: var(--ant-aggrid-row-selected-color, white) !important;
+      // 防止闪烁，确保过渡效果平滑
+      transition: background-color 0.3s, color 0.3s;
+    }
+  }
+  
+  // Input组件样式
+  .ant-input {
+    &:hover {
+      border-color: var(--ant-input-hover-border-color, #40a9ff) !important;
+    }
+    
+    &:focus {
+      border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+    }
+  }
+  
+  // Button组件样式
+  .ant-btn {
+    &.ant-btn-default:hover {
+      background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+      border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
+    }
   }
 }

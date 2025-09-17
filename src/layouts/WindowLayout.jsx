@@ -3,8 +3,8 @@ import {useEffect, useState} from 'react'
 import zhCN from 'antd/locale/zh_CN';
 import { ApplicationStateProvider } from "@/store/state";
 import './WindowLayout.less'; // 引入样式文件
-// import { useApplicationState } from "@/store/state";
 export default (props) => {
+    // const [viewSetting] = useApplicationState(s => [s.view]);
     // const [setNavTheme] = useApplicationState(s => [s.actions.view.setNavTheme]);
 
     const [settings, setSettings] = useState({});
@@ -31,45 +31,73 @@ export default (props) => {
           components: {
             Card: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               border: '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: 10
             },
             // 添加Table组件的毛玻璃效果
             Table: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               border: '1px solid #f0f0f0'
             },
             // 添加Tabs组件的毛玻璃效果
             Tabs: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
             },
             // 添加Tree组件的毛玻璃效果
             Tree: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
             },
             // 添加Input组件的毛玻璃效果
             Input: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
             },
             // 添加Select组件的毛玻璃效果
             Select: {
               colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(0.5px)',
-              WebkitBackdropFilter: 'blur(0.5px)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
               colorBorder: '#f0f0f0'
+            },
+            // 添加Checkbox组件的毛玻璃效果
+            Checkbox: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: 'rgba(255, 255, 255, 0.5)'
+            },
+            // 添加Radio组件的毛玻璃效果
+            Radio: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: 'rgba(255, 255, 255, 0.5)'
+            },
+            // 添加Textarea组件的毛玻璃效果
+            InputTextArea: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: '#f0f0f0'
+            },
+            // 添加FooterToolbar组件的毛玻璃效果
+            FooterToolbar: {
+              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)',
+              colorBorder: 'rgba(255, 255, 255, 0.3)'
             }
           }
         };

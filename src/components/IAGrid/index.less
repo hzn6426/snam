@@ -17,6 +17,7 @@
 
      .ag-tools-left {
       margin-top: 3px;
+      color: rgba(0, 0, 0, 0.85); // 默认字体颜色
         //  span {
         //    font-size: 15px;
         //    line-height: 32px;
@@ -29,12 +30,60 @@
        justify-content: flex-end;
       padding-bottom: 0;
       
-      // 为工具栏按钮添加毛玻璃效果
+      // 为工具栏按钮添加主题颜色支持
       .ant-btn {
-        background: rgba(255, 255, 255, 0.3) !important;
-        backdrop-filter: blur(0.5px);
-        -webkit-backdrop-filter: blur(0.5px);
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: #ffffff;
+        border: 1px solid #d9d9d9;
+        color: rgba(0, 0, 0, 0.85);
+        
+        // 主要按钮使用主题色
+        &[type="primary"] {
+          background: var(--ant-primary-color);
+          border-color: var(--ant-primary-color);
+          color: #ffffff;
+          
+          // 悬停状态
+          &:hover {
+            background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color));
+            border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color));
+          }
+          
+          // 激活状态
+          &:active {
+            background: var(--ant-btn-primary-active-bg, var(--ant-primary-color));
+            border-color: var(--ant-btn-primary-active-border, var(--ant-primary-color));
+          }
+        }
+      }
+      
+      // 为工具栏按钮添加毛玻璃效果
+      .glass-theme & {
+        .ant-btn {
+          background: rgba(255, 255, 255, 0.3) !important;
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+          border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          color: white !important;
+          
+          // 主要按钮使用主题色
+          &[type="primary"] {
+            background: var(--ant-primary-color) !important;
+            border-color: var(--ant-primary-color) !important;
+            color: #ffffff !important;
+            
+            // 悬停状态
+            &:hover {
+              background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color)) !important;
+              border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color)) !important;
+            }
+            
+            // 激活状态
+            &:active {
+              background: var(--ant-btn-primary-active-bg, var(--ant-primary-color)) !important;
+              border-color: var(--ant-btn-primary-active-border, var(--ant-primary-color)) !important;
+            }
+          }
+        }
       }
      }
    }
@@ -88,17 +137,50 @@
          .ag-pagination {
            display: flex;
            margin: 5px 0px 5px 5px;
-    
+
            .pagination-tools {
             width: 300px;
              padding: 0 3px;
            }
-    
+
            .pagination-content {
              width: 100%;
              text-align: right;
              padding: 0px 3px;
              height: 30px;
+             position: relative;
+             z-index: 10; // 确保分页组件在最前，不被其他组件遮挡
+            
+             // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
+             .ant-pagination {
+               .ant-pagination-item-active {
+                 background-color: var(--ant-primary-color) !important;
+                 border-color: var(--ant-primary-color) !important;
+                 
+                 a {
+                   color: var(--ant-pagination-item-active-color, #ffffff) !important;
+                 }
+               }
+               
+               // 确保所有页码的字体颜色适配主题设置
+               .ant-pagination-item {
+                 a {
+                   color: var(--ant-primary-color); // 页码字体颜色适配主题色
+                 }
+               }
+               
+               // 确保分页跳转输入框中的当前页数字也适配主题色
+               .ant-pagination-options {
+                 .ant-pagination-options-quick-jumper {
+                   input {
+                     &:focus {
+                       border-color: var(--ant-primary-color) !important;
+                       box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
+                     }
+                   }
+                 }
+               }
+             }
            }
          }
          }
@@ -232,8 +314,8 @@
  // 玻璃模式下的样式
 .glass-theme .ag-container {
   background: rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
 }
 
@@ -244,52 +326,62 @@
 
 .glass-theme .ag-header {
   background: rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: white !important;
 }
 
 .glass-theme .ag-row {
   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: white !important;
 }
 
 .glass-theme .ag-row-even {
   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: white !important;
 }
 
 .glass-theme .ag-row-odd {
   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
-}
-
-.glass-theme .ag-row-hover {
-  background: rgba(24, 144, 255, 0.1) !important;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: white !important;
 }
 
 .glass-theme .ag-row-selected {
-  background: rgba(24, 144, 255, 0.2) !important;
+  background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
+  color: var(--ant-aggrid-row-selected-color, white) !important;
+}
+
+.glass-theme .ag-row-hover {
+  // 去掉hover适配主题颜色设置，使用默认的玻璃效果样式
+  background: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
 }
 
 .glass-theme .ag-cell {
   border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
 }
 
 .glass-theme .ag-pinned-left-header,
 .glass-theme .ag-pinned-right-header {
   background: rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: white !important;
 }
 
 .glass-theme .ag-pinned-left-cols-container,
 .glass-theme .ag-pinned-right-cols-container {
   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
-  backdrop-filter: blur(0.5px);
-  -webkit-backdrop-filter: blur(0.5px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: white !important;
 }
 
 // 修复表格容器透明度
@@ -304,4 +396,181 @@
 
 .glass-theme .ag-center-cols-container {
   background: transparent !important;
+}
+
+// 玻璃模式下分页组件的样式
+.glass-theme .ag-pagination {
+  color: white !important;
+  
+  .pagination-content {
+    color: white !important;
+    
+    // 分页按钮颜色
+    .ant-pagination {
+      color: white !important;
+      
+      .ant-pagination-item {
+        color: white !important;
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        
+        a {
+          color: white !important;
+        }
+      }
+      
+      .ant-pagination-item-active {
+        background-color: var(--ant-primary-color) !important; // 使用主题色
+        border-color: var(--ant-primary-color) !important;
+        
+        a {
+          color: white !important;
+        }
+      }
+      
+      .ant-pagination-prev,
+      .ant-pagination-next {
+        color: white !important;
+        
+        .ant-pagination-item-link {
+          color: white !important;
+          background-color: rgba(255, 255, 255, 0.3) !important;
+          border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+      }
+      
+      // 确保分页跳转输入框在玻璃主题下也正确显示
+      .ant-pagination-options {
+        .ant-pagination-options-size-changer {
+          .ant-select-selector {
+            background: rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: white !important;
+          }
+        }
+        
+        .ant-pagination-options-quick-jumper {
+          color: white !important;
+          
+          input {
+            background: rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: white !important;
+            
+            &::placeholder {
+              color: rgba(255, 255, 255, 0.65) !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 玻璃模式下IAGrid标题的样式
+.glass-theme .ag-container {
+  .ag-tools {
+    .ag-tools-left {
+      color: white !important;
+      
+      .ant-typography {
+        color: white !important;
+      }
+    }
+  }
+  
+  // 确保表格行标题也显示为白色
+  .ag-theme-balham {
+    .ag-header {
+      .ag-header-cell {
+        color: white !important;
+        
+        .ag-header-cell-label {
+          color: white !important;
+        }
+      }
+    }
+    
+    .ag-cell {
+      color: white !important;
+    }
+  }
+}
+
+// 列设置表格的玻璃主题样式
+.glass-theme {
+  .ag-setting {
+    .ag-theme-balham {
+      background: transparent !important;
+      
+      .ag-header {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        color: white !important;
+      }
+      
+      .ag-row {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        color: white !important;
+      }
+      
+      .ag-row-even {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        color: white !important;
+      }
+      
+      .ag-row-odd {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        color: white !important;
+      }
+      
+      .ag-row-hover {
+        // 去掉hover适配主题颜色设置，使用默认的玻璃效果样式
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+      }
+      
+      .ag-row-selected {
+        background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
+        color: var(--ant-aggrid-row-selected-color, white) !important;
+      }
+      
+      .ag-cell {
+        border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+      }
+      
+      .ag-pinned-left-header,
+      .ag-pinned-right-header {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        color: white !important;
+      }
+    }
+  }
+}
+
+// 为所有主题模式下的IAGrid选中行设置样式
+.ag-theme-balham {
+  .ag-row-selected {
+    background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
+    color: var(--ant-aggrid-row-selected-color, #ffffff) !important; // 在所有模式下都使用白色字体
+  }
+  
+  .ag-row-hover {
+    // 去掉hover适配主题颜色设置，使用默认样式
+    background: inherit !important;
+    color: inherit !important;
+  }
 }
