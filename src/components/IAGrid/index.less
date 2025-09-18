@@ -56,6 +56,20 @@
         }
       }
       
+      // 确保在所有主题模式下工具栏按钮都能正确应用主题色
+      .ant-btn[type="primary"] {
+        background: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
+        color: #ffffff !important;
+      }
+      
+      // 确保工具栏按钮在所有情况下都能正确应用主题色
+      .ag-tools-right .ant-btn[type="primary"] {
+        background: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
+        color: #ffffff !important;
+      }
+      
       // 为工具栏按钮添加毛玻璃效果
       .glass-theme & {
         .ant-btn {
@@ -182,6 +196,20 @@
                }
              }
            }
+         }
+         
+         // 确保在所有主题模式下分页组件都能正确应用主题色（只设置字体颜色，不设置背景色）
+         .ag-pagination .ant-pagination .ant-pagination-item-active {
+           // 不设置背景色
+           border-color: var(--ant-primary-color) !important;
+           
+           a {
+             color: var(--ant-primary-color) !important; // 使用主题色作为字体颜色
+           }
+         }
+         
+         .ag-pagination .ant-pagination .ant-pagination-item a {
+           color: var(--ant-primary-color) !important;
          }
          }
     
@@ -544,6 +572,10 @@
         background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
         color: var(--ant-aggrid-row-selected-color, white) !important;
       }
+
+      .ag-row-selected::before {
+         background-color: transparent;
+       }
       
       .ag-cell {
         border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
@@ -564,8 +596,8 @@
 // 为所有主题模式下的IAGrid选中行设置样式
 .ag-theme-balham {
   .ag-row-selected {
-    background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
-    color: var(--ant-aggrid-row-selected-color, #ffffff) !important; // 在所有模式下都使用白色字体
+    background: var(--ant-primary-color) !important; // 使用纯主题色
+    color: #ffffff !important; // 在所有模式下都使用白色字体
   }
   
   .ag-row-hover {
@@ -574,3 +606,11 @@
     color: inherit !important;
   }
 }
+
+// 确保在所有主题模式下IAGrid选中行都能正确应用主题色
+.ag-theme-balham .ag-row-selected {
+  background: var(--ant-primary-color) !important;
+  color: #ffffff !important;
+}
+
+
