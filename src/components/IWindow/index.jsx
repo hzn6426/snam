@@ -56,6 +56,7 @@ export default React.forwardRef((props, ref) => {
             padding: '0 10px 10px 10px',
             borderRadius: '0px',
         }}
+        className="iwindow-card"
     >
         <Form
             name="basic"

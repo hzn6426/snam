@@ -30,13 +30,14 @@
   // 确保在玻璃模式下也能正确显示
   .glass-theme & {
     .ant-input,
+    .ant-select
     .ant-select-selector,
     .ant-picker {
-      background: rgba(255, 255, 255, 0.3) !important;
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
-      color: white !important;
+      background: var(--glass-surface-bg) !important;
+      backdrop-filter: var(--glass-backdrop-filter);
+      -webkit-backdrop-filter: var(--glass-backdrop-filter);
+      border: 1px solid var(--glass-surface-border) !important;
+      color: var(--text-color) !important;
     }
     
     .ant-input::placeholder {
@@ -44,11 +45,11 @@
     }
     
     .ant-btn {
-      background: rgba(255, 255, 255, 0.3) !important;
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
-      color: white !important;
+      background: var(--glass-surface-bg) !important;
+      backdrop-filter: var(--glass-backdrop-filter);
+      -webkit-backdrop-filter: var(--glass-backdrop-filter);
+      border: 1px solid var(--glass-surface-border) !important;
+      color: var(--text-color) !important;
       
       &[type="primary"] {
         background: var(--ant-primary-color) !important;

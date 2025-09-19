@@ -1,19 +1,46 @@
+
+
+// 确保在任何情况下IFooterToolBar都能正确应用玻璃效果
+// .ant-pro-footer-bar {
+//   .glass-theme & {
+//     background: var(--glass-surface-bg) !important;
+//     backdrop-filter: var(--glass-backdrop-filter);
+//     -webkit-backdrop-filter: var(--glass-backdrop-filter);
+//     border-top: 1px solid var(--glass-surface-border) !important;
+//     color: var(--text-color) !important;
+    
+//     .ant-btn {
+//       background: var(--glass-surface-bg) !important;
+//       backdrop-filter: var(--glass-backdrop-filter);
+//       -webkit-backdrop-filter: var(--glass-backdrop-filter);
+//       border: 1px solid var(--glass-surface-border) !important;
+//       color: var(--text-color) !important;
+      
+//       &.ant-btn-primary {
+//         background: var(--ant-primary-color) !important;
+//         border-color: var(--ant-primary-color) !important;
+//         color: white !important;
+//       }
+//     }
+//   }
+// }
+
 // IFooterToolBar组件的样式
 .glass-theme {
   .ant-pro-footer-bar {
-    background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-    color: white !important; // 设置字体颜色为白色
+    background: var(--glass-surface-bg) !important;
+    backdrop-filter: var(--glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--glass-backdrop-filter);
+    border-top: 1px solid var(--glass-surface-border) !important;
+    color: var(--text-color) !important;
     
     // FooterToolBar中的按钮也应用毛玻璃效果
     .ant-btn {
-      background: rgba(255, 255, 255, 0.3) !important;
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
-      color: white !important;
+      background: var(--glass-surface-bg) !important;
+      backdrop-filter: var(--glass-backdrop-filter);
+      -webkit-backdrop-filter: var(--glass-backdrop-filter);
+      border: 1px solid var(--glass-surface-border) !important;
+      color: var(--text-color) !important;
     }
     
     // 主要按钮使用主题色
@@ -21,31 +48,6 @@
       background: var(--ant-primary-color) !important;
       border-color: var(--ant-primary-color) !important;
       color: white !important;
-    }
-  }
-}
-
-// 确保在任何情况下IFooterToolBar都能正确应用玻璃效果
-.ant-pro-footer-bar {
-  .glass-theme & {
-    background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-    color: white !important;
-    
-    .ant-btn {
-      background: rgba(255, 255, 255, 0.3) !important;
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      border: 1px solid rgba(255, 255, 255, 0.3) !important;
-      color: white !important;
-      
-      &.ant-btn-primary {
-        background: var(--ant-primary-color) !important;
-        border-color: var(--ant-primary-color) !important;
-        color: white !important;
-      }
     }
   }
 }

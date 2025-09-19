@@ -21,12 +21,76 @@ export default (props) => {
     let key = Object.keys(v)[0];
     let value = v[key];
     let n = R.assoc(key, value)(props.settings);
+    
     if (key == "locale") {
       setLocale(value, false);
       localStorage.setItem("umi-locale", value);
     }
-    setViewSetting(n);
-    localStorage.setItem("settings", JSON.stringify(n));
+    
+    // 如果是主题相关设置，立即应用
+    if (key === "navTheme" || key === "colorPrimary") {
+      // 立即更新主题
+      setViewSetting(n);
+      localStorage.setItem("settings", JSON.stringify(n));
+      
+      // 立即设置data-theme属性
+      if (key === "navTheme") {
+        const theme = value === 'realDark' ? 'dark' : value;
+        document.documentElement.setAttribute("data-theme", theme);
+        
+        // 处理玻璃主题
+        if (value === 'glass') {
+          document.body.classList.add('glass-theme');
+          document.body.style.backgroundImage = "url('../assets/back/bg-7.jpg')";
+          document.body.style.backgroundSize = "cover";
+          document.body.style.backgroundPosition = "center";
+          document.body.style.backgroundAttachment = "fixed";
+        } else {
+          document.body.classList.remove('glass-theme');
+          document.body.style.backgroundImage = "";
+          document.body.style.backgroundSize = "";
+          document.body.style.backgroundPosition = "";
+          document.body.style.backgroundAttachment = "";
+        }
+      }
+      
+      // 立即更新主题色
+      if (key === "colorPrimary" && value) {
+        document.documentElement.style.setProperty('--ant-primary-color', value);
+        // 更新其他相关CSS变量
+        const style = document.documentElement.style;
+        style.setProperty('--ant-menu-item-selected-bg', value);
+        style.setProperty('--ant-menu-item-active-bg', value);
+        style.setProperty('--ant-menu-item-hover-bg', `${value}cc`);
+        style.setProperty('--ant-menu-highlight-color', value);
+        style.setProperty('--ant-menu-dark-item-selected-bg', value);
+        style.setProperty('--ant-menu-dark-item-active-bg', value);
+        style.setProperty('--ant-pagination-item-active-bg', value);
+        style.setProperty('--ant-pagination-item-active-border', value);
+        style.setProperty('--ant-btn-primary-bg', value);
+        style.setProperty('--ant-btn-primary-border', value);
+        style.setProperty('--ant-btn-primary-hover-bg', `${value}cc`);
+        style.setProperty('--ant-btn-primary-hover-border', `${value}cc`);
+        style.setProperty('--ant-btn-primary-active-bg', `${value}99`);
+        style.setProperty('--ant-btn-primary-active-border', `${value}99`);
+        style.setProperty('--ant-pro-layout-sider-background', value);
+        style.setProperty('--ant-tree-node-selected-bg', value);
+        style.setProperty('--ant-tree-node-hover-bg', `${value}cc`);
+        style.setProperty('--ant-select-item-selected-bg', value);
+        style.setProperty('--ant-select-item-hover-bg', `${value}cc`);
+        style.setProperty('--ant-form-item-label-color', value);
+        style.setProperty('--ant-aggrid-row-selected-bg', value);
+        style.setProperty('--ant-aggrid-row-hover-bg', `${value}cc`);
+        style.setProperty('--ant-input-hover-border-color', value);
+        style.setProperty('--ant-input-focus-border-color', value);
+        style.setProperty('--ant-btn-default-hover-bg', `${value}cc`);
+        style.setProperty('--ant-btn-default-hover-border', value);
+      }
+    } else {
+      setViewSetting(n);
+      localStorage.setItem("settings", JSON.stringify(n));
+    }
+    
     //发送事件
     window.dispatchEvent(new Event("storage"));
   }

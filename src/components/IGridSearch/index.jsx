@@ -41,7 +41,7 @@ export default (props) => {
                         }}
                         size="small" key="columnSearch"
                         enterButton
-                        placeholder={placeholder || '搜索'} allowClear />
+                        placeholder={placeholder || '搜索'}  />
 
                 </IIF>
                 <IIF test={xtype === 'select'}>

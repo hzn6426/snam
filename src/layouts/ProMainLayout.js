@@ -31,7 +31,7 @@ export default (props) => {
     const [menuData, setMenuData] = useState([]);
     const [currentUser, setCurrentUser] = useState({});
 
-    const [viewSetting] = useApplicationState(s => [s.view]);
+    const [viewSetting, setViewSetting] = useApplicationState(s => [s.view, s.actions.view.setViewSetting]);
     
     // 根据主题模式设置毛玻璃效果
     const getGlassTheme = () => {
@@ -141,15 +141,32 @@ export default (props) => {
       return viewSetting.navTheme === "light" ? viewSetting.theme : "";
     };
     
+    // 初始化主题设置
+    useEffect(() => {
+        // 从localStorage读取保存的主题设置
+        const savedSettings = localStorage.getItem("settings");
+        if (savedSettings) {
+            try {
+                const parsedSettings = JSON.parse(savedSettings);
+                if (parsedSettings.navTheme) {
+                    setViewSetting(parsedSettings);
+                }
+            } catch (error) {
+                console.warn("Failed to parse saved settings:", error);
+            }
+        }
+    }, []);
+
     useEffect(() => {
         if (viewSetting.navTheme) {
             const theme = viewSetting.navTheme == 'realDark' ? 'dark' : viewSetting.navTheme;
             document.documentElement.setAttribute("data-theme", theme);
+            
             // 确保玻璃主题类名添加到body上
             if (viewSetting.navTheme === 'glass') {
                 document.body.classList.add('glass-theme');
                 // 确保背景图显示
-                document.body.style.backgroundImage = "url('../assets/back/bg-6.jpg')";
+                document.body.style.backgroundImage = "url('../assets/back/bg-7.jpg')";
                 document.body.style.backgroundSize = "cover";
                 document.body.style.backgroundPosition = "center";
                 document.body.style.backgroundAttachment = "fixed";
