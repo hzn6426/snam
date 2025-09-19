@@ -195,8 +195,8 @@ export default (props) => {
             style.setProperty('--ant-menu-item-selected-bg', viewSetting.colorPrimary); // 使用纯主题色
             // 设置菜单项选中时的字体颜色为白色（确保在所有模式下都清晰可见）
             style.setProperty('--ant-menu-item-selected-color', '#ffffff');
-            // 设置菜单项悬停时的背景色（稍微淡一点）
-            style.setProperty('--ant-menu-item-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            // 设置菜单项悬停时的背景色（使用更稳定的颜色，避免闪烁）
+            style.setProperty('--ant-menu-item-hover-bg', `${viewSetting.colorPrimary}0f`); // 6%透明度，更稳定
             // 设置菜单项默认字体颜色
             style.setProperty('--ant-menu-item-color', 'rgba(0, 0, 0, 0.85)');
             // 设置菜单高亮颜色
@@ -216,11 +216,11 @@ export default (props) => {
             style.setProperty('--ant-btn-primary-bg', viewSetting.colorPrimary);
             style.setProperty('--ant-btn-primary-border', viewSetting.colorPrimary);
             
-            // 确保按钮在不同状态下的颜色也正确设置
-            style.setProperty('--ant-btn-primary-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
-            style.setProperty('--ant-btn-primary-hover-border', `${viewSetting.colorPrimary}cc`); // 80%透明度
-            style.setProperty('--ant-btn-primary-active-bg', `${viewSetting.colorPrimary}99`); // 60%透明度
-            style.setProperty('--ant-btn-primary-active-border', `${viewSetting.colorPrimary}99`); // 60%透明度
+            // 确保按钮在不同状态下的颜色也正确设置（使用更稳定的颜色）
+            style.setProperty('--ant-btn-primary-hover-bg', `${viewSetting.colorPrimary}dd`); // 87%透明度
+            style.setProperty('--ant-btn-primary-hover-border', `${viewSetting.colorPrimary}dd`); // 87%透明度
+            style.setProperty('--ant-btn-primary-active-bg', `${viewSetting.colorPrimary}bb`); // 73%透明度
+            style.setProperty('--ant-btn-primary-active-border', `${viewSetting.colorPrimary}bb`); // 73%透明度
             
             // 为ProLayout侧边栏背景设置主题色
             style.setProperty('--ant-pro-layout-sider-background', viewSetting.colorPrimary);
@@ -228,14 +228,14 @@ export default (props) => {
             // 为Tree组件设置主题色
             style.setProperty('--ant-tree-node-selected-bg', viewSetting.colorPrimary);
             style.setProperty('--ant-tree-node-selected-color', '#ffffff');
-            // 为Tree组件设置悬停色（稍微淡一点）
-            style.setProperty('--ant-tree-node-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            // 为Tree组件设置悬停色（使用更稳定的颜色）
+            style.setProperty('--ant-tree-node-hover-bg', `${viewSetting.colorPrimary}0f`); // 6%透明度，更稳定
             
             // 为Select组件设置主题色
             style.setProperty('--ant-select-item-selected-bg', viewSetting.colorPrimary);
             style.setProperty('--ant-select-item-selected-color', '#ffffff');
-            // 为Select组件设置悬停色（稍微淡一点）
-            style.setProperty('--ant-select-item-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            // 为Select组件设置悬停色（使用更稳定的颜色）
+            style.setProperty('--ant-select-item-hover-bg', `${viewSetting.colorPrimary}20`); // 12.5%透明度，更稳定
             
             // 为Form组件设置主题色
             style.setProperty('--ant-form-item-label-color', viewSetting.colorPrimary);
@@ -243,15 +243,15 @@ export default (props) => {
             // 为IAGrid选中行设置主题色（使用纯主题色，不淡化）
             style.setProperty('--ant-aggrid-row-selected-bg', viewSetting.colorPrimary); // 使用纯主题色
             style.setProperty('--ant-aggrid-row-selected-color', '#ffffff');
-            // 为IAGrid设置悬停色（稍微淡一点）
-            style.setProperty('--ant-aggrid-row-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            // 为IAGrid设置悬停色（使用更稳定的颜色）
+            style.setProperty('--ant-aggrid-row-hover-bg', `${viewSetting.colorPrimary}20`); // 12.5%透明度，更稳定
             
             // 为Input组件设置悬停和焦点颜色
             style.setProperty('--ant-input-hover-border-color', viewSetting.colorPrimary);
             style.setProperty('--ant-input-focus-border-color', viewSetting.colorPrimary);
             
-            // 为Button组件设置悬停颜色（稍微淡一点）
-            style.setProperty('--ant-btn-default-hover-bg', `${viewSetting.colorPrimary}cc`); // 80%透明度
+            // 为Button组件设置悬停颜色（使用更稳定的颜色）
+            style.setProperty('--ant-btn-default-hover-bg', `${viewSetting.colorPrimary}20`); // 12.5%透明度，更稳定
             style.setProperty('--ant-btn-default-hover-border', viewSetting.colorPrimary);
         }
     }, [viewSetting.colorPrimary]);

@@ -200,6 +200,10 @@
     color: var(--ant-aggrid-row-selected-color, #ffffff) !important; // 使用主题变量
   }
 
+  .ag-row-selected::before {
+    background-color: transparent;
+  }
+
   .ag-row-hover {
     background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.1)) !important; // 使用主题变量
     color: inherit !important;
@@ -218,10 +222,10 @@
 }
 
 // 确保在所有主题模式下IAGrid选中行都能正确应用主题色
-.ag-theme-balham .ag-row-selected {
-  background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important;
-  color: var(--ant-aggrid-row-selected-color, #ffffff) !important;
-}
+// .ag-theme-balham .ag-row-selected {
+//   background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important;
+//   color: var(--ant-aggrid-row-selected-color, #ffffff) !important;
+// }
 
 
  // 为暗色主题添加选中行样式

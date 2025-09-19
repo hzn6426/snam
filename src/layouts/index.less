@@ -1,27 +1,4 @@
-.springTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/spring.jpg');
-    }
-}
-.summerTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/summer.jpg');
-    }
-}
-.autumnTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/autumn.jpg');
-    }
-}
-.winterTheme {
-    .ant-pro-layout-bg-list {
-        background: transparent;
-        background: url('../assets/images/winter.jpg');
-    }
-}
+
 
 .tabPage {
     .ant-page-header {
@@ -87,6 +64,127 @@ html.glass-theme, body.glass-theme {
   z-index: -1;
   position: relative;
 }
+
+// 白昼模式下左侧菜单样式
+[data-theme="light"] {
+  // .ant-pro-sider {
+  //   // 菜单项目字体颜色
+  //   .ant-menu-item {
+  //     color: var(--ant-menu-item-color, rgba(0, 0, 0, 0.85)) !important;
+      
+  //     // 选中菜单项字体颜色
+  //    .ant-menu-item-selected {
+  //       color: var(--ant-menu-item-selected-color, white) !important;
+  //       background-color: var(--ant-menu-item-selected-bg, var(--ant-primary-color)) !important;
+  //       // 防止闪烁，确保过渡效果平滑
+  //       // transition: background-color 0.3s, color 0.3s;
+  //     }
+      
+  //     // 激活菜单项字体颜色
+  //     .ant-menu-item-active {
+  //       color: var(--ant-menu-item-selected-color, white) !important;
+  //       background-color: var(--ant-menu-item-active-bg, var(--ant-primary-color)) !important;
+  //       // 防止闪烁，确保过渡效果平滑
+  //       // transition: background-color 0.3s, color 0.3s;
+  //     }
+      
+  //     // 悬停菜单项字体颜色
+  //     // &:hover {
+  //     //   color: var(--ant-menu-item-selected-color, white) !important;
+  //     //   background-color: var(--ant-menu-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  //     //   // 防止闪烁，确保过渡效果平滑
+  //     //   transition: background-color 0.3s, color 0.3s;
+  //     // }
+      
+  //     // 确保菜单项中的图标也正确显示
+  //     // .anticon {
+  //     //   color: inherit !important;
+  //     // }
+  //   }
+    
+  //   // 子菜单字体颜色
+  //   .ant-menu-submenu-title {
+  //     color: var(--ant-menu-item-color, rgba(0, 0, 0, 0.85)) !important;
+      
+  //     // 确保子菜单中的图标也正确显示
+  //     .anticon {
+  //       color: inherit !important;
+  //     }
+  //   }
+    
+  //   // 菜单组标题字体颜色
+    
+  // }
+  
+  // 应用主题颜色到左侧菜单
+  .ant-menu {
+    .ant-menu-item-selected {
+      background-color: var(--ant-menu-item-selected-bg, var(--ant-primary-color)) !important;
+      color: var(--ant-menu-item-selected-color, white) !important;
+      // 防止闪烁，确保过渡效果平滑
+      // transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .ant-menu-item-active {
+      background-color: var(--ant-menu-item-active-bg, var(--ant-primary-color)) !important;
+      // color: var(--ant-menu-item-selected-color, white) !important;
+      // 防止闪烁，确保过渡效果平滑
+      // transition: background-color 0.3s, color 0.3s;
+    }
+    
+    // .ant-menu-item:hover {
+    //   background-color: var(--ant-menu-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+    //   // color: var(--ant-menu-item-selected-color, white) !important;
+    //   // 防止闪烁，确保过渡效果平滑
+    //   // transition: background-color 0.3s, color 0.3s;
+    // }
+    .ant-menu-item-group-title {
+      color: rgba(0, 0, 0, 0.65) !important;
+    }
+  }
+
+  .ant-tree {
+    // background-color: var(--ant-menu-item-active-bg, var(--ant-primary-color)) !important;
+    // background: rgba(255, 255, 255, 0.3) !important;
+    // background: transparent !important;
+    // backdrop-filter: blur(0.5px);
+    // -webkit-backdrop-filter: blur(0.5px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important; // 与IAGrid边框颜色一致
+    color: white !important; // 设置字体颜色为白色
+  }
+
+  .ant-tree-treenode {
+    background: transparent !important;
+    color: rgba(0, 0, 0, 0.65) !important;
+  }
+
+  .ant-tree-node-content-wrapper {
+    background: transparent !important;
+    border-radius: 2px;
+    color: rgba(0, 0, 0, 0.65) !important;
+    // 添加毛玻璃效果
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+  }
+
+  .ant-tree-node-content-wrapper:hover {
+    background: rgba(24, 144, 255, 0.1) !important;
+    color: white !important; // 设置字体颜色为白色
+    // 添加毛玻璃效果
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+  }
+
+  .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    background: var(--ant-tree-node-selected-bg, rgba(24, 144, 255, 0.2)) !important;
+    color: var(--ant-tree-node-selected-color, white) !important; // 使用主题色
+    // 添加毛玻璃效果
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+  }
+}
+
+
 
 // 毛玻璃效果样式
 .glass-theme {

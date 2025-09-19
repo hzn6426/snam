@@ -27,29 +27,120 @@
     color: #ffffff !important;
   }
   
-  // 确保在玻璃模式下也能正确显示
+  // 确保在玻璃模式下也能正确显示 - 参考IAGrid分页组件样式
   .glass-theme & {
-    .ant-input,
-    .ant-select
-    .ant-select-selector,
-    .ant-picker {
-      background: var(--glass-surface-bg) !important;
-      backdrop-filter: var(--glass-backdrop-filter);
-      -webkit-backdrop-filter: var(--glass-backdrop-filter);
-      border: 1px solid var(--glass-surface-border) !important;
-      color: var(--text-color) !important;
+    .ant-input {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.65) !important;
+      }
+      
+      &:hover {
+        border-color: var(--ant-primary-color) !important;
+      }
+      
+      &:focus {
+        border-color: var(--ant-primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+      }
     }
     
-    .ant-input::placeholder {
-      color: rgba(255, 255, 255, 0.65) !important;
+    .ant-input-affix-wrapper {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      
+      &:hover {
+        border-color: var(--ant-primary-color) !important;
+      }
+      
+      &:focus {
+        border-color: var(--ant-primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+      }
+      
+      .ant-input {
+        background: transparent !important;
+        color: white !important;
+        
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.65) !important;
+        }
+      }
+    }
+    
+    .ant-select {
+      .ant-select-selector {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        
+        .ant-select-selection-item {
+          color: white !important;
+        }
+        
+        .ant-select-selection-placeholder {
+          color: rgba(255, 255, 255, 0.65) !important;
+        }
+      }
+      
+      &:hover .ant-select-selector {
+        border-color: var(--ant-primary-color) !important;
+      }
+      
+      &.ant-select-focused .ant-select-selector {
+        border-color: var(--ant-primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+      }
+    }
+    
+    .ant-picker {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      
+      .ant-picker-input {
+        input {
+          background: transparent !important;
+          color: white !important;
+          
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.65) !important;
+          }
+        }
+      }
+      
+      &:hover {
+        border-color: var(--ant-primary-color) !important;
+      }
+      
+      &:focus {
+        border-color: var(--ant-primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+      }
     }
     
     .ant-btn {
-      background: var(--glass-surface-bg) !important;
-      backdrop-filter: var(--glass-backdrop-filter);
-      -webkit-backdrop-filter: var(--glass-backdrop-filter);
-      border: 1px solid var(--glass-surface-border) !important;
-      color: var(--text-color) !important;
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+      
+      &:hover {
+        border-color: var(--ant-primary-color) !important;
+      }
       
       &[type="primary"] {
         background: var(--ant-primary-color) !important;

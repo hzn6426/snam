@@ -1,3 +1,81 @@
+// // 通用主题样式 - 确保主题变量在所有主题下都生效
+// [data-theme="light"],
+// [data-theme="dark"],
+// [data-theme="glass"] {
+//   // 确保主题变量能够正确传递到所有组件
+//   --ant-primary-color: var(--ant-primary-color, #1677ff);
+//   --ant-menu-item-selected-bg: var(--ant-menu-item-selected-bg, var(--ant-primary-color));
+//   --ant-menu-item-selected-color: var(--ant-menu-item-selected-color, #ffffff);
+//   --ant-menu-item-hover-bg: var(--ant-menu-item-hover-bg, color-mix(in srgb, var(--ant-primary-color) 6%, transparent));
+//   --ant-menu-item-color: var(--ant-menu-item-color, rgba(0, 0, 0, 0.85));
+//   --ant-menu-highlight-color: var(--ant-menu-highlight-color, var(--ant-primary-color));
+  
+  // 菜单样式优化 - 防止闪烁
+  .ant-menu {
+    .ant-menu-item {
+      transition: background-color 0.1s ease, color 0.1s ease !important;
+      
+      &:hover {
+        background-color: var(--ant-menu-item-hover-bg) !important;
+        color: var(--ant-menu-item-color) !important;
+      }
+      
+      &.ant-menu-item-selected {
+        background-color: var(--ant-menu-item-selected-bg) !important;
+        color: var(--ant-menu-item-selected-color) !important;
+      }
+    }
+    
+    .ant-menu-submenu {
+      .ant-menu-submenu-title {
+        transition: background-color 0.1s ease, color 0.1s ease !important;
+        
+        &:hover {
+          background-color: var(--ant-menu-item-hover-bg) !important;
+          color: var(--ant-menu-item-color) !important;
+        }
+      }
+    }
+  // }
+  
+  // 白昼模式下的Tree组件样式
+  [data-theme="light"] {
+    .ant-tree {
+      .ant-tree-node-content-wrapper {
+        &:hover {
+          background: var(--ant-tree-node-hover-bg, color-mix(in srgb, var(--ant-primary-color) 6%, transparent)) !important;
+          color: var(--ant-tree-node-selected-color, white) !important;
+          transition: background-color 0.1s ease, color 0.1s ease;
+        }
+        
+        &.ant-tree-node-selected {
+          background: var(--ant-tree-node-selected-bg, var(--ant-primary-color)) !important;
+          color: var(--ant-tree-node-selected-color, white) !important;
+        }
+      }
+    }
+  }
+  
+  // ProLayout 菜单样式
+  .ant-pro-sider {
+    .ant-menu {
+      .ant-menu-item {
+        transition: background-color 0.1s ease, color 0.1s ease !important;
+        
+        &:hover {
+          background-color: var(--ant-menu-item-hover-bg) !important;
+          color: var(--ant-menu-item-color) !important;
+        }
+        
+        &.ant-menu-item-selected {
+          background-color: var(--ant-menu-item-selected-bg) !important;
+          color: var(--ant-menu-item-selected-color) !important;
+        }
+      }
+    }
+  }
+}
+
 // WindowLayout的玻璃效果样式
 .glass-theme {
   // 设置背景图片 - 在根元素上设置
@@ -143,6 +221,9 @@
   .ant-input-affix-wrapper,
   .ant-select-selector,
   .ant-picker,
+  .ant-radio,
+  .ant-checkbox,
+  .ant-input-textarea,
   .ant-cascader-picker {
     background: rgba(255, 255, 255, 0.3) !important;
     backdrop-filter: blur(3px);
@@ -158,6 +239,15 @@
     // 占位符文字颜色
     &::placeholder {
       color: rgba(255, 255, 255, 0.65) !important;
+    }
+
+    &:hover {
+      border-color: var(--ant-primary-color, #40a9ff) !important;
+    }
+    
+    &:focus {
+      border-color: var(--ant-primary-color, #40a9ff) !important;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
     }
   }
   
@@ -265,17 +355,17 @@
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     // 防止闪烁，确保过渡效果平滑
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.1s ease, color 0.1s ease;
   }
   
   .ant-tree-node-content-wrapper:hover {
-    background: var(--ant-tree-node-hover-bg, rgba(24, 144, 255, 0.8)) !important; // 稍微淡一点的主题色
+    background: var(--ant-tree-node-hover-bg, color-mix(in srgb, var(--ant-primary-color) 6%, transparent)) !important; // 使用主题变量
     color: white !important; // 设置字体颜色为白色
     // 添加毛玻璃效果
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     // 防止闪烁，确保过渡效果平滑
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.1s ease, color 0.1s ease;
   }
   
   .ant-tree-node-content-wrapper.ant-tree-node-selected {
@@ -285,7 +375,7 @@
     backdrop-filter: blur(0.5px);
     -webkit-backdrop-filter: blur(0.5px);
     // 防止闪烁，确保过渡效果平滑
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.1s ease, color 0.1s ease;
   }
   
   // 确保内容区域也有毛玻璃效果
@@ -316,9 +406,7 @@
   }
   
   // 修复ProLayout背景
-  .ant-pro-layout-bg-list {
-    // 背景图由body提供，这里不需要重复设置
-  }
+  // 背景图由body提供，这里不需要重复设置
   
   // IFooterToolBar的毛玻璃效果
   // .ant-pro-footer-bar {
@@ -409,7 +497,7 @@
     }
     
     .ag-row-hover {
-      background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.8)) !important; // 稍微淡一点的主题色
+      background: var(--ant-aggrid-row-hover-bg, color-mix(in srgb, var(--ant-primary-color) 12.5%, transparent)) !important; // 使用主题变量
       color: var(--ant-aggrid-row-selected-color, white) !important;
       // 防止闪烁，确保过渡效果平滑
       transition: background-color 0.3s, color 0.3s;
@@ -488,22 +576,265 @@
   }
   
   // Input组件样式
-  .ant-input {
-    &:hover {
-      border-color: var(--ant-input-hover-border-color, #40a9ff) !important;
-    }
+  // .ant-input {
+  //   &:hover {
+  //     border-color: var(--ant-input-hover-border-color, #40a9ff) !important;
+  //   }
     
-    &:focus {
-      border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //   &:focus {
+  //     border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
+  //     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //   }
+  // }
+  
+  // // Button组件样式
+  // .ant-btn {
+  //   &.ant-btn-default:hover {
+  //     background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  //     border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
+  //   }
+  // }
+  
+  // IWindow Card组件样式 - 确保无圆角
+  .iwindow-card {
+    border-radius: 0 !important;
+    
+    .ant-card-body {
+      border-radius: 0 !important;
     }
   }
   
-  // Button组件样式
-  .ant-btn {
-    &.ant-btn-default:hover {
-      background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
-      border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
+  // 玻璃模式下IWindow中的Form组件样式
+  .iwindow-card {
+    background: var(--glass-surface-bg) !important;
+    backdrop-filter: var(--glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--glass-backdrop-filter);
+    border: 1px solid var(--glass-surface-border) !important;
+    color: var(--text-color) !important;
+    
+    .ant-card-body {
+      background: transparent !important;
+      color: var(--text-color) !important;
+    }
+    
+    // Form组件样式
+    .snam-form {
+      .ant-form-item-label > label {
+        color: var(--text-color) !important;
+      }
+      
+      // Input组件 - 参考IAGrid分页组件样式
+      .ant-input {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.65) !important;
+        }
+        
+        &:focus {
+          border-color: var(--ant-primary-color) !important;
+          box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+        }
+        
+        &:hover {
+          border-color: var(--ant-primary-color) !important;
+        }
+      }
+      
+      .ant-input-affix-wrapper {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        
+        &:focus {
+          border-color: var(--ant-primary-color) !important;
+          box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+        }
+        
+        &:hover {
+          border-color: var(--ant-primary-color) !important;
+        }
+        
+        .ant-input {
+          background: transparent !important;
+          color: white !important;
+          
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.65) !important;
+          }
+        }
+      }
+      
+      // Select组件 - 参考IAGrid分页组件样式
+      .ant-select {
+        .ant-select-selector {
+          background: rgba(255, 255, 255, 0.3) !important;
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+          border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          color: white !important;
+          
+          .ant-select-selection-item {
+            color: white !important;
+          }
+          
+          .ant-select-selection-placeholder {
+            color: rgba(255, 255, 255, 0.65) !important;
+          }
+        }
+        
+        &.ant-select-focused .ant-select-selector {
+          border-color: var(--ant-primary-color) !important;
+          box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+        }
+        
+        &:hover .ant-select-selector {
+          border-color: var(--ant-primary-color) !important;
+        }
+      }
+      
+      // DatePicker组件 - 参考IAGrid分页组件样式
+      .ant-picker {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        
+        .ant-picker-input {
+          input {
+            background: transparent !important;
+            color: white !important;
+            
+            &::placeholder {
+              color: rgba(255, 255, 255, 0.65) !important;
+            }
+          }
+        }
+        
+        &:focus {
+          border-color: var(--ant-primary-color) !important;
+          box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+        }
+        
+        &:hover {
+          border-color: var(--ant-primary-color) !important;
+        }
+      }
+      
+      // Radio组件 - 参考IAGrid分页组件样式
+      .ant-radio-wrapper {
+        color: white !important;
+        
+        .ant-radio {
+          .ant-radio-inner {
+            background: rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          }
+          
+          &.ant-radio-checked .ant-radio-inner {
+            background: var(--ant-primary-color) !important;
+            border-color: var(--ant-primary-color) !important;
+            
+            &::after {
+              background-color: var(--ant-primary-color) !important;
+            }
+          }
+          
+          &:hover .ant-radio-inner {
+            border-color: var(--ant-primary-color) !important;
+          }
+        }
+      }
+      
+      // Checkbox组件 - 参考IAGrid分页组件样式
+      .ant-checkbox-wrapper {
+        color: white !important;
+        
+        .ant-checkbox {
+          .ant-checkbox-inner {
+            background: rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          }
+          
+          &.ant-checkbox-checked .ant-checkbox-inner {
+            background: var(--ant-primary-color) !important;
+            border-color: var(--ant-primary-color) !important;
+          }
+          
+          &:hover .ant-checkbox-inner {
+            border-color: var(--ant-primary-color) !important;
+          }
+        }
+      }
+      
+      // Button组件 - 参考IAGrid分页组件样式
+      .ant-btn {
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        
+        &.ant-btn-primary {
+          background: var(--ant-primary-color) !important;
+          border-color: var(--ant-primary-color) !important;
+          color: #ffffff !important;
+        }
+        
+        &:hover {
+          border-color: var(--ant-primary-color) !important;
+        }
+      }
+      
+      // Tree组件 - 参考IAGrid分页组件样式
+      .ant-tree {
+        background: transparent !important;
+        color: white !important;
+        
+        .ant-tree-node-content-wrapper {
+          color: white !important;
+          background: transparent !important;
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: var(--ant-primary-color) !important;
+          }
+        }
+        
+        .ant-tree-node-selected {
+          .ant-tree-node-content-wrapper {
+            background: var(--ant-primary-color) !important;
+            color: white !important;
+          }
+        }
+        
+        .ant-tree-switcher {
+          color: white !important;
+          
+          &:hover {
+            color: var(--ant-primary-color) !important;
+          }
+        }
+        
+        .ant-tree-title {
+          color: inherit !important;
+        }
+        
+        .ant-tree-iconEle {
+          color: inherit !important;
+        }
+      }
     }
   }
 }
