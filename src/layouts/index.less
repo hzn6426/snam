@@ -93,8 +93,8 @@ html.glass-theme, body.glass-theme {
   // 设置背景图片 - 只在body上设置，不在每个组件上重复设置
   // 组件通过backdrop-filter实现毛玻璃效果，背景图由body提供
   
-  // 设置默认字体颜色为白色
-  color: white !important;
+  // 设置默认字体颜色
+  color: var(--text-color) !important;
   
   // 玻璃模式下的左侧菜单样式
   .ant-pro-sider {
@@ -351,9 +351,10 @@ html.glass-theme, body.glass-theme {
   
   // 表格容器的毛玻璃效果（同IAGrid边框样式）
   .ant-table-container {
-    background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background: transparent !important;
+    // background: rgba(255, 255, 255, 0.3) !important;
+    // backdrop-filter: blur(3px);
+    // -webkit-backdrop-filter: blur(3px);
     border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
     color: white !important; // 设置字体颜色为白色
   }
@@ -417,8 +418,8 @@ html.glass-theme, body.glass-theme {
   // Tab组件的毛玻璃效果（同IAGrid边框样式）
   .ant-tabs {
     // background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    // backdrop-filter: blur(0.5px);
+    // -webkit-backdrop-filter: blur(0.5px);
     color: white !important; // 设置字体颜色为白色
     
     .ant-tabs-nav {
@@ -435,7 +436,8 @@ html.glass-theme, body.glass-theme {
     }
     
     .ant-tabs-content-holder {
-      background: rgba(255, 255, 255, 0.3) !important;
+      background: transparent !important;
+      // background: rgba(255, 255, 255, 0.3) !important;
       color: white !important; // 设置字体颜色为白色
       border-top: none; // Tab内容区域顶部不需要边框
     }

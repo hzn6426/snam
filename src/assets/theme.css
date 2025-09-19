@@ -1,11 +1,198 @@
 [data-theme="light"] {
+    /* base */
     --scrollbar-bg: #faf5f3;
-    --grid-bd:#f0f0f0;
-    --split-bg:#fff;
+    --grid-bd: #f0f0f0;
+    --split-bg: #ffffff;
+    --text-color: rgba(0, 0, 0, 0.85);
+
+    /* primary (can be overridden dynamically by JS) */
+    --ant-primary-color: #1677ff;
+
+    /* menu */
+    --ant-menu-item-selected-bg: var(--ant-primary-color);
+    --ant-menu-item-selected-color: #ffffff;
+    --ant-menu-item-active-bg: var(--ant-primary-color);
+    --ant-menu-item-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-menu-item-color: rgba(0, 0, 0, 0.85);
+    --ant-menu-highlight-color: var(--ant-primary-color);
+    --ant-menu-dark-item-selected-bg: var(--ant-primary-color);
+    --ant-menu-dark-item-active-bg: var(--ant-primary-color);
+
+    /* pagination */
+    --ant-pagination-item-active-bg: var(--ant-primary-color);
+    --ant-pagination-item-active-border: var(--ant-primary-color);
+    --ant-pagination-item-active-color: #ffffff;
+
+    /* buttons */
+    --ant-btn-primary-bg: var(--ant-primary-color);
+    --ant-btn-primary-border: var(--ant-primary-color);
+    --ant-btn-primary-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-primary-hover-border: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-primary-active-bg: color-mix(in srgb, var(--ant-primary-color) 60%, transparent);
+    --ant-btn-primary-active-border: color-mix(in srgb, var(--ant-primary-color) 60%, transparent);
+    --ant-btn-default-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-default-hover-border: var(--ant-primary-color);
+
+    /* layout */
+    --ant-pro-layout-sider-background: var(--ant-primary-color);
+    --header-bg: rgba(250, 250, 250, 0.6);
+    --sider-bg: rgba(255, 255, 255, 0.8);
+    --page-container-bg: rgba(255, 255, 255, 0.8);
+
+    /* tree */
+    --ant-tree-node-selected-bg: var(--ant-primary-color);
+    --ant-tree-node-selected-color: #ffffff;
+    --ant-tree-node-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* select */
+    --ant-select-item-selected-bg: var(--ant-primary-color);
+    --ant-select-item-selected-color: #ffffff;
+    --ant-select-item-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* form */
+    --ant-form-item-label-color: rgba(0, 0, 0, 0.85);
+
+    /* ag-grid */
+    --ant-aggrid-row-selected-bg: var(--ant-primary-color);
+    --ant-aggrid-row-selected-color: #ffffff;
+    --ant-aggrid-row-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* input */
+    --ant-input-hover-border-color: #40a9ff;
+    --ant-input-focus-border-color: #40a9ff;
 }
 
 [data-theme="dark"] {
+    /* base */
     --scrollbar-bg: #353535;
-    --grid-bd:#303030;
-    --split-bg:#000;
+    --grid-bd: #303030;
+    --split-bg: #000000;
+    --text-color: rgba(255, 255, 255, 0.85);
+
+    /* primary (can be overridden dynamically by JS) */
+    --ant-primary-color: #1677ff;
+
+    /* menu */
+    --ant-menu-item-selected-bg: var(--ant-primary-color);
+    --ant-menu-item-selected-color: #ffffff;
+    --ant-menu-item-active-bg: var(--ant-primary-color);
+    --ant-menu-item-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-menu-item-color: rgba(255, 255, 255, 0.85);
+    --ant-menu-highlight-color: var(--ant-primary-color);
+    --ant-menu-dark-item-selected-bg: var(--ant-primary-color);
+    --ant-menu-dark-item-active-bg: var(--ant-primary-color);
+
+    /* pagination */
+    --ant-pagination-item-active-bg: var(--ant-primary-color);
+    --ant-pagination-item-active-border: var(--ant-primary-color);
+    --ant-pagination-item-active-color: #ffffff;
+
+    /* buttons */
+    --ant-btn-primary-bg: var(--ant-primary-color);
+    --ant-btn-primary-border: var(--ant-primary-color);
+    --ant-btn-primary-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-primary-hover-border: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-primary-active-bg: color-mix(in srgb, var(--ant-primary-color) 60%, transparent);
+    --ant-btn-primary-active-border: color-mix(in srgb, var(--ant-primary-color) 60%, transparent);
+    --ant-btn-default-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-default-hover-border: var(--ant-primary-color);
+
+    /* layout */
+    --ant-pro-layout-sider-background: var(--ant-primary-color);
+    --header-bg: rgba(0, 0, 0, 0.6);
+    --sider-bg: rgba(0, 0, 0, 0.8);
+    --page-container-bg: rgba(0, 0, 0, 0.8);
+
+    /* tree */
+    --ant-tree-node-selected-bg: var(--ant-primary-color);
+    --ant-tree-node-selected-color: #ffffff;
+    --ant-tree-node-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* select */
+    --ant-select-item-selected-bg: var(--ant-primary-color);
+    --ant-select-item-selected-color: #ffffff;
+    --ant-select-item-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* form */
+    --ant-form-item-label-color: rgba(255, 255, 255, 0.85);
+
+    /* ag-grid */
+    --ant-aggrid-row-selected-bg: var(--ant-primary-color);
+    --ant-aggrid-row-selected-color: #ffffff;
+    --ant-aggrid-row-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* input */
+    --ant-input-hover-border-color: #177ddc;
+    --ant-input-focus-border-color: #177ddc;
+}
+
+/* glass theme variables */
+[data-theme="glass"] {
+    /* base */
+    --scrollbar-bg: rgba(255, 255, 255, 0.4);
+    --grid-bd: rgba(255, 255, 255, 0.3);
+    --split-bg: rgba(255, 255, 255, 0.3);
+    --text-color: rgba(255, 255, 255, 0.95);
+
+    /* primary */
+    --ant-primary-color: #1677ff;
+
+    /* backdrop and translucent surfaces */
+    --glass-surface-bg: rgba(255, 255, 255, 0.3);
+    --glass-surface-border: rgba(255, 255, 255, 0.3);
+    --glass-surface-border-strong: rgba(255, 255, 255, 0.5);
+    --glass-backdrop-filter: blur(3px);
+
+    /* menu */
+    --ant-menu-item-selected-bg: var(--ant-primary-color);
+    --ant-menu-item-selected-color: #ffffff;
+    --ant-menu-item-active-bg: var(--ant-primary-color);
+    --ant-menu-item-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-menu-item-color: rgba(255, 255, 255, 0.85);
+    --ant-menu-highlight-color: var(--ant-primary-color);
+    --ant-menu-dark-item-selected-bg: var(--ant-primary-color);
+    --ant-menu-dark-item-active-bg: var(--ant-primary-color);
+
+    /* pagination */
+    --ant-pagination-item-active-bg: var(--ant-primary-color);
+    --ant-pagination-item-active-border: var(--ant-primary-color);
+    --ant-pagination-item-active-color: #ffffff;
+
+    /* buttons */
+    --ant-btn-primary-bg: var(--ant-primary-color);
+    --ant-btn-primary-border: var(--ant-primary-color);
+    --ant-btn-primary-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-primary-hover-border: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-primary-active-bg: color-mix(in srgb, var(--ant-primary-color) 60%, transparent);
+    --ant-btn-primary-active-border: color-mix(in srgb, var(--ant-primary-color) 60%, transparent);
+    --ant-btn-default-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+    --ant-btn-default-hover-border: var(--ant-primary-color);
+
+    /* layout */
+    --ant-pro-layout-sider-background: var(--glass-surface-bg);
+    --header-bg: var(--glass-surface-bg);
+    --sider-bg: var(--glass-surface-bg);
+    --page-container-bg: var(--glass-surface-bg);
+
+    /* tree */
+    --ant-tree-node-selected-bg: var(--ant-primary-color);
+    --ant-tree-node-selected-color: #ffffff;
+    --ant-tree-node-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* select */
+    --ant-select-item-selected-bg: var(--ant-primary-color);
+    --ant-select-item-selected-color: #ffffff;
+    --ant-select-item-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* form */
+    --ant-form-item-label-color: rgba(255, 255, 255, 0.85);
+
+    /* ag-grid */
+    --ant-aggrid-row-selected-bg: var(--ant-primary-color);
+    --ant-aggrid-row-selected-color: #ffffff;
+    --ant-aggrid-row-hover-bg: color-mix(in srgb, var(--ant-primary-color) 80%, transparent);
+
+    /* input */
+    --ant-input-hover-border-color: #40a9ff;
+    --ant-input-focus-border-color: #40a9ff;
 }
