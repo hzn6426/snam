@@ -255,7 +255,7 @@ const addon = [
             <Button
               key="add"
               size='small'
-              htmlType="button"
+              type="primary"
               onClick={() => {
                 const rows = produce(ui, (draft) => {
                   draft.push( { component: <Input /> });
@@ -270,6 +270,7 @@ const addon = [
             <Button
               key="submit"
               danger
+              type="primary"
               size='small'
               onClick={() => {
                 const rows = produce(ui, (draft) => {

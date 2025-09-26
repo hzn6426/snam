@@ -136,14 +136,14 @@
            border-color: var(--ant-primary-color) !important;
 
            a {
-             color: var(--ant-pagination-item-active-color, #ffffff) !important;
+             color: var(--text-color, #ffffff) !important;
            }
          }
 
          // 确保所有页码的字体颜色适配主题设置
          .ant-pagination-item {
            a {
-             color: var(--ant-primary-color); // 页码字体颜色适配主题色
+             color: var(--text-color); // 页码字体颜色适配主题色
            }
          }
 
@@ -172,18 +172,18 @@
    }
 
    // 确保在所有主题模式下分页组件都能正确应用主题色（只设置字体颜色，不设置背景色）
-   .ag-pagination .ant-pagination .ant-pagination-item-active {
-     // 不设置背景色
-     border-color: var(--ant-primary-color) !important;
+  //  .ag-pagination .ant-pagination .ant-pagination-item-active {
+  //    // 不设置背景色
+  //    border-color: var(--ant-primary-color) ;
+  //    background-color: var(--ant-primary-color);
+  //    a {
+  //      color: var(--text-color) !important; // 使用主题色作为字体颜色
+  //    }
+  //  }
 
-     a {
-       color: var(--ant-primary-color) !important; // 使用主题色作为字体颜色
-     }
-   }
-
-   .ag-pagination .ant-pagination .ant-pagination-item a {
-     color: var(--ant-primary-color) !important;
-   }
+  //  .ag-pagination .ant-pagination .ant-pagination-item a {
+  //    color: var(--text-color) ;
+  //  }
  }
 
  .ag-theme-balham {
@@ -330,7 +330,8 @@
  }
 
  .glass-theme .ag-header-container {
-  background: rgba(255, 255, 255, 0.3) !important;
+  // background: rgba(255, 255, 255, 0.3) !important;
+  background:transparent !important;
   //  backdrop-filter: blur(3px);
   //  -webkit-backdrop-filter: blur(3px);
   // border-bottom: 1px solid #f0f0f0 !important;
@@ -343,8 +344,9 @@
 
  .glass-theme .ag-header {
    background: rgba(255, 255, 255, 0.3) !important;
-   backdrop-filter: blur(3px);
-   -webkit-backdrop-filter: blur(3px);
+  //  backdrop-filter: blur(3px);
+  //  -webkit-backdrop-filter: blur(3px);
+  border-bottom-color: transparent !important;
    color: white !important;
  }
 
@@ -447,6 +449,7 @@
          }
        }
 
+
        .ant-pagination-item-active {
          background-color: var(--ant-primary-color) !important; // 使用主题色
          border-color: var(--ant-primary-color) !important;
@@ -520,6 +523,7 @@
      .ag-header {
        .ag-header-cell {
          color: white !important;
+        //  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
 
          .ag-header-cell-label {
            color: white !important;

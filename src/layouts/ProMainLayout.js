@@ -166,7 +166,7 @@ export default (props) => {
             if (viewSetting.navTheme === 'glass') {
                 document.body.classList.add('glass-theme');
                 // 确保背景图显示
-                document.body.style.backgroundImage = "url('../assets/back/bg-7.jpg')";
+                document.body.style.backgroundImage = "url('../assets/back/bg-6.jpg')";
                 document.body.style.backgroundSize = "cover";
                 document.body.style.backgroundPosition = "center";
                 document.body.style.backgroundAttachment = "fixed";

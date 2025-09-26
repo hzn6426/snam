@@ -41,7 +41,7 @@ export default (props) => {
         // 处理玻璃主题
         if (value === 'glass') {
           document.body.classList.add('glass-theme');
-          document.body.style.backgroundImage = "url('../assets/back/bg-7.jpg')";
+          document.body.style.backgroundImage = "url('../assets/back/bg-6.jpg')";
           document.body.style.backgroundSize = "cover";
           document.body.style.backgroundPosition = "center";
           document.body.style.backgroundAttachment = "fixed";

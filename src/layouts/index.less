@@ -55,7 +55,7 @@
 
 // 添加全局玻璃主题样式
 html.glass-theme, body.glass-theme {
-  background-image: url('../assets/back/bg-7.jpg') !important;
+  background-image: url('../assets/back/bg-6.jpg') !important;
   background-size: cover !important;
   background-position: center !important;
   background-attachment: fixed !important;
@@ -194,6 +194,16 @@ html.glass-theme, body.glass-theme {
   // 设置默认字体颜色
   color: var(--text-color) !important;
   
+  .feildset {
+    color: var(--text-color) !important;
+  }
+  .ant-alert {
+    color: var(--text-color) !important;
+    background-color:  rgba(255, 255, 255, 0.3) !important;
+     backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    font-weight: bold;
+  }
   // 玻璃模式下的左侧菜单样式
   .ant-pro-sider {
     color: white !important;
@@ -309,12 +319,16 @@ html.glass-theme, body.glass-theme {
       }
       
       .ant-pagination-item-active {
-        background-color: rgba(255, 255, 255, 0.3) !important;
-        border-color: rgba(255, 255, 255, 0.3) !important;
+        background-color: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
         
         a {
           color: white !important;
         }
+      }
+
+      .ant-pagination-options-quick-jumper {
+        background-color: transparent !important;
       }
       
       .ant-pagination-prev,
@@ -347,12 +361,12 @@ html.glass-theme, body.glass-theme {
     // 选中状态的Checkbox
     &.ant-checkbox-checked {
       .ant-checkbox-inner {
-        background: rgba(24, 144, 255, 0.6) !important;
-        border-color: rgba(24, 144, 255, 0.6) !important;
+        background: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
       }
       
       &::after {
-        border-color: rgba(24, 144, 255, 0.6) !important;
+        border-color: var(--ant-primary-color) !important;
       }
     }
   }
@@ -379,8 +393,8 @@ html.glass-theme, body.glass-theme {
     // 选中状态的Radio
     &.ant-radio-checked {
       .ant-radio-inner {
-        border-color: rgba(24, 144, 255, 0.6) !important;
-        background: rgba(24, 144, 255, 0.6) !important;
+        border-color: var(--ant-primary-color) !important;
+        background: var(--ant-primary-color) !important;
       }
     }
   }
@@ -446,15 +460,46 @@ html.glass-theme, body.glass-theme {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; // 与IAGrid边框颜色一致
     color: white !important; // 设置字体颜色为白色
   }
-  
+
+  .ant-transfer {
+    color: white !important;
+
+    .ant-transfer-list-content-item-checked {
+      background-color: var(--ant-primary-color) !important;
+
+    }
+
+    .ant-transfer-list-header {
+      color: white !important;
+      background-color: transparent !important;
+    }
+  }
+
+  // .ant-table-wrapper .ant-table {
+  //   border-radius: 8px !important;
+  // }
   // 表格容器的毛玻璃效果（同IAGrid边框样式）
   .ant-table-container {
     background: transparent !important;
     // background: rgba(255, 255, 255, 0.3) !important;
     // backdrop-filter: blur(3px);
     // -webkit-backdrop-filter: blur(3px);
-    border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+    border: 0px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
     color: white !important; // 设置字体颜色为白色
+  }
+
+  .ant-table-title {
+    color: white !important;
+  }
+
+  .ant-table-wrapper .ant-table-thead >tr>th {
+    // background: transparent !important;
+    color: white !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .ant-table-row.ant-table-row-selected >.ant-table-cell {
+    background-color: var(--ant-primary-color) !important;
   }
   
   // FooterToolBar的毛玻璃效果
@@ -549,6 +594,14 @@ html.glass-theme, body.glass-theme {
       color: white !important;
     }
   }
+
+  .ant-tabs .ant-card  {
+      backdrop-filter:none !important;
+    }
+  
+  .ant-tabs .ant-card * {
+      backdrop-filter:none !important;
+    }
   
   // 表单组件的毛玻璃效果
   .ant-input,
@@ -626,17 +679,17 @@ html.glass-theme, body.glass-theme {
   }
 
   // 分页组件样式
-  .ant-pagination {
-    // 分页当前页使用主题色
-    .ant-pagination-item-active {
-      background-color: var(--ant-pagination-item-active-bg, var(--ant-primary-color)) !important;
-      border-color: var(--ant-pagination-item-active-border, var(--ant-primary-color)) !important;
+  // .ant-pagination {
+  //   // 分页当前页使用主题色
+  //   .ant-pagination-item-active {
+  //     background-color: var( var(--ant-primary-color)) !important;
+  //     border-color: var(--ant-pagination-item-active-border, var(--ant-primary-color)) !important;
       
-      a {
-        color: var(--ant-pagination-item-active-color, #ffffff) !important;
-      }
-    }
-  }
+  //     a {
+  //       color: var(--ant-pagination-item-active-color, #ffffff) !important;
+  //     }
+  //   }
+  // }
 
   // Select组件样式
   .ant-select {
@@ -654,7 +707,7 @@ html.glass-theme, body.glass-theme {
 
   // 表单组件样式
   .ant-form-item-label > label {
-    color: var(--ant-form-item-label-color, rgba(0, 0, 0, 0.85)) !important;
+    color: var(--text-color) !important;
   }
 
   // Input组件样式
@@ -719,16 +772,16 @@ html.glass-theme, body.glass-theme {
   }
   
   // 分页组件在玻璃模式下的样式
-  .ant-pagination {
-    .ant-pagination-item-active {
-      background-color: var(--ant-pagination-item-active-bg, var(--ant-primary-color)) !important;
-      border-color: var(--ant-pagination-item-active-border, var(--ant-primary-color)) !important;
+  // .ant-pagination {
+  //   .ant-pagination-item-active {
+  //     background-color: var( --ant-primary-color) !important;
+  //     border-color: var(--ant-primary-color) !important;
       
-      a {
-        color: var(--ant-pagination-item-active-color, #ffffff) !important;
-      }
-    }
-  }
+  //     a {
+  //       color: var(--ant-pagination-item-active-color, #ffffff) !important;
+  //     }
+  //   }
+  // }
   
   // Select组件在玻璃模式下的样式
   .ant-select {
@@ -761,4 +814,224 @@ html.glass-theme, body.glass-theme {
       border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
     }
   }
+
+  // // Form组件样式
+  //   .snam-form {
+  //     .ant-form-item-label > label {
+  //       color: var(--text-color) !important;
+  //     }
+      
+  //     // Input组件 - 参考IAGrid分页组件样式
+  //     .ant-input {
+  //       background: rgba(255, 255, 255, 0.3) !important;
+  //       backdrop-filter: blur(3px);
+  //       -webkit-backdrop-filter: blur(3px);
+  //       border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //       color: white !important;
+        
+  //       &::placeholder {
+  //         color: rgba(255, 255, 255, 0.65) !important;
+  //       }
+        
+  //       &:focus {
+  //         border-color: var(--ant-primary-color) !important;
+  //         box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //       }
+        
+  //       &:hover {
+  //         border-color: var(--ant-primary-color) !important;
+  //       }
+  //     }
+      
+  //     .ant-input-affix-wrapper {
+  //       background: rgba(255, 255, 255, 0.3) !important;
+  //       backdrop-filter: blur(3px);
+  //       -webkit-backdrop-filter: blur(3px);
+  //       border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //       color: white !important;
+        
+  //       &:focus {
+  //         border-color: var(--ant-primary-color) !important;
+  //         box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //       }
+        
+  //       &:hover {
+  //         border-color: var(--ant-primary-color) !important;
+  //       }
+        
+  //       .ant-input {
+  //         background: transparent !important;
+  //         color: white !important;
+          
+  //         &::placeholder {
+  //           color: rgba(255, 255, 255, 0.65) !important;
+  //         }
+  //       }
+  //     }
+      
+  //     // Select组件 - 参考IAGrid分页组件样式
+  //     .ant-select {
+  //       .ant-select-selector {
+  //         background: rgba(255, 255, 255, 0.3) !important;
+  //         backdrop-filter: blur(3px);
+  //         -webkit-backdrop-filter: blur(3px);
+  //         border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //         color: white !important;
+          
+  //         .ant-select-selection-item {
+  //           color: white !important;
+  //         }
+          
+  //         .ant-select-selection-placeholder {
+  //           color: rgba(255, 255, 255, 0.65) !important;
+  //         }
+  //       }
+        
+  //       &.ant-select-focused .ant-select-selector {
+  //         border-color: var(--ant-primary-color) !important;
+  //         box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //       }
+        
+  //       &:hover .ant-select-selector {
+  //         border-color: var(--ant-primary-color) !important;
+  //       }
+  //     }
+      
+  //     // DatePicker组件 - 参考IAGrid分页组件样式
+  //     .ant-picker {
+  //       background: rgba(255, 255, 255, 0.3) !important;
+  //       backdrop-filter: blur(3px);
+  //       -webkit-backdrop-filter: blur(3px);
+  //       border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //       color: white !important;
+        
+  //       .ant-picker-input {
+  //         input {
+  //           background: transparent !important;
+  //           color: white !important;
+            
+  //           &::placeholder {
+  //             color: rgba(255, 255, 255, 0.65) !important;
+  //           }
+  //         }
+  //       }
+        
+  //       &:focus {
+  //         border-color: var(--ant-primary-color) !important;
+  //         box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //       }
+        
+  //       &:hover {
+  //         border-color: var(--ant-primary-color) !important;
+  //       }
+  //     }
+      
+  //     // Radio组件 - 参考IAGrid分页组件样式
+  //     .ant-radio-wrapper {
+  //       color: white !important;
+        
+  //       .ant-radio {
+  //         .ant-radio-inner {
+  //           background: rgba(255, 255, 255, 0.3) !important;
+  //           backdrop-filter: blur(3px);
+  //           -webkit-backdrop-filter: blur(3px);
+  //           border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //         }
+          
+  //         &.ant-radio-checked .ant-radio-inner {
+  //           background: var(--ant-primary-color) !important;
+  //           border-color: var(--ant-primary-color) !important;
+            
+  //           &::after {
+  //             background-color: var(--ant-primary-color) !important;
+  //           }
+  //         }
+          
+  //         &:hover .ant-radio-inner {
+  //           border-color: var(--ant-primary-color) !important;
+  //         }
+  //       }
+  //     }
+      
+  //     // Checkbox组件 - 参考IAGrid分页组件样式
+  //     .ant-checkbox-wrapper {
+  //       color: white !important;
+        
+  //       .ant-checkbox {
+  //         .ant-checkbox-inner {
+  //           background: rgba(255, 255, 255, 0.3) !important;
+  //           backdrop-filter: blur(3px);
+  //           -webkit-backdrop-filter: blur(3px);
+  //           border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //         }
+          
+  //         &.ant-checkbox-checked .ant-checkbox-inner {
+  //           background: var(--ant-primary-color) !important;
+  //           border-color: var(--ant-primary-color) !important;
+  //         }
+          
+  //         &:hover .ant-checkbox-inner {
+  //           border-color: var(--ant-primary-color) !important;
+  //         }
+  //       }
+  //     }
+      
+  //     // Button组件 - 参考IAGrid分页组件样式
+  //     .ant-btn {
+  //       background: rgba(255, 255, 255, 0.3) !important;
+  //       backdrop-filter: blur(3px);
+  //       -webkit-backdrop-filter: blur(3px);
+  //       border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  //       color: white !important;
+        
+  //       &.ant-btn-primary {
+  //         background: var(--ant-primary-color) !important;
+  //         border-color: var(--ant-primary-color) !important;
+  //         color: #ffffff !important;
+  //       }
+        
+  //       &:hover {
+  //         border-color: var(--ant-primary-color) !important;
+  //       }
+  //     }
+      
+  //     // Tree组件 - 参考IAGrid分页组件样式
+  //     .ant-tree {
+  //       background: transparent !important;
+  //       color: white !important;
+        
+  //       .ant-tree-node-content-wrapper {
+  //         color: white !important;
+  //         background: transparent !important;
+          
+  //         &:hover {
+  //           background: rgba(255, 255, 255, 0.1) !important;
+  //           color: var(--ant-primary-color) !important;
+  //         }
+  //       }
+        
+  //       .ant-tree-node-selected {
+  //         .ant-tree-node-content-wrapper {
+  //           background: var(--ant-primary-color) !important;
+  //           color: white !important;
+  //         }
+  //       }
+        
+  //       .ant-tree-switcher {
+  //         color: white !important;
+          
+  //         &:hover {
+  //           color: var(--ant-primary-color) !important;
+  //         }
+  //       }
+        
+  //       .ant-tree-title {
+  //         color: inherit !important;
+  //       }
+        
+  //       .ant-tree-iconEle {
+  //         color: inherit !important;
+  //       }
+  //     }
+  //   }
 }
