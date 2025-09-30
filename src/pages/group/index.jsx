@@ -550,7 +550,7 @@ export default (props) => {
             <Col span={18}>
                 {/* <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
                     <div> */}
-                <div style={{ marginBottom: '15px', border: 0 }}>
+                <div style={{ marginBottom: '15px', border: 0,zIndex:9999 }}>
                     <IAGrid
                         title="用户列表"
                         gridName="perm_group_list"

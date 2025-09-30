@@ -29,13 +29,14 @@
        .ant-btn {
          background: #ffffff;
          border: 1px solid #d9d9d9;
-         color: rgba(0, 0, 0, 0.85);
+         color: var(--ant-primary-color);
 
 
           // 悬停状态
           &:hover {
             background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color));
             border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color));
+            color:#ffffff;
           }
        }
 
@@ -59,10 +60,11 @@
            background: rgba(255, 255, 255, 0.3) !important;
            backdrop-filter: blur(3px);
            -webkit-backdrop-filter: blur(3px);
-           border: 1px solid rgba(255, 255, 255, 0.3) !important;
-           color: white !important;
+          //  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+           color: var(--ant-primary-color);
 
            &:hover {
+              color:#ffffff;
                  background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color)) !important;
                  border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color)) !important;
                }
@@ -117,7 +119,7 @@
      margin: 5px 0px 5px 5px;
 
      .pagination-tools {
-       width: 300px;
+       width: 800px;
        padding: 0 3px;
      }
 
@@ -127,48 +129,47 @@
        padding: 0px 3px;
        height: 30px;
        position: relative;
-       z-index: 9999; // 提高z-index确保分页组件在最前，不被其他组件遮挡
-
-       // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
-       .ant-pagination {
-         .ant-pagination-item-active {
-           background-color: var(--ant-primary-color) !important;
-           border-color: var(--ant-primary-color) !important;
-
-           a {
-             color: var(--text-color, #ffffff) !important;
-           }
-         }
-
-         // 确保所有页码的字体颜色适配主题设置
-         .ant-pagination-item {
-           a {
-             color: var(--text-color); // 页码字体颜色适配主题色
-           }
-         }
-
-         // 确保分页跳转输入框中的当前页数字也适配主题色
-         .ant-pagination-options {
-           .ant-pagination-options-quick-jumper {
-             input {
-               &:focus {
-                 border-color: var(--ant-primary-color) !important;
-                 box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
-               }
-             }
-           }
-
-           // 确保每页条数选择下拉框在最前
-           .ant-pagination-options-size-changer {
-             z-index: 10000 !important;
-
-             .ant-select-dropdown {
-               z-index: 10001 !important;
-             }
-           }
-         }
-       }
+       z-index: 1; // 提高z-index确保分页组件在最前，不被其他组件遮挡
      }
+
+     .ant-pagination-item-active {
+      background-color: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
+
+      a {
+        color: #ffffff !important;
+      }
+    }
+
+    // 确保所有页码的字体颜色适配主题设置
+    .ant-pagination-item {
+      background-color: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
+      a {
+        color: #ffffff; // 页码字体颜色适配主题色
+      }
+    }
+
+    // 确保分页跳转输入框中的当前页数字也适配主题色
+    .ant-pagination-options {
+      .ant-pagination-options-quick-jumper {
+        input {
+          &:focus {
+            border-color: var(--ant-primary-color) !important;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
+          }
+        }
+      }
+
+      // 确保每页条数选择下拉框在最前
+      .ant-pagination-options-size-changer {
+        z-index: 10000 !important;
+
+        .ant-select-dropdown {
+          z-index: 10001 !important;
+        }
+      }
+    }
    }
 
    // 确保在所有主题模式下分页组件都能正确应用主题色（只设置字体颜色，不设置背景色）
@@ -216,8 +217,10 @@
 
 .ag-theme-balham .ag-root-wrapper {
   border-radius: 0px 0px 0px 0px;
-  border-color: transparent !important;
-  border-width: 0px;
+  border:transparent;
+  // border-color: transparent !important;
+  // border-width: 0px;
+  border-bottom: 1px solid #f0f0f0;
   // border-width: 2px;
 }
 
@@ -274,6 +277,21 @@
        display: flex;
        justify-content: flex-end;
        padding-bottom: 0;
+
+       // 为工具栏按钮添加主题颜色支持
+       .ant-btn {
+         background: transparent;
+         border: 1px solid #303030;
+         color: var(--ant-primary-color);
+
+
+          // 悬停状态
+          &:hover {
+            background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color));
+            border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color));
+            color:#ffffff;
+          }
+       }
      }
    }
 
@@ -297,8 +315,6 @@
     border-radius: 0px 0px 0px 0px;
     border-color: transparent !important;
     border-width: 0px ;
-    // border-color: #f0f0f0;
-    // border-width: 2px;
   }
 
 
@@ -308,7 +324,7 @@
      margin: 5px 0px 5px 5px;
 
      .pagination-tools {
-       width: 400px;
+       width: 800px;
        padding: 0 20px;
      }
 
@@ -318,6 +334,46 @@
        padding: 0px 3px;
        height: 30px;
      }
+
+      // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
+    .ant-pagination-item-active {
+      background-color: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
+
+      a {
+        color: var(--text-color, #ffffff) !important;
+      }
+    }
+
+    // 确保所有页码的字体颜色适配主题设置
+    .ant-pagination-item {
+      background-color: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
+      a {
+        color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
+      }
+    }
+
+    // 确保分页跳转输入框中的当前页数字也适配主题色
+    .ant-pagination-options {
+      .ant-pagination-options-quick-jumper {
+        input {
+          &:focus {
+            border-color: var(--ant-primary-color) !important;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
+          }
+        }
+      }
+
+      // 确保每页条数选择下拉框在最前
+      .ant-pagination-options-size-changer {
+        z-index: 10000 !important;
+
+        .ant-select-dropdown {
+          z-index: 10001 !important;
+        }
+      }
+    }
    }
  }
 
@@ -435,29 +491,68 @@
 
    .pagination-content {
      color: white !important;
+   }
 
-     // 分页按钮颜色
-     .ant-pagination {
-       color: white !important;
+     // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
+    .ant-pagination-item-active {
+      background-color: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
 
-       .ant-pagination-item {
-         color: white !important;
-         background-color: rgba(255, 255, 255, 0.2) !important;
+      a {
+        color: var(--text-color, #ffffff) !important;
+      }
+    }
 
-         a {
-           color: white !important;
-         }
-       }
+    // 确保所有页码的字体颜色适配主题设置
+    .ant-pagination-item {
+      background-color: var(--ant-primary-color) !important;
+      border-color: var(--ant-primary-color) !important;
+      a {
+        color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
+      }
+    }
+
+    // 确保分页跳转输入框中的当前页数字也适配主题色
+    .ant-pagination-options {
+      .ant-pagination-options-quick-jumper {
+        input {
+          &:focus {
+            border-color: var(--ant-primary-color) !important;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
+          }
+        }
+      }
+
+      // 确保每页条数选择下拉框在最前
+      .ant-pagination-options-size-changer {
+        z-index: 10000 !important;
+
+        .ant-select-dropdown {
+          z-index: 20001 !important;
+        }
+      }
+    }
+
+   // 分页按钮颜色
+
+      //  .ant-pagination-item {
+      //    color: white !important;
+      //    background-color: rgba(255, 255, 255, 0.2) !important;
+
+      //    a {
+      //      color: white !important;
+      //    }
+      //  }
 
 
-       .ant-pagination-item-active {
-         background-color: var(--ant-primary-color) !important; // 使用主题色
-         border-color: var(--ant-primary-color) !important;
+      //  .ant-pagination-item-active {
+      //    background-color: var(--ant-primary-color) !important; // 使用主题色
+      //    border-color: var(--ant-primary-color) !important;
 
-         a {
-           color: white !important;
-         }
-       }
+      //    a {
+      //      color: white !important;
+      //    }
+      //  }
 
        .ant-pagination-prev,
        .ant-pagination-next {
@@ -471,39 +566,37 @@
        }
 
        // 确保分页跳转输入框在玻璃主题下也正确显示
-       .ant-pagination-options {
-         .ant-pagination-options-size-changer {
-           .ant-select-selector {
-             background: rgba(255, 255, 255, 0.3) !important;
-             backdrop-filter: blur(3px);
-             -webkit-backdrop-filter: blur(3px);
-             border: 1px solid rgba(255, 255, 255, 0.3) !important;
-             color: white !important;
-           }
+      //  .ant-pagination-options {
+      //    .ant-pagination-options-size-changer {
+      //      .ant-select-selector {
+      //        background: rgba(255, 255, 255, 0.3) !important;
+      //        backdrop-filter: blur(3px);
+      //        -webkit-backdrop-filter: blur(3px);
+      //        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      //        color: white !important;
+      //      }
 
-           .ant-select-dropdown {
-            z-index: 20001 !important;
-          }
-         }
+      //      .ant-select-dropdown {
+      //       z-index: 20001 !important;
+      //     }
+      //    }
 
-         .ant-pagination-options-quick-jumper {
-           color: white !important;
+      //    .ant-pagination-options-quick-jumper {
+      //      color: white !important;
 
-           input {
-             background: rgba(255, 255, 255, 0.3) !important;
-             backdrop-filter: blur(3px);
-             -webkit-backdrop-filter: blur(3px);
-             border: 1px solid rgba(255, 255, 255, 0.3) !important;
-             color: white !important;
+      //      input {
+      //        background: rgba(255, 255, 255, 0.3) !important;
+      //        backdrop-filter: blur(3px);
+      //        -webkit-backdrop-filter: blur(3px);
+      //        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      //        color: white !important;
 
-             &::placeholder {
-               color: rgba(255, 255, 255, 0.65) !important;
-             }
-           }
-         }
-       }
-     }
-   }
+      //        &::placeholder {
+      //          color: rgba(255, 255, 255, 0.65) !important;
+      //        }
+      //      }
+      //    }
+      //  }
  }
 
  // 玻璃模式下IAGrid标题的样式

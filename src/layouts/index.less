@@ -168,7 +168,7 @@ html.glass-theme, body.glass-theme {
   }
 
   .ant-tree-node-content-wrapper:hover {
-    background: rgba(24, 144, 255, 0.1) !important;
+    background: var(--ant-btn-primary-hover-bg, rgba(24, 144, 255, 0.1)) !important;
     color: white !important; // 设置字体颜色为白色
     // 添加毛玻璃效果
     backdrop-filter: blur(0.5px);
@@ -298,51 +298,51 @@ html.glass-theme, body.glass-theme {
   }
   
   // IAGrid分页组件字体颜色
-  .ag-pagination {
-    color: white !important;
+  // .ag-pagination {
+  //   color: white !important;
     
-    .pagination-content {
-      color: white !important;
-    }
+  //   .pagination-content {
+  //     color: white !important;
+  //   }
     
-    // 分页按钮颜色
-    .ant-pagination {
-      color: white !important;
+  //   // 分页按钮颜色
+  //   .ant-pagination {
+  //     color: white !important;
       
-      .ant-pagination-item {
-        color: white !important;
-        background-color: rgba(255, 255, 255, 0.2) !important;
+  //     .ant-pagination-item {
+  //       color: white !important;
+  //       background-color: rgba(255, 255, 255, 0.2) !important;
         
-        a {
-          color: white !important;
-        }
-      }
+  //       a {
+  //         color: white !important;
+  //       }
+  //     }
       
-      .ant-pagination-item-active {
-        background-color: var(--ant-primary-color) !important;
-        border-color: var(--ant-primary-color) !important;
+  //     .ant-pagination-item-active {
+  //       background-color: var(--ant-primary-color) !important;
+  //       border-color: var(--ant-primary-color) !important;
         
-        a {
-          color: white !important;
-        }
-      }
+  //       a {
+  //         color: white !important;
+  //       }
+  //     }
 
-      .ant-pagination-options-quick-jumper {
-        background-color: transparent !important;
-      }
+  //     .ant-pagination-options-quick-jumper {
+  //       background-color: transparent !important;
+  //     }
       
-      .ant-pagination-prev,
-      .ant-pagination-next {
-        color: white !important;
+  //     .ant-pagination-prev,
+  //     .ant-pagination-next {
+  //       color: white !important;
         
-        .ant-pagination-item-link {
-          color: white !important;
-          background-color: rgba(255, 255, 255, 0.3) !important;
-          border-color: rgba(255, 255, 255, 0.3) !important;
-        }
-      }
-    }
-  }
+  //       .ant-pagination-item-link {
+  //         color: white !important;
+  //         background-color: rgba(255, 255, 255, 0.3) !important;
+  //         border-color: rgba(255, 255, 255, 0.3) !important;
+  //       }
+  //     }
+  //   }
+  // }
   
   // Checkbox组件的毛玻璃效果
   .ant-checkbox-wrapper {
@@ -635,7 +635,7 @@ html.glass-theme, body.glass-theme {
     -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
     color: white !important; // 设置字体颜色为白色
-    z-index: 10001 !important;
+    z-index: 20001 !important;
   }
   
   // 树形组件的毛玻璃效果
@@ -663,7 +663,7 @@ html.glass-theme, body.glass-theme {
   }
 
   .ant-tree-node-content-wrapper:hover {
-    background: rgba(24, 144, 255, 0.1) !important;
+    background: var(--ant-btn-primary-hover-bg, rgba(24, 144, 255, 0.1)) !important;
     color: white !important; // 设置字体颜色为白色
     // 添加毛玻璃效果
     backdrop-filter: blur(0.5px);
@@ -717,18 +717,18 @@ html.glass-theme, body.glass-theme {
     }
     
     &:focus {
-      border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
+      border-color: var(--ant-primary-color, #40a9ff) !important;
       box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
     }
   }
 
   // Button组件样式
-  .ant-btn {
-    &.ant-btn-default:hover {
-      background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
-      border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
-    }
-  }
+  // .ant-btn {
+  //   &.ant-btn-default:hover {
+  //     background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  //     border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
+  //   }
+  // }
 
   // 确保内容区域也有毛玻璃效果
   .ant-pro-page-container {
@@ -796,24 +796,24 @@ html.glass-theme, body.glass-theme {
   }
   
   // Input组件在玻璃模式下的样式
-  .ant-input {
-    &:hover {
-      border-color: var(--ant-input-hover-border-color, #40a9ff) !important;
-    }
+  // .ant-input {
+  //   &:hover {
+  //     border-color: var(--ant-input-hover-border-color, #40a9ff) !important;
+  //   }
     
-    &:focus {
-      border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
-    }
-  }
+  //   &:focus {
+  //     border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
+  //     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  //   }
+  // }
   
   // Button组件在玻璃模式下的样式
-  .ant-btn {
-    &.ant-btn-default:hover {
-      background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
-      border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
-    }
-  }
+  // .ant-btn {
+  //   &.ant-btn-default:hover {
+  //     background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  //     border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
+  //   }
+  // }
 
   // // Form组件样式
   //   .snam-form {
