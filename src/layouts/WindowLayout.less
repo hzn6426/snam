@@ -405,55 +405,6 @@
     color: white !important; // 设置字体颜色为白色
   }
   
-  // 修复ProLayout背景
-  // 背景图由body提供，这里不需要重复设置
-  
-  // IFooterToolBar的毛玻璃效果
-  // .ant-pro-footer-bar {
-  //   background: rgba(255, 255, 255, 0.3) !important;
-  //   backdrop-filter: blur(3px);
-  //   -webkit-backdrop-filter: blur(3px);
-  //   border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-  //   color: white !important; // 设置字体颜色为白色
-    
-  //   // FooterToolBar中的按钮也应用毛玻璃效果
-  //   .ant-btn {
-  //     background: rgba(255, 255, 255, 0.3) !important;
-  //     backdrop-filter: blur(3px);
-  //     -webkit-backdrop-filter: blur(3px);
-  //     border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  //     color: white !important;
-      
-  //     &.ant-btn-primary {
-  //       background: var(--ant-primary-color) !important;
-  //       border-color: var(--ant-primary-color) !important;
-  //       color: white !important;
-  //     }
-  //   }
-  // }
-  
-  // // 确保IFooterToolBar在任何情况下都应用玻璃效果
-  // .glass-theme .ant-pro-footer-bar {
-  //   background: rgba(255, 255, 255, 0.3) !important;
-  //   backdrop-filter: blur(3px);
-  //   -webkit-backdrop-filter: blur(3px);
-  //   border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-  //   color: white !important;
-    
-  //   .ant-btn {
-  //     background: rgba(255, 255, 255, 0.3) !important;
-  //     backdrop-filter: blur(3px);
-  //     -webkit-backdrop-filter: blur(3px);
-  //     border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  //     color: white !important;
-      
-  //     &.ant-btn-primary {
-  //       background: var(--ant-primary-color) !important;
-  //       border-color: var(--ant-primary-color) !important;
-  //       color: white !important;
-  //     }
-  //   }
-  // }
   
   // 分页组件样式
   .ant-pagination {
@@ -472,11 +423,22 @@
   .ant-select {
     // 下拉选项选中时使用主题色
     .ant-select-item-option-selected {
-      background-color: var(--ant-select-item-selected-bg, var(--ant-primary-color)) !important;
+      background-color: var(--ant-primary-color) !important;
       color: var(--ant-select-item-selected-color, #ffffff) !important;
     }
     
     // 下拉选项悬停时使用稍微淡一点的主题色
+    .ant-select-item-option:hover {
+      background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+    }
+  }
+
+  .ant-select-dropdown {
+    .ant-select-item-option-selected {
+      background-color: var(--ant-primary-color) !important;
+      color: var(--ant-select-item-selected-color, #ffffff) !important;
+    }
+    
     .ant-select-item-option:hover {
       background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
     }
@@ -559,41 +521,8 @@
     .ant-radio-input:focus + .ant-radio-inner {
       border-color: var(--ant-primary-color) !important;
     }
-    
-    .ant-radio-checked .ant-radio-inner {
-      border-color: var(--ant-primary-color) !important;
-      
-      &::after {
-        background-color: var(--ant-primary-color) !important;
-      }
-    }
-    
-    // 确保IWindow内的Select能正确应用主题色
-    .ant-select-item-option-selected {
-      background-color: var(--ant-primary-color) !important;
-      color: #ffffff !important;
-    }
   }
   
-  // Input组件样式
-  // .ant-input {
-  //   &:hover {
-  //     border-color: var(--ant-input-hover-border-color, #40a9ff) !important;
-  //   }
-    
-  //   &:focus {
-  //     border-color: var(--ant-input-focus-border-color, #40a9ff) !important;
-  //     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
-  //   }
-  // }
-  
-  // // Button组件样式
-  // .ant-btn {
-  //   &.ant-btn-default:hover {
-  //     background-color: var(--ant-btn-default-hover-bg, rgba(24, 144, 255, 0.8)) !important;
-  //     border-color: var(--ant-btn-default-hover-border, #40a9ff) !important;
-  //   }
-  // }
   
   // IWindow Card组件样式 - 确保无圆角
   .iwindow-card {
@@ -728,32 +657,6 @@
         }
       }
       
-      // Radio组件 - 参考IAGrid分页组件样式
-      .ant-radio-wrapper {
-        color: white !important;
-        
-        .ant-radio {
-          .ant-radio-inner {
-            background: rgba(255, 255, 255, 0.3) !important;
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-          }
-          
-          &.ant-radio-checked .ant-radio-inner {
-            background: var(--ant-primary-color) !important;
-            border-color: var(--ant-primary-color) !important;
-            
-            &::after {
-              background-color: var(--ant-primary-color) !important;
-            }
-          }
-          
-          &:hover .ant-radio-inner {
-            border-color: var(--ant-primary-color) !important;
-          }
-        }
-      }
       
       // Checkbox组件 - 参考IAGrid分页组件样式
       .ant-checkbox-wrapper {

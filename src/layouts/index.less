@@ -537,17 +537,17 @@ html.glass-theme, body.glass-theme {
   }
   
   // IAGrid标题的字体颜色
-  .ag-container {
-    .ag-tools {
-      .ag-tools-left {
-        color: white !important;
+  // .ag-container {
+  //   .ag-tools {
+  //     .ag-tools-left {
+  //       color: white !important;
         
-        .ant-typography {
-          color: white !important;
-        }
-      }
-    }
-  }
+  //       .ant-typography {
+  //         color: white !important;
+  //       }
+  //     }
+  //   }
+  // }
   
   // 用户名称字体颜色
   .ant-pro-global-header {
@@ -627,6 +627,7 @@ html.glass-theme, body.glass-theme {
   }
   
   // 下拉菜单的毛玻璃效果
+  .ant-menu-dropdown,
   .ant-select-dropdown,
   .ant-picker-dropdown,
   .ant-cascader-menus {
@@ -692,18 +693,18 @@ html.glass-theme, body.glass-theme {
   // }
 
   // Select组件样式
-  .ant-select {
-    // 下拉选项选中时使用主题色
-    .ant-select-item-option-selected {
-      background-color: var(--ant-select-item-selected-bg, var(--ant-primary-color)) !important;
-      color: var(--ant-select-item-selected-color, #ffffff) !important;
-    }
+  // .ant-select {
+  //   // 下拉选项选中时使用主题色
+  //   .ant-select-item-option-selected {
+  //     background-color: var(--ant-select-item-selected-bg, var(--ant-primary-color)) !important;
+  //     color: var(--ant-select-item-selected-color, #ffffff) !important;
+  //   }
     
-    // 下拉选项悬停时使用稍微淡一点的主题色
-    .ant-select-item-option:hover {
-      background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
-    }
-  }
+  //   // 下拉选项悬停时使用稍微淡一点的主题色
+  //   .ant-select-item-option:hover {
+  //     background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  //   }
+  // }
 
   // 表单组件样式
   .ant-form-item-label > label {
@@ -786,7 +787,18 @@ html.glass-theme, body.glass-theme {
   // Select组件在玻璃模式下的样式
   .ant-select {
     .ant-select-item-option-selected {
-      background-color: var(--ant-select-item-selected-bg, var(--ant-primary-color)) !important;
+      background-color: var(--ant-primary-color) !important;
+      color: var(--ant-select-item-selected-color, #ffffff) !important;
+    }
+    
+    .ant-select-item-option:hover {
+      background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+    }
+  }
+
+  .ant-select-dropdown {
+    .ant-select-item-option-selected {
+      background-color: var(--ant-primary-color) !important;
       color: var(--ant-select-item-selected-color, #ffffff) !important;
     }
     
