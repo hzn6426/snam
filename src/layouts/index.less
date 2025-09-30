@@ -53,6 +53,42 @@
     padding-inline: 10px;
 }
 
+.ant-select {
+  .ant-select-item-option-selected {
+    background-color: var(--ant-primary-color) !important;
+    color: var(--ant-select-item-selected-color, #ffffff) !important;
+  }
+  
+  .ant-select-item-option:hover {
+    background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  }
+}
+
+.ant-select-dropdown {
+  .ant-select-item-option-selected {
+    background-color: var(--ant-primary-color) !important;
+    color: var(--ant-select-item-selected-color, #ffffff) !important;
+  }
+  
+  .ant-select-item-option:hover {
+    background-color: var(--ant-select-item-hover-bg, rgba(24, 144, 255, 0.8)) !important;
+  }
+}
+
+.ant-dropdown-menu-item {
+  color: var(--ant-primary-color) !important;
+
+  &:hover {
+    background-color: var(--ant-primary-color) !important;
+    color: white !important;
+  }
+}
+
+.ant-segmented .ant-segmented-item-selected  {
+  background-color: var(--ant-primary-color) !important;
+  color: white !important;
+}
+
 // 添加全局玻璃主题样式
 html.glass-theme, body.glass-theme {
   background-image: url('../assets/back/bg-6.jpg') !important;
@@ -637,6 +673,63 @@ html.glass-theme, body.glass-theme {
     border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
     color: white !important; // 设置字体颜色为白色
     z-index: 20001 !important;
+  }
+
+  // Ant Design Dropdown overlay 样式（含气泡类）
+  .ant-dropdown,
+  .ant-dropdown-menu,
+  .ant-dropdown-menu-submenu,
+  .ant-popover,
+  .ant-tooltip {
+    background: rgba(255, 255, 255, 0.4) !important;
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+    // border: 1px solid #f0f0f0 !important;
+    color: white !important;
+  }
+
+  
+
+  .ant-popover-inner,
+  .ant-tooltip-inner,
+  .ant-dropdown-menu {
+    background: transparent !important;
+    color: white !important;
+  }
+
+  // Ant Design Drawer 样式
+  .ant-drawer-mask {
+    background: rgba(0, 0, 0, 0.2) !important; // 轻微遮罩，保持玻璃视觉
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .ant-drawer-content-wrapper {
+    // 让抽屉内容具备玻璃效果
+    .ant-drawer-content {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-left: 1px solid rgba(255, 255, 255, 0.3) !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+    }
+
+    .ant-drawer-header {
+      background: rgba(255, 255, 255, 0.25) !important;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+      color: white !important;
+    }
+
+    .ant-drawer-title {
+      color: white !important;
+    }
+
+    .ant-drawer-close {
+      color: white !important;
+    }
   }
   
   // 树形组件的毛玻璃效果

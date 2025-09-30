@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { setLocale } from 'umi';
 import { Drawer, Form, Row, Col, Switch, Radio, Segmented } from 'antd';
-import { createFromIconfontCN } from '@ant-design/icons';
+import { BuildOutlined, SunOutlined,MoonOutlined } from '@ant-design/icons';
 import { useApplicationState } from "@/store/state";
 import * as R from 'ramda';
 import LayoutBox from './layoutBox';
 import ThemeBox from './themeBox';
 import ColorBox from './colorBox';
 
-const MyIcon = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_4138236_ruatnx8t8dg.js'
-});
+
 
 export default (props) => {
   const [settingForm] = Form.useForm();
@@ -123,17 +121,17 @@ export default (props) => {
                   {
                     label: '白昼',
                     value: 'light',
-                    icon: <MyIcon type="caladog-day" />,
+                    icon: <SunOutlined />,
                   },
                   {
                     label: '暗夜',
                     value: 'realDark',
-                    icon: <MyIcon type="caladog-night" />,
+                    icon: <MoonOutlined />,
                   },
                   {
                     label: '玻璃',
                     value: 'glass',
-                    icon: <MyIcon type="caladog-glass" />,
+                    icon: <BuildOutlined />,
                   },
                 ]}
               />

@@ -48,7 +48,7 @@ export default (props) => {
         }
     ]
 
-    return <Dropdown menu={{ items }}>
+    return <Dropdown menu={{ items }} trigger={['click']}>
         {props.children}
     </Dropdown>
 }
