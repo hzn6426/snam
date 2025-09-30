@@ -278,7 +278,7 @@ export default (props) => {
                     clearSelect={searchLoading}
                     showSizeChanger={false}
                     showQuickJumper={false}
-                    // showTotal={false}
+                    showTotal={false}
                 />
                 <>
                     <IAGrid
@@ -298,6 +298,8 @@ export default (props) => {
                         total={columnTotal}
                         onSelectedChanged={onColumnChange}
                         showSizeChanger={false}
+                        showQuickJumper={false}
+                        showTotal={false}
                         pageToolBarRender={[
                             <Permit authority="pcolumn:save">
                                 <IButton size="small" danger type="primary" key="joinColumn" icon={<NodeExpandOutlined />} onClick={join} >
@@ -330,6 +332,8 @@ export default (props) => {
                         dataSource={permDataSource}
                         total={permTotal}
                         showSizeChanger={false}
+                        showQuickJumper={false}
+                        showTotal={false}
                         toolBarRender={[
                             <Permit  authority="pcolumn:save" key="new">
                                 <Tooltip title="保存权限列">

@@ -1182,7 +1182,7 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: offsetHeight - 192, overflow: 'auto' }}
+                                        bodyStyle={{ height: offsetHeight - 177, overflow: 'auto' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 {/* <Permit authority="resource:saveUsetBusinessPerm">
@@ -1345,7 +1345,7 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'auto', padding: '2px' }}
+                                        bodyStyle={{ height: offsetHeight - 177, overflow: 'auto', padding: '2px' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveDataPerm">
@@ -1437,7 +1437,7 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'auto', padding: '2px' }}
+                                        bodyStyle={{ height: offsetHeight - 177, overflow: 'auto', padding: '2px' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveUserColumnPerm">

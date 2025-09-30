@@ -132,21 +132,23 @@
        z-index: 1; // 提高z-index确保分页组件在最前，不被其他组件遮挡
      }
 
-     .ant-pagination-item-active {
+     
+
+    // 确保所有页码的字体颜色适配主题设置
+    .ant-pagination-item {
+      background-color: transparent !important;
+      border-color: var(--ant-primary-color) !important;
+      a {
+        color: var(--text-color, #000000); // 页码字体颜色适配主题色
+      }
+    }
+
+    .ant-pagination-item-active {
       background-color: var(--ant-primary-color) !important;
       border-color: var(--ant-primary-color) !important;
 
       a {
         color: #ffffff !important;
-      }
-    }
-
-    // 确保所有页码的字体颜色适配主题设置
-    .ant-pagination-item {
-      background-color: var(--ant-primary-color) !important;
-      border-color: var(--ant-primary-color) !important;
-      a {
-        color: #ffffff; // 页码字体颜色适配主题色
       }
     }
 
@@ -335,24 +337,26 @@
        height: 30px;
      }
 
-      // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
-    .ant-pagination-item-active {
-      background-color: var(--ant-primary-color) !important;
-      border-color: var(--ant-primary-color) !important;
-
-      a {
-        color: var(--text-color, #ffffff) !important;
-      }
-    }
+    
 
     // 确保所有页码的字体颜色适配主题设置
     .ant-pagination-item {
-      background-color: var(--ant-primary-color) !important;
+      background-color: transparent !important;
       border-color: var(--ant-primary-color) !important;
       a {
         color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
       }
     }
+
+      // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
+      .ant-pagination-item-active {
+        background-color: var(--ant-primary-color) !important;
+        border-color: var(--ant-primary-color) !important;
+  
+        a {
+          color: var(--text-color, #ffffff) !important;
+        }
+      }
 
     // 确保分页跳转输入框中的当前页数字也适配主题色
     .ant-pagination-options {
@@ -494,21 +498,24 @@
    }
 
      // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
+    
+
+    // 确保所有页码的字体颜色适配主题设置
+    .ant-pagination-item {
+      // background-color: var(--ant-primary-color) !important;
+      background-color: transparent !important;
+      border-color: var(--ant-primary-color) !important;
+      a {
+        color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
+      }
+    }
+
     .ant-pagination-item-active {
       background-color: var(--ant-primary-color) !important;
       border-color: var(--ant-primary-color) !important;
 
       a {
         color: var(--text-color, #ffffff) !important;
-      }
-    }
-
-    // 确保所有页码的字体颜色适配主题设置
-    .ant-pagination-item {
-      background-color: var(--ant-primary-color) !important;
-      border-color: var(--ant-primary-color) !important;
-      a {
-        color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
       }
     }
 

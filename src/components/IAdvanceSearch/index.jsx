@@ -183,7 +183,7 @@ const addon = [
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Select options={andOr} defaultValue="AND" disabled={idex == 0 || props.disabled == true} onChange={onFormChange} />
+                  <Select options={andOr} defaultValue="AND" disabled={ props.disabled == true} onChange={onFormChange} />
                 </Form.Item>
               </Col>
               <Col span={4}>
