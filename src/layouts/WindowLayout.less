@@ -98,12 +98,14 @@
   // 透明度设置为0.3，展示背景图片
   .ant-card {
     background: rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    // backdrop-filter: blur(0.5px);
+    // -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
     border-radius: 10px !important; // 与IAGrid相同的圆角
     color: white !important; // 设置字体颜色为白色
   }
+
+
   
   .ant-pro-sider {
     background: rgba(255, 255, 255, 0.3) !important;
@@ -215,9 +217,28 @@
       color: white !important;
     }
   }
+
+  .ant-input-number-handler-wrap {
+    background-color: transparent !important;
+    
+  }
+  .ant-input-number-handler {
+    border-inline-start: none !important;
+    border-inline-end: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+  }
   
   // 表单组件的毛玻璃效果
   .ant-input,
+  .ant-input-number,
+  .ant-input-number-handler
   .ant-input-affix-wrapper,
   .ant-select-selector,
   .ant-picker,
@@ -336,8 +357,8 @@
   // 树形组件的毛玻璃效果
   .ant-tree {
     background: transparent !important;
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    // backdrop-filter: blur(0.5px);
+    // -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.3) !important; // 与IAGrid边框颜色一致
     color: white !important; // 设置字体颜色为白色
   }
@@ -352,8 +373,8 @@
     border-radius: 2px;
     color: white !important; // 设置字体颜色为白色
     // 添加毛玻璃效果
-    backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
+    // backdrop-filter: blur(0.5px);
+    // -webkit-backdrop-filter: blur(0.5px);
     // 防止闪烁，确保过渡效果平滑
     transition: background-color 0.1s ease, color 0.1s ease;
   }
@@ -541,6 +562,12 @@
     border: 1px solid var(--glass-surface-border) !important;
     color: var(--text-color) !important;
     
+    .ant-card-head {
+      border-bottom: 1px solid #f0f0f0 !important;
+      .ant-card-head-title {
+        color: white !important;
+      }
+    }
     .ant-card-body {
       background: transparent !important;
       color: var(--text-color) !important;

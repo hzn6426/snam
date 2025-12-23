@@ -303,6 +303,8 @@ export default Object.freeze({
   API_SAVE_USER_AND_ROLE: '/authority/userRole/saveUserAndRole',
   // 获取所有组织列表
   API_GROUP_TREE_ALL_GROUPS: '/authority/group/treeAllGroups',
+  // 复制用户权限
+  API_GROUP_COPY_USER_PERM: '/authority/group/copyUserPerm',
 
   //= ==============================================//
   //                   职位管理                      //
