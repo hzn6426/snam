@@ -10,7 +10,7 @@ import {
     Permit
   } from '@/common/components';
 import { option2TextObject } from '@/common/utils';
-import {showOperationConfirm} from '@/common/antd';
+import {showOperationConfirm, showDeleteConfirm} from '@/common/antd';
 import {
     INewWindow,
     api,
@@ -26,7 +26,8 @@ import {
     RestOutlined,
     ApiOutlined,
     SunOutlined,
-    UnlockTwoTone 
+    UnlockTwoTone,
+    CloudSyncOutlined
 } from '@ant-design/icons';
 import { of } from 'rxjs';
 import {
@@ -277,6 +278,16 @@ export default () => {
                 </Button>
                     </Tooltip>
                 </Permit>,
+                
+                <Button
+                  key="refresh"
+                  size="small"
+                  loading={loading}
+                    icon={<CloudSyncOutlined />}
+                  onClick={() => handleRefreshCache()}
+                >
+                  
+                </Button>
 
             ]}
             pageToolBarRender={[
