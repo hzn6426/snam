@@ -183,7 +183,7 @@ const addon = [
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Select options={andOr} defaultValue="AND" disabled={idex == 0 || props.disabled == true} onChange={onFormChange} />
+                  <Select options={andOr} defaultValue="AND" disabled={ props.disabled == true} onChange={onFormChange} />
                 </Form.Item>
               </Col>
               <Col span={4}>
@@ -255,7 +255,7 @@ const addon = [
             <Button
               key="add"
               size='small'
-              htmlType="button"
+              type="primary"
               onClick={() => {
                 const rows = produce(ui, (draft) => {
                   draft.push( { component: <Input /> });
@@ -270,6 +270,7 @@ const addon = [
             <Button
               key="submit"
               danger
+              type="primary"
               size='small'
               onClick={() => {
                 const rows = produce(ui, (draft) => {

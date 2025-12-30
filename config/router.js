@@ -120,6 +120,11 @@ export default [
                 component: './group/move',
               },
               {
+                name: '组织用户复制权限',
+                path: '/new/group/copy',
+                component: './group/copy',
+              },
+              {
                 name: '公司编辑',
                 path: '/new/group/company',
                 component: './group/company',

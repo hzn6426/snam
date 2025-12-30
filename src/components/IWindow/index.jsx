@@ -3,7 +3,6 @@ import { useWindowSize } from '@/common/utils';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Space } from 'antd';
 import React, { useEffect, useState,useImperativeHandle } from 'react';
-import './index.less';
 export default React.forwardRef((props, ref) => {
     const { saveVisible } = props;
     //窗口大小
@@ -56,6 +55,7 @@ export default React.forwardRef((props, ref) => {
             padding: '0 10px 10px 10px',
             borderRadius: '0px',
         }}
+        className="iwindow-card"
     >
         <Form
             name="basic"

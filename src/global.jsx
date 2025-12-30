@@ -10,6 +10,7 @@ if (token) {
   history.push(constant.SYSTEM_ROUTE_LOGIN);
 }
 
+
 // // 搜索栏布局
 // const closeStyle = {
 //   width: '100%',

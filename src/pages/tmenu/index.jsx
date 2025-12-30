@@ -396,7 +396,7 @@ export default (props) => {
                         iconRender={loop}
                         blockNode={true}
                         treeData={treeData}
-                        bodyStyle={{ height: offsetHeight - 110, overflow: 'scroll' }}
+                        bodyStyle={{ height: offsetHeight - 110, overflow: 'auto' }}
                         titleRender={(node) => (
                             <div style={{ width: '100%' }}>
                                 <div style={{ float: 'left' }}>

@@ -9,7 +9,7 @@ import {
     LockTwoTone,
     UnlockTwoTone,
     RestOutlined, ApiOutlined, DiffOutlined, HistoryOutlined, UserAddOutlined, MergeOutlined, SolutionOutlined,
-    AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, UserSwitchOutlined
+    AimOutlined, FundViewOutlined, TeamOutlined, SunOutlined, UserSwitchOutlined
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
@@ -420,6 +420,27 @@ export default (props) => {
     }
 
 
+    //复制用户权限
+    const onCopy = () => {
+        if (selectedGroupUserKeys.length !== 1) {
+            message.error('请选择一个要复制权限的用户！');
+            return;
+        }
+        const param = { groupId: selectedGroupId, userId: selectedGroupUserKeys[0] };
+        INewWindow({
+            url: '/new/group/copy',
+            title: '复制用户权限',
+            width: 700,
+            height: 600,
+            callback: () => {
+                reloadTree();
+                searchUserByGroup(pageNo, pageSize);
+            },
+            callparam: () => param,
+        });
+    }
+
+
     // 将未分配的用户添加到分组中
     const addUser2Group = () => {
         if (!selectedGroupId || selectedGroupId === constant.ROOT_OF_GROUP) {
@@ -497,7 +518,7 @@ export default (props) => {
                     placeholder="输入组织或人员进行搜索"
                     checkable={false}
                     blockNode={true}
-                    bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
+                    bodyStyle={{ height: offsetHeight - 105, overflow: 'auto' }}
                     titleRender={(node) => (
                         <div style={{ width: '100%' }}>
                             <div style={{ float: 'left' }}>
@@ -550,7 +571,7 @@ export default (props) => {
             <Col span={18}>
                 {/* <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
                     <div> */}
-                <div style={{ marginBottom: '15px', border: 0 }}>
+                <div style={{ border: 0,position:'relative',zIndex:999 }}>
                     <IAGrid
                         title="用户列表"
                         gridName="perm_group_list"
@@ -663,9 +684,18 @@ export default (props) => {
                                     移动
                                 </Button>
                             </Permit>,
+                            <Permit authority="group:copyUserPerm">
+                            <Button size="small" danger
+                                type="primary"
+                                icon={<TeamOutlined />}
+                                key="copu" onClick={() => onCopy()}>
+                                复制权限
+                            </Button>
+                        </Permit>,
 
                         ]}
                     />
+                    </div>
                     {/* {selectedGroupUserKeys?.length > 0 && (
                             <IFooterToolbar>
                                 
@@ -673,7 +703,8 @@ export default (props) => {
                         )} */}
                     {/* </div>
                     <div> */}
-                </div>
+                {/* </div> */}
+                <div style={{ marginTop: '15px', border: 0,position:'relative' }}>
                 <IAGrid
                     gridName="perm_group_unassign_list"
                     title="未分配列表"
@@ -692,12 +723,13 @@ export default (props) => {
                     // }}
                     pageToolBarRender={[
                         <Permit authority="group:addUsers" key="addUsers">
-                            <IButton size="small" icon={<UserAddOutlined />} type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
+                            <Button size="small" icon={<UserAddOutlined />} type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
                                 加入
-                            </IButton>
+                            </Button>
                         </Permit>
                     ]}
                 />
+                </div>
                 {/* {selectedNotAssignUserKeys?.length > 0 && (
                             <IFooterToolbar>
                                 <Permit authority="group:addUsers" key="addUsers">

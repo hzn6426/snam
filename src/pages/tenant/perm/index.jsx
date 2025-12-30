@@ -141,7 +141,7 @@ export default () => {
                         iconRender={loop}
                         blockNode={true}
                         treeData={treeData}
-                        bodyStyle={{ height: 'calc(100vh - 40px)', overflow: 'scroll',padding:'0px',margin:'0px' }}
+                        bodyStyle={{ height: 'calc(100vh - 40px)', overflow: 'auto',padding:'0px',margin:'0px' }}
                         titleRender={(node) => (
                             <div style={{ width: '100%',height:'40px',lineHeight:'40px',verticalAlign: 'middle'}}>
                                     <Space>{node.icon}{node.title}</Space>
@@ -171,7 +171,7 @@ export default () => {
                     }}>
                     {tabList.map((item, index) => (
                         <TabPane  tab={item.tab} key={item.key} style={{ padding:'0px 0px 0px 5px' }}>
-                            <div style={{ height:  'calc(100vh - 64px)', overflow: 'scroll' }}>
+                            <div style={{ height:  'calc(100vh - 64px)', overflow: 'auto' }}>
                                 {item.component}
                             </div>
                         </TabPane>
@@ -193,7 +193,7 @@ export default () => {
                     }}
                     className={'cala-body tabPage'}
                 >
-                    <div style={{ height:  'calc(100vh - 64px)', overflow: 'scroll' }}>
+                    <div style={{ height:  'calc(100vh - 64px)', overflow: 'auto' }}>
                         {<KeepAlive name={actionTab.key} key={actionTab.key} id={actionTab.key}>{actionTab.component}</KeepAlive> }
                     </div>
                 </PageContainer> */}

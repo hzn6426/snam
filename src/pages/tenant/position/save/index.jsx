@@ -152,7 +152,7 @@ export default (props) => {
             </ILayout>
             {treeVisible && (
                 <ISearchTree
-                    bodyStyle={{ height: 'calc(100vh - 345px)', overflow: 'scroll' }}
+                    bodyStyle={{ height: 'calc(100vh - 345px)', overflow: 'auto' }}
                     iconRender={loopGroup}
                     showIcon={true}
                     treeData={treeData}

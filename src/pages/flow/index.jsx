@@ -644,7 +644,7 @@ const parentColumns = [
                     <Card
                     size="small"
                     style={{height:bottomHeight - 80}}
-                    bodyStyle={{ height: bottomHeight - 156, overflow: 'scroll' }}
+                    bodyStyle={{ height: bottomHeight - 156, overflow: 'auto' }}
                     bordered={true}
                     actions={[
                         <div style={{ float: 'right', paddingRight: '10px', height:'10px',marginTop:'-5px' }} key="bottom">

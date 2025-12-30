@@ -193,7 +193,7 @@ export default (props) => {
                             </div>
                         </>
                     }
-                    bodyStyle={{ height: clientHeight - 130, overflow: 'scroll' }}
+                    bodyStyle={{ height: clientHeight - 130, overflow: 'auto' }}
                 >
                     <Tree
                         showIcon
@@ -215,7 +215,7 @@ export default (props) => {
                 <Card
                     size="small"
                     bordered={true}
-                    bodyStyle={{ height: clientHeight - 130, overflow: 'scroll' }}
+                    bodyStyle={{ height: clientHeight - 130, overflow: 'auto' }}
                     title={
                         <>
                             <span>功能按钮列表</span>

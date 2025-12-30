@@ -42,6 +42,7 @@ export default (props) => {
             <ILayout type="vbox">
                 <IFormItem xtype='input' name="parentName" label="上级组织" labelCol={{flex:'90px'}} disabled />
                 <IFormItem xtype='input' name="groupName" label="子部门名称" labelCol={{flex:'90px'}} required />
+                <IFormItem xtype='number' name="priority" label="优先级" labelCol={{flex:'90px'}} placeholder="越小越在前"/>
             </ILayout>
             </IWindow>
     )

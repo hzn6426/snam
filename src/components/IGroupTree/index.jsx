@@ -64,7 +64,7 @@ export default (props) => {
         //         </Space>
         //     }
         //     bordered={true}
-        //     bodyStyle={{ height: '400px', overflow: 'scroll' }}
+        //     bodyStyle={{ height: '400px', overflow: 'auto' }}
         // >
         //     <Tree
         //         showIcon

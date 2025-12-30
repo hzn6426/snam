@@ -1,51 +1,48 @@
  .ag-container {
-  border: 1px solid #f0f0f0;
-    border-radius: 10px;
-    margin: 0px 5px;
-    display: flex;
-    flex-direction: column;
-    // background: #ffffff;
+   border: 1px solid #f0f0f0;
+   border-radius: 10px;
+   margin: 0px 5px;
+   display: flex;
+   flex-direction: column;
 
    /* AgGrid 工具栏 */
    .ag-tools {
-    padding: 6px 3px 0px 10px !important;
-      height: 35px;
+     padding: 6px 3px 0px 10px !important;
+     height: 35px;
      flex: none;
      display: flex;
-
      justify-content: space-between;
 
      .ag-tools-left {
-      margin-top: 3px;
-        //  span {
-        //    font-size: 15px;
-        //    line-height: 32px;
-      
-        //  }
+       margin-top: 3px;
+       color: rgba(0, 0, 0, 0.85); // 默认字体颜色
      }
 
      .ag-tools-right {
        display: flex;
        justify-content: flex-end;
-      padding-bottom: 0;
+       padding-bottom: 0;
+
+       .ant-btn {
+         background: #ffffff;
+         border: 1px solid #d9d9d9;
+         color: var(--ant-primary-color);
+
+         // 悬停状态
+         &:hover {
+           background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color));
+           border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color));
+           color: #ffffff;
+         }
+       }
      }
    }
 
    /* AgGrid 主体 */
    .ag-body {
-    margin-top: 0px;
+     margin-top: 0px;
      position: relative;
      flex: auto;
-
-    //  .ag-ltr .ag-cell,
-      //  .ag-pinned-left-header,
-      //  .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
-      //   border: 1px solid #DADCDE !important;
-      //  }
-      // .ag-ltr .ag-cell,
-      // .ag-pinned-left-header {
-      //   border-right: 1px solid #DADCDE !important;
-      // }
 
      .ag-setting {
        .ag-unselectable .ag-has-focus {
@@ -59,78 +56,137 @@
      }
    }
 
-         .ag-theme-balham .ag-root-wrapper {
-           border-radius: 0px 0px 0px 0px;
-           border-color: #f0f0f0;
-           // border-width: 2px;
-         }
+   /* AgGrid 分页栏 */
+   .ag-pagination {
+     display: flex;
+     margin: 5px 0px 5px 5px;
 
-         .ag-theme-balham-dark .ag-root-wrapper {
-           border-radius: 10px;
-           // border-color: #f0f0f0;
-           // border-width: 2px;
-         }
+     .pagination-tools {
+       width: 800px;
+       padding: 0 3px;
+     }
 
-         // .ag-cell {
-         //   border-right-color: #f0f0f0;
-         //   border-right-width: 1px;
-         //   border-right-style: solid;
-         // }
-         /* AgGrid 分页栏 */
-         .ag-pagination {
-           display: flex;
-           margin: 5px 0px 5px 5px;
-    
-           .pagination-tools {
-            width: 300px;
-             padding: 0 3px;
-           }
-    
-           .pagination-content {
-             width: 100%;
-             text-align: right;
-             padding: 0px 3px;
-             height: 30px;
+     .pagination-content {
+       width: 100%;
+       text-align: right;
+       padding: 0px 3px;
+       height: 30px;
+       position: relative;
+       z-index: 1; // 提高z-index确保分页组件在最前，不被其他组件遮挡
+     }
+
+     // 确保所有页码的字体颜色适配主题设置
+     .ant-pagination-item {
+       background-color: transparent !important;
+       border-color: var(--ant-primary-color) !important;
+
+       a {
+         color: var(--text-color, #000000); // 页码字体颜色适配主题色
+       }
+     }
+
+     .ant-pagination-item-active {
+       background-color: var(--ant-primary-color) !important;
+       border-color: var(--ant-primary-color) !important;
+
+       a {
+         color: #ffffff !important;
+       }
+     }
+
+     // 确保分页跳转输入框中的当前页数字也适配主题色
+     .ant-pagination-options {
+       .ant-pagination-options-quick-jumper {
+         input {
+           &:focus {
+             border-color: var(--ant-primary-color) !important;
+             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
            }
          }
-         }
-    
-         // .ag-theme-balham {
-         //   /* disable all borders */
-         //   border-radius: 5px;
-         // }
+       }
+
+       // 确保每页条数选择下拉框在最前
+      //  .ant-pagination-options-size-changer {
+      //    z-index: 10000 !important;
+
+      //    .ant-select-dropdown {
+      //      z-index: 10001 !important;
+      //    }
+      //  }
+     }
+   }
+ }
+
  .ag-theme-balham {
    --ag-borders: none;
    --ag-row-border-style: none;
    --ag-header-foreground-color: #323232;
-   // --ag-header-foreground-color: white;
-   // --ag-header-background-color: rgb(66, 98, 223);
    --ag-header-background-color: #f0f0f0;
  }
 
- // /* we set border radius for header row  */
- // .ag-theme-balham .ag-header {
- //   border-radius: 10px;
- // }
+ // 为所有主题模式下的IAGrid选中行设置样式
+ .ag-theme-balham {
+   .ag-row-selected {
+     background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用主题变量
+     color: var(--ant-aggrid-row-selected-color, #ffffff) !important; // 使用主题变量
+   }
 
- // /* we set background and border radius for odd rows */
- // .ag-theme-balham .ag-row-odd {
- //   background-color: rgb(238, 241, 238);
- //   border-radius: 10px;
- // }
+   .ag-row-selected::before {
+     background-color: transparent;
+   }
 
- // /* we set background and border radius for even rows */
- // .ag-theme-balham .ag-row-even {
- //   background-color: white;
- //   border-radius: 10px;
- // }
+   .ag-row-hover {
+     background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.1)) !important; // 使用主题变量
+     color: inherit !important;
+   }
+
+   .ag-row-hover::before {
+     background-color: transparent !important;
+   }
+ }
+
+ .ag-theme-balham .ag-root-wrapper {
+   border-radius: 0px 0px 0px 0px;
+   border: transparent;
+   border-bottom: 1px solid #f0f0f0;
+ }
+
+//=======================================================暗黑主题
+
+ // 为暗色主题添加选中行样式
+ .ag-theme-balham-dark {
+   .ag-root-wrapper {
+     border-radius: 0px 0px 0px 0px;
+     border-color: transparent !important;
+     border-width: 0px;
+   }
+
+   .ag-row-selected {
+     background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important;
+     color: var(--ant-aggrid-row-selected-color, #ffffff) !important;
+   }
+
+   .ag-row-selected::before {
+     background-color: transparent;
+   }
+
+   .ag-row-hover {
+     background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.1)) !important;
+     color: inherit !important;
+   }
+
+   .ag-row-hover::before {
+     background-color: transparent !important;
+   }
+ }
+
  .ag-container-dark {
    border: 1px solid #303030;
    border-radius: 10px;
-  margin: 0 5px;
+   margin: 0 5px;
    display: flex;
    flex-direction: column;
-    // background: #0b0b0b;
+   // background: #0b0b0b;
 
    /* AgGrid 工具栏 */
    .ag-tools {
@@ -143,17 +199,27 @@
 
      .ag-tools-left {
        padding-bottom: 5px;
-       //  span {
-       //    font-size: 15px;
-       //    line-height: 32px;
-
-       //  }
      }
 
      .ag-tools-right {
        display: flex;
        justify-content: flex-end;
        padding-bottom: 0;
+
+       // 为工具栏按钮添加主题颜色支持
+       .ant-btn {
+         background: transparent;
+         border: 1px solid #303030;
+         color: var(--ant-primary-color);
+
+
+         // 悬停状态
+         &:hover {
+           background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color));
+           border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color));
+           color: #ffffff;
+         }
+       }
      }
    }
 
@@ -163,60 +229,275 @@
      position: relative;
      flex: auto;
 
-     //  .ag-ltr .ag-cell,
-     //  .ag-pinned-left-header,
-     //  .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
-     //   border: 1px solid #DADCDE !important;
-     //  }
-     // .ag-ltr .ag-cell,
-     // .ag-pinned-left-header {
-     //   border-right: 1px solid #DADCDE !important;
-     // }
-
      .ag-setting {
        .ag-unselectable .ag-has-focus {
          -webkit-user-select: none !important;
          user-select: none !important;
        }
-
-       .ag-row-selected::before {
-         background-color: transparent;
-       }
      }
    }
 
-   .ag-theme-balham .ag-root-wrapper {
-     border-radius: 0px 0px 0px 0px;
-     border-color: #303030;
-     // border-width: 2px;
-   }
-
-   .ag-theme-balham-dark .ag-root-wrapper {
-     border-radius: 10px;
-     // border-color: #f0f0f0;
-     // border-width: 2px;
-   }
-
-   // .ag-cell {
-   //   border-right-color: #f0f0f0;
-   //   border-right-width: 1px;
-   //   border-right-style: solid;
-   // }
    /* AgGrid 分页栏 */
    .ag-pagination {
      display: flex;
-    margin: 5px 0px 5px 5px;
+     margin: 5px 0px 5px 5px;
 
      .pagination-tools {
-       width: 400px;
+       width: 800px;
        padding: 0 20px;
      }
 
      .pagination-content {
        width: 100%;
        text-align: right;
-      padding: 0px 3px;
+       padding: 0px 3px;
        height: 30px;
+     }
+
+     // 确保所有页码的字体颜色适配主题设置
+     .ant-pagination-item {
+       background-color: transparent !important;
+       border-color: var(--ant-primary-color) !important;
+
+       a {
+         color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
+       }
+     }
+
+     // 确保分页组件中的当前页字体颜色适配主题设置（所有模式）
+     .ant-pagination-item-active {
+       background-color: var(--ant-primary-color) !important;
+       border-color: var(--ant-primary-color) !important;
+
+       a {
+         color: var(--text-color, #ffffff) !important;
+       }
+     }
+
+     // 确保分页跳转输入框中的当前页数字也适配主题色
+     .ant-pagination-options {
+       .ant-pagination-options-quick-jumper {
+         input {
+           &:focus {
+             border-color: var(--ant-primary-color) !important;
+             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
+           }
+         }
+       }
+
+       // 确保每页条数选择下拉框在最前
+      //  .ant-pagination-options-size-changer {
+      //    z-index: 10000 !important;
+
+      //    .ant-select-dropdown {
+      //      z-index: 10001 !important;
+      //    }
+      //  }
+     }
+   }
+ }
+
+ //=======================================================玻璃模式
+ // 玻璃模式下的样式
+ .glass-theme .ag-container {
+   background: rgba(255, 255, 255, 0.3) !important;
+   backdrop-filter: blur(3px);
+   -webkit-backdrop-filter: blur(3px);
+   border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+
+   .ag-tools {
+     .ag-tools-left {
+       color: white !important;
+
+       .ant-typography {
+         color: white !important;
+       }
+     }
+
+     .ag-tools-right {
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 0;
+
+      // 为工具栏按钮添加毛玻璃效果
+        .ant-btn {
+          background: rgba(255, 255, 255, 0.3) !important;
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+          //  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          color: var(--ant-primary-color);
+
+          &:hover {
+            color: #ffffff;
+            background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color)) !important;
+            border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color)) !important;
+          }
+
+        }
+    }
+   }
+
+   .ag-header {
+     background: rgba(255, 255, 255, 0.3) !important;
+     border-bottom-color: transparent !important;
+     color: white !important;
+
+     .ag-header-cell {
+       color: white !important;
+
+       .ag-header-cell-label {
+         color: white !important;
+       }
+     }
+   }
+
+   .ag-cell {
+     border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+     color: white !important;
+   }
+ }
+
+ .glass-theme .ag-header-container {
+   // background: rgba(255, 255, 255, 0.3) !important;
+   background: transparent !important;
+   //  backdrop-filter: blur(3px);
+   //  -webkit-backdrop-filter: blur(3px);
+   // border-bottom: 1px solid #f0f0f0 !important;
+ }
+
+ // 玻璃模式下表格内容的样式
+ .glass-theme .ag-theme-balham {
+   background: transparent !important;
+ }
+
+
+ .glass-theme .ag-row {
+   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+   backdrop-filter: blur(3px);
+   -webkit-backdrop-filter: blur(3px);
+   color: white !important;
+ }
+
+ //  .glass-theme .ag-row-even {
+ //    background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+ //    backdrop-filter: blur(3px);
+ //    -webkit-backdrop-filter: blur(3px);
+ //    color: white !important;
+ //  }
+
+ //  .glass-theme .ag-row-odd {
+ //    background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+ //    backdrop-filter: blur(3px);
+ //    -webkit-backdrop-filter: blur(3px);
+ //    color: white !important;
+ //  }
+
+ .glass-theme .ag-row-selected {
+   background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
+   color: var(--ant-aggrid-row-selected-color, white) !important;
+ }
+
+ .glass-theme .ag-row-selected::before {
+   background-color: transparent !important;
+ }
+
+ .glass-theme .ag-row-hover {
+   background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.1)) !important;
+   color: inherit !important;
+ }
+
+ .glass-theme .ag-row-hover::before {
+   background-color: transparent !important;
+ }
+
+
+ .glass-theme .ag-pinned-left-header,
+ .glass-theme .ag-pinned-right-header {
+   background: rgba(255, 255, 255, 0.3) !important;
+   backdrop-filter: blur(3px);
+   -webkit-backdrop-filter: blur(3px);
+   color: white !important;
+ }
+
+ .glass-theme .ag-pinned-left-cols-container,
+ .glass-theme .ag-pinned-right-cols-container {
+   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
+   backdrop-filter: blur(3px);
+   -webkit-backdrop-filter: blur(3px);
+   color: white !important;
+ }
+
+ // 修复表格容器透明度
+ .glass-theme .ag-root-wrapper {
+   background: transparent !important;
+   border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
+ }
+
+ .glass-theme .ag-center-cols-clipper {
+   background: transparent !important;
+ }
+
+ .glass-theme .ag-center-cols-container {
+   background: transparent !important;
+ }
+
+ // 玻璃模式下分页组件的样式
+ .glass-theme .ag-pagination {
+   color: white !important;
+
+   .pagination-content {
+     color: white !important;
+   }
+
+   // 确保所有页码的字体颜色适配主题设置
+   .ant-pagination-item {
+     // background-color: var(--ant-primary-color) !important;
+     background-color: transparent !important;
+     border-color: var(--ant-primary-color) !important;
+
+     a {
+       color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
+     }
+   }
+
+   .ant-pagination-item-active {
+     background-color: var(--ant-primary-color) !important;
+     border-color: var(--ant-primary-color) !important;
+
+     a {
+       color: var(--text-color, #ffffff) !important;
+     }
+   }
+
+   // 确保分页跳转输入框中的当前页数字也适配主题色
+   .ant-pagination-options {
+     .ant-pagination-options-quick-jumper {
+       input {
+         &:focus {
+           border-color: var(--ant-primary-color) !important;
+           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
+         }
+       }
+     }
+
+     // 确保每页条数选择下拉框在最前
+    //  .ant-pagination-options-size-changer {
+    //    z-index: 10000 !important;
+
+    //    .ant-select-dropdown {
+    //      z-index: 20001 !important;
+    //    }
+    //  }
+   }
+
+   .ant-pagination-prev,
+   .ant-pagination-next {
+     color: white !important;
+
+     .ant-pagination-item-link {
+       color: white !important;
+       background-color: rgba(255, 255, 255, 0.3) !important;
+       border-color: rgba(255, 255, 255, 0.3) !important;
      }
    }
  }

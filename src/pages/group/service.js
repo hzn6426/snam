@@ -65,3 +65,7 @@ export function listRoleByUser(uid, orgId) {
   return iget(`${constant.API_ROLE_BY_USER}?orgId=${orgId}&uid=${uid}`);
 }
 
+export function copyUserPerm(groupUser) {
+  return ipost(constant.API_GROUP_COPY_USER_PERM, groupUser);
+}
+

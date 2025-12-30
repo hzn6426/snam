@@ -462,7 +462,7 @@ export default (props) => {
             placeholder="输入组织或人员进行搜索"
             checkable={false}
             blockNode={true}
-            bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
+            bodyStyle={{ height: offsetHeight - 105, overflow: 'auto' }}
             titleRender={(node) => (
               <div style={{ width: '100%' }}>
                 <div style={{ float: 'left' }}>

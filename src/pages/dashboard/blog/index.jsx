@@ -33,7 +33,44 @@ export default () => {
       
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
-
+        <Timeline.Item>
+            <Title level={4}>[3.2.10] 2025.12.23</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph type='danger'>
+              <ul className="snam-li">
+                <li>新增 组织管理中添加用户复制权限功能，可以将一个用户复制到另一个用户中</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item><Timeline.Item>
+            <Title level={4}>[3.3.0] 2025.12.23</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph type='danger'>
+              <ul className="snam-li">
+                <li>新增 复制用户权限 用于在组织中将一个用户的所有权限复制到另一个用户中</li>
+                <li>新增 前端增加 <b>玻璃主题</b> 可在主题中选择玻璃主题</li>
+                <li>新增 组织优先级排序，编辑组织可设置优先级</li>
+                <li>新增 规则适配，可适配规则设计器中的规则(全新 GROOVY规则,即将开源</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化移动用户 移动用户时添加更新权限选项，选择是，将会将权限同步移动后的组织，保持权限不变</li>
+                
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复解析 SQL时,有 BigDecimal 类型时导致解析错误问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+          
           <Timeline.Item>
             <Title level={4}>[3.2.9] 2025.8.22</Title>
             <Title level={5}>新增功能</Title>

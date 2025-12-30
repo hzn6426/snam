@@ -5,6 +5,24 @@ import { createStoreContext, defineStoreInstance } from "@/store/store";
 function current(state) {
     return JSON.parse(JSON.stringify(state));
 }
+
+// 从localStorage加载保存的设置
+function loadSettingsFromStorage() {
+    try {
+        const savedSettings = localStorage.getItem("settings");
+        if (savedSettings) {
+            const parsedSettings = JSON.parse(savedSettings);
+            return {
+                ...defaultSettings,
+                ...parsedSettings
+            };
+        }
+    } catch (error) {
+        console.warn("Failed to load settings from localStorage:", error);
+    }
+    return defaultSettings;
+}
+
 const applicationStateInstance = defineStoreInstance((init) => {
     return immer((set) => ({
         ...init,
@@ -20,19 +38,7 @@ const applicationStateInstance = defineStoreInstance((init) => {
         },
     }));
 }, {
-    view:{
-        navTheme: defaultSettings.navTheme,
-        layout: defaultSettings.layout,
-        contentWidth: defaultSettings.contentWidth,
-        fixedHeader: defaultSettings.fixedHeader,
-        fixSiderbar: defaultSettings.fixSiderbar,
-        pwa: defaultSettings.pwa,
-        headerHeight: defaultSettings.headerHeight,
-        siderWidth: defaultSettings.siderWidth,
-        isTabs: defaultSettings.isTabs,
-        colorPrimary: defaultSettings.colorPrimary,
-        splitMenus: defaultSettings.splitMenus,
-    }
+    view: loadSettingsFromStorage()
 });
 export const [ApplicationStateProvider, useApplicationState] = createStoreContext(applicationStateInstance);
 

@@ -68,6 +68,7 @@
         margin: 3px;
         cursor: pointer;
         overflow: hidden;
+        position: relative;
 
         .color-icon {
             width: @color-item-size;
@@ -76,6 +77,32 @@
             font-size: 14px;
             text-align: center;
             line-height: @color-item-size;
+            transition: all 0.3s ease;
+            
+            &.custom-color-icon {
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57, #ff9ff3, #54a0ff) !important;
+                background-size: 200% 200% !important;
+                animation: gradientShift 3s ease infinite;
+                border: 2px solid #fff !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                
+                &:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+                }
+            }
         }
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
     }
 }
