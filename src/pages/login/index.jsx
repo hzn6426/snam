@@ -1,6 +1,6 @@
 import { api, constant, isEmpty, md5 } from '@/common/utils';
-import { LockTwoTone, UserOutlined } from '@ant-design/icons';
-import { Alert, Button, Checkbox, Form, Input, Typography, message } from 'antd';
+import { LockTwoTone, UserOutlined, HomeOutlined,GithubFilled } from '@ant-design/icons';
+import { Alert, Button, Checkbox, Form, Input, Typography, message,Avatar, } from 'antd';
 import { parse } from 'querystring';
 import { useState } from 'react';
 import { history, useIntl } from 'umi';
@@ -233,21 +233,26 @@ export default (props) => {
           <Form.Item name="autoLogin" valuePropName="checked" noStyle >
             <Checkbox>记住密码</Checkbox>
           </Form.Item>
+           <div style={{float:'right', marginRight: '18px',marginBottom:'0px',layout:'flex', }}>
+            <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={28} icon={<HomeOutlined />} style={{backgroundColor:'rgba(255, 255, 255, 0.4)',color:'#c85a5b',fontWeight:'bold', verticalAlign: 'middle', marginLeft: 0, marginRight: 4,cursor:'pointer' }} />
+            <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor:'rgba(255, 255, 255, 0.4)',color:'#c85a5b',fontWeight:'bold', verticalAlign: 'middle', marginLeft: 0, cursor:'pointer', marginRight: -20 }} />
+          </div>
         </div>
         <div style={{ marginLeft: '54px' }}>
           <Form.Item>
             <Button
-              type="primary"
+              // type="primary"
               htmlType="submit"
               size="large"
               shape="round"
-              style={{ width: '200px' }}
+              style={{ width: '240px',backgroundColor:'rgba(255, 255, 255, 0.4)', }}
               loading={loading}
             >
               登录
             </Button>
           </Form.Item>
         </div>
+       
       </Form>
     </div>
   );

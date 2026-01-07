@@ -1,8 +1,12 @@
-import { constant, idelete, iget, ipost, iput, isearchByToken } from '@/common/utils';
+import { constant, idelete, iget, ipost, iput,isearch, isearchByToken } from '@/common/utils';
 
 //条件查询
 export function searchOrder(token, conditions) {
     return isearchByToken(token, constant.API_ORDER_SEARCH, conditions);
+}
+//第三方用户查询
+export  function searchOrderByOuter(conditions) {
+    return isearch(constant.API_ORDER_SEARCH_OUTER, conditions);
 }
 
 //保存或更新
