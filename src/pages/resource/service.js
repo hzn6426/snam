@@ -8,9 +8,17 @@ export function listBPermResourcesByUser(orgId, uid) {
 export function listBPermResourcesByUset(usetId) {
     return iget(`${constant.API_RESOURCE_BPERM_BY_USET}?usetId=${usetId}`);
 }
+// 根据职位ID获取业务资源权限及权限范围
+export function listBPermResourcesByPosition(positionId) {
+    return iget(`${constant.API_RESOURCE_BPERM_BY_POSITION}?positionId=${positionId}`);
+}
 // 根据用户和权限获取用户业务权限
 export function listPermEntrustsByUser(orgId, uid, pid) {
     return iget(`${constant.API_RESOURCE_PERM_ENTRUST_BY_USER}?orgId=${orgId}&uid=${uid}&permId=${pid}`);
+}
+// 根据用户和权限获取用户额外的业务权限
+export function listPermAdditionalEntrustsByUser(orgId, uid, pid) {
+    return iget(`${constant.API_RESOURCE_PERM_ADDITIONAL_ENTRUST_BY_USER}?orgId=${orgId}&uid=${uid}&permId=${pid}`);
 }
 // 根据用户和权限获取用户排除的业务权限
 export function listPermExceptEntrustsByUser(orgId, uid, pid) {
@@ -25,13 +33,34 @@ export function saveUserBusinessPerm(perm) {
 export function listPermEntrustsByUset(usetId, pid) {
     return iget(`${constant.API_RESOURCE_PERM_ENTRUST_BY_USET}?usetId=${usetId}&permId=${pid}`);
 }
+
+// 根据用户组和权限获取用户额外的业务权限
+export function listPermAdditionalEntrustsByUset(usetId, pid) {
+    return iget(`${constant.API_RESOURCE_PERM_ADDITIONAL_ENTRUST_BY_USET}?usetId=${usetId}&permId=${pid}`);
+}
+// 根据职位和权限获取用户业务权限
+export function listPermEntrustsByPosition(positionId, pid) {
+    return iget(`${constant.API_RESOURCE_PERM_ENTRUST_BY_POSITION}?positionId=${positionId}&permId=${pid}`);
+}
+// 根据职位和权限获取用户额外的业务权限
+export function listPermAdditionalEntrustsByPosition(positionId, pid) {
+    return iget(`${constant.API_RESOURCE_PERM_ADDITIONAL_ENTRUST_BY_POSITION}?positionId=${positionId}&permId=${pid}`);
+}
 // 根据用户组和权限获取排除用户业务权限
 export function listPermExceptEntrustsByUset(usetId, pid) {
     return iget(`${constant.API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USET}?usetId=${usetId}&permId=${pid}`);
 }
+// 根据职位和权限获取排除用户业务权限
+export function listPermExceptEntrustsByPosition(positionId, pid) {
+    return iget(`${constant.API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_POSITION}?positionId=${positionId}&permId=${pid}`);
+}
 // 保存用户组业务权限
 export function saveUsetBusinessPerm(perm) {
     return ipost(constant.API_RESOURCE_SAVE_USET_PERM, perm);
+}
+// 保存职位业务权限
+export function savePositionBusinessPerm(perm) {
+    return ipost(constant.API_RESOURCE_SAVE_POSITION_PERM, perm);
 }
 // 根据权限获取对应的业务表信息
 export function fetchActionMapperByPerm(perm) {
@@ -57,9 +86,17 @@ export function loadUserDataPerm(userId, orgId, permId) {
 export function loadUsetDataPerm(usetId, permId) {
     return iget(`${constant.API_RESOURCE_LOAD_USET_DATA_PERM}?usetId=${usetId}&permId=${permId}`)
 }
+// 获取用户组的数据权限
+export function loadPositionDataPerm(positionId, permId) {
+    return iget(`${constant.API_RESOURCE_LOAD_POSITION_DATA_PERM}?positionId=${positionId}&permId=${permId}`)
+}
 // 保存用户组数据权限
 export function saveUsetDataPerm(perm) {
     return ipost(constant.API_RESOURCE_SAVE_USET_DATA_PERM, perm);
+}
+// 保存职位数据权限
+export function savePositionDataPerm(perm) {
+    return ipost(constant.API_RESOURCE_SAVE_POSITION_DATA_PERM, perm);
 }
 // 获取用户的列数据权限
 export function loadUserColumnPerm(userId, orgId, permId) {
@@ -69,6 +106,10 @@ export function loadUserColumnPerm(userId, orgId, permId) {
 export function loadUsetColumnPerm(usetId, permId) {
     return iget(`${constant.API_RESOURCE_LOAD_USET_COLUMN_PERM}?usetId=${usetId}&permId=${permId}`)
 }
+// 获取用户组的列数据权限
+export function loadPositionColumnPerm(positionId, permId) {
+    return iget(`${constant.API_RESOURCE_LOAD_POSITION_COLUMN_PERM}?positionId=${positionId}&permId=${permId}`)
+}
 // 保存用户列权限
 export function saveUserColumnPerm(perm) {
     return ipost(constant.API_RESOURCE_SAVE_USER_COLUMN_PERM, perm);
@@ -76,6 +117,10 @@ export function saveUserColumnPerm(perm) {
 // 保存用户组列权限
 export function saveUsetColumnPerm(perm) {
     return ipost(constant.API_RESOURCE_SAVE_USET_COLUMN_PERM, perm);
+}
+// 保存职位列权限
+export function savePositionColumnPerm(perm) {
+    return ipost(constant.API_RESOURCE_SAVE_POSITION_COLUMN_PERM, perm);
 }
 // 获取用户按钮数据权限
 export function getUserFunctionDataPerm(viewType, permId, orgId, usetId) {

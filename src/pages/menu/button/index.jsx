@@ -28,8 +28,12 @@ export default (props) => {
         const param = window.opener.onGetParams();
         if (param.id) {
             setButtonDisabled(true);
-            setBeNoAuth(param.beUnauth || false)
         }
+        let beAuth = false;
+            if (param.beUnauth === true) {
+                beAuth = true;
+            }
+            setBeNoAuth(beAuth);
         setCurrent(param);
     }, []);
 
@@ -66,7 +70,7 @@ export default (props) => {
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>
                 </IFormItem>
-                <IIF test={beNoAuth == true}>
+                <IIF test={beNoAuth === true}>
                 <IFormItem name="beLoginUnauth" label="忽略鉴权" xtype="radio" defaultValue={false} labelCol={{ flex: '110px' }}>
                     <Radio value={false}>否</Radio>
                     <Radio value={true}>是</Radio>

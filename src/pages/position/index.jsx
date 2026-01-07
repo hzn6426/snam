@@ -202,7 +202,7 @@ const LockRenderer = (props) => {
             url: '/new/position/ADD',
             title: '新建职位',
             width: 700,
-            height: 600,
+            height: 780,
             callback: () => {
                 loadGroup();
                 searchPositionByGroup(pageNo, pageSize);
@@ -217,7 +217,7 @@ const LockRenderer = (props) => {
             url: '/new/position/' + record.id,
             title: '编辑职位',
             width: 700,
-            height: 600,
+            height: 780,
             callback: () => {
                 loadGroup();
                 searchPositionByGroup(pageNo, pageSize);

@@ -34,6 +34,14 @@ export function loadActiveByGroup(gid) {
 export function listEntrusByPosition(pid) {
   return iget(`${constant.API_POSITION_LIST_ENTRUSTS}?pid=${pid}`);
 }
+// 根据组织ID获取所有的额外委托(组织和用户)列表
+export function listAdditionalEntrusByPosition(pid) {
+  return iget(`${constant.API_POSITION_LIST_ADDITIONAL_ENTRUSTS}?pid=${pid}`);
+}
+// 根据组织ID获取所有的额外委托(组织和用户)列表
+export function listExceptEntrusByPosition(pid) {
+  return iget(`${constant.API_POSITION_LIST_EXCEPT_ENTRUSTS}?pid=${pid}`);
+}
 // 保存职位角色
 export function savePositionRoles(positionRole) {
   return ipost(constant.API_POSITION_SAVE_POSITION_ROLES, positionRole);

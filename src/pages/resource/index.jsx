@@ -28,8 +28,9 @@ import {
     ScheduleOutlined,
     UserOutlined,
     TeamOutlined,
-    IssuesCloseOutlined,
-    SaveOutlined
+    SolutionOutlined,
+    SaveOutlined,
+    UsergroupAddOutlined
 } from '@ant-design/icons';
 import {
     Alert,
@@ -53,6 +54,11 @@ import {
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { zip } from 'rxjs';
+import perm from '../tenant/perm';
+import { set } from 'lscache';
+import en from '@/locales/en';
+import copy from '../group/copy';
+import user from '../user';
 
 let permScopes = {};
 api.dict.listChildByParentCode(constant.DICT_BUSINESS_PERM_SCOPE_TAG).subscribe({
@@ -166,6 +172,10 @@ export default () => {
     // 排除表格数据源
     const [exceptDataSource, setExceptDataSource] = useState([]);
     const [exceptSelectedKeys, setExceptSelectedKeys] = useState([]);
+
+    // 委托列表
+    const [entrustDataSource, setEntrustDataSource] = useState([]);
+    const [entrustSelectedKeys, setEntrustSelectedKeys] = useState([]);
     //   // 权限范围可选项
     //   const [permScopeOptions, setPermScopeOptions] = useState([]);
     // 权限范围
@@ -213,6 +223,11 @@ export default () => {
     // 用户选择的用户组ID
     const [selectedUsetId, setSelectedUsetId] = useState();
 
+    // 用户组树节点
+    const [positionTreeData, setPositionTreeData] = useState([]);
+    // 用户选择的用户组ID
+    const [selectedPositionId, setSelectedPositionId] = useState();
+
     const [userKeyMap, setUserKeyMap] = useState({});
     const [userGroupKeyMap, setUserGroupKeyMap] = useState({});
     const [userIdGroupKeyMap, setUserIdGroupKeyMap] = useState({});
@@ -224,7 +239,7 @@ export default () => {
         dataIndex: 'title',
     }, {
         title: '操作',
-        width: 60,
+        width: 50,
         search: false,
         dataIndex: 'operator',
         render: (text, record) => {
@@ -237,7 +252,34 @@ export default () => {
                     }
                 }, exceptDataSource);
                 setExceptDataSource(ds);
-                userGroupKeyMap[record.key].disabled = false;
+                setUserGroupKeyMap(produce(userGroupKeyMap,draft => {
+                    draft[record.key].disabled = false;
+                }));
+                // userGroupKeyMap[record.key].disabled = false;
+            }} /></>
+        }
+    }];
+
+    const entrustColumns = [{
+        title: '名称',
+        search: false,
+        dataIndex: 'title',
+    }, {
+        title: '操作',
+        width: 50,
+        search: false,
+        dataIndex: 'operator',
+        render: (text, record) => {
+            return <><DeleteOutlined title='删除' onClick={(e) => {
+                e.stopPropagation();
+                const ds = [];
+                forEach((v) => {
+                    if (v.key !== record.key) {
+                        ds.push(v);
+                    }
+                }, entrustDataSource);
+                setEntrustDataSource(ds);
+                // userGroupKeyMap[record.key].disabled = false;
             }} /></>
         }
     }];
@@ -245,6 +287,13 @@ export default () => {
     const uks = {};
     const uidks = {};
     const ugs = {};
+
+    const removeExtra = (title) => {
+        if (title.indexOf('(') > 0 && title.indexOf(')') > 0) {
+            title = title.substring(0, title.indexOf('(')) + title.substring(title.indexOf(')') + 1);;
+        }
+        return title;
+    }
 
     const loopUserGroup = (data) => {
         forEach((v) => {
@@ -256,10 +305,34 @@ export default () => {
         }, data);
     }
 
+    const loopUserPosition = (data) => {
+        forEach((v) => {
+            if (v.tag === 'POSITION') {
+                copyObject(v, {
+                    selectable: true,
+                    //disableCheckbox: true,
+                    icon: <SolutionOutlined style={{ color: '#eb2f96' }} />,
+                });
+            } else {
+                // 节点是组织不允许修改
+                copyObject(v, { 
+                    selectable: false,
+                    icon: <ApartmentOutlined /> 
+                });
+            }
+            if (v.children && !isEmpty(v.children)) {
+                loopUserPosition(v.children);
+            }
+        }, data);
+    }
+
     // 将组织设置为不可选
     const loopGroup = (data, beNotSelectGroup, beInit) => {
         forEach((v) => {
-            v.disabled = false;
+            copyObject(v, {
+                disabled: false,
+            });
+            // v.disabled = false;
             if (beInit === true) {
                 ugs[v.key] = v;
             }
@@ -324,13 +397,21 @@ export default () => {
         });
     };
 
+    // 根据职位加载对应的权限资源
+    const loadPermResourceByPosition = (positionId) => {
+        api.resource.listBPermResourcesByPosition(positionId).subscribe({
+            next: (data) => setDataSource(data),
+        });
+    };
+
     // 根据用户及权限加载对应的业务权限
     const loadUserPermEntrusts = (orgId, uid, permId) => {
         zip(
             api.resource.listPermEntrustsByUser(orgId, uid, permId),
             api.resource.listPermExceptEntrustsByUser(orgId, uid, permId),
+            api.resource.listPermAdditionalEntrustsByUser(orgId, uid, permId)
         ).subscribe({
-            next: ([data1, data2]) => {
+            next: ([data1, data2, data3]) => {
                 forEach((v) => {
                     v.disabled = false;
                 }, disabledNodes || []);
@@ -349,15 +430,30 @@ export default () => {
                         const node = userIdGroupKeyMap[v];
                         node.disabled = true;
                         disables.push(node);
+                        let title = removeExtra(node.title);
                         if (node.parentGroupName) {
-                            ds.push({ title: node.title + '[' + node.parentGroupName + ']', key: node.key });
+                            ds.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
                         } else {
-                            ds.push({ title: node.title, key: node.key });
+                            ds.push({ title: title, key: node.key });
                         }
                     }
                 }, data2);
                 setExceptDataSource(ds);
                 setDisAbledNodes(disables);
+
+                const addDs = [];
+                forEach((v) => {
+                    if (userIdGroupKeyMap[v]) {
+                        const node = userIdGroupKeyMap[v];
+                        let title = removeExtra(node.title);
+                        if (node.parentGroupName) {
+                            addDs.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                        } else {
+                            addDs.push({ title: title, key: node.key });
+                        }
+                    }
+                }, data3);
+                setEntrustDataSource(addDs);
             },
         });
     };
@@ -366,9 +462,10 @@ export default () => {
     const loadUsetPermEntrusts = (usetId, permId) => {
         zip(
             api.resource.listPermEntrustsByUset(usetId, permId),
-            api.resource.listPermExceptEntrustsByUset(usetId, permId)
+            api.resource.listPermExceptEntrustsByUset(usetId, permId),
+            api.resource.listPermAdditionalEntrustsByUset(usetId, permId)
         ).subscribe({
-            next: ([data1, data2]) => {
+            next: ([data1, data2, data3]) => {
                 forEach((v) => {
                     v.disabled = false;
                 }, disabledNodes);
@@ -387,16 +484,85 @@ export default () => {
                         const node = userIdGroupKeyMap[v];
                         node.disabled = true;
                         disables.push(node);
+                        let title = removeExtra(node.title);
                         if (node.parentGroupName) {
-                            ds.push({ title: node.title + '[' + node.parentGroupName + ']', key: node.key });
+                            ds.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
                         } else {
-                            ds.push({ title: node.title, key: node.key });
+                            ds.push({ title: title, key: node.key });
                         }
                     }
                 }, data2);
                 setExceptDataSource(ds);
                 setDisAbledNodes(disables);
 
+                const addDs = [];
+                forEach((v) => {
+                    if (userIdGroupKeyMap[v]) {
+                        const node = userIdGroupKeyMap[v];
+                        let title = removeExtra(node.title);
+                        if (node.parentGroupName) {
+                            addDs.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                        } else {
+                            addDs.push({ title: title, key: node.key });
+                        }
+                    }
+                }, data3);
+                setEntrustDataSource(addDs);
+            },
+        });
+    }
+
+    // 根据职位及权限加载对应的业务权限
+    const loadPositionPermEntrusts = (positionId, permId) => {
+        zip(
+            api.resource.listPermEntrustsByPosition(positionId, permId),
+            api.resource.listPermExceptEntrustsByPosition(positionId, permId),
+            api.resource.listPermAdditionalEntrustsByPosition(positionId, permId)
+        ).subscribe({
+            next: ([data1, data2,data3]) => {
+                forEach((v) => {
+                    v.disabled = false;
+                }, disabledNodes);
+
+                const targets = [];
+                console.log(userKeyMap);
+                forEach((v) => {
+                    if (userKeyMap[v]) {
+                        targets.push(userKeyMap[v]);
+                    }
+                }, data1);
+                setPermGroupOrUserId(targets);
+                const ds = [];
+                const disables = [];
+                forEach((v) => {
+                    if (userIdGroupKeyMap[v]) {
+                        const node = userIdGroupKeyMap[v];
+                        node.disabled = true;
+                        disables.push(node);
+                        let title = removeExtra(node.title);
+                        if (node.parentGroupName) {
+                            ds.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                        } else {
+                            ds.push({ title: title, key: node.key });
+                        }
+                    }
+                }, data2);
+                setExceptDataSource(ds);
+                setDisAbledNodes(disables);
+
+                const addDs = [];
+                forEach((v) => {
+                    if (userIdGroupKeyMap[v]) {
+                        const node = userIdGroupKeyMap[v];
+                        let title = removeExtra(node.title);
+                        if (node.parentGroupName) {
+                            addDs.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                        } else {
+                            addDs.push({ title: title, key: node.key });
+                        }
+                    }
+                }, data3);
+                setEntrustDataSource(addDs);
             },
         });
     }
@@ -421,6 +587,7 @@ export default () => {
         }
     };
 
+
     //排除用户
     const onExceptUserPerm = (node, e) => {
         if (node.disabled) {
@@ -434,10 +601,11 @@ export default () => {
         });
         setDisAbledNodes(disables);
         const ds = produce(exceptDataSource, (draft) => {
+            let title = removeExtra(node.text);
             if (node.parentGroupName) {
-                draft.push({ title: node.text + '[' + node.parentGroupName + ']', key: node.key });
+                draft.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
             } else {
-                draft.push({ title: node.text, key: node.key });
+                draft.push({ title: title, key: node.key });
             }
         })
         setExceptDataSource(ds);
@@ -449,6 +617,30 @@ export default () => {
             setPermGroupOrUserId(ks);
 
         }
+    }
+
+     //添加委托用户
+    const onEntrustUserPerm = (node, e) => {
+        
+        e.stopPropagation();
+        // userGroupKeyMap[node.key].disabled = true;
+        // const disables = produce(disabledNodes, (draft) => {
+        //     draft.push(node);
+        // });
+        // setDisAbledNodes(disables);
+        let index = entrustDataSource.findIndex(item => item.key === node.key);
+        if (index >= 0) {
+            return;
+        }
+        const ds = produce(entrustDataSource, (draft) => {
+            let title = removeExtra(node.text);
+            if (node.parentGroupName) {
+                draft.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+            } else {
+                draft.push({ title: title, key: node.key });
+            }
+        })
+        setEntrustDataSource(ds);
     }
 
 
@@ -592,6 +784,45 @@ export default () => {
         });
     }
 
+    // 根据职位获取对应的数据权限
+    const loadPositionDataPerm = (positionId, permId) => {
+        api.resource.loadPositionDataPerm(positionId, permId).subscribe({
+            next: (data) => {
+                // if (!data || data.length === 0) {
+                //     return;
+                // }
+                bform.setFieldsValue({});
+                setBeOrChecked(false);
+                setUi([]);
+
+                const perm = data[0] || {};
+                const aliaNames = [];
+                const ad = {};
+                const adConditionAlias = {};
+                const tableNames = [];
+                const tableAliasMap = {};
+                forEach((v) => {
+                    aliaNames.push(v.aliasName);
+                    tableNames.push(v.tableName);
+                    adConditionAlias['conditionTableAlias' + v.tableName] = v.conditionTableAlias;
+                    ad[v.tableName] = v.express;
+                    tableAliasMap[v.tableName] = v.aliasName;
+                }, perm.searchExpresses || []);
+                // const obj = {permId: permId, userId: userId, orgId: orgId, tables:aliaNames, ...ad };
+                const obj = {
+                    ...ad, ...adConditionAlias, tables: aliaNames,
+                    // beOrCondition:perm.beOrCondition,
+                    permStartTime: perm.permStartTime,
+                    permEndTime: perm.permEndTime
+                };
+                // setBeOrChecked(perm.beOrCondition || false);
+                // setBeForceChecked(perm.beForceCondition || false);
+                fetchDataPermColumnsByTable(tableNames.join(','), tableAliasMap, () => { bform.setFieldsValue(obj);setBeOrChecked(perm.beOrCondition || false); });
+
+            }
+        });
+    }
+
     //保存用户数据权限
     const submitUserDataPerm = () => {
         if (permType === 'user') {
@@ -601,6 +832,11 @@ export default () => {
             }
         } else if (permType === 'uset') {
             if (isNil(selectedUsetId) || isNil(originPermScope)) {
+                message.error('请先选择对应的功能!');
+                return;
+            }
+        } else if (permType === 'position') {
+            if (isNil(selectedPositionId) || isNil(originPermScope)) {
                 message.error('请先选择对应的功能!');
                 return;
             }
@@ -626,6 +862,13 @@ export default () => {
             } else if (permType === 'uset') {
                 setSaveLoading(true);
                 api.resource.saveUsetDataPerm(values).subscribe({
+                    next: () => {
+                        message.success("操作成功!");
+                    }
+                }).add(() => setSaveLoading(false));
+            } else if (permType === 'position') {
+                setSaveLoading(true);
+                api.resource.savePositionDataPerm(values).subscribe({
                     next: () => {
                         message.success("操作成功!");
                     }
@@ -780,6 +1023,37 @@ export default () => {
         })
     }
 
+    //加载职位列权限
+    const loadPositionColumnPerm = (positionId, permId) => {
+        api.resource.loadPositionColumnPerm(positionId, permId).subscribe({
+            next: (data) => {
+                if (!data || data.length === 0) {
+                    return;
+                }
+                const aliaNames = [];
+                const tables = [];
+                const tableExceptColumns = {};
+                forEach((v) => {
+                    tables.push(v.alias);
+                    aliaNames.push(v.alias)
+                    const cmns = [];
+                    if (v.columns && v.columns.length > 0) {
+                        forEach((vv) => {
+                            cmns.push(vv.columnName);
+                        }, v.columns);
+                    }
+                    tableExceptColumns[v.table] = cmns;
+                }, data);
+
+                setColumnPermSelectedTables(tables)
+                const obj = { tables: aliaNames };
+                cform.setFieldsValue(obj);
+                setExceptTableColumn(tableExceptColumns);
+            }
+        })
+    }
+
+
     //重新渲染列权限组件
     const renderColumnPermUi = (selectTables) => {
         const tables = {};
@@ -833,6 +1107,11 @@ export default () => {
                 message.error('请先选择对应的功能!');
                 return;
             }
+        } else if (permType === 'position') {
+            if (isNil(selectedPositionId) || isNil(originPermScope)) {
+                message.error('请先选择对应的功能!');
+                return;
+            }
         }
         cform.validateFields().then((values) => {
             const submitValues = [];
@@ -870,6 +1149,13 @@ export default () => {
                         message.success("操作成功!");
                     }
                 }).add(() => setSaveLoading(false));
+            } else if (permType === 'position') {
+                setSaveLoading(true);
+                api.resource.savePositionColumnPerm(values).subscribe({
+                    next: () => {
+                        message.success("操作成功!");
+                    }
+                }).add(() => setSaveLoading(false));
             }
         });
     }
@@ -896,6 +1182,7 @@ export default () => {
                 orgId: selectedUserGroupId,
                 userId: selectedUserId,
                 usetId: selectedUsetId,
+                positionId: selectedPositionId,
                 permId: record.permId,
                 permScope: record.permScope,
             };
@@ -909,12 +1196,15 @@ export default () => {
                 loadUserPermEntrusts(selectedUserGroupId, selectedUserId, record.permId);
             } else if (permType === 'uset') {
                 loadUsetPermEntrusts(selectedUsetId, record.permId);
+            } else if (permType === 'position') {
+                loadPositionPermEntrusts(selectedPositionId, record.permId);
             }
         } else if (ak === 'businessPerm') {
             const businessFormValue = {
                 orgId: selectedUserGroupId,
                 userId: selectedUserId,
                 usetId: selectedUsetId,
+                positionId: selectedPositionId,
                 permId: record.permId,
             };
             setBeForceChecked(false);
@@ -926,6 +1216,8 @@ export default () => {
                     loadUserDataPerm(selectedUserId, selectedUserGroupId, record.permId);
                 } else if (permType === 'uset') {
                     loadUsetDataPerm(selectedUsetId, record.permId);
+                } else if (permType === 'position') {
+                    loadPositionDataPerm(selectedPositionId, record.permId);
                 }
             });
         } else if (ak === 'columnPerm') {
@@ -933,6 +1225,7 @@ export default () => {
                 orgId: selectedUserGroupId,
                 userId: selectedUserId,
                 usetId: selectedUsetId,
+                positionId: selectedPositionId,
                 permId: record.permId,
             };
             cform.resetFields();
@@ -945,6 +1238,8 @@ export default () => {
                     loadUserColumnPerm(selectedUserId, selectedUserGroupId, record.permId);
                 } else if (permType === 'uset') {
                     loadUsetColumnPerm(selectedUsetId, record.permId);
+                } else if (permType === 'position') {
+                    loadPositionColumnPerm(selectedPositionId, record.permId);
                 }
             });
 
@@ -954,7 +1249,7 @@ export default () => {
     //用户选择
     const onUserSelect = (node) => {
         let uid = node.key;
-        if (uid.indexOf('#') !== 0) {
+        if (uid.indexOf('#') >= 0) {
             // eslint-disable-next-line prefer-destructuring
             uid = split(uid, '#')[1];
         }
@@ -975,6 +1270,15 @@ export default () => {
         setSelectedKeys([]);
     };
 
+    const onPositionSelect = (node) => {
+        const positionId = node.key;
+        loadPermResourceByPosition(positionId);
+        setPermType('position');
+        setSelectedPositionId(positionId);
+        setSelectedTag('');
+        setSelectedKeys([]);
+    };
+
     // 用户权限保存按钮
     const submitUserPerm = () => {
         if (permType === 'user') {
@@ -987,10 +1291,14 @@ export default () => {
                 message.error('请先选择对应的功能!');
                 return;
             }
+        } else if (permType === 'position') {
+            if (isNil(selectedPositionId) || isNil(originPermScope)) {
+                message.error('请先选择对应的功能!');
+                return;
+            }
         }
         setConfirmLoading(true);
         form.validateFields().then((values) => {
-            console.log(values);
             copyObject(values, {
                 groupEntrusts: [],
                 userEntrusts: [],
@@ -998,10 +1306,12 @@ export default () => {
                 permEndTime: values.timeRange && values.timeRange[1],
                 exceptGroupEntrusts: [],
                 exceptUserEntrusts: [],
+                additionalGroupEntrusts:[],
+                additionalUserEntrusts:[],
             });
+            const g = [];
+            const u = [];
             if (!isEmpty(permGroupOrUserId)) {
-                const g = [];
-                const u = [];
                 forEach((v) => {
                     if (v.indexOf('#') !== -1) {
                         v = split(v, '#')[1];
@@ -1010,11 +1320,28 @@ export default () => {
                         g.push(v);
                     }
                 }, permGroupOrUserId);
-                copyObject(values, {
-                    groupEntrusts: g,
-                    userEntrusts: u,
-                });
             }
+            copyObject(values, {
+                groupEntrusts: g,
+                userEntrusts: u,
+            });
+            const additionalGroupEntrusts = [];
+            const additionalUserEntrusts= [];
+            if (!isEmpty(entrustDataSource)) {
+                forEach((v) => {
+                    let dsKey = v.key;
+                    if (dsKey.indexOf('#') !== -1) {
+                        dsKey = split(dsKey, '#')[1];
+                        additionalUserEntrusts.push(dsKey);
+                    } else {
+                        additionalGroupEntrusts.push(dsKey);
+                    }
+                }, entrustDataSource);
+            }
+            copyObject(values, {
+                additionalGroupEntrusts: additionalGroupEntrusts,
+                additionalUserEntrusts: additionalUserEntrusts,
+            });
             if (!isEmpty(exceptDataSource)) {
                 const eg = [];
                 const eu = [];
@@ -1047,6 +1374,13 @@ export default () => {
                         loadPermResourceByUset(selectedUsetId);
                     },
                 }).add(() => setConfirmLoading(false));
+            } else if (permType === 'position') {
+                api.resource.savePositionBusinessPerm(values).subscribe({
+                    next: () => {
+                        message.success('操作成功!');
+                        loadPermResourceByPosition(selectedPositionId);
+                    },
+                }).add(() => setConfirmLoading(false));
             }
         }).catch(() => {
             setConfirmLoading(false);
@@ -1059,9 +1393,16 @@ export default () => {
         });
     };
 
+    const treeAllPosition = () => {
+        api.group.treeAllGroupsAndPositions().subscribe({
+            next: (data) => setPositionTreeData(data),
+        });
+    };
+
     useEffect(() => {
         loadGroup();
         treeAllUset();
+        treeAllPosition();
     }, []);
 
     useEffect(() => {
@@ -1081,7 +1422,7 @@ export default () => {
                         bodyStyle={{ height: offsetHeight - 66, overflow: 'auto', paddingTop: '5px' }}
                     >
                         <Tabs size="small" type="card" >
-                            <TabPane size='small' tab="用户组织" key="userGroup">
+                            <TabPane size='small' tab="组织用户" key="userGroup">
                                 {/* <div> */}
                                 <ISearchTree
                                     bordered={false}
@@ -1107,6 +1448,23 @@ export default () => {
                                     iconRender={(data) => loopUserGroup(data)}
                                     treeData={usetTreeData}
                                     onSelect={(uids, { node }) => onUsetSelect(node)}
+                                    titleRender={(node) => (
+                                        <div style={{ width: '100%' }}>
+                                            <div style={{ float: 'left' }}>
+                                                {node.icon} {node.title}
+                                            </div>
+                                        </div>
+                                    )}
+                                />
+                            </TabPane>
+                            <TabPane size='small' tab="用户职位" key="userPosition">
+                                <ISearchTree
+                                    bordered={false}
+                                    bodyStyle={{}}
+                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'auto' }}
+                                    iconRender={(data) => loopUserPosition(data)}
+                                    treeData={positionTreeData}
+                                    onSelect={(uids, { node }) => onPositionSelect(node)}
                                     titleRender={(node) => (
                                         <div style={{ width: '100%' }}>
                                             <div style={{ float: 'left' }}>
@@ -1229,6 +1587,11 @@ export default () => {
                                                     <Input />
                                                 </Form.Item>
                                             </Form.Item>
+                                            <Form.Item style={{ display: 'none' }}>
+                                                <Form.Item name="positionId" label="positionId">
+                                                    <Input />
+                                                </Form.Item>
+                                            </Form.Item>
 
                                             <Row gutter={12}>
                                                 <Col span={24}>
@@ -1281,10 +1644,10 @@ export default () => {
                                                             size='small'
                                                             bordered={true}
                                                             bodyStyle={{ height: 280, overflow: 'auto' }}
-                                                            title={<div>指定范围列表</div>}
+                                                            title={<span>指定范围列表 - 部门全选时只委托组织,选用户时只委托用户</span>}
                                                         >
                                                             <ISearchTree
-                                                                bodyStyle={{ height: 320, overflow: 'auto' }}
+                                                                bodyStyle={{ height: 210, overflow: 'auto' }}
                                                                 iconRender={(data) => loopGroup(data, false, false)}
                                                                 size="small"
                                                                 bordered
@@ -1300,12 +1663,17 @@ export default () => {
                                                                         <div style={{ float: 'left' }}>
                                                                             {node.icon} {node.title}
                                                                         </div>
-                                                                        <div style={{ float: 'right', zIndex: 999 }}>
+                                                                        <div style={{ float: 'right', zIndex: 999,marginRight: 5 }}>
                                                                             <Space>
                                                                                 <DeleteRowOutlined
                                                                                     size="small"
                                                                                     title='排除'
                                                                                     onClick={(e) => onExceptUserPerm(node, e)}
+                                                                                />
+                                                                                <UsergroupAddOutlined
+                                                                                    size="small"
+                                                                                    title='添加'
+                                                                                    onClick={(e) => onEntrustUserPerm(node, e)}
                                                                                 />
                                                                             </Space>
                                                                         </div>
@@ -1315,11 +1683,12 @@ export default () => {
                                                         </Card>
                                                     </Col>
                                                 </Row>
-                                                <Row gutter={5}>
-                                                    <Col span={24}>
+                                                <Row gutter={2}>
+                                                    <Col span={12}>
                                                         <Table
                                                             size="small"
-                                                            style={{ marginTop: '5px' }}
+                                                            style={{ marginTop: '5px'}}
+                                                            // className=" [&_.ant-table-body]:min-h-[180px]"
                                                             title={() => <><b>排除组织/用户列表</b></>}
                                                             scroll={{ y: 195, }}
                                                             bordered
@@ -1335,7 +1704,28 @@ export default () => {
                                                             pagination={false}
                                                         />
                                                     </Col>
+                                                    <Col span={12}>
+                                                        <Table
+                                                            size="small"
+                                                            style={{ marginTop: '5px',marginLeft:'2px'}}
+                                                            // className=" [&_.ant-table-body]:min-h-[180px]"
+                                                            title={() => <><b>委托组织/用户列表</b></>}
+                                                            scroll={{ y: 195, }}
+                                                            bordered
+                                                            rowKey="key"
+                                                            columns={entrustColumns}
+                                                            search={false}
+                                                            dataSource={entrustDataSource}
+                                                            rowSelection={{
+                                                                onChange: (rowKeys) => {
+                                                                    setEntrustSelectedKeys(rowKeys);
+                                                                },
+                                                            }}
+                                                            pagination={false}
+                                                        />
+                                                    </Col>
                                                 </Row>
+                                                
                                             </>
                                         )}
                                     </Card>
@@ -1379,6 +1769,11 @@ export default () => {
                                             </Form.Item>
                                             <Form.Item style={{ display: 'none' }}>
                                                 <Form.Item name="usetId" label="usetId">
+                                                    <Input />
+                                                </Form.Item>
+                                            </Form.Item>
+                                            <Form.Item style={{ display: 'none' }}>
+                                                <Form.Item name="positionId" label="positionId">
                                                     <Input />
                                                 </Form.Item>
                                             </Form.Item>
@@ -1471,6 +1866,11 @@ export default () => {
                                             </Form.Item>
                                             <Form.Item style={{ display: 'none' }}>
                                                 <Form.Item name="usetId" label="usetId">
+                                                    <Input />
+                                                </Form.Item>
+                                            </Form.Item>
+                                            <Form.Item style={{ display: 'none' }}>
+                                                <Form.Item name="positionId" label="positionId">
                                                     <Input />
                                                 </Form.Item>
                                             </Form.Item>

@@ -321,9 +321,28 @@ export default Object.freeze({
   API_POSITION_LIST_ACTIVED_BY_GROUP: '/authority/position/listActiveByGroup',
   // 组织ID获取对应的委托列表
   API_POSITION_LIST_ENTRUSTS: '/authority/position/listEntrusIdsByPosition',
+  // 组织ID获取对应的委托列表
+  API_POSITION_LIST_ADDITIONAL_ENTRUSTS: '/authority/position/listAdditionalEntrustIdsByPosition',
+  // 组织ID获取对应的排除委托列表
+  API_POSITION_LIST_EXCEPT_ENTRUSTS: '/authority/position/listExceptEntrusIdsByPosition',
   // 保存职位角色
   API_POSITION_SAVE_POSITION_ROLES: '/authority/position/savePositionRole',
-
+  // 根据职位和权限加载职位业务权限
+  API_RESOURCE_PERM_ENTRUST_BY_POSITION: '/authority/resource/listPermEntrustsByPosition',
+  // 根据职位和权限加载职位额外的业务权限
+  API_RESOURCE_PERM_ADDITIONAL_ENTRUST_BY_POSITION: '/authority/resource/listPermAdditionalEntrustsByPosition',
+  // 根据职位和权限加载职位排除的业务权限
+  API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_POSITION: '/authority/resource/listPermExceptEntrustsByPosition',
+  // 获取职位的数据权限
+  API_RESOURCE_LOAD_POSITION_DATA_PERM: '/authority/resource/getPositionDataPerm',
+  // 获取职位的列权限
+  API_RESOURCE_LOAD_POSITION_COLUMN_PERM: '/authority/resource/listPositionColumnPerm',
+  // 保存职位业务权限
+  API_RESOURCE_SAVE_POSITION_PERM: '/authority/resource/savePositionBusinessPerm',
+  // 保存职位列权限
+  API_RESOURCE_SAVE_POSITION_COLUMN_PERM: '/authority/resource/savePositionColumnPerm',
+  // 保存职位数据权限
+  API_RESOURCE_SAVE_POSITION_DATA_PERM: '/authority/resource/savePositionDataPerm',
   //= ==============================================//
   //                   数据权限列                     //
   //= ==============================================//
@@ -345,15 +364,21 @@ export default Object.freeze({
   API_RESOURCE_BPERM_BY_USER: '/authority/resource/listResourcesForBPermByUser',
   // 根据客户和权限加载用户业务权限
   API_RESOURCE_PERM_ENTRUST_BY_USER: '/authority/resource/listPermEntrustsByUser',
+  // 根据客户和权限加载额外的用户业务权限
+  API_RESOURCE_PERM_ADDITIONAL_ENTRUST_BY_USER: '/authority/resource/listPermAdditionalEntrustsByUser',
   // 根据客户和权限加载用户排除的业务权限
   API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USER: '/authority/resource/listPermExceptEntrustsByUser',
   // 保存用户业务权限
   API_RESOURCE_SAVE_USER_PERM: '/authority/resource/saveBusinessPerm',
   // 根据用户组获取业务资源及业务权限范围
   API_RESOURCE_BPERM_BY_USET: '/authority/resource/listResourcesForBPermByUset',
+  // 根据职位获取业务资源及业务权限范围
+  API_RESOURCE_BPERM_BY_POSITION: '/authority/resource/listResourcesForBPermByPosition',
 
   // 根据客户和权限加载用户组业务权限
   API_RESOURCE_PERM_ENTRUST_BY_USET: '/authority/resource/listPermEntrustsByUset',
+  // 根据客户和权限加载用户组额外的业务权限
+  API_RESOURCE_PERM_ADDITIONAL_ENTRUST_BY_USET: '/authority/resource/listPermAdditionalEntrustByUset',
   // 根据客户和权限加载用户组排除的业务权限
   API_RESOURCE_PERM_EXCEPT_ENTRUST_BY_USET: '/authority/resource/listPermExceptEntrustsByUset',
   // 保存用户组业务权限

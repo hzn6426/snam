@@ -230,7 +230,7 @@ export default (props) => {
         const parent = node.parentId;
         setSelectedGroupId(parent);
         if (parent === constant.ROOT_OF_GROUP) {
-            const param = { id: node.key, groupName: node.text,parentId: parent }
+            const param = { id: node.key, groupName: node.text,parentId: parent,priority:node.priority }
             INewWindow({
                 url: '/new/group/company',
                 title: '编辑公司',
