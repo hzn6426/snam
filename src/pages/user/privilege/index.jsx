@@ -53,7 +53,7 @@ const userState = {
     LOCKED: { text: '锁定', status: 'Error' },
 };
 
-const dataPermViewOption = [{ label: "全部", value: "ALL" }, { label: "用户", value: "USER" }, { label: "用户组", value: "USET" }]
+const dataPermViewOption = [{ label: "全部", value: "ALL" }, { label: "用户", value: "USER" }, { label: "职位", value: "POSITION" }, { label: "用户组", value: "USET" }]
 
 const UserStateRenderer = (props) => {
     return props.value && <IStatus value={props.value} state={userState} />;
@@ -282,6 +282,17 @@ const loop = (data) =>
         return d;
     }, data);
 
+    const exceptColumns = [{
+        title: '名称',
+        search: false,
+        dataIndex: 'title',
+    }];
+
+    const entrustColumns = [{
+        title: '名称',
+        search: false,
+        dataIndex: 'title',
+    }];
 //渲染图标
 const addIcon = (data) => {
     if (isEmpty(data)) return;
@@ -341,6 +352,8 @@ export default (props) => {
     const [permGroupOrUserId, setPermGroupOrUserId] = useState([]);
     // 用户对应的职位ID
     const [postitionId, setPostitionId] = useState('');
+    // 对应的用户 ID
+    const [userId, setUserId] = useState('');
     // 职位用户组织树
     const [postTreeData, setPostTreeData] = useState([]);
     // 选中的自定义职位权限范围
@@ -369,6 +382,9 @@ export default (props) => {
     const [exceptDataSource, setExceptDataSource] = useState([]);
     const [exceptSelectedKeys, setExceptSelectedKeys] = useState([]);
 
+     // 委托列表
+     const [entrustDataSource, setEntrustDataSource] = useState([]);
+     const [entrustSelectedKeys, setEntrustSelectedKeys] = useState([]);
 
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [saveLoading, setSaveLoading] = useState(false);
@@ -407,13 +423,24 @@ export default (props) => {
         setDataPermView(v);
     }
 
+    const removeExtra = (title) => {
+        if (title.indexOf('(') > 0 && title.indexOf(')') > 0) {
+            title = title.substring(0, title.indexOf('(')) + title.substring(title.indexOf(')') + 1);;
+        }
+        return title;
+    }
+
     //获取职位信息
     const getPosition = (id) => {
-        zip(api.position.getPosition(id), api.position.listEntrusByPosition(id)).subscribe({
-            next: ([data, data2]) => {
+        zip(api.position.getPosition(id), api.position.listEntrusByPosition(id),
+            api.position.listAdditionalEntrusByPosition(id), api.position.listExceptEntrusByPosition(id)).subscribe({
+            next: ([data, data2, data3, data4]) => {
                 setPostPermGroupOrUserId(data2);
+                setEntrustDataSource(data3);
+                setExceptDataSource(data4);
                 const position = data[0];
                 postForm.setFieldsValue(position);
+                
             }
         });
     }
@@ -461,10 +488,11 @@ export default (props) => {
         const uid = split(id, '_')[0];
         const gid = split(id, '_')[1];
         if (key === 'buttonPerm') {
-            api.resource.getUserFunctionDataPerm(dataPermView, permId, gid, selectedUsetId).subscribe({
+            api.resource.getUserFunctionDataPerm(dataPermView, permId, userId, gid, postitionId, selectedUsetId).subscribe({
                 next: (data) => {
                     const dp = data[0];
                     const data1 = dp?.entrustIds;
+                    
                     form.setFieldsValue(dp);
                     setPermScope(dp.permScope);
                     forEach((v) => {
@@ -495,6 +523,26 @@ export default (props) => {
                     }, data2);
                     setExceptDataSource(ds);
                     setDisAbledNodes(disables);
+
+                    const data3 = dp?.additionalEntrustIds;
+                    const addDs = [];
+                    forEach((v) => {
+                        if (v.indexOf('#') >=  0) {
+                            // eslint-disable-next-line prefer-destructuring
+                            v = split(v, '#')[1];
+                        }
+                        if (userIdGroupKeyMap[v]) {
+                            const node = userIdGroupKeyMap[v];
+                            console.log(node);
+                            let title = removeExtra(node.title);
+                            if (node.parentGroupName) {
+                                addDs.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                            } else {
+                                addDs.push({ title: title, key: node.key });
+                            }
+                        }
+                    }, data3);
+                    setEntrustDataSource(addDs);
                 }
             })
         } else if (key == 'businessPerm') {
@@ -524,7 +572,7 @@ export default (props) => {
                     // setTableComment(commentMap);
                     tableComment = commentMap;
 
-                    api.resource.getUserBusinessDataPerm(dataPermView, permId, gid, selectedUsetId).subscribe({
+                    api.resource.getUserBusinessDataPerm(dataPermView, permId, userId, gid, postitionId, selectedUsetId).subscribe({
                         next: (data) => {
                             setBeHaveAndCondition(false);
                             setBeHaveOrCondition(false);
@@ -598,7 +646,7 @@ export default (props) => {
                     // setTableComment(commentMap);
                     tableComment = commentMap;
 
-                    api.resource.getUserColumnDataPerm(dataPermView, permId, gid, selectedUsetId).subscribe({
+                    api.resource.getUserColumnDataPerm(dataPermView, permId, userId, gid, postitionId, selectedUsetId).subscribe({
                         next: (data) => {
                             if (!data || data.length === 0) {
                                 return;
@@ -671,6 +719,7 @@ export default (props) => {
 
     useEffect(() => {
         init(params.id)
+        
     }, [params.id])
 
     useEffect(() => {
@@ -684,6 +733,7 @@ export default (props) => {
         const id = params.id;
         const uid = split(id, '_')[0];
         const gid = split(id, '_')[1];
+        setUserId(uid);
         api.user.listPermMenusAndButtons(uid, gid, selectRoleId, beFilterPermButton,beFilterUnAuthButton).subscribe({
             next: (data) => {
                 addIcon(data);
@@ -705,11 +755,65 @@ export default (props) => {
     }, [selectedUsetId, dataPermView])
 
     //监控职位ID
+    // useEffect(() => {
+    //     if (postitionId) {
+    //         getPosition(postitionId);
+    //     }
+    // }, [postitionId]);
+
     useEffect(() => {
-        if (postitionId) {
-            getPosition(postitionId);
+        if (!postitionId) {
+            return;
         }
-    }, [postitionId]);
+        getPosition(postitionId);
+        const id = postitionId;
+        if (!isEmpty(userIdGroupKeyMap)) {
+            zip(api.position.listAdditionalEntrusByPosition(id), api.position.listExceptEntrusByPosition(id)).subscribe({
+                next: ([data3, data4]) => {
+                    const addDs = [];
+                    forEach((v) => {
+                        if (v.indexOf('#') >=  0) {
+                            // eslint-disable-next-line prefer-destructuring
+                            v = split(v, '#')[1];
+                        }
+                        if (userIdGroupKeyMap[v]) {
+                            const node = userIdGroupKeyMap[v];
+                            console.log(node);
+                            let title = removeExtra(node.title);
+                            if (node.parentGroupName) {
+                                addDs.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                            } else {
+                                addDs.push({ title: title, key: node.key });
+                            }
+                        }
+                    }, data3);
+                    setEntrustDataSource(addDs);
+
+                    const ds = [];
+                    const disables = [];
+                    forEach((v) => {
+                        if (v.indexOf('#') >= 0 ) {
+                            // eslint-disable-next-line prefer-destructuring
+                            v = split(v, '#')[1];
+                        }
+                        if (userIdGroupKeyMap[v]) {
+                            const node = userIdGroupKeyMap[v];
+                            node.disabled = true;
+                            disables.push(node);
+                            let title = removeExtra(node.title);
+                            if (node.parentGroupName) {
+                                ds.push({ title: title + '[' + node.parentGroupName + ']', key: node.key });
+                            } else {
+                                ds.push({ title: title, key: node.key });
+                            }
+                        }
+                    }, data4);
+                    setExceptDataSource(ds);
+                    setDisAbledNodes(disables);
+                }
+            });
+        }
+    },[userIdGroupKeyMap,postitionId])
 
     //监控权限按钮选择
     useEffect(() => {
@@ -722,29 +826,29 @@ export default (props) => {
         loadGroup();
     }, []);
 
-    const exceptColumns = [{
-        title: '名称',
-        search: false,
-        dataIndex: 'title',
-    }, {
-        title: '操作',
-        width: 60,
-        search: false,
-        dataIndex: 'operator',
-        render: (text, record) => {
-            return <><DeleteOutlined title='删除排除' onClick={(e) => {
-                e.stopPropagation();
-                const ds = [];
-                forEach((v) => {
-                    if (v.key !== record.key) {
-                        ds.push(v);
-                    }
-                }, exceptDataSource);
-                setExceptDataSource(ds);
-                userGroupKeyMap[record.key].disabled = false;
-            }} /></>
-        }
-    }];
+    // const exceptColumns = [{
+    //     title: '名称',
+    //     search: false,
+    //     dataIndex: 'title',
+    // }, {
+    //     title: '操作',
+    //     width: 60,
+    //     search: false,
+    //     dataIndex: 'operator',
+    //     render: (text, record) => {
+    //         return <><DeleteOutlined title='删除排除' onClick={(e) => {
+    //             e.stopPropagation();
+    //             const ds = [];
+    //             forEach((v) => {
+    //                 if (v.key !== record.key) {
+    //                     ds.push(v);
+    //                 }
+    //             }, exceptDataSource);
+    //             setExceptDataSource(ds);
+    //             userGroupKeyMap[record.key].disabled = false;
+    //         }} /></>
+    //     }
+    // }];
 
     const uks = {};
     const uidks = {};
@@ -989,7 +1093,7 @@ export default (props) => {
                                         </ILayout>
                                         {postTreeVisible && (
                                             <ISearchTree
-                                                bodyStyle={{ height: 'calc(100vh - 345px)', overflow: 'auto' }}
+                                            bodyStyle={{ height: 210, overflow: 'auto' }}
                                                 iconRender={loopGroup}
                                                 showIcon={true}
                                                 treeData={postTreeData}
@@ -1000,6 +1104,49 @@ export default (props) => {
                                                 }}
                                             />
                                         )}
+                                        
+                                        <Row gutter={2}>
+                                            <Col span={12}>
+                                                <Table
+                                                    size="small"
+                                                    style={{ marginTop: '5px',marginBottom: '5px'}}
+                                                    // className=" [&_.ant-table-body]:min-h-[180px]"
+                                                    title={() => <><b>排除组织/用户列表</b></>}
+                                                    scroll={{ y: 195, }}
+                                                    bordered
+                                                    rowKey="key"
+                                                    columns={exceptColumns}
+                                                    search={false}
+                                                    dataSource={exceptDataSource}
+                                                    rowSelection={{
+                                                        onChange: (rowKeys) => {
+                                                            setExceptSelectedKeys(rowKeys);
+                                                        },
+                                                    }}
+                                                    pagination={false}
+                                                />
+                                            </Col>
+                                            <Col span={12}>
+                                                <Table
+                                                    size="small"
+                                                    style={{ marginTop: '5px',marginLeft:'2px',marginBottom: '5px'}}
+                                                    // className=" [&_.ant-table-body]:min-h-[180px]"
+                                                    title={() => <><b>委托组织/用户列表</b></>}
+                                                    scroll={{ y: 195, }}
+                                                    bordered
+                                                    rowKey="key"
+                                                    columns={entrustColumns}
+                                                    search={false}
+                                                    dataSource={entrustDataSource}
+                                                    rowSelection={{
+                                                        onChange: (rowKeys) => {
+                                                            setEntrustSelectedKeys(rowKeys);
+                                                        },
+                                                    }}
+                                                    pagination={false}
+                                                />
+                                            </Col>
+                                        </Row>
                                     </Form>
                                 </IIF>
                             </Card>
@@ -1088,7 +1235,7 @@ export default (props) => {
                                                 </Col>
                                             </Row>
                                             <Row gutter={5}>
-                                                <Col span={24}>
+                                                <Col span={12}>
                                                     <Table
                                                         size="small"
                                                         style={{ marginTop: '5px' }}
@@ -1107,6 +1254,26 @@ export default (props) => {
                                                         pagination={false}
                                                     />
                                                 </Col>
+                                                <Col span={12}>
+                                                <Table
+                                                    size="small"
+                                                    style={{ marginTop: '5px',marginLeft:'2px',marginBottom: '5px'}}
+                                                    // className=" [&_.ant-table-body]:min-h-[180px]"
+                                                    title={() => <><b>委托组织/用户列表</b></>}
+                                                    scroll={{ y: 195, }}
+                                                    bordered
+                                                    rowKey="key"
+                                                    columns={entrustColumns}
+                                                    search={false}
+                                                    dataSource={entrustDataSource}
+                                                    rowSelection={{
+                                                        onChange: (rowKeys) => {
+                                                            setEntrustSelectedKeys(rowKeys);
+                                                        },
+                                                    }}
+                                                    pagination={false}
+                                                />
+                                            </Col>
                                             </Row>
                                         </>
                                     )}

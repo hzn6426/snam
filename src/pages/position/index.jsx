@@ -146,6 +146,11 @@ const LockRenderer = (props) => {
             valueFormatter: (x) => permScope[x.value],
         },
         {
+            headerName: '角色数量',
+            width: 80,
+            field: 'roleCount',
+        },
+        {
             headerName: '是否主管',
             width: 100,
             field: 'beManager',

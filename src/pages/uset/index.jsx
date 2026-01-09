@@ -88,6 +88,16 @@ const initColumns = [
         field: 'usetName',
     },
     {
+        headerName: '用户数',
+        width: 70,
+        field: 'userCount',
+    },
+    {
+        headerName: '角色数',
+        width: 70,
+        field: 'roleCount',
+    },
+    {
         headerName: '创建人',
         width: 100,
         field: 'createUserCnName',

@@ -123,14 +123,14 @@ export function savePositionColumnPerm(perm) {
     return ipost(constant.API_RESOURCE_SAVE_POSITION_COLUMN_PERM, perm);
 }
 // 获取用户按钮数据权限
-export function getUserFunctionDataPerm(viewType, permId, orgId, usetId) {
-    return iget(`${constant.API_RESOURCE_USER_FUNCTION_DATA_PERM}?viewType=${viewType}&permId=${permId}&orgId=${orgId}&usetId=${usetId}`)
+export function getUserFunctionDataPerm(viewType, permId, userId, orgId, positionId, usetId) {
+    return iget(`${constant.API_RESOURCE_USER_FUNCTION_DATA_PERM}?viewType=${viewType}&permId=${permId}&userId=${userId}&orgId=${orgId}&positionId=${positionId}&usetId=${usetId}`)
 }
 // 获取用户业务数据权限
-export function getUserBusinessDataPerm(viewType, permId, orgId, usetId) {
-    return iget(`${constant.API_RESOURCE_USER_BUSINESS_DATA_PERM}?viewType=${viewType}&permId=${permId}&orgId=${orgId}&usetId=${usetId}`)
+export function getUserBusinessDataPerm(viewType, permId, userId, orgId, positionId, usetId) {
+    return iget(`${constant.API_RESOURCE_USER_BUSINESS_DATA_PERM}?viewType=${viewType}&permId=${permId}&userId=${userId}&orgId=${orgId}&positionId=${positionId}&usetId=${usetId}`)
 }
 // 获取用户列数据权限
-export function getUserColumnDataPerm(viewType, permId, orgId, usetId) {
-    return iget(`${constant.API_RESOURCE_USER_COLUMN_DATA_PERM}?viewType=${viewType}&permId=${permId}&orgId=${orgId}&usetId=${usetId}`)
+export function getUserColumnDataPerm(viewType, permId, userId, orgId, positionId, usetId) {
+    return iget(`${constant.API_RESOURCE_USER_COLUMN_DATA_PERM}?viewType=${viewType}&permId=${permId}&userId=${userId}&orgId=${orgId}&positionId=${positionId}&usetId=${usetId}`)
 }

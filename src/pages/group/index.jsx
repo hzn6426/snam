@@ -228,6 +228,7 @@ export default (props) => {
     //编辑 组织架构
     const handleEditGroup = (node) => {
         const parent = node.parentId;
+        console.log(node);
         setSelectedGroupId(parent);
         if (parent === constant.ROOT_OF_GROUP) {
             const param = { id: node.key, groupName: node.text,parentId: parent,priority:node.priority }
