@@ -22,8 +22,8 @@ const loop = (data) =>
     forEachObject((v, k, item) => {
         item.key = item.id;
         const index = item.name?.indexOf(searchValue);
-        const beforeStr = item.name?.substr(0, index);
-        const afterStr = item.name?.substr(index + searchValue.length);
+        const beforeStr = item.name?.substring(0, index);
+        const afterStr = item.name?.substring(index + searchValue.length);
         const name =
             index > -1 ? (
                 <span>

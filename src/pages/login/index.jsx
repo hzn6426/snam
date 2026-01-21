@@ -84,9 +84,9 @@ export default (props) => {
     if (redirect) {
       const redirectUrlParams = new URL(redirect);
       if (redirectUrlParams.origin === urlParams.origin) {
-        redirect = redirect.substr(urlParams.origin.length);
+        redirect = redirect.substring(urlParams.origin.length);
         if (redirect.match(/^\/.*#/)) {
-          redirect = redirect.substr(redirect.indexOf('#') + 1);
+          redirect = redirect.substring(redirect.indexOf('#') + 1);
           url = redirect;
         }
       }

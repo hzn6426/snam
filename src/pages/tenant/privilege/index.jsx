@@ -16,7 +16,7 @@ import {
     isEmpty,
     isFunction,
     isNil,
-    moment,
+    dayjs,
     produce,
     split,
 } from '@/common/utils';
@@ -77,7 +77,6 @@ api.dict.listChildByParentCode(constant.DICT_BUSINESS_PERM_SCOPE_TAG).subscribe(
 });
 
 let tableComment = {};
-const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
 const columns = [
@@ -907,7 +906,7 @@ export default (props) => {
             };
             if (record.permStartTime && record.permEndTime) {
                 copyObject(buttonFormValue, {
-                    timeRange: [moment(record.permStartTime), moment(record.permEndTime)],
+                    timeRange: [dayjs(record.permStartTime), dayjs(record.permEndTime)],
                 });
             }
             form.setFieldsValue(buttonFormValue);
@@ -1087,43 +1086,52 @@ export default (props) => {
                         //bordered={false}
                         bodyStyle={{ height: offsetHeight - 66, overflow: 'auto', paddingTop: '5px' }}
                     >
-                        <Tabs size="small" type="card" >
-                            <TabPane size='small' tab="用户组织" key="userGroup">
-                                {/* <div> */}
-                                <ISearchTree
-                                    bordered={false}
-                                    bodyStyle={{}}
-                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'auto' }}
-                                    iconRender={(data) => loopGroup(data, true, true)}
-                                    treeData={treeData}
-                                    onSelect={(uids, { node }) => onUserSelect(node)}
-                                    titleRender={(node) => (
-                                        <div style={{ width: '100%' }}>
-                                            <div style={{ float: 'left' }}>
-                                                {node.icon} {node.title}
-                                            </div>
-                                        </div>
-                                    )}
-                                />
-                            </TabPane>
-                            <TabPane size='small' tab="用户组" key="userUset">
-                                <ISearchTree
-                                    bordered={false}
-                                    bodyStyle={{}}
-                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'auto' }}
-                                    iconRender={(data) => loopUserGroup(data)}
-                                    treeData={usetTreeData}
-                                    onSelect={(uids, { node }) => onUsetSelect(node)}
-                                    titleRender={(node) => (
-                                        <div style={{ width: '100%' }}>
-                                            <div style={{ float: 'left' }}>
-                                                {node.icon} {node.title}
-                                            </div>
-                                        </div>
-                                    )}
-                                />
-                            </TabPane>
-                        </Tabs>
+                        <Tabs 
+                            size="small" 
+                            type="card"
+                            items={[
+                                {
+                                    key: 'userGroup',
+                                    label: '用户组织',
+                                    children: (
+                                        <ISearchTree
+                                            bordered={false}
+                                            bodyStyle={{}}
+                                            iconRender={(data) => loopGroup(data, true, true)}
+                                            treeData={treeData}
+                                            onSelect={(uids, { node }) => onUserSelect(node)}
+                                            titleRender={(node) => (
+                                                <div style={{ width: '100%' }}>
+                                                    <div style={{ float: 'left' }}>
+                                                        {node.icon} {node.title}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        />
+                                    )
+                                },
+                                {
+                                    key: 'userUset',
+                                    label: '用户组',
+                                    children: (
+                                        <ISearchTree
+                                            bordered={false}
+                                            bodyStyle={{}}
+                                            iconRender={(data) => loopUserGroup(data)}
+                                            treeData={usetTreeData}
+                                            onSelect={(uids, { node }) => onUsetSelect(node)}
+                                            titleRender={(node) => (
+                                                <div style={{ width: '100%' }}>
+                                                    <div style={{ float: 'left' }}>
+                                                        {node.icon} {node.title}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        />
+                                    )
+                                }
+                            ]}
+                        />
                     </Card>
                 </Col>
                 <Col span={10}>
@@ -1183,9 +1191,13 @@ export default (props) => {
                                 onChange={(activeKey) => {
                                     setKey(activeKey);
                                     onSelect(selectedRecord, activeKey);
-                                }}>
-
-                                <TabPane tab="功能数据权限" key="buttonPerm" style={{ padding: 0 }}>
+                                }}
+                                items={[
+                                    {
+                                        key: 'buttonPerm',
+                                        label: '功能数据权限',
+                                        children: (
+                                            <div style={{ padding: 0 }}>
                                     <Card
                                         bordered={false}
                                         size='small'
@@ -1252,6 +1264,7 @@ export default (props) => {
                                                         rules={[{ required: true, message: false }]}
                                                     >
                                                         <Radio.Group
+                                                            optionType="button"
                                                             buttonStyle="solid"
                                                             style={{ width: '260px' }}
                                                             options={permScopeOptions}
@@ -1275,8 +1288,8 @@ export default (props) => {
                                                             <RangePicker
                                                                 style={{ width: '240px' }}
                                                                 ranges={{
-                                                                    今天: [moment(), moment()],
-                                                                    本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                    今天: [dayjs(), dayjs()],
+                                                                    本月: [dayjs().startOf('month'), dayjs().endOf('month')],
                                                                 }}
                                                                 // showTime
                                                                 format="YYYY-MM-DD"
@@ -1352,9 +1365,14 @@ export default (props) => {
                                             </>
                                         )}
                                     </Card>
-
-                                </TabPane>
-                                <TabPane tab="业务数据权限" key="businessPerm" style={{ padding: 0 }}>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        key: 'businessPerm',
+                                        label: '业务数据权限',
+                                        children: (
+                                            <div style={{ padding: 0 }}>
                                     <Card
                                         bordered={false}
                                         size='small'
@@ -1425,8 +1443,8 @@ export default (props) => {
                                                         <RangePicker
                                                             style={{ width: '240px' }}
                                                             ranges={{
-                                                                今天: [moment(), moment()],
-                                                                本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                今天: [dayjs(), dayjs()],
+                                                                本月: [dayjs().startOf('month'), dayjs().endOf('month')],
                                                             }}
                                                             // showTime
                                                             format="YYYY-MM-DD"
@@ -1450,9 +1468,14 @@ export default (props) => {
                                             {ui.map((item) => (<>{item}</>))}
                                         </Form>
                                     </Card>
-                                </TabPane>
-
-                                <TabPane tab="列数据权限" key="columnPerm" style={{ padding: 0 }}>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        key: 'columnPerm',
+                                        label: '列数据权限',
+                                        children: (
+                                            <div style={{ padding: 0 }}>
                                     <Card
                                         bordered={false}
                                         size='small'
@@ -1519,8 +1542,11 @@ export default (props) => {
                                             {columnUi.map((item) => (<>{item}</>))}
                                         </Form>
                                     </Card>
-                                </TabPane>
-                            </Tabs>
+                                            </div>
+                                        )
+                                    }
+                                ]}
+                            />
                         </Card>
                     </Col>
                 )}

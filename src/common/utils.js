@@ -17,7 +17,7 @@ import { tap } from 'rxjs';
 import PubSub from 'pubsub-js';
 
 
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 
 import {
@@ -500,7 +500,7 @@ export const isNumber = (val) => {
 // padLeftZero(2323) //=> 002323
 //==========================================
 export const padLeftZero = (str) => {
-  return `00${str}`.substr(str.length);
+  return `00${str}`.substring(str.length);
 };
 
 //===========================================
@@ -512,7 +512,7 @@ export const dateFormat = (d, fmt) => {
   if (isNumber(theDate)) {
     let date = new Date(theDate);
     if (/(y+)/.test(fmt)) {
-      format = fmt.replace(RegExp.$1, `${date.getFullYear()}`.substr(4 - RegExp.$1.length));
+      format = fmt.replace(RegExp.$1, `${date.getFullYear()}`.substring(4 - RegExp.$1.length));
     }
     let o = {
       'M+': date.getMonth() + 1,
@@ -849,14 +849,14 @@ function toFixed(n, d) {
       s = a.join("").replace(new RegExp("(\\d+)(\\d{" + d + "})\\d$"), "$1.$2");
 
     }
-    if (b) s = s.substr(1);
+    if (b) s = s.substring(1);
     return (pm + s).replace(/\.$/, "");
   }
   return this + "";
 };
 
 export {
-  api, constant, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, isearchByToken, iupload, md5, moment, pluckCurrentTargetChecked,
+  api, constant, dayjs, getCache, hasCache, idelete, idownload, iget, ilogin, ipost, iput, isearch, isearchByToken, iupload, md5, pluckCurrentTargetChecked,
   pluckCurrentTargetValue, pluckFirst, produce, PubSub, removeCache, setCache, stringRandom, useObservable,
   useObservableCallback,
   useObservableState, useRefFn, useSubscription

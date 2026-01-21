@@ -1032,7 +1032,7 @@ export default (props) => {
                                                 }}>
                                                 添加
                                             </Button>
-                                            <Button type="danger" size='small'
+                                            <Button danger size='small'
                                                 style={{ float: 'right',marginRight:2 }} onClick={() => urlForm.resetFields()}>重置</Button>
                                             </Form.Item>
                                     </Form>

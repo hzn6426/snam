@@ -5,7 +5,7 @@ import { DatePicker, Form, Input, InputNumber, message, Select, } from 'antd';
 import { useRef, useState } from 'react';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 
 export default (props) => {
@@ -97,7 +97,7 @@ export default (props) => {
                     label="过期时间"
                     rules={[{ whitespace: true, required: true, message: false }]}
                 >
-                     <DatePicker placeholder='不填为永不过期' format={'YYYY-MM-DD HH:mm'} showTime={{ defaultValue: moment('00:00', 'HH:mm') }} style={{ width: '100%' }} />
+                     <DatePicker placeholder='不填为永不过期' format={'YYYY-MM-DD HH:mm'} showTime={{ defaultValue: dayjs('00:00', 'HH:mm') }} style={{ width: '100%' }} />
                 </Form.Item>
                 {/* <Form.Item
                     labelCol={{ span: 3 }}

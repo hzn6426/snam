@@ -522,7 +522,7 @@ const IGrid = React.forwardRef((props, ref) => {
           onClose={() => {
             setDrawerVisible(false);
           }}
-          visible={drawerVisible}
+          open={drawerVisible}
           getContainer={false}
           width={200}
           style={{

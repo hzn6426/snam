@@ -54,7 +54,7 @@ const XUser = (props) => {
     //   multiple
       // treeDefaultExpandAll      
       value={props.value}
-      dropdownMatchSelectWidth={false}       
+      popupMatchSelectWidth={false}       
       onChange={props.onChange}
       treeData={treeData}
       treeNodeFilterProp='title'

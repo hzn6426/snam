@@ -19,7 +19,7 @@ const Department = (props) => {
             allowClear
             // treeDefaultExpandAll      
             value={props.value}
-            dropdownMatchSelectWidth={false}
+            popupMatchSelectWidth={false}
             onChange={props.onChange}
             treeData={treeData}
             treeNodeFilterProp='title'

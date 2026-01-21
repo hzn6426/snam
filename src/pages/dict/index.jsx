@@ -493,7 +493,7 @@ export default (props) => {
                                 </Button>
                             </Permit>
                             <Permit authority="dictionary:delete">
-                                <Button type="danger" key="delete" onClick={() => showDeleteConfirm('父字典删除后,子字典也将被删除,确定删除选中的字典吗?', () => onParentDelete(selectedParentKeys))} loading={loading}>
+                                <Button danger key="delete" onClick={() => showDeleteConfirm('父字典删除后,子字典也将被删除,确定删除选中的字典吗?', () => onParentDelete(selectedParentKeys))} loading={loading}>
                                     删除
                                 </Button>
                             </Permit>
@@ -613,7 +613,7 @@ export default (props) => {
                                 </Button>
                             </Permit>
                             <Permit authority="dictChild:delete">
-                                <Button type="danger" key="delete" onClick={() => {
+                                <Button danger key="delete" onClick={() => {
 
                                     const parentId = selectedParentKeys[selectedParentKeys.length - 1];
                                     showDeleteConfirm('确定删除选中的子字典吗?', () => onChildDelete([selectedChildKeys, parentId]));

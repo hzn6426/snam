@@ -6,7 +6,7 @@ import { zip } from 'rxjs'
 import { message, Alert } from "antd";
 import { useParams } from 'umi';
 import { AccountBookOutlined } from '@ant-design/icons';
-import moment from 'moment/moment';
+import dayjs from 'dayjs';
 
 
 export default (props) => {

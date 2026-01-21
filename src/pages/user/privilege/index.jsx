@@ -8,7 +8,7 @@ import {
     forEach, forEachObject,
     isEmpty,
     isFunction,
-    moment,
+    dayjs,
     split
 } from '@/common/utils';
 import { Alert, Card, Checkbox, Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space, Switch, Table, Tabs, Tooltip, Transfer } from 'antd';
@@ -60,7 +60,6 @@ const UserStateRenderer = (props) => {
 };
 
 let tableComment = {};
-const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const roleState = {
     UNACTIVE: { text: '未激活', status: 'Warning' },
@@ -252,8 +251,8 @@ const loop = (data) =>
     forEachObject((v, k, item) => {
         item.key = item.id;
         const index = item.name?.indexOf(searchValue);
-        const beforeStr = item.name?.substr(0, index);
-        const afterStr = item.name?.substr(index + searchValue.length);
+        const beforeStr = item.name?.substring(0, index);
+        const afterStr = item.name?.substring(index + searchValue.length);
         const name =
             index > -1 ? (
                 <span>
@@ -1060,11 +1059,16 @@ export default (props) => {
                         activeKey={key}
                         size="small"
                         type="card"
-                        tabPosition={'top'}
+                        tabPlacement="top"
                         onChange={(activeKey) => {
                             setKey(activeKey);
-                        }}>
-                        <TabPane tab="职位数据权限" key="positionPerm" style={{ padding: 0 }} >
+                        }}
+                        items={[
+                            {
+                                key: 'positionPerm',
+                                label: '职位数据权限',
+                                children: (
+                                    <div style={{ padding: 0 }}>
                             <Card
                                 bordered={false}
                                 size='small'
@@ -1150,8 +1154,14 @@ export default (props) => {
                                     </Form>
                                 </IIF>
                             </Card>
-                        </TabPane>
-                        <TabPane size="small" tab="功能数据权限" key="buttonPerm" style={{ padding: 0 }}>
+                                    </div>
+                                )
+                            },
+                            {
+                                key: 'buttonPerm',
+                                label: '功能数据权限',
+                                children: (
+                                    <div style={{ padding: 0 }}>
                             <Card
                                 bordered={false}
                                 size='small'
@@ -1173,6 +1183,7 @@ export default (props) => {
                                                 >
                                                     <Radio.Group
                                                         disabled={true}
+                                                        optionType="button"
                                                         buttonStyle="solid"
                                                         style={{ width: '240px' }}
                                                         options={permScopeOptions}
@@ -1197,8 +1208,8 @@ export default (props) => {
                                                             disabled={true}
                                                             style={{ width: '240px' }}
                                                             ranges={{
-                                                                今天: [moment(), moment()],
-                                                                本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                今天: [dayjs(), dayjs()],
+                                                                本月: [dayjs().startOf('month'), dayjs().endOf('month')],
                                                             }}
                                                             // showTime
                                                             format="YYYY-MM-DD"
@@ -1279,9 +1290,14 @@ export default (props) => {
                                     )}
                                 </IIF>
                             </Card>
-                        </TabPane>
-
-                        <TabPane tab="业务数据权限" key="businessPerm" style={{ padding: 0 }} >
+                                    </div>
+                                )
+                            },
+                            {
+                                key: 'businessPerm',
+                                label: '业务数据权限',
+                                children: (
+                                    <div style={{ padding: 0 }}>
                             <Card
                                 bordered={false}
                                 size='small'
@@ -1326,8 +1342,8 @@ export default (props) => {
                                                                 disabled={true}
                                                                 style={{ width: '240px' }}
                                                                 ranges={{
-                                                                    今天: [moment(), moment()],
-                                                                    本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                    今天: [dayjs(), dayjs()],
+                                                                    本月: [dayjs().startOf('month'), dayjs().endOf('month')],
                                                                 }}
                                                                 // showTime
                                                                 format="YYYY-MM-DD"
@@ -1386,8 +1402,8 @@ export default (props) => {
                                                                 disabled={true}
                                                                 style={{ width: '240px' }}
                                                                 ranges={{
-                                                                    今天: [moment(), moment()],
-                                                                    本月: [moment().startOf('month'), moment().endOf('month')],
+                                                                    今天: [dayjs(), dayjs()],
+                                                                    本月: [dayjs().startOf('month'), dayjs().endOf('month')],
                                                                 }}
                                                                 // showTime
                                                                 format="YYYY-MM-DD"
@@ -1415,9 +1431,14 @@ export default (props) => {
                                     </IIF>
                                 </IIF>
                             </Card>
-                        </TabPane>
-
-                        <TabPane tab="列数据权限" key="columnPerm" style={{ padding: 0 }}>
+                                    </div>
+                                )
+                            },
+                            {
+                                key: 'columnPerm',
+                                label: '列数据权限',
+                                children: (
+                                    <div style={{ padding: 0 }}>
                             <Card
                                 bordered={false}
                                 size='small'
@@ -1449,8 +1470,11 @@ export default (props) => {
                                     </Form>
                                 </IIF>
                             </Card>
-                        </TabPane>
-                    </Tabs>
+                                    </div>
+                                )
+                            }
+                        ]}
+                    />
                 </Card>
             </ILayout>
         </IWindow>

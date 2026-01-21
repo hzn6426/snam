@@ -16,7 +16,6 @@ import Group from '../group';
 import USet from '../uset';
 import Position from '../position';
 import Privilege from "../privilege";
-import TabPane from "antd/es/tabs/TabPane";
 import { set } from "lscache";
 import { useParams } from 'umi';
 export default () => {
@@ -163,20 +162,22 @@ export default () => {
                     size="small"
                     type="editable-card"
                     onEdit={onEdit}
-                    tabPosition={'top'}
+                    tabPlacement="top"
                     className={'cala-body tabPage'}
                     onChange={(activeKey) => {
                         const tabs = tabList.filter((item) => item.key == activeKey);
                         setActionTab(tabs[0]);
-                    }}>
-                    {tabList.map((item, index) => (
-                        <TabPane  tab={item.tab} key={item.key} style={{ padding:'0px 0px 0px 5px' }}>
-                            <div style={{ height:  'calc(100vh - 64px)', overflow: 'auto' }}>
+                    }}
+                    items={tabList.map((item) => ({
+                        key: item.key,
+                        label: item.tab,
+                        children: (
+                            <div style={{ height: 'calc(100vh - 64px)', overflow: 'auto', padding: '0px 0px 0px 5px' }}>
                                 {item.component}
                             </div>
-                        </TabPane>
-                    ))}
-                </Tabs>
+                        )
+                    }))}
+                />
                 {/* <PageContainer
                     style={{padding: '0px',margin: '0px'}}
                     // ghost

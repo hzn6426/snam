@@ -326,7 +326,7 @@ export default () => {
                 </Button>
             </Permit>
             <Permit authority="limit:delete">
-                <Button type="danger" key="delete" onClick={() => showDeleteConfirm('确定删除选中限流器吗？', () => handleDelete())}>
+                <Button danger key="delete" onClick={() => showDeleteConfirm('确定删除选中限流器吗？', () => handleDelete())}>
                     删除
                 </Button>
             </Permit>

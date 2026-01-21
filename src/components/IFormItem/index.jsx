@@ -13,7 +13,7 @@ import {
   Select,
   Switch,
 } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 export default (props) => {
   const {
@@ -88,7 +88,7 @@ export default (props) => {
         item = (
           <DatePicker
             format={format ? format : 'YYYY-MM-DD HH:mm'}
-            showTime={showTime || { defaultValue: moment('00:00', 'HH:mm') }}
+            showTime={showTime || { defaultValue: dayjs('00:00', 'HH:mm') }}
             style={{ width: '100%' }}
             {...others}
           />

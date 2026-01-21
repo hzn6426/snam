@@ -517,7 +517,7 @@ export default (props) => {
                     />
                     {/* {selectedKeys?.length > 0 && (
                         <IFooterToolbar>
-                            <Button type="danger" key="delete"
+                            <Button danger key="delete"
                                 onClick={() => showDeleteConfirm('确定删除选中的按钮吗?', () => onDeleteButton(selectedKeys))}>
                                 删除
                             </Button>

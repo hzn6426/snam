@@ -1,5 +1,5 @@
 import { User } from '@/common/componentx';
-import { groupBy, isArray, mapObjIndexed, moment, produce } from '@/common/utils';
+import { groupBy, isArray, mapObjIndexed, dayjs, produce } from '@/common/utils';
 import {
   Button,
   Card,
@@ -100,7 +100,7 @@ const addon = [
         comp = (
           <DatePicker
             format="YYYY-MM-DD HH:mm"
-            showTime={{ defaultValue: moment('00:00', 'HH:mm') }}
+            showTime={{ defaultValue: dayjs('00:00', 'HH:mm') }}
             style={{ width: '100%' }}
             onChange={onFormChange}
           />
@@ -129,7 +129,7 @@ const addon = [
       formValue['condition' + index] = item['condition'];
       formValue['leftBro'+ index] = item['leftBro'];
       formValue['rightBro'+ index] = item['rightBro'];
-      formValue['value' + type + index] = beDate ? moment(item['value']) : item['value'];
+      formValue['value' + type + index] = beDate ? dayjs(item['value']) : item['value'];
       formValue['column' + index] = item['column'];
       const component = getCompByXtype(type);
       comp.push({ component: component, dataType: type });

@@ -2,11 +2,11 @@ import React, {
     forwardRef, useEffect, useImperativeHandle, useRef, useState,
 } from 'react';
 import { Input, DatePicker } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export default forwardRef((props, ref) => {
     const refInput = useRef(null);
-    const [value, setValue] = useState(props.value ? moment(props.value) : '');
+    const [value, setValue] = useState(props.value ? dayjs(props.value) : '');
     useEffect(() => {
         // get ref from React component
         const eInput = refInput.current;
@@ -25,7 +25,7 @@ export default forwardRef((props, ref) => {
         let api = props.api;
         api.stopEditing();
         if (e.target.value || props.value) {
-            let text = moment(e.target.value) || moment(props.value);
+            let text = dayjs(e.target.value) || dayjs(props.value);
             props.api.forEachNode((rowNode) => {
                 const rdata = rowNode.data;
                 if (rowNode.rowIndex === props.rowIndex) {
@@ -39,7 +39,7 @@ export default forwardRef((props, ref) => {
     const onChange = (m, s) => {
         let api = props.api;
         api.stopEditing();
-        let text = s ? moment(s) : '';
+        let text = s ? dayjs(s) : '';
         props.api.forEachNode((rowNode) => {
             const rdata = rowNode.data;
             if (rowNode.rowIndex === props.rowIndex) {

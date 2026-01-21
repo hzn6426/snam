@@ -9,7 +9,7 @@ import IIF from '../IIF';
 // let gData = [];
 export default (props) => {
 
-    const { conSelect, onCheck, checkedKeys, groupSelectable, treeData, placeholder, title, iconRender, bodyStyle, bordered, titleRender, checkable, ...others } = props;
+    const { conSelect, onCheck, checkedKeys, groupSelectable, treeData, placeholder, title, iconRender, bodyStyle, bordered, titleRender, checkable, defaultExpandAll, defaultExpandedKeys, ...others } = props;
 
 
 
@@ -20,15 +20,15 @@ export default (props) => {
     // // 树节点数据
     // const [treeData, setTreeData] = useState([]);
     // 展开的树节点key
-    const [expandedKeys, setExpandedKeys] = useState([]);
+    const [expandedKeys, setExpandedKeys] = useState(defaultExpandedKeys || []);
     // 查询值
     const [searchValue, setSearchValue] = useState('');
 
     const [dataList, setDataList] = useState([]);
     const [allData, setAllData] = useState([]);
 
-    const onExpand = (keys) => {
-        setExpandedKeys(keys);
+    const onExpand = (expandedKeysValue) => {
+        setExpandedKeys(expandedKeysValue);
         setAutoExpandParent(false);
     };
 
@@ -96,8 +96,8 @@ export default (props) => {
     const loop = (data) =>
         data.map((item) => {
             const index = item.title.indexOf(searchValue);
-            const beforeStr = item.title.substr(0, index);
-            const afterStr = item.title.substr(index + searchValue.length);
+            const beforeStr = item.title.substring(0, index);
+            const afterStr = item.title.substring(index + searchValue.length);
             const title =
                 index > -1 ? (
                     <span>
@@ -181,6 +181,7 @@ export default (props) => {
                 onExpand={onExpand}
                 expandedKeys={expandedKeys}
                 autoExpandParent={autoExpandParent}
+                defaultExpandAll={defaultExpandAll}
                 // switcherIcon={<CaretDownOutlined />}
                 treeData={loop(treeData)}
                 // treeData={treeData}
