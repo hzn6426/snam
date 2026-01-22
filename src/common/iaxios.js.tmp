@@ -1,9 +1,9 @@
-import { ElMessage, ElNotification } from 'element-plus';
+import { constant, forEach, has, isNil } from '@/common/utils';
+import { message, notification } from 'antd';
 import axios from 'axios';
 import objectAssign from 'object-assign';
-import { defer, from } from 'rxjs';
+import { defer, from, lastValueFrom } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { constant, forEach, has, isNil } from '@/common/utils';
 
 // 创建 axios 实例
 const service = axios.create({
@@ -11,13 +11,20 @@ const service = axios.create({
   withCredentials: true,
 });
 
+
 const err = (error) => {
   const { response } = error;
   const data = response?.data || response?.result;
   if (response) {
     const errorText = data.message || response.statusText;
     const { status } = response;
-    
+    // if (status != 200) {
+    //   notification.error({
+    //     message: `请求错误 ${status}: ${response.config.url}`,
+    //     description: errorText,
+    //   });
+    //   return { code: status, message: errorText, data: data };
+    // }
     if (data && data.code !== 200) {
       if (
         data.code === 20002 ||
@@ -27,9 +34,9 @@ const err = (error) => {
         data.code === 403 ||
         data.code === 503
       ) {
-        ElNotification.error({
-          title: `请求错误 ${status}: ${response.config.url}`,
-          message: errorText,
+        notification.error({
+          message: `请求错误 ${status}: ${response.config.url}`,
+          description: errorText,
         });
         if (data.code !== 403) {
           setTimeout(() => {
@@ -37,18 +44,20 @@ const err = (error) => {
           }, 3000);
         }
         return data;
-      }
+      } 
 
-      ElMessage.error({
-        message: errorText,
-        customClass: 'errorMessage',
-      });
+      let config = { content: errorText, className: 'errorMessage' };
+      message.error(config);
+      // console.log(data)
+      //message.error(errorText)
+      // TODO
+
       return data;
     }
   } else if (!response) {
-    ElNotification.error({
-      message: '您的网络发生异常，无法连接服务器',
-      title: '网络异常',
+    notification.error({
+      description: '您的网络发生异常，无法连接服务器',
+      message: '网络异常',
     });
   }
   return response;
@@ -58,7 +67,7 @@ const err = (error) => {
 service.interceptors.request.use((config) => {
   const token = sessionStorage.getItem(constant.KEY_USER_TOKEN);
   const beLogin = config.url === constant.API_LOGIN;
-  
+  // eslint-disable-next-line max-len
   if ((token === null || token.length === 0) && !beLogin) {
     window.location.href = constant.ROUTE_LOGIN;
     return config;
@@ -107,7 +116,11 @@ export const warpParam = (param) => {
   target.dto = dto;
   return target;
 };
-
+/**
+ * 将后台的返回信息封装成表格所需的格式
+ * @param {*} response 后台返回数据
+ * @returns
+ */
 export const wrapResult = (response) => {
   const { data, totalCount } = response;
   return Promise.resolve({
@@ -126,6 +139,12 @@ export async function wpostWithheaders(purl, param, headers) {
   });
 }
 
+/**
+ * 封装post请求方法
+ * @param {*} purl 请求Url
+ * @param {*} param 请求参数
+ * @returns
+ */
 export async function wpost(purl, param) {
   return service.post(purl, param, {
     headers: {
@@ -134,6 +153,12 @@ export async function wpost(purl, param) {
   });
 }
 
+/**
+ * 封装post请求方法
+ * @param {*} purl 请求Url
+ * @param {*} param 请求参数
+ * @returns
+ */
 export async function wpostByToken(token, purl, param) {
   return service.post(purl, param, {
     headers: {
@@ -142,7 +167,11 @@ export async function wpostByToken(token, purl, param) {
     },
   });
 }
-
+/**
+ * 封装get请求方法
+ * @param {*} purl 请求Url
+ * @returns
+ */
 export async function wget(purl) {
   return service.get(purl, {
     headers: {
@@ -151,7 +180,12 @@ export async function wget(purl) {
     data: null,
   });
 }
-
+/**
+ * 封装put请求方法
+ * @param {*} purl 请求Url
+ * @param {*} param  请求参数
+ * @returns
+ */
 export async function wput(purl, param) {
   return service.put(purl, param, {
     headers: {
@@ -159,7 +193,12 @@ export async function wput(purl, param) {
     },
   });
 }
-
+/**
+ * 封装delete请求方法
+ * @param {*} purl 请求Url
+ * @param {*} param 请求参数
+ * @returns
+ */
 export async function wdelete(purl, param) {
   return service.delete(purl, {
     headers: {
@@ -169,6 +208,11 @@ export async function wdelete(purl, param) {
   });
 }
 
+/**
+ * 文件上传方法
+ * @param {*} formData
+ * @returns
+ */
 export async function wfileUpload(purl, formData) {
   return service.post(purl, formData, {
     headers: {
@@ -189,6 +233,12 @@ export async function wfileDownload(purl, formData = false, post = true) {
   return post ? service.post(purl, formData, data) : service.get(purl, data);
 }
 
+/**
+ * rxjs封装Promise(后台请求)方法为可观察者，结果为下载文件流
+ * @param {*} promise
+ * @param  {...any} args
+ * @returns
+ */
 export const wrapStreamObservable = (promise, ...args) => {
   return defer(() =>
     from(promise(...args)).pipe(
@@ -196,11 +246,18 @@ export const wrapStreamObservable = (promise, ...args) => {
         return has(resp, 'code') && has(resp, 'data') && resp.code === 200;
       }),
       map((resp) => {
+        console.log(resp.data);
         return resp.data;
       }),
     ),
   );
 };
+/**
+ * rxjs封装Promise(后台请求)方法为可观察者，过滤结果为数组数据
+ * @param promise 后台请求
+ * @param args 可变参数
+ * @returns
+ */
 
 export const wrapObservable = (promise, ...args) => {
   return defer(() =>
@@ -213,6 +270,12 @@ export const wrapObservable = (promise, ...args) => {
   );
 };
 
+/**
+ * rxjs封装Promise(后台请求)方法为可观察者，过滤结果为单个对象
+ * @param {*} promise 后台请求
+ * @param {*} args 后台请求参数
+ * @returns
+ */
 export const wrapSObservable = (promise, ...args) => {
   return defer(() =>
     from(promise(...args)).pipe(
@@ -225,6 +288,24 @@ export const wrapSObservable = (promise, ...args) => {
   );
 };
 
+/**
+ * 封装查询observable
+ * <br>例如：
+ * new Promise((resolve, reject) => {
+      wrapSearchObservable(api.customer.searchCustomer, {
+        ...params,
+        sorter,
+        filter,
+      }).subscribe({
+        next: (data) => resolve(data),
+        error: (err) => reject(err),
+      });
+    })
+ *
+ * @param {*} promise 后台请求
+ * @param {*} args 后台请求参数
+ * @returns
+ */
 export const wrapSearchObservable = (promise, ...args) => {
   return defer(() =>
     from(promise(...args)).pipe(
@@ -241,6 +322,24 @@ export const wrapSearchObservable = (promise, ...args) => {
   );
 };
 
+/**
+ * 经过observable封装后返回的Promise,用于表格分页的request中
+ * @param {*} promise 后台请求
+ * @param {*} args 后台请求参数
+ * @returns {Promise}
+ */
+export async function wrapSearchPromise(promise, ...args) {
+  return lastValueFrom(wrapSearchObservable(promise, ...args));
+}
+
+/**
+ * 封装后台请求后供label,value格式的下拉用的observable
+ * @param {*} labelProp 映射成label的属性名称
+ * @param {*} valueProp 映射成value的属性名称
+ * @param {*} promise 后台请求
+ * @param {*} args 后台请求参数
+ * @returns
+ */
 export const wrapSelectObservable = (labelProp, valueProp, promise, ...args) => {
   return defer(() =>
     from(promise(...args)).pipe(
@@ -257,3 +356,14 @@ export const wrapSelectObservable = (labelProp, valueProp, promise, ...args) => 
   );
 };
 
+/**
+ * 经过observable封装后返回的Promise,用于基于Label,value格式的request中
+ * @param {*} labelProp 映射成label的属性名称
+ * @param {*} valueProp 映射成value的属性名称
+ * @param {*} promise 后台请求
+ * @param {*} args 后台请求参数
+ * @returns
+ */
+export async function wrapSelectPromise(labelProp, valueProp, promise, ...args) {
+  return lastValueFrom(wrapSelectObservable(labelProp, valueProp, promise, ...args));
+}

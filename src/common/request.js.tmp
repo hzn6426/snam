@@ -22,7 +22,7 @@ export const isearchByToken = (token, url, condition) => {
 
 export const ilogin = (url, param, headers) => {
   return wrapObservable(wpostWithheaders, url, param, headers);
-};
+}
 
 export const ipost = (url, param) => {
   return wrapObservable(wpost, url, param || null);
@@ -47,4 +47,3 @@ export const iupload = (url, param) => {
 export const idownload = (url, param, post = true) => {
   return wrapStreamObservable(wfileDownload, url, param, post);
 };
-
