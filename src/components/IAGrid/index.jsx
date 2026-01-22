@@ -3,11 +3,12 @@ import { AppstoreOutlined, InteractionOutlined } from '@ant-design/icons';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-balham.css';
 import { AgGridReact } from 'ag-grid-react';
+// import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 import { Button, Drawer, Pagination, Space, Typography, message, theme } from 'antd';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import './index.less';
 // import { useOverlayScrollbars } from 'overlayscrollbars-react';
-
+// ModuleRegistry.registerModules([AllCommunityModule]);
 export default React.forwardRef((props, ref) => {
   const {
     gridName,
@@ -120,7 +121,7 @@ export default React.forwardRef((props, ref) => {
 
   const gridReady = (params) => {
     setGridApi(params.api);
-    setGridColumnApi(gridRef.current?.columnApi);
+    setGridColumnApi(params.api); // 使用 params.columnApi 而不是 gridRef.current?.columnApi
     let customColumn = JSON.parse(localStorage.getItem(localPrefix + gridName));
     if (customColumn) {
       let initColumn = [], hideColumn = [];
@@ -140,13 +141,17 @@ export default React.forwardRef((props, ref) => {
 
       setGridColumns(initColumn);
       hideColumn.forEach((node) => {
-        gridRef.current?.columnApi.setColumnVisible(node, false);
+        params.columnApi?.setColumnVisible(node, false);
       })
     }
   }
 
   //打开Column设置面板
   const openSetting = () => {
+    if (!gridColumnApi) {
+      message.warning('表格尚未初始化完成，请稍后再试');
+      return;
+    }
     setIsOpen(true);
     const cols = gridColumnApi.getAllGridColumns();
     let colNames = [];
@@ -166,26 +171,38 @@ export default React.forwardRef((props, ref) => {
     }, 100);
   }
 
-  // 通用列属性
-  const defaultCol = useMemo(() => {
+  // // 通用列属性
+  // const defaultCol = useMemo(() => {
+  //   return {
+  //     resizable: true,
+  //     sortable: true,
+  //     width:150,
+  //     cellStyle: { fontWeight: "bold" },
+  //     // minWidth: '60px',
+  //     // enableRowGroup: true,
+  //     // enablePivot: true,
+  //     // enableValue: true,
+  //     // pinned:''
+  //   };
+  // }, []);
+  const defaultColDef = useMemo(() => {
     return {
-      resizable: true,
-      sortable: true,
-      minWidth: 60,
-      enableRowGroup: true,
-      enablePivot: true,
-      enableValue: true,
-      pinned:''
+      width: 150,
+      cellStyle: { fontWeight: "normal" },
     };
   }, []);
 
   // 拖拽顺序
   const settingDragEnd = (e) => {
-    gridColumnApi.moveColumn(e.node.data.field, e.overIndex);
+    if (gridColumnApi) {
+      gridColumnApi.moveColumn(e.node.data.field, e.overIndex);
+    }
   }
 
   // 选择显示
   const settingChanged = () => {
+    if (!gridColumnApi) return;
+    
     const selectedRows = settingRef.current.api.getSelectedRows();
     let settingCols = []
     selectedRows.forEach(element => { settingCols.push(element.field) });
@@ -374,7 +391,8 @@ useEffect(() => {
   //   osInstanceHorizontal,
   //   osInstanceVertical,
   // ]);
-
+  const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
+  const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   return (
     <div className={"ag-container" + (colorBgBase == '#fff' ? "" : "-dark")} style={style ? {...style, height: height || 300} : { height: height || 300}}>
 
@@ -383,24 +401,29 @@ useEffect(() => {
           <Typography.Text>{title}</Typography.Text>
         </div>
         <div className='ag-tools-right'>
-          {/* <Space> */}
           <Space.Compact block>
             {toolBarRender && toolBarRender.map((obj) => obj)}
-            {/* {topToolBar && topToolBar()} */}
 
             <Button size="small" key="refresh" type="default" iconPosition="end" icon={<InteractionOutlined />} onClick={() => getRowData(pageNo, pageSize)} />
             <Button size="small" key="setting" type="default" iconPosition="end" icon={<AppstoreOutlined />} onClick={openSetting} />
           </Space.Compact>
-          {/* </Space> */}
         </div>
       </div>
+    {/* // <div style={containerStyle}>
+    //   <div style={{ height: "100%", boxSizing: "border-box" }}> */}
+        {/* <div
+          style={gridStyle}
+          className={
+            "ag-theme-balham"
+          }
+        > */}
 
-      <div className={"ag-body ag-theme-balham" + (colorBgBase == '#fff' ? "" : "-dark")} >
+      <div className={" ag-theme-balham" + (colorBgBase == '#fff' ? "" : "-dark")} style={gridStyle}>
         <AgGridReact
           ref={gridRef}
           rowData={dataSource} // 表格数据
           columnDefs={gridColumns} // 列数据
-          defaultColDef={defaultCol} // 列属性设置
+          defaultColDef={defaultColDef} // 列属性设置
           rowSelection={rowSelection || 'multiple'} // 行选择设置
           onSelectionChanged={(e) => {
             const nodes = e.api.getSelectedNodes() || [];
@@ -415,7 +438,7 @@ useEffect(() => {
           }} // 行选择数据
           onCellDoubleClicked={onCellDoubleClicked}
           onCellClicked={onCellClicked}
-          onCellValueChanged={onCellValueChanged}
+          // onCellValueChanged={onCellValueChanged}
           singleClickEdit={true}
           rowMultiSelectWithClick={true}
           onGridReady={gridReady}
@@ -424,6 +447,8 @@ useEffect(() => {
           animateRows={true} // 行动画
           noRowsOverlayComponent={optionsHide?.noDatasEmpty ? NoRowsOverlayEmpty : NoRowsOverlay}
           enableCellChangeFlash={true}
+          // domLayout='autoHeight'
+          style={{height:'calc(100vh-20px)'}}
         />
         <Drawer
           onClose={() => setIsOpen(false)}
@@ -479,6 +504,7 @@ useEffect(() => {
         />
       </div>
 
+    {/* </div> */}
     </div>
   );
 });

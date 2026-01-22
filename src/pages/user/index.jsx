@@ -109,23 +109,20 @@ const LockRenderer = (props) => {
 const initColumns = [
   {
     headerName: '序号',
-    textAlign: 'center',
     checkboxSelection: true,
     headerCheckboxSelection: true,
-    lockPosition: 'left',
+    pinned: 'left',
     width: 80,
-    cellStyle: { userSelect: 'none' },
+    cellStyle: { textAlign: 'center', userSelect: 'none' },
     valueFormatter: (params) => {
       return `${parseInt(params.node.id) + 1}`;
     },
-    // rowDrag: true,
   },
   {
     headerName: '状态',
     width: 70,
-    textAlign: 'center',
     field: 'state',
-    // cellRenderer: 'stateCellRenderer',
+    cellStyle: { textAlign: 'center' },
     cellRenderer: StateRenderer,
   },
   {
@@ -147,15 +144,16 @@ const initColumns = [
   {
     headerName: '登录模式',
     width: 90,
-    align: 'center',
     field: 'beMultiLogin',
+    cellStyle: { textAlign: 'center' },
+    cellDataType:'string',
     valueFormatter: (x) => x.value === true ? '共享登录' : '单点登录',
   },
   {
     headerName: '过期策略',
     width: 90,
-    align: 'center',
     field: 'expirePolicy',
+    cellStyle: { textAlign: 'center' },
     valueFormatter: (x) => {
       if (x.value === 'LAST_ACTIVE') {
         return '最后活跃';
@@ -168,8 +166,8 @@ const initColumns = [
   {
     headerName: '性别',
     width: 70,
-    align: 'center',
     field: 'userSex',
+    cellStyle: { textAlign: 'center' },
   },
   {
     headerName: '公司',
@@ -191,14 +189,12 @@ const initColumns = [
     headerName: '属性',
     width: 150,
     field: 'userTag',
-    // cellRenderer: 'tagCellRenderer',
     cellRenderer: TagRenderer,
   },
   {
     headerName: '登录终端',
     width: 220,
     field: 'pointTag',
-    // cellRenderer: 'tagCellRenderer',
     cellRenderer: PointTagRenderer,
   },
   {
@@ -401,6 +397,8 @@ export default (props) => {
     cacheParam = params;
     cachePageNo = pageNo;
     cachePageSize = pageSize;
+    setPageNo(pageNo);
+    setPageSize(pageSize);
     api.user
       .searchUser(param)
       .subscribe({
@@ -497,7 +495,6 @@ export default (props) => {
         <Col span={6}>
           <ISearchTree
             iconRender={loopGroup}
-            showIcon
             treeData={treeData}
             placeholder="输入组织或人员进行搜索"
             checkable={false}
@@ -562,7 +559,7 @@ export default (props) => {
           // }}
           // columnsStorageKey="_cache_user_columns"
           columns={initColumns}
-          request={(pageNo, pageSize) => search(pageNo, pageSize)}
+          request={(pageNo, pageSize) => search(pageNo, pageSize, {}, false)}
           dataSource={dataSource}
           total={total}
               pageNo={pageNo}
