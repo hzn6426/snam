@@ -1,7 +1,7 @@
 import React from 'react';
 import { LogoutOutlined, SettingOutlined, CloudSyncOutlined } from '@ant-design/icons';
 import { Dropdown, message } from 'antd';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import { api, constant } from '@/common/utils';
 // import api from '@/services';
 // import { wrapObservable } from '@/utils/RxjsUtil';

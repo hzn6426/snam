@@ -2,7 +2,7 @@ import { api, constant, getPageQuery } from '@/common/utils';
 import { LogoutOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import React from 'react';
-import { history } from 'umi';
+import { history } from '@umijs/max';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 import { useApplicationState } from "@/store/state";

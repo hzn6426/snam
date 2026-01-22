@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { api, data2Option, split, useAutoObservableEvent } from '@/common/utils';
 import { IFormItem, ILayout, IWindow, IIF } from '@/common/components';
 import { message, Alert } from 'antd';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 export default (props) => {
     const params = useParams();

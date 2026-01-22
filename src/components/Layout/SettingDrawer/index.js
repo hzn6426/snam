@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { setLocale } from 'umi';
 import { Drawer, Form, Row, Col, Switch, Radio, Segmented } from 'antd';
 import { BuildOutlined, SunOutlined,MoonOutlined } from '@ant-design/icons';
 import { useApplicationState } from "@/store/state";
@@ -21,7 +20,7 @@ export default (props) => {
     let n = R.assoc(key, value)(props.settings);
     
     if (key == "locale") {
-      setLocale(value, false);
+      // setLocale(value, false);
       localStorage.setItem("umi-locale", value);
     }
     

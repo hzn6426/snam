@@ -4,7 +4,7 @@ import { api, useAutoObservable, useAutoObservableEvent, contains, dateFormat } 
 import { IFormItem, ILayout, IWindow, IAGrid } from '@/common/components';
 import { message, Spin, Tag } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { zip } from 'rxjs';
 import { use } from '@/pages/position/service';
 import {

@@ -1,14 +1,14 @@
-import { ConfigProvider, Dropdown, Input, Spin,Avatar } from 'antd';
-import { ApplicationStateProvider } from "@/store/state";
+import { ConfigProvider } from 'antd';
+import { ApplicationStateProvider } from '@/store/state';
 import ProMainLayout from './ProMainLayout';
-export default (props) => {
-    
+import { Outlet } from '@umijs/max';
 
-    return (
-            <ApplicationStateProvider>
-                <ProMainLayout {...props} />
-            </ApplicationStateProvider>
-            
-            
-        )
-}
+export default (props) => {
+  return (
+    <ApplicationStateProvider>
+      <ProMainLayout {...props}>
+        <Outlet />
+      </ProMainLayout>
+    </ApplicationStateProvider>
+  );
+};

@@ -3,7 +3,7 @@ import { api, constant, data2Option, isArray, split, useAutoObservable } from '@
 import { message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 
 export default (props) => {

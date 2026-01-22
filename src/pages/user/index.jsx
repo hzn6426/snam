@@ -122,7 +122,7 @@ const initColumns = [
   },
   {
     headerName: '状态',
-    width: 60,
+    width: 70,
     textAlign: 'center',
     field: 'state',
     // cellRenderer: 'stateCellRenderer',
@@ -497,6 +497,7 @@ export default (props) => {
         <Col span={6}>
           <ISearchTree
             iconRender={loopGroup}
+            showIcon
             treeData={treeData}
             placeholder="输入组织或人员进行搜索"
             checkable={false}

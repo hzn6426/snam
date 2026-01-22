@@ -2,7 +2,7 @@ import { IFormItem, ILayout, IWindow } from '@/common/components';
 import { api } from '@/common/utils';
 import { Radio, Select, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 const { Option } = Select;
 export default (props) => {

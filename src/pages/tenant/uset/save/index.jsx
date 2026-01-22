@@ -3,7 +3,7 @@ import { api, split, startsWith, useAutoObservable, useAutoObservableEvent } fro
 import { IFormItem, ILayout, IWindow } from '@/common/components';
 import { message } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { set } from 'lscache';
 
 

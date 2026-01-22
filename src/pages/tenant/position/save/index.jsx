@@ -3,7 +3,7 @@ import { api, useAutoObservable, split, constant, isEmpty, forEach, copyObject, 
 import { IFormItem, ILayout, ISearchTree, IWindow } from '@/common/components';
 import { message, Card, Radio } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { ApartmentOutlined, UserOutlined } from '@ant-design/icons';
 import { zip } from 'rxjs'
 

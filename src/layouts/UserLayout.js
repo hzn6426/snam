@@ -1,5 +1,6 @@
 import { constant } from '@/common/utils';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Outlet } from '@umijs/max';
 // import logo from '../assets/logo.png';
 import logo from '../assets/antd.svg';
 import styles from './UserLayout.less';
@@ -20,7 +21,7 @@ const UserLayout = (props) => {
                         </div>
                         <div className={styles.desc}>{constant.SYSTEM_LOGIN_DESC}</div>
                     </div>
-                    {props.children}
+                    <Outlet />
                 </div>
             </div>
         </HelmetProvider>

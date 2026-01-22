@@ -1,8 +1,7 @@
 import { forEach, isEmpty, isFunction } from '@/common/utils';
 import { AppstoreOutlined, InteractionOutlined } from '@ant-design/icons';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, Drawer, Pagination, Space, Typography, message, theme } from 'antd';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';

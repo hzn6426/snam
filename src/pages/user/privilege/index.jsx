@@ -14,7 +14,7 @@ import {
 import { Alert, Card, Checkbox, Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space, Switch, Table, Tabs, Tooltip, Transfer } from 'antd';
 import { useEffect, useState } from 'react';
 import { zip } from 'rxjs';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 import {
     ApartmentOutlined,

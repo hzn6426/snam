@@ -4,7 +4,7 @@ import { IFormItem, ILayout, IWindow, IGrid } from '@/common/components';
 import { Button, Col, Form, Input, message, Modal, Row, Radio, Divider,Select, InputNumber, Transfer, Card, Tree, Space, Table, Tabs, Tooltip } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {XButton} from '@/common/componentx'
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import {
     ApartmentOutlined,
     BarsOutlined,

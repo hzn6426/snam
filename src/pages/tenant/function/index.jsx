@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { message, Modal, Space, Spin, Tag } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 let functionIds = [];
 export default (props) => {

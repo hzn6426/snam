@@ -4,7 +4,7 @@ import { Button, Card, Checkbox, Space, Tree, message } from 'antd';
 import { useRef, useState } from 'react';
 import { zip } from 'rxjs';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 import {
     BarsOutlined,

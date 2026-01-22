@@ -4,12 +4,12 @@ import { useApplicationState } from "@/store/state";
 import { PicCenterOutlined, PicLeftOutlined, PicRightOutlined, SyncOutlined, UngroupOutlined,HomeOutlined ,GithubFilled } from '@ant-design/icons';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { ConfigProvider, Dropdown, Input, Spin,Avatar } from 'antd';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import defaultSettings from '../../config/defaultSettings';
 // import { wrapObservable, wrapSObservable } from '@/utils/RxjsUtil';
 import { iconEnum } from '@/common/icons';
 import KeepAlive, { useAliveController } from 'react-activation';
-import { Link, history } from 'umi';
+import { Link, history } from '@umijs/max';
 import routeCache from '../../config/routerCache.js';
 // import Logo from '../assets/logo.png';
 import Logo from '../assets/antd.svg';
@@ -17,11 +17,12 @@ import Header from '@/assets/images/header.jpg';
 import { api, constant } from '@/common/utils';
 import './index.less';
 import zhCN from 'antd/locale/zh_CN';
+import { Outlet, useLocation } from '@umijs/max';
 const tabListInit = [{ key: '/dashboard/blog', tab: '更新日志', closable: false }];
 export default (props) => {
-
-     const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));
-    const [pathname, setPathname] = useState(props.location.pathname);
+    const location = useLocation();
+    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));
+    const [pathname, setPathname] = useState(location.pathname);
     const [isVisible, setIsVisible] = useState(false);
     const [tabList, setTabList] = useState(tabListInit);
     const [actionTab, setActionTab] = useState('');
@@ -287,10 +288,10 @@ export default (props) => {
 
 
     useEffect(() => {
-        setPathname(props.location.pathname);
+        setPathname(location.pathname);
         // 按钮新建
-        addTab(props.location);
-    }, [props.location.pathname]);
+        addTab(location);
+    }, [location.pathname]);
 
     // TAB右键菜单
     const menuItems = [
@@ -510,7 +511,7 @@ export default (props) => {
                     className={viewSetting.isTabs ? 'cala-body tabPage' : 'cala-body breadcrumb'}
                 >
                     <div style={{ height: viewSetting.layout == "side" ? 'calc(100vh - 64px)' : 'calc(100vh - 120px)', overflow: 'hidden' }}>
-                        {viewSetting.isTabs ? <KeepAlive name={pathname} key={pathname} id={pathname}>{props.children}</KeepAlive> : props.children}
+                        {viewSetting.isTabs ? <KeepAlive name={pathname} key={pathname} id={pathname}><Outlet /></KeepAlive> : <Outlet />}
                     </div>
                 </PageContainer>
                 <SettingDrawer

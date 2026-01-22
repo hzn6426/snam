@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-// import { connect } from 'umi';
+// import { connect } from '@umijs/max';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 // import NoticeIconView from './NoticeIconView';

@@ -3,7 +3,7 @@ import { LockTwoTone, UserOutlined, HomeOutlined,GithubFilled } from '@ant-desig
 import { Alert, Button, Checkbox, Form, Input, Typography, message,Avatar, } from 'antd';
 import { parse } from 'querystring';
 import { useState } from 'react';
-import { history, useIntl } from 'umi';
+import { history } from '@umijs/max';
 import styles from './index.less';
 const { Title } = Typography;
 const getPageQuery = () => parse(window.location.href.split('?')[1]);
@@ -19,7 +19,7 @@ const LoginMessage = ({ content }) => (
   />
 );
 export default (props) => {
-  const { formatMessage } = useIntl(); //国际化
+  // const { formatMessage } = useIntl(); //国际化
   const [loading, setLoading] = useState(false);
   //读取cookies
   const getCookie = (name) => {

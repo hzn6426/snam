@@ -6,7 +6,7 @@ import { Descriptions } from 'antd';
 import CodeMirror from '@uiw/react-codemirror';
 import { EditorView } from "codemirror";
 import { useRef, useState, useEffect } from 'react';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { useApplicationState } from "@/store/state";
 
 

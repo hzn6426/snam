@@ -3,7 +3,7 @@ import { api, useAutoObservableEvent } from '@/common/utils';
 import { message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 
 export default (props) => {

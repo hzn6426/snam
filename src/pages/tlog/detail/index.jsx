@@ -7,7 +7,7 @@ import { Descriptions } from 'antd';
 import { EditorView } from "codemirror";
 import { useRef, useState, useEffect } from 'react';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { useApplicationState } from "@/store/state";
 
 export default (props) => {

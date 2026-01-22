@@ -3,7 +3,7 @@ import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
 import { IFormItem, ILayout, IWindow } from '@/common/components';
 import { message, Radio } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 
 export default (props) => {

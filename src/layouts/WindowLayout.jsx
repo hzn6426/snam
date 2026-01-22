@@ -2,6 +2,7 @@ import { ConfigProvider, theme  } from 'antd';
 import {useEffect, useState} from 'react'
 import zhCN from 'antd/locale/zh_CN';
 import { ApplicationStateProvider } from "@/store/state";
+import { Outlet } from '@umijs/max';
 import './WindowLayout.less'; // 引入样式文件
 export default (props) => {
     // const [viewSetting] = useApplicationState(s => [s.view]);
@@ -205,7 +206,7 @@ export default (props) => {
         }}
         >
             <div className={getThemeClassName()}>
-                {props.children}
+                <Outlet />
             </div>
         </ConfigProvider>
         </ApplicationStateProvider>

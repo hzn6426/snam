@@ -4,7 +4,7 @@ import { AntDesignOutlined, LockOutlined, UserOutlined } from '@ant-design/icons
 import { Avatar, Button, Card, Checkbox, Form, Input, Typography, message } from 'antd';
 import { parse } from 'querystring';
 import { useState } from 'react';
-import { history, useIntl } from 'umi';
+import { history, useIntl } from '@umijs/max';
 const { Title } = Typography;
 const getPageQuery = () => parse(window.location.href.split('?')[1]);
 

@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 
 
 

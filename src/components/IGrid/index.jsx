@@ -1,9 +1,9 @@
 import { copyObject, forEach } from '@/common/utils';
 import { ReloadOutlined, SettingOutlined } from '@ant-design/icons';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
+import { AgGridReact } from 'ag-grid-react';
 import { Drawer, Pagination, Space, Spin, Tooltip } from 'antd';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 // import './index.less';
@@ -95,30 +95,25 @@ const IGrid = React.forwardRef((props, ref) => {
     const cp = {};
     const target = [];
     forEach((v) => {
-      const gridColumn = (
-        <AgGridColumn
-          key={v.key || v.dataIndex}
-          headerName={v.title}
-          field={v.dataIndex}
-          width={v.width}
-          cellRenderer={v.cellRenderer}
-          hide={v.beHide}
-          cellStyle={v.cellStyle || (v.align ? { textAlign: v.align } : { textAlign: 'center' })}
-          headerClass={
-            v.headerClass || (v.align === 'left'
-              ? 'leftAlign'
-              : v.align === 'right'
-                ? 'rightAlign'
-                : 'centerAlign')
-          }
-          valueFormatter={v.valueFormatter}
-          valueGetter={v.valueGetter}
-          cellEditorSelector={v.cellEditorSelector}
-          editable={v.editable}
-          suppressMovable={v.suppressMovable}
-          pinned={v.pinned}
-        />
-      );
+      const gridColumn = {
+        headerName: v.title,
+        field: v.dataIndex,
+        width: v.width,
+        cellRenderer: v.cellRenderer,
+        hide: v.beHide,
+        cellStyle: v.cellStyle || (v.align ? { textAlign: v.align } : { textAlign: 'center' }),
+        headerClass: v.headerClass || (v.align === 'left'
+          ? 'leftAlign'
+          : v.align === 'right'
+            ? 'rightAlign'
+            : 'centerAlign'),
+        valueFormatter: v.valueFormatter,
+        valueGetter: v.valueGetter,
+        cellEditorSelector: v.cellEditorSelector,
+        editable: v.editable,
+        suppressMovable: v.suppressMovable,
+        pinned: v.pinned,
+      };
       // console.log(v.cellRenderer);
       // if (v.cellRenderer) {
       //   cp[`rd${v.cellRenderer.name}`] = v.cellRenderer;
@@ -449,6 +444,27 @@ const IGrid = React.forwardRef((props, ref) => {
         <AgGridReact
           ref={ref}
           rowData={dataSource}
+          columnDefs={[
+            ...(!optionsHide?.select ? [{
+              headerName: " ",
+              field: "0",
+              headerCheckboxSelection: rowSelection != 'single',
+              checkboxSelection: true,
+              floatingFilter: false,
+              suppressMenu: true,
+              minWidth: 35,
+              maxWidth: 35,
+              width: 35,
+              flex: 0,
+              resizable: false,
+              sortable: false,
+              editable: false,
+              filter: false,
+              suppressColumnsToolPanel: true,
+              pinned: "left",
+            }] : []),
+            ...gridColumns,
+          ]}
           onDragStopped={(e) => changeSetting(e, false)}
           onGridReady={onGridReady}
           rowSelection={rowSelection || 'multiple'}
@@ -478,29 +494,7 @@ const IGrid = React.forwardRef((props, ref) => {
           singleClickEdit={true}
           suppressScrollOnNewData={true}
           getRowStyle={getRowStyle}
-        >
-          {!optionsHide?.select && (
-            <AgGridColumn
-              headerName=" "
-              field="0"
-              headerCheckboxSelection={rowSelection != 'single'}
-              checkboxSelection={true}
-              floatingFilter={false}
-              suppressMenu={true}
-              minWidth={35}
-              maxWidth={35}
-              width={35}
-              flex={0}
-              resizable={false}
-              sortable={false}
-              editable={false}
-              filter={false}
-              suppressColumnsToolPanel={true}
-              pinned="left"
-            />
-          )}
-          {gridColumns.map((obj, index) => obj)}
-        </AgGridReact>
+        />
         <Drawer
           title={
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>

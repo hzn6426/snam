@@ -6,7 +6,7 @@ import KeepAlive, { useAliveController } from 'react-activation';
 import ProLayout, { PageContainer } from '@ant-design/pro-layout';
 import { ConfigProvider, Dropdown, Input, Spin,Avatar } from 'antd';
 import { use, useEffect, useState } from 'react';
-import { Link, history } from 'umi';
+import { Link, history } from '@umijs/max';
 import { api, constant,forEach } from '@/common/utils';
 import { calc } from "antd/es/theme/internal";
 import objectAssign from "object-assign";
@@ -17,7 +17,7 @@ import USet from '../uset';
 import Position from '../position';
 import Privilege from "../privilege";
 import { set } from "lscache";
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 export default () => {
     const params = useParams();
     const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));

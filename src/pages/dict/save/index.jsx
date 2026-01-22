@@ -4,7 +4,7 @@ import { api, useAutoObservable, useAutoObservableEvent } from "@/common/utils";
 import { map, shareReplay, switchMap, tap, filter } from "rxjs/operators";
 import { zip } from 'rxjs'
 import { message, Alert } from "antd";
-import { useParams } from 'umi';
+import { useParams } from '@umijs/max';
 import { AccountBookOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
