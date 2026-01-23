@@ -11,6 +11,8 @@ import { api, constant } from '@/common/utils';
 
 
 export default (props) => {
+    const { onSetting = () => {} } = props;
+    
     const logout = () => {
         sessionStorage.removeItem('token');
         history.push('/user/login');
@@ -34,7 +36,7 @@ export default (props) => {
         {
             key: 'settings',
             icon: <SettingOutlined />,
-            label: <span onClick={() => { props.onSetting() }}>主题布局</span>,
+            label: <span onClick={() => { onSetting() }}>主题布局</span>,
         },
         {
             key: 'refreshPrivilege',

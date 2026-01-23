@@ -5,7 +5,6 @@ import React from 'react';
 import { history } from '@umijs/max';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { useApplicationState } from "@/store/state";
 
 class AvatarDropdown extends React.Component {
   onMenuClick = (event) => {
@@ -32,7 +31,6 @@ class AvatarDropdown extends React.Component {
 
   render() {
     const { currentUser } = this.props;
-    const [viewSetting] = useApplicationState(s => [s.view]);
     // const { currentUser } = this.state;
     const menuHeaderDropdown = (
       <Menu className={styles.menu} onClick={this.onMenuClick}>
@@ -61,7 +59,7 @@ class AvatarDropdown extends React.Component {
           >
             {constant.SYSTEM_AVATAR_NAME}
           </Avatar>
-          <span className={`${styles.name} anticon`} style={{ color: viewSetting.navTheme === 'glass' ? 'white' : 'inherit' }}>{currentUser.name}</span>
+          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
         </span>
       </HeaderDropdown>
     ) : (

@@ -37,7 +37,7 @@ import {
   RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined, HistoryOutlined,
   AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, EyeOutlined
 } from '@ant-design/icons';
-import { Form, message, Tooltip, Spin, Input, Row, Col, Tag, Button } from 'antd';
+import { Form, message, Tooltip, Spin, Input, Row, Col, Tag, Button, Splitter } from 'antd';
 import { IButton } from '@/common/components';
 import { of, zip } from 'rxjs';
 import {
@@ -491,8 +491,8 @@ export default (props) => {
   // 列表及弹窗
   return (
     <>
-      <Row >
-        <Col span={6}>
+      <Splitter style={{ height: offsetHeight - 60, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border:'1px dash' }}>
+        <Splitter.Panel defaultSize="20%" min="15%" max="40%">
           <ISearchTree
             iconRender={loopGroup}
             treeData={treeData}
@@ -514,10 +514,9 @@ export default (props) => {
               }
             }}
           />
-
-        </Col>
-        <Col span={18}>
-      <Spin spinning={searchLoading}>
+        </Splitter.Panel>
+        <Splitter.Panel>
+          <Spin spinning={searchLoading}>
             {/* <XSearchForm
           searchName="businessUser_Search"
           form={searchForm}
@@ -683,9 +682,9 @@ export default (props) => {
         {/* <IFooterToolbar visible={!isEmpty(selectedKeys)}>
 
         </IFooterToolbar> */}
-      </Spin>
-        </Col>
-      </Row>
+          </Spin>
+        </Splitter.Panel>
+      </Splitter>
     </>
   );
 };

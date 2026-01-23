@@ -13,7 +13,7 @@ import {
     produce
 } from '@/common/utils';
 import { NodeCollapseOutlined, NodeExpandOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Input, Tag, Tooltip, message } from 'antd';
+import { Button, Input, Tag, Tooltip, message, Splitter } from 'antd';
 import { useEffect, useState } from 'react';
 
 
@@ -258,12 +258,13 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <ILayout type="hbox" spans="7 10 7" >
-                <IAGrid
+            <Splitter style={{ height: offsetHeight - 40, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                <Splitter.Panel defaultSize="30%" min="20%" max="40%">
+                    <IAGrid
                     gridName="perm_table_list"
                     toolBarRender={[
                         <Input.Search onSearch={(value) => setTableSearchValue(value)} enterButton type='text'
-                            style={{ marginRight: '5px' }}
+                            style={{ marginRight: '5px',height:'24px' }}
                             size='small' key="tableSearch" placeholder='输入表名或描述进行搜索' allowClear />]}
                     title="表格列表"
                     key="table"
@@ -280,10 +281,11 @@ export default (props) => {
                     showQuickJumper={false}
                     showTotal={false}
                 />
-                <>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize="40%" min="30%" max="50%">
                     <IAGrid
                         toolBarRender={[<Input.Search onSearch={(value) => setColumnSearchValue(value)} enterButton type='text'
-                            style={{ marginRight: '5px' }}
+                            style={{ marginRight: '5px',height:'24px' }}
                             size='small' key="columnSearch" placeholder='输入列名或描述进行搜索' allowClear />]}
                         title="表格列列表"
                         gridName="perm_column_list"
@@ -318,8 +320,8 @@ export default (props) => {
                         </Button>
                         </Permit>
                     </IFooterToolbar> */}
-                </>
-                <>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize="30%" min="20%" max="40%">
                     <IAGrid
                         title="权限列列表"
                         key="perm"
@@ -368,8 +370,8 @@ export default (props) => {
                         </Button>
                         </Permit>
                     </IFooterToolbar> */}
-                </>
-            </ILayout>
+                </Splitter.Panel>
+            </Splitter>
         </>
     );
 };

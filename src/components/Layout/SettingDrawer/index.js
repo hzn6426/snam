@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, Form, Row, Col, Switch, Radio, Segmented } from 'antd';
-import { BuildOutlined, SunOutlined,MoonOutlined } from '@ant-design/icons';
+import { SunOutlined, MoonOutlined } from '@ant-design/icons';
 import { useApplicationState } from "@/store/state";
 import * as R from 'ramda';
 import LayoutBox from './layoutBox';
@@ -34,21 +34,6 @@ export default (props) => {
       if (key === "navTheme") {
         const theme = value === 'realDark' ? 'dark' : value;
         document.documentElement.setAttribute("data-theme", theme);
-        
-        // 处理玻璃主题
-        if (value === 'glass') {
-          document.body.classList.add('glass-theme');
-          document.body.style.backgroundImage = "url('../assets/back/bg-6.jpg')";
-          document.body.style.backgroundSize = "cover";
-          document.body.style.backgroundPosition = "center";
-          document.body.style.backgroundAttachment = "fixed";
-        } else {
-          document.body.classList.remove('glass-theme');
-          document.body.style.backgroundImage = "";
-          document.body.style.backgroundSize = "";
-          document.body.style.backgroundPosition = "";
-          document.body.style.backgroundAttachment = "";
-        }
       }
       
       // 立即更新主题色
@@ -126,11 +111,6 @@ export default (props) => {
                     label: '暗夜',
                     value: 'realDark',
                     icon: <MoonOutlined />,
-                  },
-                  {
-                    label: '玻璃',
-                    value: 'glass',
-                    icon: <BuildOutlined />,
                   },
                 ]}
               />

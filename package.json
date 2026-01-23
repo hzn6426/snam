@@ -24,7 +24,7 @@
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.2",
     "@ifrog/uflow": "1.1.0",
-    "@umijs/max": "^4.3.41",
+    "@umijs/max": "^4.6.23",
     "@uiw/react-amap": "^7.1.13",
     "@uiw/react-codemirror": "^4.23.10",
     "ag-grid-community": "^32.3.3",
@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@umijs/fabric": "^4.0.1",
-    "@umijs/lint": "^4.3.41",
+    "@umijs/lint": "^4.6.23",
     "carlo": "^0.9.46",
     "cross-env": "^7.0.3",
     "cross-port-killer": "^1.4.0",

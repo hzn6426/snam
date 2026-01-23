@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import { showDeleteConfirm } from '@/common/antd';
-import { Button, Col, Form, message, Row, Space, Tag, Tooltip } from 'antd';
+import { Button, Col, Form, message, Row, Space, Tag, Tooltip, Splitter } from 'antd';
 import { of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, switchMap, tap, filter } from 'rxjs/operators';
 
@@ -511,8 +511,8 @@ export default (props) => {
     const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
     // 列表及弹窗
     return (
-        <Row >
-            <Col span={6}>
+        <Splitter style={{ height: offsetHeight - 40, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+            <Splitter.Panel defaultSize="20%" min="15%" max="40%">
                 <ISearchTree
                     iconRender={loopGroup}
                     treeData={treeData}
@@ -567,9 +567,8 @@ export default (props) => {
                         }
                     }}
                 />
-
-            </Col>
-            <Col span={18}>
+            </Splitter.Panel>
+            <Splitter.Panel>
                 {/* <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
                     <div> */}
                 <div style={{ border: 0,position:'relative',zIndex:999 }}>
@@ -742,8 +741,8 @@ export default (props) => {
                         )} */}
                 {/* </div>
                 </IDrag> */}
-            </Col>
-        </Row>
+            </Splitter.Panel>
+        </Splitter>
     );
 
 

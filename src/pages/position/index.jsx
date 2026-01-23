@@ -23,7 +23,7 @@ import {
     data2States,
 } from '@/common/utils';
 import { showDeleteConfirm, showOperationConfirm } from '@/common/antd';
-import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Tag, Tooltip } from 'antd';
+import { Col, Form, Input, Row, Card, Tree, Checkbox, Space, Button, message, Tag, Tooltip, Splitter } from 'antd';
 import {
     IFormItem,
     IAGrid,
@@ -327,8 +327,8 @@ const LockRenderer = (props) => {
     const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0]; //获取容器高度
 
     return (
-        <Row gutter={5}>
-            <Col span={6}>
+        <Splitter style={{ height: offsetHeight - 40, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+            <Splitter.Panel defaultSize="20%" min="15%" max="40%">
                 <ISearchTree
                     iconRender={loopGroup}
                     treeData={treeData}
@@ -350,8 +350,8 @@ const LockRenderer = (props) => {
                         </div>
                     )}
                 />
-            </Col>
-            <Col span={18}>
+            </Splitter.Panel>
+            <Splitter.Panel>
                 <IAGrid
                     title="职位列表"
                     columns={initColumns}
@@ -415,8 +415,8 @@ const LockRenderer = (props) => {
 
                     </IFooterToolbar>
                 )} */}
-            </Col>
-        </Row>
+            </Splitter.Panel>
+        </Splitter>
 
     )
 }

@@ -1,7 +1,12 @@
 import { constant } from '@/common/utils';
 import '@/assets/theme.css';
 import '@/assets/index.less';
+import { autoFixContext } from 'react-activation'
 
+autoFixContext(
+  [require('react/jsx-runtime'), 'jsx', 'jsxs', 'jsxDEV'],
+  [require('react/jsx-dev-runtime'), 'jsx', 'jsxs', 'jsxDEV']
+)
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 export async function getInitialState() {
   const token = sessionStorage.getItem(constant.KEY_USER_TOKEN);

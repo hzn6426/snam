@@ -80,7 +80,7 @@ const initColumns = [
     },
     {
         headerName: '关联类型',
-        width: 80,
+        width: 85,
         align: 'center',
         field: 'bindType',
         cellRenderer: BindRenderer

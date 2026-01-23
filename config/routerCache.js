@@ -4,17 +4,17 @@ import { forEach } from '@/common/utils';
 const routeCache = {};
 forEach((v) => {
   if (v.path) {
-    routeCache[v.path] = v.name;
+    routeCache[v.path] = {name:v.name,component:v.component};
   }
   if (v.routes) {
     forEach((inner) => {
       if (inner.path) {
-        routeCache[inner.path] = inner.name;
+        routeCache[inner.path] = {name:inner.name, component:inner.component};
       }
       if (inner.routes) {
         forEach((deepInner) => {
           if (deepInner.path) {
-            routeCache[deepInner.path] = deepInner.name;
+            routeCache[deepInner.path] = {name:deepInner.name,component:deepInner.component};
           }
         }, inner.routes);
       }

@@ -754,6 +754,7 @@ export const INewWindow = (props) => {
 
 };
 
+
 function setWindowTitle(mapWin, title) {
   if (mapWin.document) {// If loaded
     mapWin.document.title = title;

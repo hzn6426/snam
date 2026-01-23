@@ -23,7 +23,6 @@ export default (props) => {
     const location = useLocation();
     const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? defaultSettings : JSON.parse(localStorage.getItem("settings")));
     const [pathname, setPathname] = useState(location.pathname);
-    const [isVisible, setIsVisible] = useState(false);
     const [tabList, setTabList] = useState(tabListInit);
     const [actionTab, setActionTab] = useState('');
     const { dropScope, refresh, clear } = useAliveController();
@@ -31,114 +30,12 @@ export default (props) => {
     const [loading, setLoading] = useState(false);
     const [menuData, setMenuData] = useState([]);
     const [currentUser, setCurrentUser] = useState({});
+    const [settingDrawerVisible, setSettingDrawerVisible] = useState(false);
 
     const [viewSetting, setViewSetting] = useApplicationState(s => [s.view, s.actions.view.setViewSetting]);
     
-    // 根据主题模式设置毛玻璃效果
-    const getGlassTheme = () => {
-      if (viewSetting.navTheme === 'glass') {
-        return {
-          components: {
-            Card: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)'
-            },
-            ProLayout: {
-              sider: {
-                colorMenuBackground: 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(3px)',
-                WebkitBackdropFilter: 'blur(3px)',
-                border: '1px solid rgba(255, 255, 255, 0.3)'
-              },
-              header: {
-                colorBgHeader: 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(3px)',
-                WebkitBackdropFilter: 'blur(3px)',
-                border: '1px solid rgba(255, 255, 255, 0.3)'
-              },
-              pageContainer: {
-                colorBgPageContainer: 'rgba(255,255,255,0.3)',
-                backdropFilter: 'blur(3px)',
-                WebkitBackdropFilter: 'blur(3px)',
-                border: '1px solid rgba(255, 255, 255, 0.3)'
-              }
-            },
-            // 添加Table组件的毛玻璃效果
-            Table: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              border: '1px solid #f0f0f0'
-            },
-            // 添加Tabs组件的毛玻璃效果
-            Tabs: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Tree组件的毛玻璃效果
-            Tree: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Input组件的毛玻璃效果
-            Input: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Select组件的毛玻璃效果
-            Select: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Checkbox组件的毛玻璃效果
-            Checkbox: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: 'rgba(255, 255, 255, 0.5)'
-            },
-            // 添加Radio组件的毛玻璃效果
-            Radio: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: 'rgba(255, 255, 255, 0.5)'
-            },
-            // 添加Textarea组件的毛玻璃效果
-            InputTextArea: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加FooterToolbar组件的毛玻璃效果
-            FooterToolbar: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: 'rgba(255, 255, 255, 0.3)'
-            }
-          }
-        };
-      }
-      return {};
-    };
-    
     // 获取主题相关的CSS类名
     const getThemeClassName = () => {
-      if (viewSetting.navTheme === 'glass') {
-        return 'glass-theme';
-      }
       return viewSetting.navTheme === "light" ? viewSetting.theme : "";
     };
     
@@ -162,23 +59,6 @@ export default (props) => {
         if (viewSetting.navTheme) {
             const theme = viewSetting.navTheme == 'realDark' ? 'dark' : viewSetting.navTheme;
             document.documentElement.setAttribute("data-theme", theme);
-            
-            // 确保玻璃主题类名添加到body上
-            if (viewSetting.navTheme === 'glass') {
-                document.body.classList.add('glass-theme');
-                // 确保背景图显示
-                document.body.style.backgroundImage = "url('../assets/back/bg-6.jpg')";
-                document.body.style.backgroundSize = "cover";
-                document.body.style.backgroundPosition = "center";
-                document.body.style.backgroundAttachment = "fixed";
-            } else {
-                document.body.classList.remove('glass-theme');
-                // 清除背景图样式
-                document.body.style.backgroundImage = "";
-                document.body.style.backgroundSize = "";
-                document.body.style.backgroundPosition = "";
-                document.body.style.backgroundAttachment = "";
-            }
         }
     }, [viewSetting]);
     
@@ -289,6 +169,7 @@ export default (props) => {
 
     useEffect(() => {
         setPathname(location.pathname);
+        console.log(location.pathname);
         // 按钮新建
         addTab(location);
     }, [location.pathname]);
@@ -305,26 +186,30 @@ export default (props) => {
     // 添加标签
     const addTab = (addItem) => {
         setPathname(addItem.pathname);
-    // 缓存页面
+        // 缓存页面
         let index = tabList.findIndex((item) => { return item.key == addItem.pathname });
         if (index < 0) {
-            let newTabs = tabList.concat({ key: addItem.pathname, tab: routeCache[addItem.pathname] });
+            let newTabs = tabList.concat({ key: addItem.pathname, tab: routeCache[addItem.pathname].name });
             setTabList(newTabs);
-            refreshTab(addItem.pathname);
+            // 移除这里的 refreshTab 调用，避免新标签页立即刷新
+            // refreshTab(addItem.pathname);
         }
     }
 
     // 关闭标签
     const editTabs = (key, action) => {
         if (action == 'remove') {
-            let newPath = tabList[tabList.findIndex((item) => { return item.key == key }) - 1].key;
-            if (pathname == key) {
-                setPathname(newPath);
-                history.replace(newPath);
-            }
-            let newTabs = tabList.filter((item) => { return item.key != key });
-            setTabList(newTabs);
-            dropScope(key).then(() => { });
+            // 先清除缓存
+            dropScope(key).then(() => {
+                let currentIndex = tabList.findIndex((item) => { return item.key == key });
+                let newPath = tabList[currentIndex - 1].key;
+                if (pathname == key) {
+                    setPathname(newPath);
+                    history.replace(newPath);
+                }
+                let newTabs = tabList.filter((item) => { return item.key != key });
+                setTabList(newTabs);
+            });
         }
     }
 
@@ -333,22 +218,40 @@ export default (props) => {
         refresh(key).then(() => { });
     }
     const closeAllTabs = () => {
-        let newTabs = [].concat(tabList[0]);
-        setPathname(newTabs[0].key);
-        history.replace(newTabs[0].key);
-        setTabList(newTabs);
-        clear().then(() => { });
+        // 先清除所有缓存
+        clear().then(() => {
+            let newTabs = [].concat(tabList[0]);
+            setPathname(newTabs[0].key);
+            history.replace(newTabs[0].key);
+            setTabList(newTabs);
+        });
     }
     const closeOtherTabs = (key) => {
         let index = tabList.findIndex((item) => { return item.key == key });
         let newTabs = [].concat(tabList[0]);
         newTabs = newTabs.concat(tabList[index]);
+        
+        // 清除其他标签的缓存
+        tabList.forEach((item, itemIndex) => {
+            if (itemIndex !== 0 && itemIndex !== index) {
+                dropScope(item.key);
+            }
+        });
+        
         setPathname(key);
         history.replace(key);
         setTabList(newTabs);
     }
     const closeLeftTabs = (key) => {
         let index = tabList.findIndex((item) => { return item.key == key });
+        
+        // 清除左边标签的缓存
+        tabList.forEach((item, itemIndex) => {
+            if (itemIndex > 0 && itemIndex < index) {
+                dropScope(item.key);
+            }
+        });
+        
         let newTabs = tabList.filter((_, itemIndex) => { return itemIndex >= index || itemIndex == 0 });
         setPathname(key);
         history.replace(key);
@@ -356,6 +259,14 @@ export default (props) => {
     }
     const closeRightTabs = (key) => {
         let index = tabList.findIndex((item) => { return item.key == key });
+        
+        // 清除右边标签的缓存
+        tabList.forEach((item, itemIndex) => {
+            if (itemIndex > index) {
+                dropScope(item.key);
+            }
+        });
+        
         let newTabs = tabList.filter((_, itemIndex) => { return itemIndex <= index });
         setPathname(key);
         history.replace(key);
@@ -377,7 +288,11 @@ export default (props) => {
     return (<ConfigProvider 
         locale={zhCN}
         space={{ size: 'small' }}
-        theme={getGlassTheme()}
+        theme={{
+            components: {
+              Splitter: { splitBarSize: 1, splitTriggerSize: 16 },
+            },
+          }}
       >
       <Spin spinning={loading}>
         <ProLayout
@@ -399,8 +314,8 @@ export default (props) => {
                     // style: {marginRight:-50},
                     render: (_, dom) => {
                         return (
-                            <AvatarDropdown onSetting={() => { setIsVisible(true) }}>
-                                <div style={{marginRight:'-25px',marginTop:'-3px', fontWeight:'bold', color: viewSetting.navTheme === 'glass' ? 'white' : 'inherit'}}>
+                            <AvatarDropdown onSetting={() => setSettingDrawerVisible(true)}>
+                                <div style={{marginRight:'-25px',marginTop:'-3px', fontWeight:'bold'}}>
                                     {dom}
                                 </div>
                             </AvatarDropdown>
@@ -418,47 +333,6 @@ export default (props) => {
                         <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: -20 }} />
                     ];
                 }}
-                // actionsRender={(props) => {
-                //     if (props.isMobile) return [];
-                //     return [
-                //         props.layout !== 'side' ? (
-                //             <div
-                //                 key="SearchOutlined"
-                //                 aria-hidden
-                //                 style={{
-                //                     display: 'flex',
-                //                     alignItems: 'center',
-                //                     marginInlineEnd: -20,
-                //                 }}
-                //                 onMouseDown={(e) => {
-                //                     e.stopPropagation();
-                //                     e.preventDefault();
-                //                 }}
-                //             >
-                //                 <Space.Compact style={{ width: '100%' }}>
-                //                     <Input
-
-                //                         style={{
-                //                             borderRadius: 4,
-                //                             //   marginInlineEnd: 12,
-                //                             //   backgroundColor:'var(--ant-primary-color)',
-                //                             //   backgroundColor: '#ffffff',
-                //                         }}
-                //                         placeholder="搜索方案"
-
-                //                     />
-                //                     <Button style={{ padding: 0, margin: 0 }} icon={<SearchOutlined />} />
-                //                 </Space.Compact>
-                //                 {/* <PlusCircleFilled
-                //             style={{
-                //               backgroundColor: 'var(--ant-primary-color)',
-                //               fontSize: 24,
-                //             }}
-                //           /> */}
-                //             </div>
-                //         ) : undefined
-                //     ];
-                // }}
 
                 menuItemRender={(item, dom) => (
                     location.pathname === item.path ? dom : <Link to={item.path} >{dom}</Link>
@@ -494,7 +368,9 @@ export default (props) => {
                         tabBarStyle: { userSelect: 'none' },
                         activeKey: pathname,
                         onEdit: (v, action) => { editTabs(v, action) },
-                        onChange: (v) => { history.replace(v) },
+                        onChange: (v) => { 
+                            history.replace(v) 
+                        },
                         renderTabBar: (props, DefaultTabBar) =>
                             <DefaultTabBar {...props}>
                                 {node => (
@@ -511,15 +387,19 @@ export default (props) => {
                     className={viewSetting.isTabs ? 'cala-body tabPage' : 'cala-body breadcrumb'}
                 >
                     <div style={{ height: viewSetting.layout == "side" ? 'calc(100vh - 64px)' : 'calc(100vh - 120px)', overflow: 'hidden' }}>
-                        {viewSetting.isTabs ? <KeepAlive name={pathname} key={pathname} id={pathname}><Outlet /></KeepAlive> : <Outlet />}
+                        {viewSetting.isTabs ? (
+                            <Outlet/>
+                        ) : (
+                            <Outlet />
+                        )}
                     </div>
                 </PageContainer>
-                <SettingDrawer
-                    visible={isVisible}
-                    settings={viewSetting}
-                    // onSettingChange={setViewSetting}
-                    closeDrawer={() => setIsVisible(false)}
-                />
-            </ProLayout></Spin></ConfigProvider>
+            </ProLayout>
+            <SettingDrawer
+                visible={settingDrawerVisible}
+                closeDrawer={() => setSettingDrawerVisible(false)}
+                settings={viewSetting}
+            />
+            </Spin></ConfigProvider>
     )
 }

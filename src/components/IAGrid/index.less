@@ -40,9 +40,9 @@
 
    /* AgGrid 主体 */
    .ag-body {
-     margin-top: 0px;
-     position: relative;
-     flex: auto;
+    //  margin-top: 0px;
+    //  position: relative;
+    //  flex: auto;
 
      .ag-setting {
        .ag-unselectable .ag-has-focus {
@@ -228,6 +228,7 @@
      margin-top: 0px;
      position: relative;
      flex: auto;
+     background-color: #000000 !important;
 
      .ag-setting {
        .ag-unselectable .ag-has-focus {
@@ -236,6 +237,14 @@
        }
      }
    }
+
+  //  .ag-row-odd {
+  //   background-color: #161414 !important;
+  //  }
+
+  //  .ag-row-even {
+  //   background-color: #201b1b !important;
+  //  }
 
    /* AgGrid 分页栏 */
    .ag-pagination {
@@ -297,207 +306,3 @@
    }
  }
 
- //=======================================================玻璃模式
- // 玻璃模式下的样式
- .glass-theme .ag-container {
-   background: rgba(255, 255, 255, 0.3) !important;
-   backdrop-filter: blur(3px);
-   -webkit-backdrop-filter: blur(3px);
-   border: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
-
-   .ag-tools {
-     .ag-tools-left {
-       color: white !important;
-
-       .ant-typography {
-         color: white !important;
-       }
-     }
-
-     .ag-tools-right {
-      display: flex;
-      justify-content: flex-end;
-      padding-bottom: 0;
-
-      // 为工具栏按钮添加毛玻璃效果
-        .ant-btn {
-          background: rgba(255, 255, 255, 0.3) !important;
-          backdrop-filter: blur(3px);
-          -webkit-backdrop-filter: blur(3px);
-          //  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-          color: var(--ant-primary-color);
-
-          &:hover {
-            color: #ffffff;
-            background: var(--ant-btn-primary-hover-bg, var(--ant-primary-color)) !important;
-            border-color: var(--ant-btn-primary-hover-border, var(--ant-primary-color)) !important;
-          }
-
-        }
-    }
-   }
-
-   .ag-header {
-     background: rgba(255, 255, 255, 0.3) !important;
-     border-bottom-color: transparent !important;
-     color: white !important;
-
-     .ag-header-cell {
-       color: white !important;
-
-       .ag-header-cell-label {
-         color: white !important;
-       }
-     }
-   }
-
-   .ag-cell {
-     border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
-     color: white !important;
-   }
- }
-
- .glass-theme .ag-header-container {
-   // background: rgba(255, 255, 255, 0.3) !important;
-   background: transparent !important;
-   //  backdrop-filter: blur(3px);
-   //  -webkit-backdrop-filter: blur(3px);
-   // border-bottom: 1px solid #f0f0f0 !important;
- }
-
- // 玻璃模式下表格内容的样式
- .glass-theme .ag-theme-balham {
-   background: transparent !important;
- }
-
-
- .glass-theme .ag-row {
-   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
-   backdrop-filter: blur(3px);
-   -webkit-backdrop-filter: blur(3px);
-   color: white !important;
- }
-
- //  .glass-theme .ag-row-even {
- //    background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
- //    backdrop-filter: blur(3px);
- //    -webkit-backdrop-filter: blur(3px);
- //    color: white !important;
- //  }
-
- //  .glass-theme .ag-row-odd {
- //    background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
- //    backdrop-filter: blur(3px);
- //    -webkit-backdrop-filter: blur(3px);
- //    color: white !important;
- //  }
-
- .glass-theme .ag-row-selected {
-   background: var(--ant-aggrid-row-selected-bg, var(--ant-primary-color)) !important; // 使用纯主题色
-   color: var(--ant-aggrid-row-selected-color, white) !important;
- }
-
- .glass-theme .ag-row-selected::before {
-   background-color: transparent !important;
- }
-
- .glass-theme .ag-row-hover {
-   background: var(--ant-aggrid-row-hover-bg, rgba(24, 144, 255, 0.1)) !important;
-   color: inherit !important;
- }
-
- .glass-theme .ag-row-hover::before {
-   background-color: transparent !important;
- }
-
-
- .glass-theme .ag-pinned-left-header,
- .glass-theme .ag-pinned-right-header {
-   background: rgba(255, 255, 255, 0.3) !important;
-   backdrop-filter: blur(3px);
-   -webkit-backdrop-filter: blur(3px);
-   color: white !important;
- }
-
- .glass-theme .ag-pinned-left-cols-container,
- .glass-theme .ag-pinned-right-cols-container {
-   background: rgba(255, 255, 255, 0.3) !important; // 统一透明度为0.3
-   backdrop-filter: blur(3px);
-   -webkit-backdrop-filter: blur(3px);
-   color: white !important;
- }
-
- // 修复表格容器透明度
- .glass-theme .ag-root-wrapper {
-   background: transparent !important;
-   border-bottom: 1px solid #f0f0f0 !important; // 与IAGrid边框颜色一致
- }
-
- .glass-theme .ag-center-cols-clipper {
-   background: transparent !important;
- }
-
- .glass-theme .ag-center-cols-container {
-   background: transparent !important;
- }
-
- // 玻璃模式下分页组件的样式
- .glass-theme .ag-pagination {
-   color: white !important;
-
-   .pagination-content {
-     color: white !important;
-   }
-
-   // 确保所有页码的字体颜色适配主题设置
-   .ant-pagination-item {
-     // background-color: var(--ant-primary-color) !important;
-     background-color: transparent !important;
-     border-color: var(--ant-primary-color) !important;
-
-     a {
-       color: var(--text-color, #ffffff) // 页码字体颜色适配主题色
-     }
-   }
-
-   .ant-pagination-item-active {
-     background-color: var(--ant-primary-color) !important;
-     border-color: var(--ant-primary-color) !important;
-
-     a {
-       color: var(--text-color, #ffffff) !important;
-     }
-   }
-
-   // 确保分页跳转输入框中的当前页数字也适配主题色
-   .ant-pagination-options {
-     .ant-pagination-options-quick-jumper {
-       input {
-         &:focus {
-           border-color: var(--ant-primary-color) !important;
-           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important; // 使用默认主题色
-         }
-       }
-     }
-
-     // 确保每页条数选择下拉框在最前
-    //  .ant-pagination-options-size-changer {
-    //    z-index: 10000 !important;
-
-    //    .ant-select-dropdown {
-    //      z-index: 20001 !important;
-    //    }
-    //  }
-   }
-
-   .ant-pagination-prev,
-   .ant-pagination-next {
-     color: white !important;
-
-     .ant-pagination-item-link {
-       color: white !important;
-       background-color: rgba(255, 255, 255, 0.3) !important;
-       border-color: rgba(255, 255, 255, 0.3) !important;
-     }
-   }
- }

@@ -26,7 +26,8 @@ import {
     Space,
     Tag,
     Tooltip,
-    message
+    message,
+    Splitter
 } from 'antd';
 import objectAssign from 'object-assign';
 
@@ -398,13 +399,13 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <Row >
-                <Col span={6}>
+            <Splitter style={{ height: offsetHeight - 40, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                <Splitter.Panel defaultSize="20%" min="15%" max="40%">
                     <ISearchTree
                         iconRender={loop}
                         blockNode={true}
                         treeData={treeData}
-                        bodyStyle={{ height: offsetHeight - 110, overflow: 'auto' }}
+                        bodyStyle={{ height: offsetHeight - 100, overflow: 'auto' }}
                         titleRender={(node) => (
                             <div style={{ width: '100%' }}>
                                 <div style={{ float: 'left' }}>
@@ -454,8 +455,8 @@ export default (props) => {
                             }
                         }}
                     />
-                </Col>
-                <Col span={18}>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize="80%" min="60%" max="85%">
                     {/* <ISearchForm
                         
                         form={searchForm}
@@ -494,9 +495,10 @@ export default (props) => {
                         toolBarRender={[
                             <Checkbox size="small" style={{ marginTop: '-5px', marginRight: '5px' }} checked={searchChecked} onChange={onChangeSearch}><div style={{ marginTop: '8px', fontSize: 12 }}>关联菜单</div></Checkbox>,
                             <Input.Search
-                                style={{ width: 250, marginRight: '5px' }}
+                                style={{ width: 250, marginRight: '5px',height:'24px' }}
                                 onSearch={(value) => setTableSearchValue(value)}
-                                size="small" key="columnSearch"
+                                size="small" 
+                                key="columnSearch"
                                 enterButton
                                 placeholder='查询 ID/URL/按钮名称/权限标识' allowClear />,
                                 <Permit authority="menu:saveOrUpdate" key="newMenu">
@@ -531,8 +533,8 @@ export default (props) => {
                             </Button>
                         </IFooterToolbar>
                     )} */}
-                </Col>
-            </Row>
+                </Splitter.Panel>
+            </Splitter>
         </>
     );
 };

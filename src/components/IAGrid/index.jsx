@@ -284,51 +284,9 @@ export default React.forwardRef((props, ref) => {
     }
   ];
 
-  // const [initializeHorizontal, osInstanceHorizontal] = useOverlayScrollbars({
-  //   defer: true,
-  //   options: {
-  //     overflow: {
-  //       x: 'scroll',
-  //       y: 'hidden',
-  //     },
-  //     scrollbars: {
-  //       autoHide: "move",
-  //       clickScroll: true,
-  //     },
-  //   },
-  //   events: {
-  //     initialized(osInstance) {
-  //       // force overflow styles
-  //       const { viewport } = osInstance.elements();
-  //       viewport.style.overflowX = `var(--os-viewport-overflow-x)`;
-  //       viewport.style.overflowY = `var(--os-viewport-overflow-y)`;
-  //     },
-  //   },
-  // });
-  // const [initializeVertical, osInstanceVertical] = useOverlayScrollbars({
-  //   defer: true,
-  //   options: {
-  //     overflow: {
-  //       x: 'hidden',
-  //       y: 'scroll',
-  //     },
-  //     scrollbars: {
-  //       autoHide: "move",
-  //       clickScroll: true,
-  //     },
-  //   },
-  //   events: {
-  //     initialized(osInstance) {
-  //       // force overflow styles
-  //       const { viewport } = osInstance.elements();
-  //       viewport.style.overflowX = `var(--os-viewport-overflow-x)`;
-  //       viewport.style.overflowY = `var(--os-viewport-overflow-y)`;
-  //     },
-  //   },
-  // });
 
 useEffect(() => {
-
+  console.log(222);
     if (defaultSearch !== false) {
       getRowData(pageNo, pageSize || 50);
     }
@@ -336,61 +294,12 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
+    console.log(111);
     gridApi && gridApi.deselectAll();
     
   }, [clearSelect]);
 
-  // useEffect(() => {
-    
-  //   if (!gridApi) {
-  //     return;
-  //   }
-  //   const scrollbarContainer = document.querySelector('.ag-body');
-  //   const viewportHorizontal = document.querySelector(
-  //     '.ag-center-cols-viewport'
-  //   );
-  //   const viewportVertical = document.querySelector('.ag-body-viewport');
 
-   
-  //   if (!scrollbarContainer || !viewportHorizontal || !viewportVertical) {
-  //     return;
-  //   }
-  //   initializeHorizontal({
-  //     target: viewportHorizontal,
-  //     elements: {
-  //       viewport: viewportHorizontal,
-  //     },
-  //     scrollbars: {
-  //       slot: scrollbarContainer,
-  //     },
-  //   });
-  //   initializeVertical({
-  //     target: viewportVertical,
-  //     elements: {
-  //       viewport: viewportVertical,
-  //     },
-  //     scrollbars: {
-  //       slot: scrollbarContainer,
-  //     },
-  //   });
-
-  //   // remove horizontal scrollbar implementation of agGrid
-  //   document.querySelector('.ag-body-horizontal-scroll')?.remove();
-  //   // remove vertical scrollbar implementation of agGrid
-  //   document.querySelector('.ag-body-vertical-scroll')?.remove();
-
-  //   return () => {
-  //     osInstanceHorizontal()?.destroy();
-  //     osInstanceVertical()?.destroy();
-  //   };
-  // }, [
-  //   // gridApi,
-  //   dataSource,
-  //   initializeHorizontal,
-  //   initializeVertical,
-  //   osInstanceHorizontal,
-  //   osInstanceVertical,
-  // ]);
   const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   return (
@@ -418,7 +327,7 @@ useEffect(() => {
           }
         > */}
 
-      <div className={" ag-theme-balham" + (colorBgBase == '#fff' ? "" : "-dark")} style={gridStyle}>
+      <div className={"ag-theme-balham" + (colorBgBase == '#fff' ? "" : "-dark")} style={gridStyle}>
         <AgGridReact
           ref={gridRef}
           rowData={dataSource} // 表格数据

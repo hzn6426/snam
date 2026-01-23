@@ -14,11 +14,6 @@ export default (props) => {
             const localSettings = JSON.parse(localStorage.getItem("settings"));
             setSettings(localSettings);
             document.documentElement.setAttribute("data-theme", localSettings?.navTheme);
-            if (localSettings.navTheme === 'glass') {
-              document.body.classList.add('glass-theme');
-            } else {
-              document.body.classList.remove('glass-theme');
-            }
             
             const viewSetting = localSettings;
             // 当主题颜色改变时，更新CSS变量
@@ -92,7 +87,6 @@ export default (props) => {
               style.setProperty('--ant-btn-default-hover-bg', `${viewSetting.colorPrimary}20`); // 12.5%透明度，更稳定
               style.setProperty('--ant-btn-default-hover-border', viewSetting.colorPrimary);
           }
-            // setNavTheme(localSettings.navTheme);
         }
     }
     useEffect(() => {
@@ -104,110 +98,18 @@ export default (props) => {
         changeTheme();
     })
     
-    // 根据主题模式设置毛玻璃效果
-    const getGlassTheme = () => {
-      if (settings.navTheme === 'glass') {
-        return {
-          components: {
-            Card: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: 10
-            },
-            // 添加Table组件的毛玻璃效果
-            Table: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              border: '1px solid #f0f0f0'
-            },
-            // 添加Tabs组件的毛玻璃效果
-            Tabs: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Tree组件的毛玻璃效果
-            Tree: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Input组件的毛玻璃效果
-            Input: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Select组件的毛玻璃效果
-            Select: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加Checkbox组件的毛玻璃效果
-            Checkbox: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: 'rgba(255, 255, 255, 0.5)'
-            },
-            // 添加Radio组件的毛玻璃效果
-            Radio: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: 'rgba(255, 255, 255, 0.5)'
-            },
-            // 添加Textarea组件的毛玻璃效果
-            InputTextArea: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: '#f0f0f0'
-            },
-            // 添加FooterToolbar组件的毛玻璃效果
-            FooterToolbar: {
-              colorBgContainer: 'rgba(255, 255, 255, 0.3)',
-              backdropFilter: 'blur(3px)',
-              WebkitBackdropFilter: 'blur(3px)',
-              colorBorder: 'rgba(255, 255, 255, 0.3)'
-            }
-          }
-        };
-      }
-      return {};
-    };
-    
-    // 获取主题相关的CSS类名
-    const getThemeClassName = () => {
-      if (settings.navTheme === 'glass') {
-        return 'glass-theme';
-      }
-      return settings.navTheme === "light" ? settings.theme : "";
-    };
-    
     return (
         <ApplicationStateProvider>
         <ConfigProvider space={{ size: 'small' }} 
         locale={zhCN}
         theme={{
-            ...getGlassTheme(),
             algorithm: settings.navTheme === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm,
             token: {
                 colorPrimary: settings.colorPrimary || '#F5222D'
             }
         }}
         >
-            <div className={getThemeClassName()}>
                 <Outlet />
-            </div>
         </ConfigProvider>
         </ApplicationStateProvider>
     )

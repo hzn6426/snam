@@ -26,7 +26,8 @@ import {
     Tag,
     message,
     Checkbox,
-    Tooltip
+    Tooltip,
+    Splitter
 } from 'antd';
 import objectAssign from 'object-assign';
 
@@ -390,8 +391,8 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <Row >
-                <Col span={6}>
+            <Splitter style={{ height: offsetHeight - 40, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                <Splitter.Panel defaultSize="20%" min="15%" max="40%">
                     <ISearchTree
                         iconRender={loop}
                         blockNode={true}
@@ -446,8 +447,8 @@ export default (props) => {
                             }
                         }}
                     />
-                </Col>
-                <Col span={18}>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize="80%" min="60%" max="85%">
                     {/* <ISearchForm
                         
                         form={searchForm}
@@ -523,8 +524,8 @@ export default (props) => {
                             </Button>
                         </IFooterToolbar>
                     )} */}
-                </Col>
-            </Row>
+                </Splitter.Panel>
+            </Splitter>
         </>
     );
 };

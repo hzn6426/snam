@@ -49,100 +49,12 @@
       background: rgba(200, 200, 200, 1);
     }
     
-    // 用户名称在玻璃主题下显示为白色
+    // 用户名称默认颜色
     .name {
-      color: rgba(0, 0, 0, 0.85); // 默认颜色
-      
-      // 玻璃主题下显示为白色
-      .glass-theme & {
-        color: white !important;
-      }
+      color: rgba(0, 0, 0, 0.85);
     }
   }
   .department {
     margin-left: 10px;
-  }
-}
-
-// .dark {
-//   .action {
-//     color: rgba(255, 255, 255, 0.85);
-//     > span {
-//       color: rgba(255, 255, 255, 0.85);
-//     }
-//     &:hover,
-//     &:global(.opened) {
-//       background: @primary-color;
-//     }
-//   }
-// }
-
-// :global(.ant-pro-global-header) {
-//   .dark {
-//     .action {
-//       color: @text-color;
-//       > span {
-//         color: @text-color;
-//       }
-//       &:hover {
-//         color: rgba(255, 255, 255, 0.85);
-//         > span {
-//           color: rgba(255, 255, 255, 0.85);
-//         }
-//       }
-//     }
-//   }
-// }
-
-// 玻璃主题下的样式
-.glass-theme {
-  .right {
-    .account {
-      .name {
-        color: white !important;
-      }
-    }
-  }
-  
-  // 顶部菜单右上角的用户名称字体颜色设置为白色
-  .ant-pro-global-header {
-    .ant-pro-global-header-content {
-      .right {
-        .account {
-          .name {
-            color: white !important;
-          }
-        }
-      }
-    }
-  }
-  
-  // 确保在任何情况下用户名称都是白色
-  .ant-pro-global-header-logo-title {
-    color: white !important;
-  }
-  
-  // 确保AvatarDropdown中的用户名也是白色
-  .ant-pro-global-header-content {
-    .right {
-      .account {
-        .name {
-          color: white !important;
-        }
-      }
-    }
-  }
-  
-  // 确保所有情况下的用户名都是白色
-  .ant-pro-global-header-content {
-    color: white !important;
-    
-    .account {
-      color: white !important;
-      
-      .name {
-        color: white !important;
-      }
-    }
   }
 }

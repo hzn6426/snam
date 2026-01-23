@@ -129,7 +129,7 @@ const initColumns = [
     },
     {
         headerName: '请求方法',
-        width: 80,
+        width: 85,
         align: 'left',
         field: 'exchangeMethod',
         cellRenderer: MethodRenderer

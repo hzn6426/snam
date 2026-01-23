@@ -35,7 +35,7 @@ import {
 // import IIF from '@/components/IIF';
 // import Permit from '@/components/Permit';
 import { showDeleteConfirm } from '@/common/antd';
-import { Form, Button, Modal, message, Select, Input, Tooltip } from 'antd';
+import { Form, Button, Modal, message, Select, Input, Tooltip, Splitter } from 'antd';
 import {
     concatMap,
     debounceTime,
@@ -418,8 +418,8 @@ export default (props) => {
                 <IFormItem name="childDictCode" label="子编码" xtype="input" />
                 <IFormItem name="childdictName" label="子名称" xtype="input" />
             </XSearchForm> */}
-            <ILayout type="hbox" spans="12 12" gutter="0">
-                <>
+            <Splitter style={{ height: offsetHeight - 40, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                <Splitter.Panel defaultSize="50%" min="40%" max="60%">
                     <IAGrid
                         ref={parentRef}
                         title="父字典列表"
@@ -499,8 +499,8 @@ export default (props) => {
                             </Permit>
                         </Space>
                     </IFooterToolbar> */}
-                </>
-                <>
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize="50%" min="40%" max="60%">
                     <IAGrid
                         ref={childRef}
                         title="子字典列表"
@@ -623,8 +623,8 @@ export default (props) => {
                             </Permit>
                         </Space>
                     </IFooterToolbar> */}
-                </>
-            </ILayout>
+                </Splitter.Panel>
+            </Splitter>
         </>
     );
 };
