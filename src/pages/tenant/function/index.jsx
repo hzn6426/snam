@@ -1,25 +1,23 @@
 
-import React, { useRef, useState, useEffect } from 'react';
-import { api, useAutoObservable, useAutoObservableEvent, contains, forEach } from '@/common/utils';
-import { IFormItem, ILayout, IWindow, IAGrid } from '@/common/components';
-import { message, Spin, Tag } from 'antd';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { useParams } from 'umi';
-import { zip } from 'rxjs';
-import { use } from '@/pages/position/service';
+import { IAGrid, IWindow } from '@/common/components';
+import { api, contains, dateFormat } from '@/common/utils';
 import {
-    CloseCircleOutlined,
-    CheckCircleOutlined
+    CheckCircleOutlined,
+    ClockCircleOutlined,
+    CloseCircleOutlined
 } from '@ant-design/icons';
+import { message, Modal, Space, Spin, Tag } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'umi';
 
-
+let functionIds = [];
 export default (props) => {
     const ref = useRef();
     const params = useParams();
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [dataSource, setDataSource] = useState([]);
-    let functionIds = [];
+    // const [functionIds,setFunctionIds] =useState([]);
 
     const [current, setCurrent] = useState({});
     const [refresh, setBeRefresh] = useState(false);
@@ -27,22 +25,77 @@ export default (props) => {
 
     const OperateRenderer = (props) => {
         const record = props.data;
-        const beOpen = contains(record.id, functionIds);
-        console.log(beOpen);
-        return beOpen ? <Tag color="#2db7f5" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
+        console.log(record)
+        const beOpen = contains(record.functionId, functionIds);
+        if (beOpen) {
+        
+            // if (record.feeType === 'MONTH') {
+            //     return <Space><Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
+            //         e.stopPropagation();
+            //         Modal.confirm({
+            //             title: "关闭该功能后，接口不可用，并且可能涉及到退费事项，您确认关闭该功能吗？",
+            //             okText: '确认',
+            //             okType: 'danger',
+            //             cancelText: '取消',
+            //             onOk() {
+            //                 api.tfunction.close({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+            //                     next: (x) => {
+            //                         message.success('关闭成功');
+            //                         doRefresh();
+            //                     }
+            //                 });
+            //             }
+            //           });
+                    
+            //     }} >关闭功能</Tag>
+            //     <Tag color="#2db7f5" style={{ width: 90, cursor: 'pointer' }} icon={<ClockCircleOutlined  title='延期功能' />} onClick={(e) => {
+            //         e.stopPropagation();
+            //         api.tfunction.defer({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+            //             next: (x) => {
+            //                 message.success('延期成功');
+            //                 doRefresh();
+            //             }
+            //         });
+            //     }} >延期功能</Tag>
+            //     </Space>;
+            // } else {
+                    return <Space><Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CloseCircleOutlined title='关闭功能' />} onClick={(e) => {
+                        e.stopPropagation();
+                        api.tfunction.close({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+                            next: (x) => {
+                                message.success('关闭成功');
+                                doRefresh();
+                            }
+                        });
+                    }} >关闭功能</Tag>
+                    <Tag color="#2db7f5" style={{ width: 90, cursor: 'pointer' }} icon={<ClockCircleOutlined  title='延期功能' />} onClick={(e) => {
+                        e.stopPropagation();
+                        api.tfunction.defer({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+                            next: (x) => {
+                                message.success('延期成功');
+                                doRefresh();
+                            }
+                        });
+                    }} >延期功能</Tag>
+                    </Space>
+                // }
+            
+        }
+            
+        return <Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CheckCircleOutlined title='开通功能' />} onClick={(e) => {
             e.stopPropagation();
-            api.tfunction.close({ 'tenantId': params.id, 'functionId': record.id }).subscribe({
-                next: (x) => {
-                    message.success('关闭成功');
-                    doRefresh();
-                }
-            });
-        }} >关闭功能</Tag> : <Tag color="#f50" style={{ width: 90, cursor: 'pointer' }} icon={<CheckCircleOutlined title='开通功能' />} onClick={(e) => {
-            e.stopPropagation();
-            api.tfunction.open({ 'tenantId': params.id, 'functionId': record.id }).subscribe({
-                next: (x) => {
-                    message.success('开通成功');
-                    doRefresh();
+            Modal.confirm({
+                title: "您确认开通该功能吗？",
+                okText: '确认',
+                okType: 'danger',
+                cancelText: '取消',
+                onOk() {
+                    api.tfunction.open({ 'tenantId': params.id, 'functionId': record.functionId }).subscribe({
+                        next: (x) => {
+                            message.success('开通成功');
+                            doRefresh();
+                        }
+                    });
                 }
             });
         }} >开通功能</Tag>
@@ -50,7 +103,9 @@ export default (props) => {
 
     const StateRenderer = (props) => {
         const record = props.data;
-        const beOpen = contains(record.id, functionIds);
+        const beOpen = contains(record.functionId, functionIds);
+       
+        console.log(record.functionId);
         return beOpen ? <Tag color="success">已开通</Tag> : <Tag color="default">未开通</Tag>
     };
     //列初始化
@@ -89,27 +144,34 @@ export default (props) => {
             width: 80,
             field: 'requestMethod',
         },
+        // {
+        //     headerName: '费用类型',
+        //     width: 80,
+        //     field: 'feeType',
+        //     valueFormatter: (x) => {
+        //         if (x.value === 'MONTH') {
+        //             return '月付费';
+        //         } else if (x.value === 'REQUEST') {
+        //             return '请求付费';
+        //         }
+        //         return '';
+        //     },
+        // },
+        // {
+        //     headerName: '单价',
+        //     width: 60,
+        //     field: 'unitPrice',
+        // },
         {
-            headerName: '费用类型',
-            width: 80,
-            field: 'feeType',
-            valueFormatter: (x) => {
-                if (x.value === 'YEAR') {
-                    return '年付费';
-                } else if (x.value === 'REQUEST') {
-                    return '请求付费';
-                }
-                return '';
-            },
-        },
-        {
-            headerName: '单价',
-            width: 60,
-            field: 'unitPrice',
+            headerName: '过期时间',
+            field: 'expireTime',
+            width: 110,
+            align: 'center',
+            valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd'),
         },
         {
             headerName: '操作',
-            width: 110,
+            width: 230,
             field: 'operate',
             cellRenderer: OperateRenderer
         }
@@ -119,9 +181,12 @@ export default (props) => {
         api.tfunction.listByTenant(tid).subscribe({
             next: (list) => {
                 functionIds = list;
-                if (callback) {
-                    callback();
-                }
+                api.tfunction.listAllOnline().subscribe({
+                    next: (online) => {
+                        setDataSource(online);
+        
+                    }
+                });
             }
         });
     }
@@ -135,19 +200,22 @@ export default (props) => {
     }
 
     const doRefresh = () => {
-        loadTenantFunction(params.id, () => ref.current.getGridApi().redrawRows());
+        functionIds = [];
+        loadTenantFunction(params.id);
+        // loadFunctions();
     }
     useEffect(() => {
+        functionIds = [];
         loadTenantFunction(params.id);
-        loadFunctions();
+        // loadFunctions();
     }, [params.id]);
 
     return (
         <IWindow
 
             current={current}
-            className="snam-modal"
-            title={(current && current.id) ? '编辑租户' : '新建租户'}
+            className="odm-modal"
+            title={(current && current.id) ? '租户接口管理' : '租户接口管理'}
             width={clientWidth}
             height={clientHeight}
             saveVisible={false}

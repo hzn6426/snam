@@ -37,6 +37,7 @@ export default (props) => {
 
     useEffect(() => {
         const item = window.opener.onGetParams();
+        item.beSyncUserPerm = true;
         setCurrent(item);
         loadTree();
     }, []);
@@ -56,6 +57,7 @@ export default (props) => {
         >
             <IFormItem xtype="hidden" name="groupId" />
             <IFormItem xtype="hidden" name="users" />
+            <IFormItem xtype="select" name="beSyncUserPerm" label="同步权限" options={[{label: '是', value: true}, {label: '否', value: false}]} />
             <ISearchTree
                 showIcon
                 checkable={false}

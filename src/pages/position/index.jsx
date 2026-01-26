@@ -30,7 +30,6 @@ import {
     ISearchForm,
     IStatus,
     ITag,
-    IModal,
     Permit,
     IFooterToolbar,
     ISearchTree,
@@ -331,7 +330,7 @@ const LockRenderer = (props) => {
                     placeholder="输入组织或职位进行搜索"
                     checkable={false}
                     blockNode={true}
-                    bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
+                    bodyStyle={{ height: offsetHeight - 105, overflow: 'auto' }}
                     onSelect={(keys, { selected }) => {
                         if (selected) {
                             setSelectedGroupId(keys[0]);

@@ -2,16 +2,17 @@ import { IIF, IStatus, IWindow } from '@/common/components';
 import { api, dateFormat, useAutoObservable } from '@/common/utils';
 import { javascript } from "@codemirror/lang-javascript";
 import CodeMirror from '@uiw/react-codemirror';
+import {json} from "@codemirror/lang-json";
 import { Descriptions } from 'antd';
 import { EditorView } from "codemirror";
 import { useState } from 'react';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { useParams } from 'umi';
-
+import { useApplicationState } from "@/store/state";
 
 export default (props) => {
+    const [navTheme] = useApplicationState(s => [s.view.navTheme]);
     const params = useParams();
-    const [settings, setSettings] = useState(localStorage.getItem("settings") == null ? {} : JSON.parse(localStorage.getItem("settings")));
     const { clientWidth, clientHeight } = window?.document?.documentElement;
     const [loading, setLoading] = useState(false);
     const [current, setCurrent] = useAutoObservable((inputs$) =>
@@ -30,6 +31,11 @@ export default (props) => {
         FAILURE: { text: '失败', status: 'Error' },
         SUCCESS: { text: '成功', status: 'Success' },
     };
+
+    const userType = {
+        TENANT:'租户',
+        USER:'用户'
+    }
 
 
 
@@ -54,7 +60,9 @@ export default (props) => {
                 <Descriptions.Item label="状态" span={24}>
                     <IStatus value={current.state} state={loggerState} />
                 </Descriptions.Item>
-
+                <Descriptions.Item label="用户类型" span={24}>
+                    {userType[current.bindType]} {current.tenantName}
+                </Descriptions.Item>
                 <Descriptions.Item label="操作人" span={1}>
                     {current.createUserCnName} {current.ipAddress}
                 </Descriptions.Item>
@@ -68,48 +76,42 @@ export default (props) => {
 
             </Descriptions>
             <br />
-            <IIF test={current && current.exchangeParam}>
                 <div className="snam-label">请求参数</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exchangeParam}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         language="json"
                         readOnly={true}
                         height="120px"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping, json(), javascript({ jsx: true })]}
                     />
                 </div>
-            </IIF>
             <br />
-            <IIF test={current && current.dataContent}>
                 <div className="snam-label">返回信息</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.dataContent}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
-                        language="json"
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         readOnly={true}
                         height="160px"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping, json(), javascript({ jsx: true })]}
                     />
                 </div>
-            </IIF>
             <br />
 
-            <IIF test={current && current.exceptionMsg}>
+            <IIF test={!!current.exceptionMsg}>
                 <div className="snam-label">错误信息</div>
                 <div style={{ border: '1px solid rgba(0, 0, 0, .06)' }}>
                     <CodeMirror
                         value={current.exceptionMsg}
-                        theme={settings.navTheme == 'light' ? 'light' : 'dark'}
-                        language="json"
+                        theme={navTheme == 'light' ? 'light' : 'dark'}
                         readOnly={true}
-                        height="120"
+                        height="140"
                         basicSetup={{ lineNumbers: false }}
-                        extensions={[EditorView.lineWrapping, javascript({ jsx: true })]}
+                        extensions={[EditorView.lineWrapping, json(), javascript({ jsx: true })]}
                     />
                 </div>
             </IIF>

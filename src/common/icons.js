@@ -1,27 +1,26 @@
-import tfunction from '@/pages/tfunction';
 import {
-    SettingOutlined,
-    TeamOutlined,
-    UserOutlined,
-    IdcardOutlined,
-    TrophyOutlined,
     ApartmentOutlined,
-    FileExclamationOutlined,
     DeploymentUnitOutlined,
-    FlagOutlined,
-    UserSwitchOutlined,
-    UnorderedListOutlined,
-    TableOutlined,
-    FunnelPlotOutlined,
+    FileExclamationOutlined,
     FileTextOutlined,
+    FlagOutlined,
+    FunnelPlotOutlined,
+    IdcardOutlined,
+    MergeCellsOutlined,
+    OneToOneOutlined,
     RobotFilled,
     RobotOutlined,
-    OneToOneOutlined,
+    SettingOutlined,
+    ShoppingCartOutlined,
     SolutionOutlined,
-    AppstoreOutlined,
-    AppstoreAddOutlined,
-    DollarOutlined,
-    MergeCellsOutlined
+    TableOutlined,
+    TeamOutlined,
+    TrophyOutlined,
+    UnorderedListOutlined,
+    UserOutlined,
+    UserSwitchOutlined,
+    ThunderboltOutlined,
+    NodeIndexOutlined
 } from '@ant-design/icons';
 
 const icons = {
@@ -44,6 +43,9 @@ const icons = {
     tmenu: <OneToOneOutlined />,
     tlog: <SolutionOutlined />,
     tfunction: <MergeCellsOutlined />,
+    order:<ShoppingCartOutlined />,
+    action:<ThunderboltOutlined />,
+    flow:<NodeIndexOutlined />
 };
 
 export const iconEnum = (item) => {

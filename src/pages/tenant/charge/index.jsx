@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import { IFormItem, IWindow } from '@/common/components';
 import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { IFormItem, ILayout, IWindow } from '@/common/components';
-import { message, Typography, Badge, Form, InputNumber } from 'antd';
+import { Form, InputNumber, message } from 'antd';
+import { useRef, useState } from 'react';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
 
@@ -43,6 +43,7 @@ export default (props) => {
             title={'租户充值'}
             width={clientWidth}
             height={clientHeight}
+            layout="horizontal"
             onSubmit={(params) => onSaveClick(params)}
             onCancel={() => {
                 window.close();
@@ -50,17 +51,21 @@ export default (props) => {
             }}
         >
             <IFormItem xtype="id" />
-            <ILayout type="vbox">
-                <span style={{ marginLeft: 20 }}>当前余额：<span style={{ color: 'red', fontWeight: 'bold', marginLeft: 5 }}>{current.balance}</span></span>
+            <Form.Item label="当前余额" name="balance" >
+                    <InputNumber style={{ width: "100%" }} disabled />
+                    {/* <span className="ant-form-text"><span style={{ color: 'red', fontWeight: 'bold', marginLeft: 5 }}>{current.balance}</span></span> */}
+                </Form.Item>
+            {/* <ILayout type="vbox"> */}
+                {/* <span style={{ marginLeft: 20 }}>当前余额：<span style={{ color: 'red', fontWeight: 'bold', marginLeft: 5 }}>{current.balance}</span></span> */}
                 <Form.Item
                     labelCol={{ span: 4 }}
                     name="money"
                     label="充值金额"
                     rules={[{ required: true, message: true }]}
                 >
-                    <InputNumber style={{ width: '100%' }} precision={2} min={1} max={99999999} onChange={() => { }} />
+                    <InputNumber style={{ width: '100%' }} precision={2} min={1} max={99999999} />
                 </Form.Item>
-            </ILayout>
+            {/* </ILayout> */}
         </IWindow>
     )
 }

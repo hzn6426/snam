@@ -3,7 +3,6 @@ import {
     IFooterToolbar,
     IFormItem,
     IAGrid,
-    XSearchForm,
     IStatus,
     IButton,
     Permit,
@@ -21,7 +20,7 @@ import {
 import {
     DiffOutlined, RestOutlined, CloudSyncOutlined
 } from '@ant-design/icons';
-import { Button, Form, Tooltip, message, Select, Input } from 'antd';
+import { Button, Form, Tooltip, message, Tag, Input } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -33,7 +32,14 @@ import {
 } from 'rxjs/operators';
 
 
-
+const BindRenderer = (props) => {
+    if (props.value === 'user') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#b66eba">用户</Tag>;
+    } else if (props.value === 'tenant') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#e65a4c">租户</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
+}
 
 const StateRenderer = (props) => {
     return props.value && <IStatus value={props.value} state={roleState} />;
@@ -77,13 +83,20 @@ const initColumns = [
         width: 80,
         align: 'center',
         field: 'bindType',
-        valueFormatter: (x) => x.value === 'user' ? '用户' : '租户',
+        cellRenderer: BindRenderer
     },
     {
         headerName: '关联用户',
         width: 140,
         align: 'center',
         field: 'bindUser',
+        
+    },
+    {
+        headerName: '租户名称',
+        width: 120,
+        align: 'center',
+        field: 'tenantName',
     },
     {
         headerName: '过期时间',
@@ -102,6 +115,18 @@ const initColumns = [
         width: 140,
         align: 'center',
         field: 'note',
+    },
+    {
+        headerName: '创建人',
+        width: 90,
+        align: 'center',
+        field: 'createUserCnName',
+    },
+    {
+        headerName: '创建',
+        width: 150,
+        field: 'createTime',
+        valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
 ];
 

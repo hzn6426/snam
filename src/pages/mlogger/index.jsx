@@ -1,7 +1,6 @@
 import {
     IFormItem,
     IAGrid,
-    XSearchForm,
     IGridSearch,
     IStatus
 } from '@/common/components';
@@ -12,7 +11,7 @@ import {
     pluck,
     useObservableAutoCallback
 } from '@/common/utils';
-import { Form, Select, Input } from 'antd';
+import { Form, Select, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -34,6 +33,28 @@ const StateRenderer = (props) => {
     }
     return <>{props.value}</>
 };
+
+const MethodRenderer = (props) => {
+    if (props.value === 'POST') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#87d068">{props.value}</Tag>;
+    } else if (props.value === 'GET') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#2db7f5">{props.value}</Tag>;
+    } else if (props.value === 'PUT') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#f1982f">{props.value}</Tag>;
+    } else if (props.value === 'DELETE') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#E8333c">{props.value}</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
+}
+
+const BindRenderer = (props) => {
+    if (props.value === 'USER') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#b66eba">用户</Tag>;
+    } else if (props.value === 'TENANT') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#e65a4c">租户</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
+}
 
 
 //列初始化
@@ -70,6 +91,13 @@ const initColumns = [
         field: 'dataFrom',
     },
     {
+        headerName: '用户类型',
+        width: 80,
+        align: 'left',
+        field: 'bindType',
+        cellRenderer: BindRenderer
+    },
+    {
         headerName: '功能名称',
         width: 170,
         align: 'left',
@@ -87,6 +115,7 @@ const initColumns = [
         width: 80,
         align: 'left',
         field: 'exchangeMethod',
+        cellRenderer: MethodRenderer
     },
     {
         headerName: '请求地址',

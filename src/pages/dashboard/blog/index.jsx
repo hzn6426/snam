@@ -1,12 +1,248 @@
-import { Card, Timeline, Typography } from 'antd';
+import { Card, Modal, Timeline, Typography } from 'antd';
+import { useEffect } from 'react';
 const { Title, Paragraph, Text } = Typography;
 
 export default () => {
+
+
+  const info = () => {
+    Modal.info({
+      title: '点赞',
+      content: (
+        <div>
+          <p>喜欢该项目就点个赞吧，您的支持是对我最大的鼓励，也是支持我前进的动力！</p>
+        </div>
+      ),
+      onOk() {window.open('https://gitee.com/ifrog/snapper-standalone',"_blank")},
+    });
+  };
   const { clientHeight } = window?.document?.documentElement;
+
+  // useEffect(() => {
+  //   const lastFetchTime = localStorage.getItem('lastFetchTime');
+  //   const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
+  //   const now = new Date().getTime();
+ 
+  //   if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
+  //     localStorage.setItem('lastFetchTime', now.toString());
+  //     info();
+  //   }
+  // },[]);
   return (
     <>
+      
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
+        <Timeline.Item>
+            <Title level={4}>[3.2.10] 2025.12.23</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph type='danger'>
+              <ul className="snam-li">
+                <li>新增 组织管理中添加用户复制权限功能，可以将一个用户复制到另一个用户中</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item><Timeline.Item>
+            <Title level={4}>[3.3.0] 2025.12.23</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph type='danger'>
+              <ul className="snam-li">
+                <li>新增 复制用户权限 用于在组织中将一个用户的所有权限复制到另一个用户中</li>
+                <li>新增 前端增加 <b>玻璃主题</b> 可在主题中选择玻璃主题</li>
+                <li>新增 组织优先级排序，编辑组织可设置优先级</li>
+                <li>新增 规则适配，可适配规则设计器中的规则(全新 GROOVY规则,即将开源</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化移动用户 移动用户时添加更新权限选项，选择是，将会将权限同步移动后的组织，保持权限不变</li>
+                
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复解析 SQL时,有 BigDecimal 类型时导致解析错误问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+          
+          <Timeline.Item>
+            <Title level={4}>[3.2.9] 2025.8.22</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph type='danger'>
+              <ul className="snam-li">
+                <li>新增 租户管理-用户管理 用于在租户中进行人员的管理</li>
+                <li>新增 租户管理-角色管理 在租户中角色管理 权限分配</li>
+                <li>新增 租户管理-组织管理 租户中人员加入组织（支持同一人员加入多个组织）及职位分配</li>
+                <li>新增 租户管理-职位管理 租户中管理职位进行角色分配及数据权限配置</li>
+                <li>新增 租户管理-授权管理 更深层次进行业务数据权限 功能数据权限 列数据权限管理</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化接入用户 通过租户绑定和用户绑定来实现接入系统后转化成对应的租户和用户，通过对应的角色、职位等来分配资源权限和数据权限</li>
+                <li>优化接入用户的授权和鉴权</li>
+                <li>优化日志展示 接入日志、租户日志、用户日志展示样式</li>
+                <li>优化组织添加用户 - 添加成员可实现一个用户添加到多个组织中</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复日志明细展示错误问题</li>
+                <li>修复删除职位时，未解除职位关联关系问题</li>
+                <li>修复用户模糊匹配选择时，未展示对应组织信息（人员位于多个组织无法确认组织）</li>
+                <li>修复用户组添加单个人员后，无法去掉人员的问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
+            <Title level={4}>[3.2.8] 2025.8.8</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 全新<a href='https://flow.baomibing.com' target='_blank'>流程设计器-让流程设计更简单(用户名ximen/123456)</a>上线, 完全开源(项目正在整理)</li>
+                <li>新增 UFlow（@ifrog/uflow）组件，基于React，用于展示流程</li>
+                <li>新增 流程演示，用于演示工作流，可以在流程设计器中设计流程，在演示中执行流程</li>
+                <li>新增 IP锁定机制，包括登录锁定及恶意刷接口锁定</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化前端展示，添加zustand状态支持，用于设置主题</li>
+                <li>优化业务权限，构造条件添加左括号和右括号，能支持复杂嵌套条件</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复解析权限SQL时类型判断错误，导致解析SQL失败</li>
+                <li>修复日志双击查看详情时出错问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
+            <Title level={4}>[3.2.7] 2025.7.15</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 全新<a href='https://rule.baomibing.com' target='_blank'>规则设计器-可动态配置脚本(用户名ximen/123456)</a>上线, 完全开源(项目及文档正在整理)</li>
+                <li>新增 snapper-rule-starter规则模块,支持规则设计器运行时</li>
+                <li>新增 @RuleEvent 规则设计器支持,动态配置规则</li>
+                <li>新增 RuleInvoker 编程式调用规则执行器支持</li>
+                <li>新增 IP锁定机制, 超过5次登录错误后, IP进行锁定(防止恶意登录) </li>
+                <li>新增 官方文档更新中, 具体查看<a href='https://www.baomibing.com/pages/the-quick-start/' target='_blank'>文档-快速开始</a> </li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化订单演示模块 - 选择王凤 运行规则设计器对应的规则, 演示规则显示器的运行</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+          <Timeline.Item>
+            <Title level={4}>[3.2.6] 2025.6.26</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 权限动作,能够动态的控制@Action内容,配置后无需重启</li>
+                <li>新增 按钮添加无鉴权(登录)和授权(资源授权)支持</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化租户相关功能,优化接口,去掉无关选项</li>
+                <li>菜单按钮列表样式优化</li>
+                <li>表格分页样式优化</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复POST请求在请求体为空时,Content-Type无效问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+         <Timeline.Item>
+            <Title level={4}>[3.2.5] 2025.6.17</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 用户添加登录终端属性，能控制用于允许登录的终端</li>
+                <li>新增 添加find_in_set选项支持</li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snapper-dependence' target='_blank'>项目依赖地址</a></li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snapper-standalone' target='_blank'>单机版地址</a></li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snapper-boot' target='_blank'>微服务版地址</a></li>
+                <li>新增 项目开源-<a href='https://gitee.com/ifrog/snam' target='_blank'>前端UI地址</a></li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化租户拦截处理相关功能</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
+
+        <Timeline.Item>
+            <Title level={4}>[3.2.4] 2025.3.14</Title>
+            <Title level={5}>新增功能</Title>
+            <Paragraph>
+              <ul className="snam-li">
+                <li>新增 提单演示-通过切换用户来获取对应数据，验证权限有效性</li>
+                <li>新增 工作流(即将到来) - 使工作流更简单<a href="https://flow.baomibing.com" target='_blank'>snapper-flow(仅前端演示)</a></li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="success">
+              功能优化
+            </Title>
+            <Paragraph type="success">
+              <ul className="snam-li">
+                <li>优化权限启动器，支持多个包的@Action扫描</li>
+                <li>优化授权管理中用户和用户获取权限，不再获取无权限数据</li>
+                <li>用户权限中添加无权限按钮支持及修复全角色获取数据问题</li>
+              </ul>
+            </Paragraph>
+            <Title level={5} type="warning">
+              修复BUG
+            </Title>
+            <Paragraph type="warning">
+              <ul className="snam-li">
+                <li>修复mybatis-plus构建查询情况下，配置排除列失效的问题</li>
+                <li>修复在只过滤公司的情况下，配置业务数据权限失效的问题</li>
+                <li>修复拦截器在某些情况下会进行转义，导致错误的问题</li>
+              </ul>
+            </Paragraph>
+          </Timeline.Item>
 
         <Timeline.Item>
             <Title level={4}>[3.2.3] 2025.1.27</Title>

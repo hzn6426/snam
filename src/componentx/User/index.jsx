@@ -9,6 +9,7 @@ import {
   isArray,
   stringRandom,
   data2Option,
+  split,
 } from '@/common/utils';
 import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 
@@ -32,9 +33,13 @@ export default (props) => {
   }, [displayName, value]);
 
   const fetchUser = (id) => {
+    // const [gid,uid] = split(id, '#');
     api.user.getUser(id).subscribe({
       next:(data) => {
         const u = data2Option('id','userRealCnName',data);
+        // forEach((v) => {
+        //   v.value = gid + '#' + v.value;
+        // },u)
         setOptionData(u);
         setKeyword(u[0]);
       }
@@ -62,7 +67,7 @@ export default (props) => {
     <Select
       showSearch
       labelInValue
-      allowClear
+      allowClear={false}
       showArrow={false}
       value={keyword}
       placeholder={placeholder}

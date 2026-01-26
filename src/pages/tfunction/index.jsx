@@ -1,42 +1,31 @@
 import { showDeleteConfirm } from '@/common/antd';
 import {
-    IFooterToolbar,
-    IFormItem,
     IAGrid,
-    XSearchForm,
-    IStatus,
     IButton,
+    IStatus,
     Permit
 } from '@/common/components';
 import {
     INewWindow,
-    dateFormat,
     api,
     beHasRowsPropNotEqual,
-    isEmpty,
+    dateFormat,
     pluck,
-    state2Option,
     useAutoObservableEvent,
     useObservableAutoCallback
 } from '@/common/utils';
 import {
-    DiffOutlined,
-    RestOutlined,
-    LockTwoTone,
     CloudDownloadOutlined,
     CloudUploadOutlined,
-    UnlockTwoTone,
-    CloudSyncOutlined,
-    SyncOutlined,
-    ReloadOutlined
+    DiffOutlined,
+    RestOutlined
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin, Select, Input, Tooltip } from 'antd';
+import { Button, Spin, Tooltip, message } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
     debounceTime,
     distinctUntilChanged,
-    filter,
     shareReplay,
     switchMap,
     tap
@@ -89,24 +78,30 @@ const initColumns = [
         width: 80,
         field: 'requestMethod',
     },
-    {
-        headerName: '费用类型',
-        width: 140,
-        field: 'feeType',
-        valueFormatter: (x) => {
-            if (x.value === 'YEAR') {
-                return '年付费';
-            } else if (x.value === 'REQUEST') {
-                return '请求付费';
-            }
-            return '';
-        },
+     {
+        headerName: '过期时间',
+        width: 150,
+        field: 'expireTime',
+        valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
     },
-    {
-        headerName: '单价',
-        width: 80,
-        field: 'unitPrice',
-    },
+    // {
+    //     headerName: '费用类型',
+    //     width: 140,
+    //     field: 'feeType',
+    //     valueFormatter: (x) => {
+    //         if (x.value === 'MONTH') {
+    //             return '按月付费';
+    //         } else if (x.value === 'REQUEST') {
+    //             return '请求付费';
+    //         }
+    //         return '';
+    //     },
+    // },
+    // {
+    //     headerName: '单价',
+    //     width: 80,
+    //     field: 'unitPrice',
+    // },
     {
         headerName: '创建人',
         width: 100,
@@ -182,7 +177,7 @@ export default (props) => {
             url: '/new/tfunction/' + id,
             title: '编辑租户接口',
             width: 700,
-            height: 400,
+            height: 580,
             callback: () => refresh()
         })),
     ]);
@@ -218,7 +213,7 @@ export default (props) => {
             url: '/new/tfunction/ADD',
             title: '新建租户接口',
             width: 700,
-            height: 400,
+            height: 580,
             callback: () => refresh()
         })
     };

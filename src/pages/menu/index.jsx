@@ -1,32 +1,32 @@
-import { IFooterToolbar, IAGrid, ISearchTree, IStatus, Permit, ISearchForm, IFormItem } from '@/common/components';
+import { IAGrid, ISearchTree, IStatus, Permit } from '@/common/components';
 import { INewWindow, api, copyObject, forEach, isEmpty, pluck } from '@/common/utils';
 import {
     AppstoreOutlined,
     AppstoreTwoTone,
     DeleteOutlined,
-    FormOutlined,
-    PlusOutlined,
-    LockTwoTone,
-    UnlockTwoTone,
     DiffOutlined,
     FolderAddOutlined,
+    FormOutlined,
+    LockTwoTone,
+    PlusOutlined,
+    PlusSquareOutlined,
     RestOutlined,
-    PlusSquareOutlined
+    UnlockTwoTone
 } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 
 import { showDeleteConfirm } from '@/common/antd';
 import {
     Button,
+    Checkbox,
     Col,
     Form,
     Input,
     Row,
     Space,
     Tag,
-    message,
-    Checkbox,
-    Tooltip
+    Tooltip,
+    message
 } from 'antd';
 import objectAssign from 'object-assign';
 
@@ -39,6 +39,19 @@ const TagRenderer = (props) => {
         return <Tag color="#f50">是</Tag>;
     }
     return <Tag color="#2db7f5">否</Tag>;
+}
+
+const MethodRenderer = (props) => {
+    if (props.value === 'POST') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#87d068">{props.value}</Tag>;
+    } else if (props.value === 'GET') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#2db7f5">{props.value}</Tag>;
+    } else if (props.value === 'PUT') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#f1982f">{props.value}</Tag>;
+    } else if (props.value === 'DELETE') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#E8333c">{props.value}</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
 }
 
 const TagActionRenderer = (props) => {
@@ -86,7 +99,7 @@ const initColumns = [
     },
     {
         headerName: '子菜单',
-        width: 70,
+        width: 90,
         align: 'center',
         field: 'subMenu',
     },
@@ -97,9 +110,16 @@ const initColumns = [
         field: 'buttonName',
     },
     {
-        headerName: '忽略权限',
+        headerName: '忽略登录权限',
         align: 'center',
-        width: 80,
+        width: 100,
+        field: 'beLoginUnauth',
+        cellRenderer: TagRenderer
+    },
+    {
+        headerName: '忽略资源权限',
+        align: 'center',
+        width: 100,
         field: 'beUnauth',
         cellRenderer: TagRenderer
     },
@@ -114,6 +134,7 @@ const initColumns = [
         align: 'center',
         width: 90,
         field: 'reqMethod',
+        cellRenderer: MethodRenderer
     },
     {
         headerName: '权限标识',
@@ -277,8 +298,10 @@ export default (props) => {
     };
 
     // 查询button
-    const search = (pageNo, pageSize, beInMenu) => {
+    const search = (pageNo, pageSize, beInMenu = searchChecked ) => {
         setSelectedKeys([]);
+        setPageNo(pageNo);
+        setPageSize(pageSize);
         let param = { dto: {}, pageNo: pageNo, pageSize: pageSize };
         param.dto.menuId = beInMenu === true ? selectedMenuId : '';
         param.dto.keyword = tableSearchValue;
@@ -381,7 +404,7 @@ export default (props) => {
                         iconRender={loop}
                         blockNode={true}
                         treeData={treeData}
-                        bodyStyle={{ height: offsetHeight - 110, overflow: 'scroll' }}
+                        bodyStyle={{ height: offsetHeight - 110, overflow: 'auto' }}
                         titleRender={(node) => (
                             <div style={{ width: '100%' }}>
                                 <div style={{ float: 'left' }}>
@@ -427,6 +450,7 @@ export default (props) => {
                             if (selected) {
                                 setSelectedMenuId(node.key);
                                 setSelectedMenuName(node.text);
+                                setSearchChecked(true);
                             }
                         }}
                     />

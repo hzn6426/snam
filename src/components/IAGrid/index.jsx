@@ -7,7 +7,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Button, Drawer, Pagination, Space, Typography, message, theme } from 'antd';
 import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import './index.less';
-
+// import { useOverlayScrollbars } from 'overlayscrollbars-react';
 
 export default React.forwardRef((props, ref) => {
   const {
@@ -36,7 +36,8 @@ export default React.forwardRef((props, ref) => {
     showTotal,
     showSizeChanger,
     clearSelect,
-    childRef
+    childRef,
+    style,
   } = props;
 
 
@@ -84,7 +85,6 @@ export default React.forwardRef((props, ref) => {
 
   useImperativeHandle(childRef, () => ({
     getGridApi: () => {
-      console.log(gridApi);
       return gridApi;
     },
   }));
@@ -113,17 +113,7 @@ export default React.forwardRef((props, ref) => {
     return <></>
   }
 
-  useEffect(() => {
-
-    if (defaultSearch !== false) {
-      getRowData(pageNo, pageSize || 50);
-    }
-
-  }, []);
-
-  useEffect(() => {
-    gridApi && gridApi.deselectAll();
-  }, [clearSelect]);
+  
 
   const getRowData = (current, size) => {
     request && request(current, size)
@@ -181,7 +171,12 @@ export default React.forwardRef((props, ref) => {
   const defaultCol = useMemo(() => {
     return {
       resizable: true,
+      sortable: true,
       minWidth: 60,
+      enableRowGroup: true,
+      enablePivot: true,
+      enableValue: true,
+      pinned:''
     };
   }, []);
 
@@ -273,8 +268,116 @@ export default React.forwardRef((props, ref) => {
     }
   ];
 
+  // const [initializeHorizontal, osInstanceHorizontal] = useOverlayScrollbars({
+  //   defer: true,
+  //   options: {
+  //     overflow: {
+  //       x: 'scroll',
+  //       y: 'hidden',
+  //     },
+  //     scrollbars: {
+  //       autoHide: "move",
+  //       clickScroll: true,
+  //     },
+  //   },
+  //   events: {
+  //     initialized(osInstance) {
+  //       // force overflow styles
+  //       const { viewport } = osInstance.elements();
+  //       viewport.style.overflowX = `var(--os-viewport-overflow-x)`;
+  //       viewport.style.overflowY = `var(--os-viewport-overflow-y)`;
+  //     },
+  //   },
+  // });
+  // const [initializeVertical, osInstanceVertical] = useOverlayScrollbars({
+  //   defer: true,
+  //   options: {
+  //     overflow: {
+  //       x: 'hidden',
+  //       y: 'scroll',
+  //     },
+  //     scrollbars: {
+  //       autoHide: "move",
+  //       clickScroll: true,
+  //     },
+  //   },
+  //   events: {
+  //     initialized(osInstance) {
+  //       // force overflow styles
+  //       const { viewport } = osInstance.elements();
+  //       viewport.style.overflowX = `var(--os-viewport-overflow-x)`;
+  //       viewport.style.overflowY = `var(--os-viewport-overflow-y)`;
+  //     },
+  //   },
+  // });
+
+useEffect(() => {
+
+    if (defaultSearch !== false) {
+      getRowData(pageNo, pageSize || 50);
+    }
+
+  }, []);
+
+  useEffect(() => {
+    gridApi && gridApi.deselectAll();
+    
+  }, [clearSelect]);
+
+  // useEffect(() => {
+    
+  //   if (!gridApi) {
+  //     return;
+  //   }
+  //   const scrollbarContainer = document.querySelector('.ag-body');
+  //   const viewportHorizontal = document.querySelector(
+  //     '.ag-center-cols-viewport'
+  //   );
+  //   const viewportVertical = document.querySelector('.ag-body-viewport');
+
+   
+  //   if (!scrollbarContainer || !viewportHorizontal || !viewportVertical) {
+  //     return;
+  //   }
+  //   initializeHorizontal({
+  //     target: viewportHorizontal,
+  //     elements: {
+  //       viewport: viewportHorizontal,
+  //     },
+  //     scrollbars: {
+  //       slot: scrollbarContainer,
+  //     },
+  //   });
+  //   initializeVertical({
+  //     target: viewportVertical,
+  //     elements: {
+  //       viewport: viewportVertical,
+  //     },
+  //     scrollbars: {
+  //       slot: scrollbarContainer,
+  //     },
+  //   });
+
+  //   // remove horizontal scrollbar implementation of agGrid
+  //   document.querySelector('.ag-body-horizontal-scroll')?.remove();
+  //   // remove vertical scrollbar implementation of agGrid
+  //   document.querySelector('.ag-body-vertical-scroll')?.remove();
+
+  //   return () => {
+  //     osInstanceHorizontal()?.destroy();
+  //     osInstanceVertical()?.destroy();
+  //   };
+  // }, [
+  //   // gridApi,
+  //   dataSource,
+  //   initializeHorizontal,
+  //   initializeVertical,
+  //   osInstanceHorizontal,
+  //   osInstanceVertical,
+  // ]);
+
   return (
-    <div className={"ag-container" + (colorBgBase == '#fff' ? "" : "-dark")} style={{ height: height || 300 }}>
+    <div className={"ag-container" + (colorBgBase == '#fff' ? "" : "-dark")} style={style ? {...style, height: height || 300} : { height: height || 300}}>
 
       <div className="ag-tools" style={{ display: optionsHide?.topTool ? 'none' : '', }}>
         <div className='ag-tools-left'>
@@ -368,6 +471,7 @@ export default React.forwardRef((props, ref) => {
           defaultPageSize={pageSize || 50}
           current={pageNo}
           total={total}
+          align="end"
           showTotal={showTotal === false ? false : (total, range) => `第${range[0]}-${range[1] || 0}条/共${total}条`}
           pageSizeOptions={pageSizeList || [50, 100, 500, 1000, 3000, 5000]}
           onChange={(page, pageSize) => {

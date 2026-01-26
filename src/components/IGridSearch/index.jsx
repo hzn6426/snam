@@ -1,25 +1,34 @@
-import { Form, Select, Input, Space, Button, DatePicker } from "antd";
-const { RangePicker } = DatePicker;
-import FormItem from "antd/es/form/FormItem";
 import { IIF } from '@/common/components';
-import { useRef, useState } from 'react';
 import {
     SearchOutlined
 } from '@ant-design/icons';
+import { Button, DatePicker, Form, Input, Select, Space } from "antd";
+import { useState } from 'react';
+import './index.less';
+const { RangePicker } = DatePicker;
 export default (props) => {
-    const { options, defaultValue, placeholder, width, format, onSearch } = props;
+    const { options, defaultValue,defaultPlaceholder, placeholder, width, format, onSearch, onChange, hiddenField, selectWidth } = props;
     const [searchValue, setSearchValue] = useState('');
     const [searchName, setSearchName] = useState(defaultValue || '');
-    const [xtype, setXtype] = useState('text');
+    const [xtype, setXtype] = useState(hiddenField == true ? 'hidden' : 'text');
     const [valueOptions, setValueOptions] = useState([]);
+    
+    // 添加样式类名
+    const className = 'igrid-search';
     return (<>
-        <Form>
+        <Form className={className}>
             <Space.Compact block>
-                <Select defaultValue={defaultValue} size="small" style={{ width: 100 }} options={options} onChange={(v, option) => {
+                
+                <Select defaultValue={defaultValue} placeholder={defaultPlaceholder} size="small" style={{ width: selectWidth || 120 }} options={options} onChange={(v, option) => {
                     setSearchName(v);
                     setXtype(option.xtype || 'text');
                     setValueOptions(option.valueOptions);
+                    onChange && onChange(v, option);
                 }} />
+                
+                <IIF test={xtype === 'hidden'}>
+                    <></>
+                </IIF>
                 <IIF test={xtype === 'text'}>
 
                     <Input.Search
@@ -32,7 +41,7 @@ export default (props) => {
                         }}
                         size="small" key="columnSearch"
                         enterButton
-                        placeholder={placeholder || '搜索'} allowClear />
+                        placeholder={placeholder || '搜索'}  />
 
                 </IIF>
                 <IIF test={xtype === 'select'}>

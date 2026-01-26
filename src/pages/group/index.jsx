@@ -1,5 +1,5 @@
-import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, IButton } from '@/common/components';
-import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, dateFormat } from '@/common/utils';
+import { IDrag, IFooterToolbar, IAGrid, ISearchTree, Permit, IStatus, IButton, IGridSearch } from '@/common/components';
+import { api, constant, copyObject, forEach, INewWindow, isEmpty, pluck, useObservableAutoCallback, beHasRowsPropNotEqual, dateFormat, data2Option } from '@/common/utils';
 import {
     ApartmentOutlined,
     DeleteOutlined,
@@ -9,7 +9,7 @@ import {
     LockTwoTone,
     UnlockTwoTone,
     RestOutlined, ApiOutlined, DiffOutlined, HistoryOutlined, UserAddOutlined, MergeOutlined, SolutionOutlined,
-    AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, UserSwitchOutlined
+    AimOutlined, FundViewOutlined, TeamOutlined, SunOutlined, UserSwitchOutlined
 } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
@@ -24,7 +24,12 @@ const TagRenderer = (props) => {
     }
     return <>员工</>;
 }
-
+let userTags = [];
+api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG).subscribe({
+    next: (data) => {
+        userTags = data2Option('dictCode', 'dictName', data);
+    }
+});
 //组件
 const LockRenderer = (props) => {
     return props.value ? (
@@ -225,7 +230,7 @@ export default (props) => {
         const parent = node.parentId;
         setSelectedGroupId(parent);
         if (parent === constant.ROOT_OF_GROUP) {
-            const param = { id: node.key, groupName: node.text }
+            const param = { id: node.key, groupName: node.text,parentId: parent }
             INewWindow({
                 url: '/new/group/company',
                 title: '编辑公司',
@@ -238,6 +243,7 @@ export default (props) => {
             const param = {
                 id: node.key,
                 groupName: node.text,
+                parentId: node.parentId,
                 parentName: node.parentGroupName,
             };
             INewWindow({
@@ -281,10 +287,10 @@ export default (props) => {
     };
 
     // 查询 用户信息
-    const searchUserByGroup = (pageNo, pageSize) => {
+    const searchUserByGroup = (pageNo, pageSize, params) => {
         setSelectedGroupUserKeys([]);
         setSearchLoading(true);
-        let param = { dto: searchForm.getFieldValue(), pageNo: pageNo, pageSize: pageSize };
+        let param = { dto: params||{}, pageNo: pageNo, pageSize: pageSize };
         param.dto.groupId = selectedGroupId;
         return api.group.searchUserByGroup(param).subscribe({
             next: (data) => {
@@ -316,6 +322,7 @@ export default (props) => {
             next: (data) => {
                 message.success('操作成功!');
                 reloadTree();
+                searchUserByGroup(pageNo, pageSize);
             }
         }).add(() => setLoading(false))
     };
@@ -326,6 +333,7 @@ export default (props) => {
             next: (data) => {
                 message.success('操作成功!');
                 reloadTree();
+                searchUserByGroup(pageNo, pageSize);
             }
         }).add(() => setLoading(false))
     }
@@ -336,6 +344,7 @@ export default (props) => {
             next: (data) => {
                 message.success('操作成功!');
                 reloadTree();
+                searchUserByGroup(pageNo, pageSize);
             }
         }).add(() => setLoading(false))
     }
@@ -402,7 +411,31 @@ export default (props) => {
             title: '移动用户',
             width: 700,
             height: 600,
-            callback: () => reloadTree(),
+            callback: () => {
+                reloadTree();
+                searchUserByGroup(pageNo, pageSize);
+            },
+            callparam: () => param,
+        });
+    }
+
+
+    //复制用户权限
+    const onCopy = () => {
+        if (selectedGroupUserKeys.length !== 1) {
+            message.error('请选择一个要复制权限的用户！');
+            return;
+        }
+        const param = { groupId: selectedGroupId, userId: selectedGroupUserKeys[0] };
+        INewWindow({
+            url: '/new/group/copy',
+            title: '复制用户权限',
+            width: 700,
+            height: 600,
+            callback: () => {
+                reloadTree();
+                searchUserByGroup(pageNo, pageSize);
+            },
             callparam: () => param,
         });
     }
@@ -485,7 +518,7 @@ export default (props) => {
                     placeholder="输入组织或人员进行搜索"
                     checkable={false}
                     blockNode={true}
-                    bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
+                    bodyStyle={{ height: offsetHeight - 105, overflow: 'auto' }}
                     titleRender={(node) => (
                         <div style={{ width: '100%' }}>
                             <div style={{ float: 'left' }}>
@@ -496,29 +529,29 @@ export default (props) => {
                                     <Space>
                                         <Permit authority="group:addDepartment" key="addDepartment">
                                             <Tooltip title="添加子部门">
-                                            <PlusOutlined
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleAddGroup(node);
-                                                }}
-                                            />
+                                                <PlusOutlined
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleAddGroup(node);
+                                                    }}
+                                                />
                                             </Tooltip>
                                         </Permit>
                                         <Permit authority="group:update" key="update">
                                             <Tooltip title="编辑该部门">
-                                            <FormOutlined
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleEditGroup(node);
-                                                }}
-                                            />
+                                                <FormOutlined
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditGroup(node);
+                                                    }}
+                                                />
                                             </Tooltip>
                                         </Permit>
                                         <Permit authority="group:delete" key="delete">
                                             <Tooltip title="删除该部门">
-                                            <DeleteOutlined
-                                                onClick={(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？', () => handleDeleteGroup(node))}
-                                            />
+                                                <DeleteOutlined
+                                                    onClick={(e) => showDeleteConfirm('删除组织架构前，请组织中不包含子组织和用户，确定要删除该组织吗？', () => handleDeleteGroup(node))}
+                                                />
                                             </Tooltip>
                                         </Permit>
 
@@ -538,7 +571,7 @@ export default (props) => {
             <Col span={18}>
                 {/* <IDrag style={{ width: '100%', height: (clientHeight - 125) + 'px' }} topHeight={topHeight} layout='horizontal' resize={(res) => { setTopHeight(res.top); setBottomHeight(res.bottom); }}>
                     <div> */}
-                <div style={{ marginBottom: '15px', border: 0 }}>
+                <div style={{ border: 0,position:'relative',zIndex:999 }}>
                     <IAGrid
                         title="用户列表"
                         gridName="perm_group_list"
@@ -558,8 +591,12 @@ export default (props) => {
                         //     lockRenderer: LockRenderer
                         // }}
                         toolBarRender={[
-                           
-                                <Permit authority="group:addUsers" key="new">
+                            <IGridSearch defaultValue={'userName'} onSearch={(params) => searchUserByGroup(1, pageSize, params)}
+                                options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' },
+                                { label: '属性', value: 'userTag', xtype: "select", valueOptions: { userTags } },
+                                { label: '手机', value: 'userMobile' }, { label: '角色', value: 'roleName' }, { label: '职位', value: 'postName' }]}
+                                width={150} />,
+                            <Permit authority="group:addUsers" key="new">
                                 <Tooltip title="添加成员">
                                     <Button
                                         key="addUser"
@@ -567,26 +604,26 @@ export default (props) => {
                                         icon={<UserAddOutlined />}
                                         onClick={handleAddUser}></Button>
                                 </Tooltip>
-                                </Permit>,
-                                <Permit authority="group:addCompany" key="addCompany">
-                                    <Tooltip title="添加分公司">
-                                        <Button
-                                            key="addCompany"
+                            </Permit>,
+                            <Permit authority="group:addCompany" key="addCompany">
+                                <Tooltip title="添加分公司">
+                                    <Button
+                                        key="addCompany"
                                         size="small"
-                                            icon={<MergeOutlined />}
-                                            onClick={handleAddCompany}></Button>
-                                    </Tooltip>
-                                </Permit>,
-                                <Permit authority="userRole:saveFromUser" key="assignRole">
-                                    <Tooltip title="分配角色">
-                                        <Button
-                                            key="assignRole"
+                                        icon={<MergeOutlined />}
+                                        onClick={handleAddCompany}></Button>
+                                </Tooltip>
+                            </Permit>,
+                            <Permit authority="userRole:saveFromUser" key="assignRole">
+                                <Tooltip title="分配角色">
+                                    <Button
+                                        key="assignRole"
                                         size="small"
-                                            icon={<SolutionOutlined />}
-                                            onClick={handleAssignRoles}></Button>
-                                    </Tooltip>
-                                </Permit>
-                           
+                                        icon={<SolutionOutlined />}
+                                        onClick={handleAssignRoles}></Button>
+                                </Tooltip>
+                            </Permit>
+
 
                         ]}
                         pageToolBarRender={[
@@ -647,9 +684,18 @@ export default (props) => {
                                     移动
                                 </Button>
                             </Permit>,
+                            <Permit authority="group:copyUserPerm">
+                            <Button size="small" danger
+                                type="primary"
+                                icon={<TeamOutlined />}
+                                key="copu" onClick={() => onCopy()}>
+                                复制权限
+                            </Button>
+                        </Permit>,
 
                         ]}
                     />
+                    </div>
                     {/* {selectedGroupUserKeys?.length > 0 && (
                             <IFooterToolbar>
                                 
@@ -657,7 +703,8 @@ export default (props) => {
                         )} */}
                     {/* </div>
                     <div> */}
-                </div>
+                {/* </div> */}
+                <div style={{ marginTop: '15px', border: 0,position:'relative' }}>
                 <IAGrid
                     gridName="perm_group_unassign_list"
                     title="未分配列表"
@@ -676,12 +723,13 @@ export default (props) => {
                     // }}
                     pageToolBarRender={[
                         <Permit authority="group:addUsers" key="addUsers">
-                            <IButton size="small" icon={<UserAddOutlined />} type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
+                            <Button size="small" icon={<UserAddOutlined />} type="primary" key="addUser2Group" onClick={() => addUser2Group()}>
                                 加入
-                            </IButton>
+                            </Button>
                         </Permit>
                     ]}
                 />
+                </div>
                 {/* {selectedNotAssignUserKeys?.length > 0 && (
                             <IFooterToolbar>
                                 <Permit authority="group:addUsers" key="addUsers">

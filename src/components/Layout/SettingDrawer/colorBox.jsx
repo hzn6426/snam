@@ -1,8 +1,10 @@
-import React from 'react';
-import { CheckOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { CheckOutlined, BgColorsOutlined } from '@ant-design/icons';
+import { ColorPicker, Tooltip } from 'antd';
 import './index.less';
 
 export default (props) => {
+    const [customColorOpen, setCustomColorOpen] = useState(false);
 
     let colors = [
         {
@@ -39,6 +41,9 @@ export default (props) => {
         }
     ]
 
+    // 检查当前颜色是否为预设颜色
+    const isPresetColor = colors.some(color => color.value === props.value);
+
     return (<div className='color-box'>
         {
             colors.map((item, index) => <div
@@ -51,6 +56,44 @@ export default (props) => {
                 </div>
             </div>)
         }
+        
+        {/* 自定义颜色选择器 */}
+        <div className="color-sub">
+            <Tooltip title="自定义颜色 - 点击选择任意颜色">
+                <div 
+                    className='color-icon custom-color-icon'
+                    onClick={() => setCustomColorOpen(true)}
+                    style={{ 
+                        backgroundColor: isPresetColor ? undefined : props.value,
+                        border: isPresetColor ? 'none' : '2px solid #fff',
+                        boxShadow: isPresetColor ? 'none' : '0 2px 8px rgba(0, 0, 0, 0.15)'
+                    }}
+                >
+                    {!isPresetColor && props.value ? <CheckOutlined /> : <BgColorsOutlined />}
+                </div>
+            </Tooltip>
+            
+            <ColorPicker
+                open={customColorOpen}
+                onOpenChange={setCustomColorOpen}
+                value={props.value}
+                onChange={(color) => {
+                    const hexColor = color.toHexString();
+                    props.onChange(hexColor);
+                }}
+                showText={(color) => (
+                    <span style={{ color: color.toHexString() }}>
+                        {color.toHexString()}
+                    </span>
+                )}
+                presets={[
+                    {
+                        label: '推荐颜色',
+                        colors: colors.map(c => c.value),
+                    },
+                ]}
+            />
+        </div>
     </div>)
 }
 

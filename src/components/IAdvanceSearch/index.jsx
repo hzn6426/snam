@@ -47,7 +47,11 @@ const AdvanceSearch = (props) => {
     { label: '不包含', value: 'NIN' },
   ];
 
-
+const addon = [
+    {label: '', value: ''},
+    { label: '左括号', value: '(' },
+    { label: '右括号', value: ')' },
+  ];
 
   const onFormChange = () => {
     form.validateFields()
@@ -57,7 +61,9 @@ const AdvanceSearch = (props) => {
           const v = {};
           v['andOr'] = values['andOr' + idx] || 'AND';
           v['column'] = values['column' + idx];
+          v['leftBro'] = values['leftBro'+ idx] || '';
           v['condition'] = values['condition' + idx] || 'EQ';
+          v['rightBro'] = values['rightBro'+ idx] || '';
           if (values['valuedate' + idx]) {
             v['value'] = values['valuedate' + idx];
             v['dataType'] = 'date';
@@ -121,7 +127,8 @@ const AdvanceSearch = (props) => {
       const beDate = type === 'date' || type === 'datetime';
       formValue['andOr' + index] = item['andOr'];
       formValue['condition' + index] = item['condition'];
-
+      formValue['leftBro'+ index] = item['leftBro'];
+      formValue['rightBro'+ index] = item['rightBro'];
       formValue['value' + type + index] = beDate ? moment(item['value']) : item['value'];
       formValue['column' + index] = item['column'];
       const component = getCompByXtype(type);
@@ -176,10 +183,20 @@ const AdvanceSearch = (props) => {
                   labelCol={{ span: 0 }}
                   wrapperCol={{ span: 24 }}
                 >
-                  <Select options={andOr} defaultValue="AND" disabled={idex == 0 || props.disabled == true} onChange={onFormChange} />
+                  <Select options={andOr} defaultValue="AND" disabled={ props.disabled == true} onChange={onFormChange} />
                 </Form.Item>
               </Col>
-              <Col span={7}>
+              <Col span={4}>
+                <Form.Item
+                  name={'leftBro'+idex}
+                  label=""
+                  labelCol={{ span: 0 }}
+                  wrapperCol={{ span: 24 }}
+                >
+                  <Select options={addon} size='small' style={{ width: '100%' }}  defaultValue="" onChange={onFormChange} />
+                </Form.Item>
+              </Col>
+              <Col span={4}>
                 <Form.Item
                   name={'column' + idex}
                   label=""
@@ -201,7 +218,7 @@ const AdvanceSearch = (props) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={5}>
+              <Col span={4}>
                 <Form.Item
                   name={'condition' + idex}
                   label=""
@@ -211,7 +228,7 @@ const AdvanceSearch = (props) => {
                   <Select options={cdn} defaultValue="EQ" disabled={props.disabled == true} />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={4}>
                 <Form.Item
                   name={'value' + (item.dataType || '') + idex}
                   label=""
@@ -221,6 +238,16 @@ const AdvanceSearch = (props) => {
                   {React.cloneElement(item.component, { disabled: props.disabled == true })}
                 </Form.Item>
               </Col>
+              <Col span={4}>
+                <Form.Item
+                  name={'rightBro'+idex}
+                  label=""
+                  labelCol={{ span: 0 }}
+                  wrapperCol={{ span: 24 }}
+                >
+                  <Select options={addon} size='small' style={{ width: '100%' }}  defaultValue="" onChange={onFormChange}/>
+                </Form.Item>
+              </Col>
             </Row>
           ))}
 
@@ -228,7 +255,7 @@ const AdvanceSearch = (props) => {
             <Button
               key="add"
               size='small'
-              htmlType="button"
+              type="primary"
               onClick={() => {
                 const rows = produce(ui, (draft) => {
                   draft.push( { component: <Input /> });
@@ -243,6 +270,7 @@ const AdvanceSearch = (props) => {
             <Button
               key="submit"
               danger
+              type="primary"
               size='small'
               onClick={() => {
                 const rows = produce(ui, (draft) => {

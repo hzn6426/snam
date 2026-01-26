@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { TButton } from '@/common/componentx';
 import { api, copyObject, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { IFormItem, IIF, ILayout, IWindow } from '@/common/components';
-import { TButton } from '@/common/componentx'
-import { InputNumber, message, Form, Input, Select, } from 'antd';
+import { DatePicker, Form, Input, InputNumber, message, Select, } from 'antd';
+import { useRef, useState } from 'react';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from 'umi';
+import moment from 'moment';
 
 
 export default (props) => {
@@ -92,11 +93,19 @@ export default (props) => {
                 </Form.Item>
                 <Form.Item
                     labelCol={{ span: 3 }}
+                    name="expireTime"
+                    label="过期时间"
+                    rules={[{ whitespace: true, required: true, message: false }]}
+                >
+                     <DatePicker placeholder='不填为永不过期' format={'YYYY-MM-DD HH:mm'} showTime={{ defaultValue: moment('00:00', 'HH:mm') }} style={{ width: '100%' }} />
+                </Form.Item>
+                {/* <Form.Item
+                    labelCol={{ span: 3 }}
                     name="feeType"
                     label="付费方式"
                     rules={[{ whitespace: true, required: true, message: false }]}
                 >
-                    <Select allowClear options={[{ label: '按年付费', value: 'YEAR' }, { label: '请求付费', value: 'REQUEST' }]} />
+                    <Select allowClear options={[{ label: '按月付费', value: 'MONTH' }, { label: '请求付费', value: 'REQUEST' }]} />
                 </Form.Item>
                 <Form.Item
                     labelCol={{ span: 3 }}
@@ -105,7 +114,7 @@ export default (props) => {
                     rules={[{ required: true, message: true }]}
                 >
                     <InputNumber style={{ width: '100%' }} precision={2} min={1} max={99999999} onChange={() => { }} />
-                </Form.Item>
+                </Form.Item> */}
             </ILayout>
         </IWindow>
     )

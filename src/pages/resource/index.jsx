@@ -1078,7 +1078,7 @@ export default () => {
                         className='snam-card'
                         size='small'
                         //bordered={false}
-                        bodyStyle={{ height: offsetHeight - 66, overflow: 'scroll', paddingTop: '5px' }}
+                        bodyStyle={{ height: offsetHeight - 66, overflow: 'auto', paddingTop: '5px' }}
                     >
                         <Tabs size="small" type="card" >
                             <TabPane size='small' tab="用户组织" key="userGroup">
@@ -1086,7 +1086,7 @@ export default () => {
                                 <ISearchTree
                                     bordered={false}
                                     bodyStyle={{}}
-                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'scroll' }}
+                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'auto' }}
                                     iconRender={(data) => loopGroup(data, true, true)}
                                     treeData={treeData}
                                     onSelect={(uids, { node }) => onUserSelect(node)}
@@ -1103,7 +1103,7 @@ export default () => {
                                 <ISearchTree
                                     bordered={false}
                                     bodyStyle={{}}
-                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'scroll' }}
+                                    // bodyStyle={{ height: 'calc(100vh - 130px)', overflow: 'auto' }}
                                     iconRender={(data) => loopUserGroup(data)}
                                     treeData={usetTreeData}
                                     onSelect={(uids, { node }) => onUsetSelect(node)}
@@ -1132,7 +1132,7 @@ export default () => {
                             </div>
                         }
                         bordered={true}
-                        bodyStyle={{ height: offsetHeight - 103, overflow: 'scroll' }}
+                        bodyStyle={{ height: offsetHeight - 103, overflow: 'auto' }}
                     >
                         <Table
                             size="small"
@@ -1168,7 +1168,7 @@ export default () => {
                             className='snam-card'
                             size='small'
                             bordered={true}
-                            bodyStyle={{ padding: 5, height: offsetHeight - 66, overflow: 'scroll' }} >
+                            bodyStyle={{ padding: 5, height: offsetHeight - 66, overflow: 'auto' }} >
                             <Tabs
                                 activeKey={key}
                                 size="small"
@@ -1182,7 +1182,7 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: offsetHeight - 192, overflow: 'scroll' }}
+                                        bodyStyle={{ height: offsetHeight - 177, overflow: 'auto' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 {/* <Permit authority="resource:saveUsetBusinessPerm">
@@ -1197,14 +1197,13 @@ export default () => {
                                                         style={{ marginRight: '10px' }}>重置</IButton>
                                                 </Permit> */}
                                                 <Permit authority="resource:saveUsetBusinessPerm">
-                                                    <IButton
+                                                    <Button
                                                         size="small"
                                                         key="submit"
-                                                    htmlType="submit"
-                                                    onClick={submitUserPerm}
+                                                        onClick={submitUserPerm}
                                                         type="primary"
                                                         icon={<SaveOutlined />}
-                                                        loading={confirmLoading}>保存</IButton>
+                                                        loading={confirmLoading}>保存</Button>
                                                 </Permit>
                                             </div>,
                                         ]}
@@ -1281,11 +1280,11 @@ export default () => {
                                                         <Card
                                                             size='small'
                                                             bordered={true}
-                                                            bodyStyle={{ height: 280, overflow: 'scroll' }}
+                                                            bodyStyle={{ height: 280, overflow: 'auto' }}
                                                             title={<div>指定范围列表</div>}
                                                         >
                                                             <ISearchTree
-                                                                bodyStyle={{ height: 320, overflow: 'scroll' }}
+                                                                bodyStyle={{ height: 320, overflow: 'auto' }}
                                                                 iconRender={(data) => loopGroup(data, false, false)}
                                                                 size="small"
                                                                 bordered
@@ -1346,19 +1345,18 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
+                                        bodyStyle={{ height: offsetHeight - 177, overflow: 'auto', padding: '2px' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveDataPerm">
-                                                    <IButton
+                                                    <Button
                                                     key="submit"
                                                         type="primary"
                                                         icon={<SaveOutlined />}
                                                         size="small"
-                                                    htmlType="submit"
                                                     loading={saveLoading}
                                                     onClick={() => submitUserDataPerm()}
-                                                    >保存</IButton>
+                                                    >保存</Button>
                                                 </Permit>
                                             </div>,
                                         ]}
@@ -1439,19 +1437,18 @@ export default () => {
                                     <Card
                                         bordered={false}
                                         size='small'
-                                        bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '2px' }}
+                                        bodyStyle={{ height: offsetHeight - 177, overflow: 'auto', padding: '2px' }}
                                         actions={[
                                             <div style={{ float: 'right', paddingRight: '10px' }} key="bottom">
                                                 <Permit authority="resource:saveUserColumnPerm">
-                                                    <IButton
+                                                    <Button
                                                         size="small"
-                                                    key="submit"
+                                                        key="submit"
                                                         type="primary"
                                                         icon={<SaveOutlined />}
-                                                    htmlType="submit"
-                                                    loading={saveLoading}
-                                                    onClick={() => submitColumnPerm()}
-                                                    >保存</IButton>
+                                                        loading={saveLoading}
+                                                        onClick={() => submitColumnPerm()}
+                                                    >保存</Button>
                                                 </Permit>
                                             </div>,
                                         ]}

@@ -614,7 +614,7 @@ export default (props) => {
                                     <Card
                                         size='small'
                                         bordered={true}
-                                        bodyStyle={{ height: 200, overflow: 'scroll' }}
+                                        bodyStyle={{ height: 200, overflow: 'auto' }}
                                         title={<div>指定用户列表</div>}
                                     >
                                         <Tree
@@ -675,7 +675,7 @@ export default (props) => {
                                         style={{marginTop:5}}
                                         size='small'
                                         bordered={true}
-                                        bodyStyle={{ height: 200, overflow: 'scroll', padding:"0px 0px 0px 5px",marginTop:1}}
+                                        bodyStyle={{ height: 200, overflow: 'auto', padding:"0px 0px 0px 5px",marginTop:1}}
                                         title={<div>过滤用户列表</div>}
                                         > 
                                 <IGrid
@@ -900,7 +900,7 @@ export default (props) => {
                                 <Card
                                     size='small'
                                     bordered={true}
-                                    bodyStyle={{ height: 255, overflow: 'scroll', marginBottom: 0, paddingBottom: 0 }}
+                                    bodyStyle={{ height: 255, overflow: 'auto', marginBottom: 0, paddingBottom: 0 }}
                                     title={<div>指定请求</div>}
                                 >
                                     <Form form={urlForm} size='small' className="dsi-form">
@@ -1042,7 +1042,7 @@ export default (props) => {
                                         style={{marginTop:5}}
                                         size='small'
                                         bordered={true}
-                                        bodyStyle={{ height: 180, overflow: 'scroll', padding:"0px 0px 0px 5px",marginTop:1}}
+                                        bodyStyle={{ height: 180, overflow: 'auto', padding:"0px 0px 0px 5px",marginTop:1}}
                                         title={<Tooltip title="按照列表顺序进行匹配"><b>过滤请求列表</b></Tooltip>}
                                         > 
                                 <IGrid

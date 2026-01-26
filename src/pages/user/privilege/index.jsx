@@ -333,6 +333,7 @@ export default (props) => {
     const [selectButtonPermId, setSelectButtonPermId] = useState('');
     // 是否过滤权限按钮
     const [beFilterPermButton, setBeFilterPermButton] = useState(false);
+    const [beFilterUnAuthButton, setBeFilterUnAuthButton] = useState(false);
 
     // 树显示
     const [postTreeVisible, setPostTreeVisible] = useState(true);
@@ -683,13 +684,13 @@ export default (props) => {
         const id = params.id;
         const uid = split(id, '_')[0];
         const gid = split(id, '_')[1];
-        api.user.listPermMenusAndButtons(uid, gid, selectRoleId, beFilterPermButton).subscribe({
+        api.user.listPermMenusAndButtons(uid, gid, selectRoleId, beFilterPermButton,beFilterUnAuthButton).subscribe({
             next: (data) => {
                 addIcon(data);
                 setTreeData(data);
             }
         });
-    }, [beFilterPermButton, selectRoleId]);
+    }, [beFilterPermButton,beFilterUnAuthButton, selectRoleId]);
 
     //监控排除的列表
     useEffect(() => {
@@ -903,12 +904,14 @@ export default (props) => {
                     style={{ borderRadius: 10 }}
                     title={
                         <>
-                            <Space>角色列表:<Select size='small' defaultValue="ALL" onChange={(v) => setSelectRoleId(v)} options={roleOptions} style={{ width: 160 }} />  <Checkbox onChange={(e) => setBeFilterPermButton(e.target.checked)}>数据权限</Checkbox></Space>
+                            <Space>角色列表:<Select size='small' defaultValue="ALL" onChange={(v) => setSelectRoleId(v)} options={roleOptions} style={{ width: 120 }} />  
+                                <Checkbox onChange={(e) => setBeFilterPermButton(e.target.checked)}>数据权限</Checkbox>
+                                <Checkbox onChange={(e) => setBeFilterUnAuthButton(e.target.checked)}>无权限</Checkbox></Space>
                         </>
                     }
                     bodyStyle={{
                         height: clientHeight - 140, paddingLeft: 5,
-                        paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'scroll',
+                        paddingRight: 0, paddingBottom: 0, margin: 0, overflow: 'auto',
                     }}
                 >
                     <ISearchTree
@@ -948,7 +951,7 @@ export default (props) => {
                                 <IIF test={dataPermView == 'USET'}><Space>用户组:<Select size='small' defaultValue="ALL" options={usetDataSource} style={{ width: 160 }} onChange={(v) => setSelectedUsetId(v)} /></Space></IIF></Space>
                         </>
                     }
-                    bodyStyle={{ padding: 5, height: clientHeight - 140, overflow: 'scroll' }} >
+                    bodyStyle={{ padding: 5, height: clientHeight - 140, overflow: 'auto' }} >
                     <Tabs
                         activeKey={key}
                         size="small"
@@ -961,7 +964,7 @@ export default (props) => {
                             <Card
                                 bordered={false}
                                 size='small'
-                                bodyStyle={{ height: clientHeight - 210, overflow: 'scroll', padding: '5px' }}
+                                bodyStyle={{ height: clientHeight - 210, overflow: 'auto', padding: '5px' }}
                             >
                                 <IIF test={!postitionId}>
                                     <Alert message="该用户没有分配职位，无法展示职位信息！" type="warning" showIcon />
@@ -986,7 +989,7 @@ export default (props) => {
                                         </ILayout>
                                         {postTreeVisible && (
                                             <ISearchTree
-                                                bodyStyle={{ height: 'calc(100vh - 345px)', overflow: 'scroll' }}
+                                                bodyStyle={{ height: 'calc(100vh - 345px)', overflow: 'auto' }}
                                                 iconRender={loopGroup}
                                                 showIcon={true}
                                                 treeData={postTreeData}
@@ -1005,7 +1008,7 @@ export default (props) => {
                             <Card
                                 bordered={false}
                                 size='small'
-                                bodyStyle={{ height: clientHeight - 210, overflow: 'scroll', padding: '5px 10px 5px 10px' }}
+                                bodyStyle={{ height: clientHeight - 210, overflow: 'auto', padding: '5px 10px 5px 10px' }}
                             >
                                 <IIF test={!selectButtonPermId}>
                                     <Alert message="请选择一个带数据权限（即有@Action注解）的按钮，可通过“数据权限”选择框进行过滤数据权限的按钮！" type="warning" showIcon />
@@ -1065,11 +1068,11 @@ export default (props) => {
                                                     <Card
                                                         size='small'
                                                         bordered={true}
-                                                        bodyStyle={{ height: 280, overflow: 'scroll' }}
+                                                        bodyStyle={{ height: 280, overflow: 'auto' }}
                                                         title={<div>指定范围列表</div>}
                                                     >
                                                         <ISearchTree
-                                                            bodyStyle={{ height: 320, overflow: 'scroll' }}
+                                                            bodyStyle={{ height: 320, overflow: 'auto' }}
                                                             iconRender={(data) => loopGroup(data, false, false)}
                                                             size="small"
                                                             bordered
@@ -1115,7 +1118,7 @@ export default (props) => {
                             <Card
                                 bordered={false}
                                 size='small'
-                                bodyStyle={{ height: clientHeight - 210, overflow: 'scroll', padding: '5px' }}
+                                bodyStyle={{ height: clientHeight - 210, overflow: 'auto', padding: '5px' }}
                             >
                                 <IIF test={!selectButtonPermId}>
                                     <Alert message="请选择一个带数据权限（即有@Action注解）的按钮，可通过“数据权限”选择框进行过滤数据权限的按钮！" type="warning" showIcon />
@@ -1251,7 +1254,7 @@ export default (props) => {
                             <Card
                                 bordered={false}
                                 size='small'
-                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'scroll', padding: '5px' }}
+                                bodyStyle={{ height: 'calc(100vh - 255px)', overflow: 'auto', padding: '5px' }}
                             >
                                 <IIF test={!selectButtonPermId}>
                                     <Alert message="请选择一个带数据权限（即有@Action注解）的按钮，可通过“数据权限”选择框进行过滤数据权限的按钮！" type="warning" showIcon />

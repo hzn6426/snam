@@ -72,8 +72,8 @@ export default (props) => {
             width: 80,
             field: 'feeType',
             valueFormatter: (x) => {
-                if (x.value === 'YEAR') {
-                    return '年付费';
+                if (x.value === 'MONTH') {
+                    return '月付费';
                 } else if (x.value === 'REQUEST') {
                     return '请求付费';
                 } else if (x.value === 'CHARGE') {
@@ -96,6 +96,11 @@ export default (props) => {
             headerName: '总价',
             width: 80,
             field: 'totalPrice'
+        },
+        {
+            headerName: '余额',
+            width: 80,
+            field: 'afterMoney'
         },
         {
             headerName: 'IP地址',

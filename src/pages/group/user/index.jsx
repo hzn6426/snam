@@ -1,6 +1,6 @@
 import { IFormItem, ILayout, IWindow } from '@/common/components';
 import { api, data2Option } from '@/common/utils';
-import { message } from 'antd';
+import { message, Alert } from 'antd';
 import { useEffect, useState } from 'react';
 
 export default (props) => {
@@ -12,6 +12,7 @@ export default (props) => {
 
     const onSaveClick = (user) => {
         setLoading(true);
+        user.users = [user.userId];
         api.group.addOrUpdateUser(user).subscribe({
             next:() => {
                 message.success('操作成功!');
@@ -37,7 +38,6 @@ export default (props) => {
         } else {
             setDisableEditUser(false);
         }
-        console.log(item.userId);
         loadPositionByGroup(item.groupId);
         setCurrent(item);
     },[]);
@@ -55,6 +55,7 @@ export default (props) => {
                 window.opener.onSuccess();
             }}
         >
+            {!current?.id && (<Alert size="small" style={{ fontSize: 12, marginBottom: 10 }} message="注意: 添加成员不会删除其他组织对应的成员，该成员会位于多个组织！" type="warning" showIcon={true} />)}
             <IFormItem xtype="id" />
             <IFormItem xtype="hidden" name="groupId"/>
             <ILayout type="vbox">

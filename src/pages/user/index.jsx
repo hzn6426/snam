@@ -3,15 +3,12 @@ import {
   IFormItem,
   IGrid,
   IAGrid,
-  ISearchForm,
-  // XSearchForm,
   IStatus,
   ITag,
   Permit,
   IGridSearch,
   ISearchTree
 } from '@/common/components';
-import XSearchForm from '@/components/XSearchForm';
 import {
   INewWindow,
   api,
@@ -40,7 +37,7 @@ import {
   RestOutlined, ApiOutlined, LockTwoTone, UnlockTwoTone, UserOutlined, ApartmentOutlined, DiffOutlined, HistoryOutlined,
   AimOutlined, FundViewOutlined, KeyOutlined, SunOutlined, EyeOutlined
 } from '@ant-design/icons';
-import { Form, message, Tooltip, Spin, Input, Row, Col, Divider, Button } from 'antd';
+import { Form, message, Tooltip, Spin, Input, Row, Col, Tag, Button } from 'antd';
 import { IButton } from '@/common/components';
 import { of, zip } from 'rxjs';
 import {
@@ -58,14 +55,18 @@ import { on } from 'ramda';
 // //初始化角色,用户属性
 let roles = [];
 let userTags = [];
+let pointTags = [];
 const roleSource = api.role.listAll();
 const userTagSource = api.dict.listChildByParentCode(constant.DICT_USER_BUSINEESS_TAG);
-zip(roleSource, userTagSource)
+const pointTagSource = api.dict.listChildByParentCode(constant.DICT_SYSTEM_POINT_TAG);
+zip(roleSource, userTagSource, pointTagSource)
   .pipe(
-    map(([data1, data2]) => {
+    map(([data1, data2, data3]) => {
       roles = data2Option('id', 'roleName', data1);
 
       userTags = data2Option('dictCode', 'dictName', data2);
+
+      pointTags = data2Option('dictCode', 'dictName', data3);
     }),
   )
   .subscribe();
@@ -77,10 +78,25 @@ const StateRenderer = (props) => {
 const TagRenderer = (props) => {
   return (
     props.value ? (
-      <ITag values={split(props.value)} options={userTags} multiColor={false} />
+      <ITag values={split(props.value)} options={userTags} multiColor={true} />
     ) : <span>-</span>
   );
 };
+
+const PointTagRenderer = (props) => {
+  return (
+    props.value ? (
+      <ITag values={split(props.value)} options={pointTags} multiColor={true} />
+    ) : <span>-</span>
+  );
+};
+
+const PostTagRenderer = (props) => {
+    if (props.value) {
+        return <Tag color="#f50">{props.value}</Tag>;
+    }
+    return <>员工</>;
+}
 //组件
 const LockRenderer = (props) => {
   return props.value ? (
@@ -156,16 +172,6 @@ const initColumns = [
     field: 'userSex',
   },
   {
-    headerName: '角色',
-    width: 150,
-    field: 'userRoles',
-  },
-  {
-    headerName: '用户组',
-    width: 150,
-    field: 'userSets',
-  },
-  {
     headerName: '公司',
     width: 100,
     field: 'userParentGroups',
@@ -179,6 +185,7 @@ const initColumns = [
     headerName: '职位',
     width: 90,
     field: 'userPosts',
+    cellRenderer: PostTagRenderer
   },
   {
     headerName: '属性',
@@ -186,6 +193,23 @@ const initColumns = [
     field: 'userTag',
     // cellRenderer: 'tagCellRenderer',
     cellRenderer: TagRenderer,
+  },
+  {
+    headerName: '登录终端',
+    width: 220,
+    field: 'pointTag',
+    // cellRenderer: 'tagCellRenderer',
+    cellRenderer: PointTagRenderer,
+  },
+  {
+    headerName: '角色',
+    width: 150,
+    field: 'userRoles',
+  },
+  {
+    headerName: '用户组',
+    width: 150,
+    field: 'userSets',
   },
   {
     headerName: '手机',
@@ -477,7 +501,7 @@ export default (props) => {
             placeholder="输入组织或人员进行搜索"
             checkable={false}
             blockNode={true}
-            bodyStyle={{ height: offsetHeight - 105, overflow: 'scroll' }}
+            bodyStyle={{ height: offsetHeight - 105, overflow: 'auto' }}
             titleRender={(node) => (
               <div style={{ width: '100%' }}>
                 <div style={{ float: 'left' }}>
@@ -550,13 +574,6 @@ export default (props) => {
               { label: '属性', value: 'userTag', xtype: "select", valueOptions: { userTags } },
               { label: '手机', value: 'userMobile' }, { label: '角色', value: 'roleName' }, { label: '职位', value: 'postName' }]}
               width={150} />,
-            // <Select defaultValue={'userName'} size="small" options={[{ label: '用户名', value: 'userName' }, { label: '中文名', value: 'userRealCnName' }]} />,
-            // <Input.Search
-            //   style={{ width: 150, marginRight: '5px' }}
-            //   onSearch={(value) => setColumnSearchValue(value)}
-            //   size="small" key="columnSearch"
-            //   enterButton
-            //   placeholder='搜索' allowClear />,
             <Permit key="user:save" authority="user:save">
               <Button
                 key="add"

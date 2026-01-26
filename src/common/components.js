@@ -10,9 +10,7 @@ import IGrid from '@/components/IGrid';
 import IAGrid from '@/components/IAGrid';
 import IIF from '@/components/IIF';
 import ILayout from '@/components/ILayout';
-import IModal from '@/components/IModal';
 import ISearchForm from '@/components/ISearchForm';
-import XSearchForm from '@/components/XSearchForm';
 import IStatus from '@/components/IStatus';
 import ITag from '@/components/ITag';
 import IWindow from '@/components/IWindow';
@@ -27,7 +25,7 @@ import ISearchTree from '@/components/ISearchTree';
 export {
   IAdvanceSearch, IChoose, IDrag, IFieldset, IFooterToolbar, IFor, IForm, IFormItem,
   IGrid, IAGrid, IGroupTree, IIF, ILayout,
-  IModal, ISearchForm, XSearchForm, ISearchTree, IStatus,
+  ISearchForm, ISearchTree, IStatus,
   ITag, IWindow,
   Permit,
   XInput, IButton, IGridSearch

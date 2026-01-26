@@ -1,6 +1,4 @@
-import { ipost, iput, iget, isearch, idelete, constant, rmap, getCache, hasCache, setCache } from '@/common/utils';
-import { map, tap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { constant, idelete, iget, ipost, iput, isearch } from '@/common/utils';
 //查询
 export function searchFunction(conditions) {
     return isearch(constant.API_FUNCTION_SEARCH, conditions);
@@ -33,6 +31,12 @@ export function open(fun) {
 export function close(fun) {
     return ipost(constant.API_FUNCTION_CLOSE, fun);
 }
+
+//延期
+export function defer(fun) {
+    return ipost(constant.API_FUNCTION_DEFER, fun);
+}
+
 //查询所有上线的功能
 export function listAllOnline() {
     return iget(constant.API_FUNCTION_LIST_ALL_ONLINE_FUNCTION);

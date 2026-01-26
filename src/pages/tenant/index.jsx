@@ -1,43 +1,37 @@
 import { showDeleteConfirm } from '@/common/antd';
 import {
-    IFooterToolbar,
-    IFormItem,
     IAGrid,
-    XSearchForm,
     IButton,
+    IGridSearch,
     IStatus,
-    Permit,
-    IGridSearch
+    Permit
 } from '@/common/components';
 import {
     INewWindow,
-    dateFormat,
     api,
     beHasRowsPropNotEqual,
+    dateFormat,
+    formatNumber,
     isEmpty,
     pluck,
     state2Option,
     useAutoObservableEvent,
-    useObservableAutoCallback,
-    formatNumber
+    useObservableAutoCallback
 } from '@/common/utils';
 import {
-    PlusOutlined,
-    LockTwoTone,
+    ClusterOutlined,
     DiffOutlined,
-    RestOutlined,
+    FilePdfOutlined,
     GatewayOutlined,
-    TransactionOutlined,
     KeyOutlined,
     LockOutlined,
+    LockTwoTone,
+    RestOutlined,
+    AppstoreOutlined,
     UnlockOutlined,
-    ClusterOutlined,
-    FilePdfOutlined,
-    ApiOutlined,
-    SunOutlined,
     UnlockTwoTone
 } from '@ant-design/icons';
-import { Button, Form, Space, message, Spin, Tag, Tooltip, Select, Input } from 'antd';
+import { Button, Form, Spin, Tag, Tooltip, message } from 'antd';
 import { useRef, useState } from 'react';
 import { of } from 'rxjs';
 import {
@@ -105,14 +99,14 @@ const initColumns = [
         width: 160,
         field: 'name',
     },
-    {
-        headerName: '账户余额',
-        width: 80,
-        field: 'balance',
-        valueFormatter: (params) => {
-            return params.value && formatNumber(params.value, 2);
-        },
-    },
+    // {
+    //     headerName: '账户余额',
+    //     width: 80,
+    //     field: 'balance',
+    //     valueFormatter: (params) => {
+    //         return params.value && formatNumber(params.value, 2);
+    //     },
+    // },
     {
         headerName: '标识',
         width: 80,
@@ -214,7 +208,7 @@ export default (props) => {
             title: '接口管理',
             width: 900,
             height: 600,
-            callback: () => { }
+            callback: () => refresh()
         })),
     ]);
 
@@ -259,33 +253,47 @@ export default (props) => {
         () => setLoading(false),
     );
 
-    const onChargeClick = (id) => {
-        if (selectedKeys.length !== 1) {
-            message.error('只能选择一条用户数据！');
-            return;
-        }
-        INewWindow({
-            url: '/new/tenant/charge/' + id,
-            title: '余额充值',
-            width: 500,
-            height: 250,
-            callback: () => refresh()
-        });
-    }
+    // const onChargeClick = (id) => {
+    //     if (selectedKeys.length !== 1) {
+    //         message.error('只能选择一条用户数据！');
+    //         return;
+    //     }
+    //     INewWindow({
+    //         url: '/new/tenant/charge/' + id,
+    //         title: '余额充值',
+    //         width: 500,
+    //         height: 250,
+    //         callback: () => refresh()
+    //     });
+    // }
 
-    const onBillClick = (id) => {
-        if (selectedKeys.length !== 1) {
+    const onPermClick = (id) => {
+         if (selectedKeys.length !== 1) {
             message.error('只能选择一条用户数据！');
             return;
         }
         INewWindow({
-            url: '/new/tenant/bill/' + id,
-            title: '账单查看',
-            width: 900,
-            height: 600,
+            url: '/new/tenant/perm/' + id,
+            title: '权限配置',
+            width: window.screen.width - 200,
+            height: window.screen.height - 200,
             // callback: () => refresh()
         });
     }
+
+    // const onBillClick = (id) => {
+    //     if (selectedKeys.length !== 1) {
+    //         message.error('只能选择一条用户数据！');
+    //         return;
+    //     }
+    //     INewWindow({
+    //         url: '/new/tenant/bill/' + id,
+    //         title: '账单查看',
+    //         width: 900,
+    //         height: 600,
+    //         // callback: () => refresh()
+    //     });
+    // }
 
     const onResourceClick = (id) => {
         if (selectedKeys.length !== 1) {
@@ -435,14 +443,14 @@ export default (props) => {
                                 删除
                             </IButton>
                         </Permit>,
-                        <Permit authority="tenant:charge">
-                            <IButton danger type="primary"
-                                size="small"
-                                icon={<TransactionOutlined />}
-                                key="charge" onClick={() => onChargeClick(selectedKeys[selectedKeys.length - 1])}>
-                                充值
-                            </IButton>
-                        </Permit>,
+                        // <Permit authority="tenant:charge">
+                        //     <IButton danger type="primary"
+                        //         size="small"
+                        //         icon={<TransactionOutlined />}
+                        //         key="charge" onClick={() => onChargeClick(selectedKeys[selectedKeys.length - 1])}>
+                        //         充值
+                        //     </IButton>
+                        // </Permit>,
                         <Permit authority="tenant:assignMenus">
                             <IButton
                                 type="success"
@@ -473,18 +481,29 @@ export default (props) => {
                                 </IButton>
                             </Tooltip>
                         </Permit>,
-
-                        <Permit authority="tenant:searchTenantFee">
-                            <IButton
-                                type="info"
-                                size="small"
-                                icon={<FilePdfOutlined />}
-                                key="searchTenantFee"
-                                onClick={() => onBillClick(selectedKeys[selectedKeys.length - 1])}
-                            >
-                                账单
+                        <Permit authority="tenant:doInitSUser">
+                        <IButton
+                            danger 
+                            type="primary"
+                            size='small'
+                            icon={<AppstoreOutlined />}
+                            key="perm"
+                            onClick={() => onPermClick(selectedKeys[selectedKeys.length - 1])}
+                        >
+                                管理
                             </IButton>
-                        </Permit>,
+                            </Permit>
+                        // <Permit authority="tenant:searchTenantFee">
+                        //     <IButton
+                        //         type="info"
+                        //         size="small"
+                        //         icon={<FilePdfOutlined />}
+                        //         key="searchTenantFee"
+                        //         onClick={() => onBillClick(selectedKeys[selectedKeys.length - 1])}
+                        //     >
+                        //         账单
+                        //     </IButton>
+                        // </Permit>,
                         
                     ]}
                     // onClick={(data) => onClicked(data)}

@@ -1,79 +1,69 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Select } from 'antd';
+import { api, copyObject, forEach, isEmpty } from '@/common/utils';
 import {
-  api,
-  useObservableAutoCallback,
-  useAutoObservable,
-  isEmpty,
-  forEach,
-  isArray,
-  stringRandom,
-  data2Option,
-} from '@/common/utils';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+  ApartmentOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import { TreeSelect } from 'antd';
+import { useEffect, useState } from 'react';
+const XUser = (props) => {
+  const [treeData, setTreeData] = useState([]);
 
-const { Option } = Select;
-// 用户组件
-export default (props) => {
-  const { Option } = Select;
-
-  const { value, displayName, placeholder, style, getTenant, tag, onChange, ...others } = props;
-  const [beTrigger, setBeTrigger] = useState(true);
-  const [keyword, setKeyword] = useState();
+  // 将组织设置为不可选
+  const loop = (data) => {
+    forEach((v) => {
+        if (v.tag === 'GROUP') {
+            copyObject(v, {
+                selectable: false,
+                //disableCheckbox: true,
+                icon: <ApartmentOutlined  />,
+            });
+        } else {
+            // 节点是组织不允许修改
+            copyObject(v, { icon: <UserOutlined style={{ color: '#52c41a' }} />} );
+        }
+        if (v.children && !isEmpty(v.children)) {
+            loop(v.children);
+        }
+    }, data);
+    return data;
+};
+  //查询
+  const loadGroup = (tid) => {
+    api.tuser.treeAllGroupsAndUsersByTag(props.tag || '', tid).subscribe({
+        next: (data) => {
+          
+          setTreeData(loop(data));
+        },
+    });
+};
   useEffect(() => {
-    if (value && displayName && beTrigger) {
-      const labelInValue = { label: displayName, value: value };
-      const option = [labelInValue];
-      setOptionData(option);
-      setKeyword(labelInValue);
-    } else if (value) {
-      console.log(value);
-      fetchUser(value);
-    }
-  }, [displayName, value]);
-
-  const fetchUser = (id) => {
-    api.tenant.getTenant(id).subscribe({
-      next:(data) => {
-        const u = data2Option('id','name',data);
-        setOptionData(u);
-        setKeyword(u[0]);
-      }
-    })
-  }
-
-  const [onSearch, optionData, setOptionData] = useObservableAutoCallback((event) =>
-    event.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap((v) => api.tenant.listByKeyword( v || '')),
-    ),
-  );
-
-  const [doOnChange] = useObservableAutoCallback((event) =>
-    event.pipe(
-      tap((v) => setBeTrigger(false)),
-      tap((v) => setKeyword(v || {})),
-      tap((v) => onChange && onChange(v?.value || '')),
-      tap((v) => getTenant && getTenant(v || {})),
-    ),
-  );
+    loadGroup(props.tenantId);
+  }, []);
 
   return (
-    <Select
+    <TreeSelect
       showSearch
-      labelInValue
-      allowClear
-      showArrow={false}
-      value={keyword}
-      placeholder={placeholder}
-      filterOption={false}
-      onSearch={onSearch}
-      onChange={doOnChange}
-      style={style}
-      {...others}
-    >
-      {optionData && isArray(optionData) && optionData.map((item) => <Option value={item.value} key={stringRandom(16) + item.value}>{item.label}</Option>)}
-    </Select>
+      allowClear={false}
+      // titleRender={(node) => (
+      //   <div style={{ width: '100%' }}>
+      //     <div style={{ float: 'left' }}>
+      //       {node.icon} {node.title}
+      //     </div>
+      //   </div>
+      // )}
+    //   multiple
+      // treeDefaultExpandAll      
+      value={props.value}
+      dropdownMatchSelectWidth={false}       
+      onChange={props.onChange}
+      treeData={treeData}
+      treeNodeFilterProp='title'
+      fieldNames={{ label: 'title', value: 'key', children: 'children' }}
+      placeholder="请选择用户"
+      style={{width: '100%'}}
+      dropdownStyle={{ width: 'auto',maxHeight: 480,overflow: 'auto'}}      
+    />
   );
 };
+
+export default XUser;

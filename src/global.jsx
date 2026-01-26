@@ -1,6 +1,7 @@
 import { history } from 'umi';
 import { constant } from '@/common/utils';
-
+import "@/assets/theme.css";
+import "@/assets/index.less"
 const token = sessionStorage.getItem(constant.KEY_USER_TOKEN);
 
 if (token) {
@@ -8,6 +9,7 @@ if (token) {
 } else {
   history.push(constant.SYSTEM_ROUTE_LOGIN);
 }
+
 
 // // 搜索栏布局
 // const closeStyle = {

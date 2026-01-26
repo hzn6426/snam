@@ -1,0 +1,363 @@
+{
+    "nodes": [
+        {
+            "id": "KrnG6AiRNEZ-2CRzGqFtk",
+            "type": "Start",
+            "data": {
+                "rpaths": [
+                    {
+                        "id": "TnOht-ngeQlzDstBikiAF"
+                    }
+                ],
+                "title": "开始",
+                "icon": "i-mynaui:play",
+                "description": "Start the chatbot flow",
+                "deletable": false,
+                "passed":true
+            },
+            "position": {
+                "x": -16,
+                "y": 128
+            },
+            "measured": {
+                "width": 96,
+                "height": 42
+            },
+            "selected": false,
+            "dragging": false
+        },
+        {
+            "id": "MIi12HnE_n9brH8N2bnEt",
+            "type": "Task",
+            "data": {
+                "passed":true,
+                "allActionRejectType": "REJECT_ALL",
+                "recommitPolicy": "COMMIT_NEXT_STEP",
+                "rejectPolicy": "TO_PREVIOUS",
+                "action": "ANY",
+                "icon": "i-iconamoon:profile-light",
+                "title": "付款申请",
+                "model": "FILL",
+                "description": "创建一个任务节点用来进行任务提交或者审核审批",
+                "entrustType": "ANY",
+                "entrusts": [],
+                "lpaths": [
+                    {
+                        "id": "QKGM7BKLd6izAfeoKHeY0"
+                    }
+                ],
+                "rpaths": [
+                    {
+                        "id": "TZmqF_WJTSlPfxb7k0Wsl"
+                    }
+                ],
+                "variables": [
+                    {
+                        "name": "money",
+                        "dataType": "FLOAT",
+                        "icon": "i-material-symbols:speed-1-75-rounded"
+                    }
+                ]
+            },
+            "position": {
+                "x": 160,
+                "y": 96
+            },
+            "measured": {
+                "width": 320,
+                "height": 197
+            },
+            "selected": false,
+            "dragging": false
+        },
+        {
+            "id": "tR-QqbLsrXHsxKECjDC_J",
+            "type": "Fork",
+            "data": {
+                "passed":true,
+                "lpaths": [
+                    {
+                        "id": "mWz4OhrN7xEEgAL13wiWc"
+                    }
+                ],
+                "rpaths": [
+                    {
+                        "id": "ADtDkZQaKFJMTsWnTX0x-",
+                        "express": "money <= 1000",
+                        "color": "GREEN"
+                    },
+                    {
+                        "id": "hDwYP1lxPtbNCdAINCFTQ",
+                        "express": "money > 1000",
+                        "color": "RED"
+                    }
+                ],
+                "icon": "i-material-symbols:graph-1",
+                "model": "FORK",
+                "title": "金额条件",
+                "description": "创建一个条件节点根据表达式结果来进行路径跳转",
+                "variables": [
+                    {
+                        "name": "money",
+                        "dataType": "FLOAT",
+                        "icon": "i-material-symbols:speed-1-75-rounded"
+                    }
+                ]
+            },
+            "position": {
+                "x": 544,
+                "y": 96
+            },
+            "selected": false,
+            "measured": {
+                "width": 320,
+                "height": 208
+            },
+            "dragging": false
+        },
+        {
+            "id": "gYtnZivNe0k6-Ohif0t1S",
+            "type": "Task",
+            "data": {
+                "passed":true,
+                "allActionRejectType": "REJECT_ALL",
+                "recommitPolicy": "COMMIT_NEXT_STEP",
+                "rejectPolicy": "TO_PREVIOUS",
+                "action": "ANY",
+                "icon": "i-iconamoon:profile-light",
+                "title": "部门经理审批",
+                "model": "AUDIT",
+                "description": "创建一个任务节点用来进行任务提交或者审核审批",
+                "entrustType": "USER",
+                "entrusts": [
+                    "王总"
+                ],
+                "lpaths": [
+                    {
+                        "id": "QKGM7BKLd6izAfeoKHeY0"
+                    }
+                ],
+                "rpaths": [
+                    {
+                        "id": "TZmqF_WJTSlPfxb7k0Wsl"
+                    }
+                ],
+                "variables": []
+            },
+            "position": {
+                "x": 960,
+                "y": -64
+            },
+            "selected": false,
+            "measured": {
+                "width": 320,
+                "height": 197
+            },
+            "dragging": false
+        },
+        {
+            "id": "MxceVFmcvuLxkH9MZ0SeM",
+            "type": "Task",
+            "data": {
+                "allActionRejectType": "REJECT_ALL",
+                "recommitPolicy": "COMMIT_NEXT_STEP",
+                "rejectPolicy": "TO_PREVIOUS",
+                "action": "ANY",
+                "icon": "i-iconamoon:profile-light",
+                "title": "总经理审批",
+                "model": "AUDIT",
+                "description": "创建一个任务节点用来进行任务提交或者审核审批",
+                "entrustType": "USER",
+                "entrusts": [
+                    "刘总"
+                ],
+                "lpaths": [
+                    {
+                        "id": "QKGM7BKLd6izAfeoKHeY0"
+                    }
+                ],
+                "rpaths": [
+                    {
+                        "id": "TZmqF_WJTSlPfxb7k0Wsl"
+                    }
+                ],
+                "variables": []
+            },
+            "position": {
+                "x": 960,
+                "y": 224
+            },
+            "selected": false,
+            "measured": {
+                "width": 320,
+                "height": 197
+            },
+            "dragging": false
+        },
+        {
+            "id": "ToNhKE1dAZp0x9MPPozM9",
+            "type": "Join",
+            "data": {
+                "lpaths": [
+                    {
+                        "id": "11waSaWa2miEaoNbLzOpd",
+                        "color": "RED"
+                    },
+                    {
+                        "id": "T-DCfS1WyBy5efhxhhQsx",
+                        "color": "GREEN"
+                    }
+                ],
+                "rpaths": [
+                    {
+                        "id": "YURpugKCjmmIVdKF8ATdr"
+                    }
+                ],
+                "exeType": "ANY",
+                "icon": "i-tabler:schema",
+                "title": "聚合执行",
+                "description": "创建一个聚合节点根据流程设置来进行聚合后继续执行",
+                "variables": []
+            },
+            "position": {
+                "x": 1424,
+                "y": 80
+            },
+            "selected": false,
+            "measured": {
+                "width": 320,
+                "height": 200
+            },
+            "dragging": false
+        },
+        {
+            "id": "FhsSanR4ZLOwA9doDNHew",
+            "type": "Notify",
+            "data": {
+                "message": "",
+                "icon": "i-fluent:alert-24-filled",
+                "title": "通知财务",
+                "description": "创建一个通知节点根据流程配置以不同渠道进行信息通知",
+                "exeType": "ASYNC",
+                "notifyType": "EMAIL",
+                "entrustType": "USER",
+                "entrusts": [],
+                "lpaths": [
+                    {
+                        "id": "yjJnJrdbCiEKkFjSER10q"
+                    }
+                ],
+                "rpaths": [
+                    {
+                        "id": "9lmszhAlESE4JPfuKn5ka"
+                    }
+                ],
+                "variables": []
+            },
+            "position": {
+                "x": 1824,
+                "y": 80
+            },
+            "selected": false,
+            "measured": {
+                "width": 320,
+                "height": 208
+            },
+            "dragging": false
+        },
+        {
+            "id": "hpKKOv0wgNUebIfO1y3Zh",
+            "type": "End",
+            "data": {
+                "icon": "i-mynaui:stop",
+                "title": "结束",
+                "description": "End the chatbot flow",
+                "deletable": false,
+                "lpaths": [
+                    {
+                        "id": "RWEHk9hJErPBQQKaH3Bf3"
+                    }
+                ]
+            },
+            "position": {
+                "x": 2224,
+                "y": 160
+            },
+            "measured": {
+                "width": 96,
+                "height": 42
+            },
+            "selected": false,
+            "dragging": false
+        }
+    ],
+    "edges": [
+        {
+            "id": "NEoc9Ro1TQ60jAzcJJ27N",
+            "source": "KrnG6AiRNEZ-2CRzGqFtk",
+            "target": "MIi12HnE_n9brH8N2bnEt",
+            "type": "passed"
+        },
+        {
+            "source": "MIi12HnE_n9brH8N2bnEt",
+            "sourceHandle": "TZmqF_WJTSlPfxb7k0Wsl",
+            "target": "tR-QqbLsrXHsxKECjDC_J",
+            "targetHandle": "mWz4OhrN7xEEgAL13wiWc",
+            "id": "XCDZs10wZVFFuz5q4qSPJ",
+            "type": "passed"
+        },
+        {
+            "source": "tR-QqbLsrXHsxKECjDC_J",
+            "sourceHandle": "ADtDkZQaKFJMTsWnTX0x-",
+            "target": "gYtnZivNe0k6-Ohif0t1S",
+            "targetHandle": "QKGM7BKLd6izAfeoKHeY0",
+            "id": "tYBStsbeXoxHAlet5MH41",
+            "type": "passed"
+        },
+        {
+            "source": "tR-QqbLsrXHsxKECjDC_J",
+            "sourceHandle": "hDwYP1lxPtbNCdAINCFTQ",
+            "target": "MxceVFmcvuLxkH9MZ0SeM",
+            "targetHandle": "QKGM7BKLd6izAfeoKHeY0",
+            "id": "UT1Q4QmQat80YjN_gVrIG",
+            "type": "deletable"
+        },
+        {
+            "source": "gYtnZivNe0k6-Ohif0t1S",
+            "sourceHandle": "TZmqF_WJTSlPfxb7k0Wsl",
+            "target": "ToNhKE1dAZp0x9MPPozM9",
+            "targetHandle": "11waSaWa2miEaoNbLzOpd",
+            "id": "g9IxpX0AbZK7VG9ikIaAD",
+            "type": "deletable"
+        },
+        {
+            "source": "MxceVFmcvuLxkH9MZ0SeM",
+            "sourceHandle": "TZmqF_WJTSlPfxb7k0Wsl",
+            "target": "ToNhKE1dAZp0x9MPPozM9",
+            "targetHandle": "T-DCfS1WyBy5efhxhhQsx",
+            "id": "QcGAsO3ke-jINjni4lOs2",
+            "type": "deletable"
+        },
+        {
+            "source": "ToNhKE1dAZp0x9MPPozM9",
+            "sourceHandle": "YURpugKCjmmIVdKF8ATdr",
+            "target": "FhsSanR4ZLOwA9doDNHew",
+            "targetHandle": "yjJnJrdbCiEKkFjSER10q",
+            "id": "1UEkXiALRSB5D-Zrfb38t",
+            "type": "deletable"
+        },
+        {
+            "source": "FhsSanR4ZLOwA9doDNHew",
+            "sourceHandle": "9lmszhAlESE4JPfuKn5ka",
+            "target": "hpKKOv0wgNUebIfO1y3Zh",
+            "targetHandle": "RWEHk9hJErPBQQKaH3Bf3",
+            "id": "jRU27F0b84Mu717g1gzlb",
+            "type": "deletable"
+        }
+    ],
+    "viewport": {
+        "x": -640.8040503407283,
+        "y": 239.83361864617376,
+        "zoom": 0.9516951036253458
+    }
+}

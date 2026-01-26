@@ -19,11 +19,25 @@ import {
     switchMap
 } from 'rxjs/operators';
 
+import {Tag} from 'antd';
+
 const loggerState = {
     FAILURE: { text: '失败', status: 'Error' },
     SUCCESS: { text: '成功', status: 'Success' },
 };
 
+const MethodRenderer = (props) => {
+    if (props.value === 'POST') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#87d068">{props.value}</Tag>;
+    } else if (props.value === 'GET') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#2db7f5">{props.value}</Tag>;
+    } else if (props.value === 'PUT') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#f1982f">{props.value}</Tag>;
+    } else if (props.value === 'DELETE') {
+        return <Tag style={{width:60,textAlign:'center'}} color="#E8333c">{props.value}</Tag>;
+    }
+    return <Tag style={{width:60,textAlign:'center'}} color="#f50">-</Tag>;
+}
 
 const StateRenderer = (props) => {
     if (props.value) {
@@ -118,6 +132,7 @@ const initColumns = [
         width: 80,
         align: 'left',
         field: 'exchangeMethod',
+        cellRenderer: MethodRenderer
     },
     {
         headerName: '请求地址',

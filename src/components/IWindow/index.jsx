@@ -2,9 +2,8 @@ import { IFooterToolbar, IIF } from '@/common/components';
 import { useWindowSize } from '@/common/utils';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Space } from 'antd';
-import { useEffect, useState } from 'react';
-import './index.less';
-export default (props) => {
+import React, { useEffect, useState,useImperativeHandle } from 'react';
+export default React.forwardRef((props, ref) => {
     const { saveVisible } = props;
     //窗口大小
     const { clientWidth, clientHeight } = useWindowSize();
@@ -16,6 +15,15 @@ export default (props) => {
     const [snamModalForm] = Form.useForm();
     const [confirmLoading, setConfirmLoading] = useState(false);
 
+    useImperativeHandle(ref, () => ({
+        setFieldsValue: (params) => {
+          // 这里可以加自己的逻辑哦
+          snamModalForm.setFieldValue(params);
+        },
+        getFieldsValue: () => {
+          return snamModalForm.getFieldsValue();
+        },
+      }), []);
 
     useEffect(() => {
         snamModalForm.resetFields();
@@ -40,63 +48,55 @@ export default (props) => {
             .catch(() => unload());
     };
 
-    return (
-        <Card
-            style={{
-                height: clientHeight - 0 + 'px',
-                overflow: 'auto',
-                padding: '0 10px 10px 10px',
-            }}
+    return (<Card
+        style={{
+            height: clientHeight - 0 + 'px',
+            overflow: 'auto',
+            padding: '0 10px 10px 10px',
+            borderRadius: '0px',
+        }}
+        className="iwindow-card"
+    >
+        <Form
+            name="basic"
+            initialValues={{ remember: true }}
+            autoComplete="off"
+            size="small"
+            className="snam-form"
+            scrollToFirstError={true}
+            form={snamModalForm}
         >
-            <Form
-                name="basic"
-                initialValues={{ remember: true }}
-                autoComplete="off"
-                size="small"
-                className="snam-form"
-                scrollToFirstError={true}
-                form={snamModalForm}
-            >
-                {props.children}
-            </Form>
-            <IFooterToolbar
-                visible={true}
-            // style={{
-            //     position: 'fixed',
-            //     bottom: '1px',
-            //     width: '100%',
-            //     padding: '5px 0 5px 25px',
-            //     background: '#f0f0f0',
-            //     marginLeft: '-20px',
-            // }}
-            >
-                <Space>
-                    <IIF test={saveVisible !== false}>
-                        <Button
-                            icon={<SaveOutlined />}
-                            type="primary"
-                            htmlType="submit"
-                            loading={confirmLoading}
-                            onClick={() => {
-                                doSubmit();
-                            }}
-                        >
-                            保存
-                        </Button>
-                    </IIF>
+            <>{props.children}</>
+        </Form>
+        <IFooterToolbar
+            visible={true}
+        >
+            <Space>
+                <IIF test={saveVisible !== false}>
                     <Button
-                        icon={<CloseOutlined />}
-                        danger
+                        icon={<SaveOutlined />}
+                        type="primary"
                         htmlType="submit"
                         loading={confirmLoading}
                         onClick={() => {
-                            props.onCancel();
+                            doSubmit();
                         }}
                     >
-                        关闭
+                        保存
                     </Button>
-                </Space>
-            </IFooterToolbar>
-        </Card>
-    );
-};
+                </IIF>
+                <Button
+                    icon={<CloseOutlined />}
+                    danger
+                    htmlType="submit"
+                    loading={confirmLoading}
+                    onClick={() => {
+                        props.onCancel();
+                    }}
+                >
+                    关闭
+                </Button>
+            </Space>
+        </IFooterToolbar>
+    </Card>);
+});

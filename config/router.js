@@ -1,7 +1,7 @@
 export default [
   {
     // path: '/',
-    // component: '../layouts/BlankLayout',
+    // component: '../layouts/StateLayout',
     // routes: [
     //   {
         path: '/user',
@@ -120,6 +120,11 @@ export default [
                 component: './group/move',
               },
               {
+                name: '组织用户复制权限',
+                path: '/new/group/copy',
+                component: './group/copy',
+              },
+              {
                 name: '公司编辑',
                 path: '/new/group/company',
                 component: './group/company',
@@ -194,6 +199,91 @@ export default [
                 path: '/new/limit/:id',
                 component: './limit/save',
               },
+              {
+                name: '编辑提单',
+                path: '/new/order/:id',
+                component: './order/save',
+              },
+              {
+                name: '编辑Action',
+                path: '/new/action/:id',
+                component: './action/save',
+              },{
+                name: '租户权限',
+                path: '/new/tenant/perm/:id',
+                component: './tenant/perm',
+              },
+
+              {
+                name: '租户用户新增',
+                path: '/new/tuser/:id',
+                component: './tenant/user/save',
+              },
+              {
+                name: '租户角色新增',
+                path: '/new/trole/:id',
+                component: './tenant/role/save',
+              },
+              {
+                name: '租户角色授权',
+                path: '/new/trole/resource/:id',
+                component: './tenant/role/resource',
+              },
+              {
+                name: '租户角色分配用户',
+                path: '/new/trole/assignUser/:id',
+                component: './tenant/role/user',
+              },
+              {
+                name: '租户组织编辑',
+                path: '/new/tgroup/save',
+                component: './tenant/group/save',
+              },
+              {
+                name: '租户组织用户编辑',
+                path: '/new/tgroup/user',
+                component: './tenant/group/user',
+              },
+              {
+                name: '租户组织用户移动',
+                path: '/new/tgroup/move',
+                component: './tenant/group/move',
+              },
+              {
+                name: '租户公司编辑',
+                path: '/new/tgroup/company',
+                component: './tenant/group/company',
+              },
+              {
+                name: '租户组织用户角色',
+                path: '/new/tgroup/role',
+                component: './tenant/group/role',
+              },
+              {
+                name: '租户用户组分配角色',
+                path: '/new/tuset/role/:id',
+                component: './tenant/uset/role',
+              },
+              {
+                name: '租户用户组分配用户',
+                path: '/new/tuset/user/:id',
+                component: './tenant/uset/user',
+              },
+              {
+                name: '租户用户组编辑',
+                path: '/new/tuset/:id',
+                component: './tenant/uset/save',
+              },
+              {
+                name: '职位分配角色',
+                path: '/new/tposition/role',
+                component: './tenant/position/role',
+              },
+              {
+                name: '用户编辑职位',
+                path: '/new/tposition/:id',
+                component: './tenant/position/save',
+              },
             ]
           }
         ]
@@ -235,6 +325,18 @@ export default [
               {
                 path: '/',
                 redirect: '/system/user',
+              },
+              {
+                name: '流程演示',
+                icon: 'smile',
+                path: '/system/flow',
+                component: './flow',
+              },
+              {
+                name: '提单演示',
+                icon: 'smile',
+                path: '/system/order',
+                component: './order',
               },
               {
                 name: '用户管理',
@@ -344,9 +446,15 @@ export default [
                 path: '/system/tfunction',
                 component: './tfunction',
               },
+              {
+                name: '权限动作',
+                icon: 'smile',
+                path: '/system/action',
+                component: './action',
+              },
             ],
           },
         ],
       },
-
+    // ]}
 ];

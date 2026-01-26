@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+// scroll-style
+::-webkit-scrollbar{
+  width: 4px;
+  height: 4px;
+//   display: block;
+  background-color: transparent !important;
+}
+::-webkit-scrollbar:horizontal {
+  height:4px;
+}
+
+::-webkit-scrollbar:vertical {
+  width:4px;
+  // height: 100%;
+}
+
+// ::-webkit-scrollbar-track,
+// ::-webkit-scrollbar-corner {
+//   background-color: transparent;
+// }
+
+::-webkit-scrollbar-thumb:horizontal {
+  border-radius: 5px;
+  background-color: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  border-radius: 5px;
+  background-color: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 5px;
+  background-color: #ccc;
+}
+
+// form 间距
+.snam-form {
+  .ant-form-item {
+    margin-bottom: 8px;
+  }
+}
+
+// 必填项 突出背景
+.snam-required {
+
+  .ant-select-selector,
+  .ant-input {
+    background: #FFFFD0 !important;
+  }
+}
+
+.snam-card {
+  // margin: 0 10px 10px 10px;
+  border-radius: 10px !important;
+}
+.snam-icon {
+  margin-right: 5px;
+}
+.ag-unselectable .ag-has-focus {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+.ant-btn-primary:disabled {
+  color: #000;
+  background-color: #f5f5f5;
+}
+
+.ant-btn-primary.ant-btn-dangerous:disabled {
+  color: #000;
+  background-color: #f5f5f5;
+}
+
+.site-tree-search-value {
+  color: #f50;
+  font-weight: bold;
+}
