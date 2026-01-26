@@ -34,14 +34,6 @@ export default () => {
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
         <Timeline.Item>
-            <Title level={4}>[3.2.10] 2025.12.23</Title>
-            <Title level={5}>新增功能</Title>
-            <Paragraph type='danger'>
-              <ul className="snam-li">
-                <li>新增 组织管理中添加用户复制权限功能，可以将一个用户复制到另一个用户中</li>
-              </ul>
-            </Paragraph>
-          </Timeline.Item><Timeline.Item>
             <Title level={4}>[3.3.0] 2025.12.23</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph type='danger'>
