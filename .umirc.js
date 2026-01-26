@@ -29,5 +29,9 @@ export default defineConfig({
   
   // 禁用 MFSU 以避免依赖解析问题
   mfsu: false,
+
+  plugins: [
+    'umi-plugin-keep-alive',
+  ],
 });
 

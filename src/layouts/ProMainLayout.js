@@ -388,7 +388,9 @@ export default (props) => {
                 >
                     <div style={{ height: viewSetting.layout == "side" ? 'calc(100vh - 64px)' : 'calc(100vh - 120px)', overflow: 'hidden' }}>
                         {viewSetting.isTabs ? (
+                            <KeepAlive cacheKey={location.pathname} autoFreeze={false} saveScrollPosition="screen">
                             <Outlet/>
+                            </KeepAlive>
                         ) : (
                             <Outlet />
                         )}
