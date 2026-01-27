@@ -18,16 +18,16 @@ export default () => {
   };
   const { clientHeight } = window?.document?.documentElement;
 
-  // useEffect(() => {
-  //   const lastFetchTime = localStorage.getItem('lastFetchTime');
-  //   const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
-  //   const now = new Date().getTime();
+  useEffect(() => {
+    const lastFetchTime = localStorage.getItem('lastFetchTime');
+    const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
+    const now = new Date().getTime();
  
-  //   if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
-  //     localStorage.setItem('lastFetchTime', now.toString());
-  //     info();
-  //   }
-  // },[]);
+    if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
+      localStorage.setItem('lastFetchTime', now.toString());
+      info();
+    }
+  },[]);
   return (
     <>
       

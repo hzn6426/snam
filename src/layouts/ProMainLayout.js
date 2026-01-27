@@ -11,8 +11,8 @@ import { iconEnum } from '@/common/icons';
 import KeepAlive, { useAliveController } from 'react-activation';
 import { Link, history } from 'umi';
 import routeCache from '../../config/routerCache.js';
-// import Logo from '../assets/logo.png';
-import Logo from '../assets/antd.svg';
+import Logo from '../assets/logo.png';
+// import Logo from '../assets/antd.svg';
 import Header from '@/assets/images/header.jpg';
 import { api, constant } from '@/common/utils';
 import './index.less';
@@ -413,8 +413,8 @@ export default (props) => {
                         // props.layout !== 'side' && document.body.clientWidth > 1400 ? (
                         //     <SearchInput />
                         // ) : undefined,
-                        // <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={28} icon={<HomeOutlined />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: 4, }} />,
-                        // <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: -20 }} />
+                        <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={28} icon={<HomeOutlined />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: 4, }} />,
+                        <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: -20 }} />
                     ];
                 }}
                 // actionsRender={(props) => {
