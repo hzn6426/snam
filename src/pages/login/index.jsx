@@ -237,11 +237,11 @@ export default (props) => {
         <div style={{ marginLeft: '54px' }}>
           <Form.Item>
             <Button
-              type="primary"
+              // type="primary"
               htmlType="submit"
               size="large"
               shape="round"
-              style={{ width: '200px' }}
+              style={{ width: '240px',backgroundColor:'rgba(255, 255, 255, 0.4)', }}
               loading={loading}
             >
               登录
