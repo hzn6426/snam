@@ -64,6 +64,11 @@ export default [
         component: '@/pages/role/resource',
       },
       {
+        name: '角色资源授权',
+        path: '/new/role/bresource/:id',
+        component: '@/pages/role/bresource',
+      },
+      {
         name: '用户授权',
         path: '/new/user/resource/:id',
         component: '@/pages/user/resource',
@@ -159,9 +164,19 @@ export default [
         component: '@/pages/menu/save',
       },
       {
+        name: '编辑菜单',
+        path: '/new/bresource/save',
+        component: '@/pages/bresource/save',
+      },
+      {
         name: '编辑按钮',
         path: '/new/menu/button',
         component: '@/pages/menu/button',
+      },
+      {
+        name: '编辑按钮',
+        path: '/new/bresource/button',
+        component: '@/pages/bresource/button',
       },
       {
         name: '编辑参数',
@@ -430,6 +445,24 @@ export default [
             icon: 'smile',
             path: '/system/action',
             component: '@/pages/action',
+          },
+          {
+            name: '业务资源',
+            icon: 'smile',
+            path: '/system/bresource',
+            component: '@/pages/bresource',
+          },
+          {
+            name: '资源授权',
+            icon: 'smile',
+            path: '/system/presource',
+            component: '@/pages/presource',
+          },
+          {
+            name: '资源演示',
+            icon: 'smile',
+            path: '/system/file',
+            component: '@/pages/file',
           },
         ],
       },

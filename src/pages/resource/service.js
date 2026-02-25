@@ -4,13 +4,25 @@ import { constant, iget, ipost } from '@/common/utils';
 export function listBPermResourcesByUser(orgId, uid) {
     return iget(`${constant.API_RESOURCE_BPERM_BY_USER}?orgId=${orgId}&uid=${uid}`);
 }
+// 根据用户ID获取系统业务资源权限及权限范围
+export function listBusinessBPermResourcesByUser(orgId, uid, resourceType) {
+    return iget(`${constant.API_RESOURCE_BUSINESS_BPERM_BY_USER}?orgId=${orgId}&uid=${uid}&resourceType=${resourceType}`);
+}
 // 根据用户组ID获取业务资源权限及权限范围
 export function listBPermResourcesByUset(usetId) {
     return iget(`${constant.API_RESOURCE_BPERM_BY_USET}?usetId=${usetId}`);
 }
+// 根据用户组ID获取系统业务资源权限及权限范围
+export function listBusinessBPermResourcesByUset(usetId, resourceType) {
+    return iget(`${constant.API_RESOURCE_BUSINESS_BPERM_BY_USET}?usetId=${usetId}&&resourceType=${resourceType}`);
+}
 // 根据职位ID获取业务资源权限及权限范围
 export function listBPermResourcesByPosition(positionId) {
     return iget(`${constant.API_RESOURCE_BPERM_BY_POSITION}?positionId=${positionId}`);
+}
+// 根据职位ID获取系统业务资源权限及权限范围
+export function listBusinessBPermResourcesByPosition(positionId, resourceType) {
+    return iget(`${constant.API_RESOURCE_BUSINESS_BPERM_BY_POSITION}?positionId=${positionId}&resourceType=${resourceType}`);
 }
 // 根据用户和权限获取用户业务权限
 export function listPermEntrustsByUser(orgId, uid, pid) {

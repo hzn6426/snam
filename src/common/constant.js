@@ -12,6 +12,8 @@ export default Object.freeze({
   ROUTE_LOGIN_TEMP: '/user/loginTemp',
   // 用户按钮KEY-sessionStorage
   KEY_USER_BUTTON_PERMS: '_USER_BUTTON_PERMS',
+  // 用户资源 Key-sessionStorage
+  KEY_USER_RESOURCE_PERMS: '_USER_RESOURCE_PERMS',
   // 用户token存储KEY-sessionStorage
   KEY_USER_TOKEN: 'SNAPPER_USER_TOKEN',
   // 当前用户
@@ -34,6 +36,8 @@ export default Object.freeze({
   SUBJECT_SYSTEM_REFRESH: '_subject_system_refresh',
   // 用户属性
   DICT_USER_BUSINEESS_TAG: 'USER_BUSINESS_TAG',
+  // 业务资源类型
+  DICT_BUSINESS_RESOURCE_TYPE_TAG: 'BUSINESS_RESOURCE_TYPE_TAG',
   // 系统端
   DICT_SYSTEM_POINT_TAG: 'SYSTEM_POINT_TAG',
 
@@ -71,6 +75,8 @@ export default Object.freeze({
   API_USER_SEARCH: '/authority/user/search',
   // 用户权限按钮
   API_USER_BUTTONS: '/authority/user/listButtons',
+  // 用户权限资源
+  API_USER_RESOURCES: '/authority/user/listBusinessResources',
   // 用户增删改查
   API_USER: '/authority/user',
   // 用户激活
@@ -140,14 +146,24 @@ export default Object.freeze({
   API_ROLE_TREE_ALL_MENUS: '/authority/resource/treeAllMenus',
   // 获取菜单对应的按钮列表
   API_ROLE_LIST_ALL_BUTTONS_BY_MENU: '/authority/resource/listAllButtonsByMenu',
+  // 获取业务资源对应的业务资源按钮列表
+  API_ROLE_LIST_ALL_RESOURCE_BUTTONS_BY_RESOURCE: '/authority/resource/listAllResourceButtonsByResource',
   // 获取角色拥有权限的菜单ID列表
   API_ROLE_PERM_MENU_LIST: '/authority/resource/listPermMenus',
+  // 获取角色拥有权限的资源列表
+  API_ROLE_PERM_BUSINESS_RESOURCE_LIST:'/authority/resource/listPermBusinessResources',
   // 获取角色拥有权限的按钮ID列表
   API_ROLE_PERM_BUTTON_LIST: '/authority/resource/listPermButtons',
+  // 获取角色拥有权限的业务资源按钮ID列表
+  API_ROLE_PERM_RESOURCE_BUTTON_LIST: '/authority/resource/listPermBusinessButtons',
   // 角色菜单权限保存
   API_ROLE_PERM_MENU_SAVE: '/authority/resource/saveMenuPerm',
+  // 角色业务资源权限保存
+  API_ROLE_PERM_BUSINESS_RESOURCE_SAVE: '/authority/resource/saveBusinessResourcePerm',
   // 角色按钮权限保存
   API_ROLE_PERM_BUTTON_SAVE: '/authority/resource/saveButtonPerm',
+  // 角色业务资源按钮权限保存
+  API_ROLE_PERM_RESOURCE_BUTTON_SAVE: '/authority/resource/saveResourceButtonPerm',
   // 根据职位获取角色列表
   API_ROLE_BY_POSITION: '/authority/role/listByPosition',
   // 刷新所有角色权限
@@ -248,6 +264,24 @@ export default Object.freeze({
   API_BUTTON_LIST_BY_KEYWORD: '/authority/button/listByKeyWord',
   // 根据按钮ID获取按钮信息
   API_BUTTON_GET_BUTTON_AND_API_BY_ID: '/authority/button/getButtonAndApiById',
+  //==============================================================//
+  // 业务资源管理                                                   //
+  //==============================================================//
+  // 查询所有资源
+  API_BUSINESS_RESOURCE_TREE_ALL: '/authority/businessResource/treeAllResource',
+  // 新增 更新
+  API_BUSINESS_RESOURCE_SAVE_OR_UPDATE: '/authority/businessResource/saveOrUpdateResource',
+  // 删除
+  API_BUSINESS_RESOURCE_DELETE: '/authority/businessResource',
+
+  // 按钮查询
+  API_BUSINESS_BUTTON_SEARCH_BUTTONS_AND_API_BY_RESOURCE: '/authority/businessButton/searchButtonsAndApiByResource',
+  // 按钮 新增 跟新
+  API_BUSINESS_BUTTON_SAVE_OR_UPDATE: '/authority/businessButton/saveOrUpdate',
+  // 按钮 删除
+  API_BUSINESS_BUTTON_DELETE: '/authority/businessButton',
+  //  根据按钮ID获取按钮信息
+  API_BUSINESS_BUTTON_GET_BUTTON_AND_API_BY_ID: '/authority/businessButton/getButtonAndApiById',
   //= ==============================================//
   //                      用户组管理                  //
   //= ==============================================//
@@ -362,6 +396,8 @@ export default Object.freeze({
   //= ==============================================//
   // 根据用户获取业务资源及业务权限范围
   API_RESOURCE_BPERM_BY_USER: '/authority/resource/listResourcesForBPermByUser',
+  // 根据用户获取系统业务资源及业务权限范围
+  API_RESOURCE_BUSINESS_BPERM_BY_USER: '/authority/resource/listBusinessResourcesForBPermByUser',
   // 根据客户和权限加载用户业务权限
   API_RESOURCE_PERM_ENTRUST_BY_USER: '/authority/resource/listPermEntrustsByUser',
   // 根据客户和权限加载额外的用户业务权限
@@ -372,9 +408,12 @@ export default Object.freeze({
   API_RESOURCE_SAVE_USER_PERM: '/authority/resource/saveBusinessPerm',
   // 根据用户组获取业务资源及业务权限范围
   API_RESOURCE_BPERM_BY_USET: '/authority/resource/listResourcesForBPermByUset',
+   // 根据用户组获取业务资源及业务权限范围
+  API_RESOURCE_BUSINESS_BPERM_BY_USET: '/authority/resource/listBusinessResourcesForBPermByUset',
   // 根据职位获取业务资源及业务权限范围
   API_RESOURCE_BPERM_BY_POSITION: '/authority/resource/listResourcesForBPermByPosition',
-
+  // 根据职位获取系统业务资源及业务权限范围
+  API_RESOURCE_BUSINESS_BPERM_BY_POSITION: '/authority/resource/listBusinessResourcesForBPermByPosition',
   // 根据客户和权限加载用户组业务权限
   API_RESOURCE_PERM_ENTRUST_BY_USET: '/authority/resource/listPermEntrustsByUset',
   // 根据客户和权限加载用户组额外的业务权限
@@ -747,5 +786,12 @@ export default Object.freeze({
   EAPI_RESOURCE_USER_BUSINESS_DATA_PERM: '/authority/tresource/getUserBusinessDataPerm',
   // 获取用户列数据权限
   EAPI_RESOURCE_USER_COLUMN_DATA_PERM: '/authority/tresource/getUserColumnDataPerm',
+  //= ==============================================//
+  //                  文件演示                       //
+  //= ==============================================//
+  API_FILE_PICTURE_UPLOAD: '/authority/file/picture/upload',
+  API_FILE_PICTURE_DELETE: '/authority/file/picture/delete',
+  API_FILE_PICTURE_SEARCH: '/authority/file/picture/search',
+  API_FILE_PICTURE_RENAME: '/authority/file/picture/rename',
 });
 

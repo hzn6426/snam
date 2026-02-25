@@ -5,6 +5,7 @@ import { parse } from 'querystring';
 import { useState } from 'react';
 import { history } from '@umijs/max';
 import styles from './index.less';
+import { zip } from 'rxjs';
 const { Title } = Typography;
 const getPageQuery = () => parse(window.location.href.split('?')[1]);
 
@@ -142,9 +143,15 @@ export default (props) => {
         handleRemeberMe(v);
         handleToken(resp.access_token);
         handleRedirect();
-        api.user.loadUserButtons().subscribe({
-          next: (br) => {
+        // api.user.loadUserButtons().subscribe({
+        //   next: (br) => {
+        //     sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || []);
+        //   }
+        // });
+        zip(api.user.loadUserButtons(),api.user.loadUserResources()).subscribe({
+          next: ([br,rr]) => {
             sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || []);
+            sessionStorage.setItem(constant.KEY_USER_RESOURCE_PERMS, rr || []);
           }
         });
 

@@ -286,7 +286,6 @@ export default React.forwardRef((props, ref) => {
 
 
 useEffect(() => {
-  console.log(222);
     if (defaultSearch !== false) {
       getRowData(pageNo, pageSize || 50);
     }
@@ -294,7 +293,6 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
-    console.log(111);
     gridApi && gridApi.deselectAll();
     
   }, [clearSelect]);

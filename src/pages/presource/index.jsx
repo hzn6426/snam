@@ -50,15 +50,11 @@ import {
     Transfer,
     message,
     Tooltip,
-    Divider
+    Divider,
+    Select
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { zip } from 'rxjs';
-import perm from '../tenant/perm';
-import { set } from 'lscache';
-import en from '@/locales/en';
-import copy from '../group/copy';
-import user from '../user';
 
 let permScopes = {};
 api.dict.listChildByParentCode(constant.DICT_BUSINESS_PERM_SCOPE_TAG).subscribe({
@@ -78,6 +74,13 @@ api.dict.listChildByParentCode(constant.DICT_BUSINESS_PERM_SCOPE_TAG).subscribe(
     next: (data) => {
         permScopeOptions = data2Option('dictCode', 'dictName', data);
     }
+});
+
+let resourceTypes = [];
+api.dict.listChildByParentCode(constant.DICT_BUSINESS_RESOURCE_TYPE_TAG).subscribe({
+    next: (data) => {
+        resourceTypes = data2Option('dictCode', 'dictName', data);
+    },
 });
 
 let tableComment = {};
@@ -384,23 +387,53 @@ export default () => {
         });
     };
 
-    // 根据用户加载对应的权限资源
-    const loadPermResourceByUser = (orgId, uid) => {
-        api.resource.listBPermResourcesByUser(orgId, uid).subscribe({
+    // // 根据用户加载对应的权限资源
+    // const loadPermResourceByUser = (orgId, uid) => {
+    //     api.resource.listBPermResourcesByUser(orgId, uid).subscribe({
+    //         next: (data) => setDataSource(data),
+    //     });
+    // };
+
+    // 根据用户加载对应的权限业务资源
+    const loadBusinessPermResourceByUser = (orgId, uid) => {
+        if (!selectedResourceType) {
+            return;
+        }
+        api.resource.listBusinessBPermResourcesByUser(orgId, uid, selectedResourceType).subscribe({
             next: (data) => setDataSource(data),
         });
     };
 
-    // 根据用户组加载对应的权限资源
-    const loadPermResourceByUset = (usetId) => {
-        api.resource.listBPermResourcesByUset(usetId).subscribe({
+    // // 根据用户组加载对应的权限资源
+    // const loadPermResourceByUset = (usetId) => {
+    //     api.resource.listBPermResourcesByUset(usetId).subscribe({
+    //         next: (data) => setDataSource(data),
+    //     });
+    // };
+
+     // 根据用户组加载对应的权限业务资源
+    const loadBusinessPermResourceByUset = (usetId) => {
+        if (!selectedResourceType) {
+            return;
+        }
+        api.resource.listBusinessBPermResourcesByUset(usetId, selectedResourceType).subscribe({
             next: (data) => setDataSource(data),
         });
     };
 
     // 根据职位加载对应的权限资源
-    const loadPermResourceByPosition = (positionId) => {
-        api.resource.listBPermResourcesByPosition(positionId).subscribe({
+    // const loadPermResourceByPosition = (positionId) => {
+    //     api.resource.listBPermResourcesByPosition(positionId).subscribe({
+    //         next: (data) => setDataSource(data),
+    //     });
+    // };
+
+    // 根据职位加载对应的权限资源
+    const loadBusinessPermResourceByPosition = (positionId) => {
+        if (!selectedResourceType) {
+            return;
+        }
+        api.resource.listBusinessBPermResourcesByPosition(positionId, selectedResourceType).subscribe({
             next: (data) => setDataSource(data),
         });
     };
@@ -1247,6 +1280,17 @@ export default () => {
         }
     }
 
+    useEffect(() => {
+        if (selectedResourceType) {
+            if (permType === 'user') {
+                loadBusinessPermResourceByUser(selectedUserGroupId, selectedUserId);
+            } else if (permType === 'uset') {
+                loadBusinessPermResourceByUset(selectedUsetId);
+            } else if (permType === 'position') {
+                loadBusinessPermResourceByPosition(selectedPositionId);
+            }
+        }
+    },[selectedResourceType])
     //用户选择
     const onUserSelect = (node) => {
         let uid = node.key;
@@ -1255,7 +1299,7 @@ export default () => {
             uid = split(uid, '#')[1];
         }
         setSelectedUserId(uid);
-        loadPermResourceByUser(node.parentId, uid);
+        loadBusinessPermResourceByUser(node.parentId, uid);
         setSelectedUserGroupId(node.parentId);
         setSelectedKeys([]);
         setSelectedTag('');
@@ -1264,7 +1308,7 @@ export default () => {
 
     const onUsetSelect = (node) => {
         const usetId = node.key;
-        loadPermResourceByUset(usetId);
+        loadBusinessPermResourceByUset(usetId);
         setPermType('uset');
         setSelectedUsetId(usetId);
         setSelectedTag('');
@@ -1273,7 +1317,7 @@ export default () => {
 
     const onPositionSelect = (node) => {
         const positionId = node.key;
-        loadPermResourceByPosition(positionId);
+        loadBusinessPermResourceByPosition(positionId);
         setPermType('position');
         setSelectedPositionId(positionId);
         setSelectedTag('');
@@ -1365,21 +1409,21 @@ export default () => {
                 api.resource.saveUserBusinessPerm(values).subscribe({
                     next: () => {
                         message.success('操作成功!');
-                        loadPermResourceByUser(selectedUserGroupId, selectedUserId);
+                        loadBusinessPermResourceByUser(selectedUserGroupId, selectedUserId);
                     },
                 }).add(() => setConfirmLoading(false));
             } else if (permType === 'uset') {
                 api.resource.saveUsetBusinessPerm(values).subscribe({
                     next: () => {
                         message.success('操作成功!');
-                        loadPermResourceByUset(selectedUsetId);
+                        loadBusinessPermResourceByUset(selectedUsetId);
                     },
                 }).add(() => setConfirmLoading(false));
             } else if (permType === 'position') {
                 api.resource.savePositionBusinessPerm(values).subscribe({
                     next: () => {
                         message.success('操作成功!');
-                        loadPermResourceByPosition(selectedPositionId);
+                        loadBusinessPermResourceByPosition(selectedPositionId);
                     },
                 }).add(() => setConfirmLoading(false));
             }
@@ -1496,10 +1540,13 @@ export default () => {
                         size='small'
                         title={
                             <div style={{ verticalAlign: 'top' }}>
-                                <Space>
+                                {/* <Space> */}
                                     功能列表
-                                    <span style={{ fontSize: 14, color: '#C5C5C5' }}>权限范围只作用于按钮功能</span>
-                                </Space>
+                                    <span style={{ fontSize: 14, color: '#C5C5C5' }}> - 权限范围只作用于按钮功能</span>
+                                    <div style={{ float: 'right' }}>
+                                    <Select size='small' placeholder="请选择资源类型" style={{ width: '160px' }} options={resourceTypes} onChange={(v) => setSelectedResourceType(v)} />
+                                    </div>
+                                {/* </Space> */}
                             </div>
                         }
                         bordered={true}
@@ -1533,7 +1580,7 @@ export default () => {
                         />
                     </Card>
                 </Col>
-                {selectedTag && selectedTag === 'BUTTON' && (
+                {selectedTag && selectedTag === 'RESOURCE_BUTTON' && (
                     <Col span={9}>
                         <Card
                             className='snam-card'

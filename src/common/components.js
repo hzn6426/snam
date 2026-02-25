@@ -15,6 +15,7 @@ import IStatus from '@/components/IStatus';
 import ITag from '@/components/ITag';
 import IWindow from '@/components/IWindow';
 import Permit from '@/components/Permit';
+import BPermit from '@/components/BPermit';
 import XInput from '@/components/XInput';
 import IButton from '@/components/IButton';
 import IGridSearch from '@/components/IGridSearch';
@@ -27,7 +28,7 @@ export {
   IGrid, IAGrid, IGroupTree, IIF, ILayout,
   ISearchForm, ISearchTree, IStatus,
   ITag, IWindow,
-  Permit,
+  Permit,BPermit,
   XInput, IButton, IGridSearch
 };
 

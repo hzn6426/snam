@@ -1,7 +1,7 @@
 import { IFieldset, IFor, IFormItem, ILayout, IWindow } from '@/common/components';
-import { api, contains, copyObject, forEach, forEachObject, groupBy, isEmpty, mapObjIndexed, produce, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
-import { Button, Card, Checkbox, Space, Tree, message } from 'antd';
-import { useRef, useState } from 'react';
+import { api, contains, copyObject, forEach, forEachObject, groupBy, data2Option, isEmpty, mapObjIndexed, produce, constant, useAutoObservableEvent } from '@/common/utils';
+import { Button, Card, Checkbox, Space, Tree, message,Select } from 'antd';
+import { useEffect, useRef, useState } from 'react';
 import { zip } from 'rxjs';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { useParams } from '@umijs/max';
@@ -71,7 +71,12 @@ const addIcon = (data) => {
         }
     }, data);
 };
-
+let resourceTypes = [];
+api.dict.listChildByParentCode(constant.DICT_BUSINESS_RESOURCE_TYPE_TAG).subscribe({
+    next: (data) => {
+        resourceTypes = data2Option('dictCode', 'dictName', data);
+    },
+});
 export default (props) => {
     const ref = useRef();
     const params = useParams();
@@ -89,25 +94,44 @@ export default (props) => {
 
     const [groupButtons, setGroupButtons] = useState({});
 
+    const [selectedResourceType, setSelectedResourceType] = useState('');
 
-    const [current, setCurrent] = useAutoObservable((inputs$) =>
-        inputs$.pipe(
-            map(([id]) => id),
-            switchMap((id) => zip(api.role.treeAllMenus(), api.role.listPermMenus(id))),
-            map(([menus, permMenus]) => {
-                addIcon(menus);
-                setTreeData(menus);
-                setUserPerms(permMenus)
-                return { roleId: params.id };
-            })
-        ),
-        [params.id],
-    )
+    const [current, setCurrent] = useState();
+    // const [current, setCurrent] = useAutoObservable((inputs$) =>
+    //     inputs$.pipe(
+    //         map(([id]) => id),
+    //         switchMap((id) => zip(api.bresource.searchTreeAllResource(), api.role.listPermMenus(id))),
+    //         map(([menus, permMenus]) => {
+    //             addIcon(menus);
+    //             setTreeData(menus);
+    //             setUserPerms(permMenus)
+    //             return { roleId: params.id };
+    //         })
+    //     ),
+    //     [params.id],
+    // )
+
+    useEffect(() => {
+        if (selectedResourceType && params.id) {
+            loadAllResource();
+        }
+        
+    },[selectedResourceType]);
+
+    const loadAllResource = () => {
+        zip(api.bresource.searchTreeAllResource('bresource',selectedResourceType), api.role.listPermBusinessResources(params.id,selectedResourceType)).subscribe({
+            next:([resource,permResources]) => {
+                setTreeData(resource);
+                setUserPerms(permResources)
+                setCurrent({ roleId: params.id });
+            }
+        })
+    }
 
     const [onClickMenu] = useAutoObservableEvent(
         [
             tap(() => setLoading(true)),
-            switchMap(([menuId, roleId]) => zip(api.role.listAllButtonsByMenu(menuId), api.role.listPermButtons(roleId, menuId))),
+            switchMap(([menuId, roleId]) => zip(api.role.listAllResourceButtonsByResource(menuId), api.role.listPermResourceButtons(roleId, menuId))),
             map(([buttons, permButtonIds]) => {
                 const results = [];
                 forEach((v) => {
@@ -135,8 +159,10 @@ export default (props) => {
         () => setLoading(false),
     );
 
+    
     const onMenuSave = (privileges) => {
-        api.role.saveMenuPerm(privileges).subscribe({
+        privileges.resourceType = selectedResourceType;
+        api.role.saveBusinessResourcePerm(privileges).subscribe({
             next: () => {
                 message.success('操作成功!');
                 window.opener?.onAction();
@@ -145,7 +171,7 @@ export default (props) => {
     }
 
     const onButtonSave = (privileges) => {
-        api.role.saveButtonPerm(privileges).subscribe({
+        api.role.saveResourceButtonPerm(privileges).subscribe({
             next: () => {
                 message.success('操作成功!');
                 window.opener?.onAction();
@@ -177,6 +203,7 @@ export default (props) => {
                             <span>菜单列表</span>
                             <div style={{ float: 'right', paddingRight: '10px' }}>
                                 <Space>
+                                    <Select size='small' placeholder="请选择资源类型" style={{ width: '160px' }} options={resourceTypes} onChange={(v) => setSelectedResourceType(v)} />
                                     <Button
                                         size="small"
                                         type="primary"

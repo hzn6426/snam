@@ -27,6 +27,10 @@ export function loadUserMenus() {
 export function loadUserButtons() {
   return iget(constant.API_USER_BUTTONS);
 }
+//获取用户权限资源列表
+export function loadUserResources() {
+  return iget(constant.API_USER_RESOURCES);
+}
 //获取当前用户
 export function getCurrentUser() {
   return iget(constant.API_USER_CURRENT);

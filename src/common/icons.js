@@ -20,14 +20,20 @@ import {
     UserOutlined,
     UserSwitchOutlined,
     ThunderboltOutlined,
+    HddOutlined,
+    CrownOutlined,
+    CoffeeOutlined,
     NodeIndexOutlined
 } from '@ant-design/icons';
 
 const icons = {
+    file:<CoffeeOutlined />,
     user: <UserOutlined />,
     uset: <TeamOutlined />,
     role: <IdcardOutlined />,
     resource: <SettingOutlined />,
+    presource:<CrownOutlined />,
+    bresource:<HddOutlined />,
     position: <TrophyOutlined />,
     group: <ApartmentOutlined />,
     menu: <UnorderedListOutlined />,

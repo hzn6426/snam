@@ -25,7 +25,7 @@ export default (props) => {
     const [pathname, setPathname] = useState(location.pathname);
     const [tabList, setTabList] = useState(tabListInit);
     const [actionTab, setActionTab] = useState('');
-    const { dropScope, refresh, clear } = useAliveController();
+    const { dropScope, refresh,refreshScope, clear } = useAliveController();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [menuData, setMenuData] = useState([]);
@@ -169,7 +169,6 @@ export default (props) => {
 
     useEffect(() => {
         setPathname(location.pathname);
-        console.log(location.pathname);
         // 按钮新建
         addTab(location);
     }, [location.pathname]);
@@ -215,7 +214,7 @@ export default (props) => {
 
     // 右键事件
     const refreshTab = (key) => {
-        refresh(key).then(() => { });
+        refreshScope(location.pathname).then(() => { });
     }
     const closeAllTabs = () => {
         // 先清除所有缓存

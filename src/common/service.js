@@ -45,6 +45,8 @@ import * as trole from '@/pages/tenant/role/service';
 import * as tposition from '@/pages/tenant/position/service';
 import * as tuset from '@/pages/tenant/uset/service';
 import * as tresource from '@/pages/tenant/privilege/service';
+import * as bresource from '@/pages/bresource/service';
+import * as file from '@/pages/file/service';
 
 const api = {
   user,
@@ -93,6 +95,8 @@ const api = {
   tposition,
   tuset,
   tresource,
+  bresource,
+  file,
 };
 
 export default api;

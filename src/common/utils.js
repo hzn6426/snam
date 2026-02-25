@@ -675,7 +675,7 @@ export const beHasRowsPropNotEqual = (prop, value, rows) => {
 const sWidth = window.screen.width;
 const sHeight = window.screen.height;
 export const INewWindow = (props) => {
-  const { url, title, width, height, callback, callparam, features } = props;
+  const { url, title, width, height, callback, callparam, features,action } = props;
   const iwidth = width || sWidth;
   const iheight = height || sHeight
 
@@ -708,23 +708,30 @@ export const INewWindow = (props) => {
     }
   }
 
-  browser.onError = (error) => {
-    if (callback && _.isFunction(callback)) {
-      callback(error);
+  // browser.onError = (error) => {
+  //   if (callback && _.isFunction(callback)) {
+  //     callback(error);
+  //   }
+  // }
+
+  // browser.onOpen = (message) => {
+  //   if (callback && _.isFunction(callback)) {
+  //     callback(message);
+  //   }
+  // }
+
+  // browser.onClose = (message) => {
+  //   if (close && _.isFunction(close)) {
+  //     close(message);
+  //   }
+  // }
+
+  browser.onAction = (message) => {
+    if (action && _.isFunction(action)) {
+      action(message);
     }
   }
 
-  browser.onOpen = (message) => {
-    if (callback && _.isFunction(callback)) {
-      callback(message);
-    }
-  }
-
-  browser.onClose = (message) => {
-    if (callback && _.isFunction(callback)) {
-      callback(message);
-    }
-  }
   const opts = features || ('location=no,menubar=no,toolbar=no,resizable=no,status=no,width=' + (iwidth) + ',  height=' + (iheight) + ',top=' + itop + ',left=' + ileft);
 
   // if (popup) {

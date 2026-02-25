@@ -8,8 +8,9 @@ import XButton from '@/componentx/XButton';
 import XUser from '@/componentx/XUser';
 import TenantUser from '@/componentx/TenantUser';
 import TUser from '@/componentx/TUser';
+import XSearchResource from '@/componentx/XSearchResource';
 
 
 
-export { BItem, Department, Dict, TButton, Tenant, User, XButton, XUser,TUser, TenantUser };
+export { BItem, Department, Dict, TButton, Tenant, User, XButton, XUser,TUser, TenantUser, XSearchResource };
 

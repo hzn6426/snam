@@ -10,6 +10,7 @@ import {
 } from '@/common/components';
 import {
   INewWindow,
+  constant,
   api,
   beHasRowsPropNotEqual,
   isEmpty,
@@ -24,7 +25,8 @@ import {
   LockTwoTone,
   UnlockTwoTone,
   CloudSyncOutlined,
-  SyncOutlined,
+  SafetyOutlined,
+  SafetyCertificateOutlined,
   DiffOutlined,
   AimOutlined,
   ApiOutlined,
@@ -236,10 +238,40 @@ export default (props) => {
       title: '角色授权',
       width: 1000,
       height: 700,
-      callback: () => refresh()
+      callback: () => refresh(),
+      action:() =>refreshUserButtons()
     });
   }
 
+  const refreshUserResources = () => {
+    api.user.loadUserResources().subscribe({
+        next: (rr) => {
+          sessionStorage.setItem(constant.KEY_USER_RESOURCE_PERMS, rr || []);
+        }
+      });
+  }
+
+  const refreshUserButtons = () => {
+      api.user.loadUserButtons().subscribe({
+          next: (br) => {
+          sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || []);
+          }
+      });
+  }
+  const onBResourceClick = (id) => {
+    if (selectedKeys.length !== 1) {
+      message.error('只能选择一条角色数据！');
+      return;
+    }
+    INewWindow({
+      url: '/new/role/bresource/' + id,
+      title: '角色授权',
+      width: 1000,
+      height: 700,
+      callback: () => refresh(),
+      action:() => refreshUserResources()
+    });
+  }
 
   //查询
   const search = (pageNo, pageSize, params) => {
@@ -394,10 +426,21 @@ export default (props) => {
                 key="grant"
                 size="small"
                 type="info"
-                icon={<KeyOutlined />}
+                icon={<SafetyOutlined /> }
                 onClick={() => { onResourceClick(selectedKeys[selectedKeys.length - 1]) }}
               >
                 授权
+              </IButton>
+            </Permit>,
+            <Permit authority="role:saveBusinessResourcePerm">
+              <IButton
+                key="grant"
+                size="small"
+                type="info"
+                icon={<SafetyCertificateOutlined />}
+                onClick={() => { onBResourceClick(selectedKeys[selectedKeys.length - 1]) }}
+              >
+                业务资源授权
               </IButton>
             </Permit>
           ]}

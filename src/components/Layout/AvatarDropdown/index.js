@@ -3,6 +3,7 @@ import { LogoutOutlined, SettingOutlined, CloudSyncOutlined } from '@ant-design/
 import { Dropdown, message } from 'antd';
 import { history } from '@umijs/max';
 import { api, constant } from '@/common/utils';
+import { zip } from 'rxjs';
 // import api from '@/services';
 // import { wrapObservable } from '@/utils/RxjsUtil';
 // import { getPageQuery } from '@/utils/utils';
@@ -19,9 +20,10 @@ export default (props) => {
       };
 
     const refreshPrivilege = () => {
-        api.user.loadUserButtons().subscribe({
-            next: (br) => {
+        zip(api.user.loadUserButtons(),api.user.loadUserResources()).subscribe({
+            next: ([br,rr]) => {
                 sessionStorage.setItem(constant.KEY_USER_BUTTON_PERMS, br || []);
+                sessionStorage.setItem(constant.KEY_USER_RESOURCE_PERMS, rr || []);
                 message.success('刷新权限成功');
             }
         });

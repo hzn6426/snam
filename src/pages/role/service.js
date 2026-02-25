@@ -43,21 +43,42 @@ export function treeAllMenus() {
 export function listAllButtonsByMenu(mid) {
   return iget(`${constant.API_ROLE_LIST_ALL_BUTTONS_BY_MENU}?menuId=${mid}`);
 }
+// 获取业务资源对应的按钮列表
+export function listAllResourceButtonsByResource(resourceId) {
+  return iget(`${constant.API_ROLE_LIST_ALL_RESOURCE_BUTTONS_BY_RESOURCE}?resourceId=${resourceId}`);
+}
 // 获取角色拥有权限的菜单ID列表
 export function listPermMenus(roleId) {
   return iget(`${constant.API_ROLE_PERM_MENU_LIST}?rid=${roleId}`);
+}
+
+// 获取角色拥有权限的业务资源ID列表
+export function listPermBusinessResources(roleId, resourceType) {
+  return iget(`${constant.API_ROLE_PERM_BUSINESS_RESOURCE_LIST}?rid=${roleId}&resourceType=${resourceType}`);
 }
 // 获取角色拥有权限的按钮ID列表
 export function listPermButtons(roleId, menuId) {
   return iget(`${constant.API_ROLE_PERM_BUTTON_LIST}?rid=${roleId}&menuId=${menuId}`);
 }
+// 获取角色拥有权限的y业务资源按钮ID列表
+export function listPermResourceButtons(roleId, resourceId) {
+  return iget(`${constant.API_ROLE_PERM_RESOURCE_BUTTON_LIST}?rid=${roleId}&resourceId=${resourceId}`);
+}
 // 角色菜单权限保存
 export function saveMenuPerm(ids) {
   return ipost(constant.API_ROLE_PERM_MENU_SAVE, ids);
 }
+// 角色业务资源权限保存
+export function saveBusinessResourcePerm(ids) {
+  return ipost(constant.API_ROLE_PERM_BUSINESS_RESOURCE_SAVE, ids);
+}
 // 角色按钮权限保存
 export function saveButtonPerm(ids) {
   return ipost(constant.API_ROLE_PERM_BUTTON_SAVE, ids);
+}
+// 角色业务资源按钮权限保存
+export function saveResourceButtonPerm(ids) {
+  return ipost(constant.API_ROLE_PERM_RESOURCE_BUTTON_SAVE, ids);
 }
 // 保存用户角色关系
 export function saveUserRole(userRole) {
