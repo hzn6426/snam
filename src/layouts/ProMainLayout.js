@@ -25,7 +25,7 @@ export default (props) => {
     const [pathname, setPathname] = useState(location.pathname);
     const [tabList, setTabList] = useState(tabListInit);
     const [actionTab, setActionTab] = useState('');
-    const { dropScope, refresh,refreshScope, clear } = useAliveController();
+    const { dropScope, refresh,refreshScope, clear,getCachingNodes,refreshById } = useAliveController();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
     const [menuData, setMenuData] = useState([]);
@@ -36,7 +36,7 @@ export default (props) => {
     
     // 获取主题相关的CSS类名
     const getThemeClassName = () => {
-      return viewSetting.navTheme === "light" ? viewSetting.theme : "";
+      return viewSetting.navTheme === "light" ? viewSetting.navTheme : "";
     };
     
     // 初始化主题设置
@@ -184,7 +184,7 @@ export default (props) => {
 
     // 添加标签
     const addTab = (addItem) => {
-        setPathname(addItem.pathname);
+        // setPathname(addItem.pathname);
         // 缓存页面
         let index = tabList.findIndex((item) => { return item.key == addItem.pathname });
         if (index < 0) {
@@ -214,7 +214,7 @@ export default (props) => {
 
     // 右键事件
     const refreshTab = (key) => {
-        refreshScope(location.pathname).then(() => { });
+        refreshById(key).then(() => {console.log(getCachingNodes())});
     }
     const closeAllTabs = () => {
         // 先清除所有缓存

@@ -403,7 +403,6 @@ export default (props) => {
       .searchUser(param)
       .subscribe({
         next: (data) => {
-          console.log(data);
           setDataSource(data.data);
           setTotal(data.total);
         },
