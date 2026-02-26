@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { api, constant, copyObject, forEach, isEmpty, stringRandom, produce, startsWith } from '@/common/utils';
-import { IFormItem, ILayout, IWindow, IGrid } from '@/common/components';
+import { IFormItem, ILayout, IWindow, IAGrid } from '@/common/components';
 import { Button, Col, Form, Input, message, Modal, Row, Radio, Divider,Select, InputNumber, Transfer, Card, Tree, Space, Table, Tabs, Tooltip } from 'antd';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {XButton} from '@/common/componentx'
@@ -287,54 +287,61 @@ export default (props) => {
 
     const exceptUrlColumns = [
         {
-            title: '#',
-            width: 50,
-            dataIndex: 'rowNo',
-            valueGetter: (params) => params.node.rowIndex + 1
+            headerName: '序号',
+            textAlign: 'center',
+            checkboxSelection: true,
+            headerCheckboxSelection: true,
+            lockPosition: 'left',
+            width: 80,
+            cellStyle: { userSelect: 'none' },
+            valueFormatter: (params) => {
+                return `${parseInt(params.node.id) + 1}`;
+            },
+            // rowDrag: true,
         },
         {
-            title: '菜单>按钮',
+            headerName: '菜单>按钮',
             width: 150,
             align: 'left',
-            dataIndex: 'resourceName',
+            field: 'resourceName',
         },
         {
-            title: 'URL',
+            headerName: 'URL',
             width: 200,
             align: 'left',
-            dataIndex: 'url',
+            field: 'url',
         },
         {
-            title: '方法',
+            headerName: '方法',
             width: 60,
             align: 'center',
-            dataIndex: 'method',
+            field: 'method',
         },
         {
-            title: 'URL前缀',
+            headerName: 'URL前缀',
             width: 100,
             align: 'left',
-            dataIndex: 'urlPrefix',
+            field: 'urlPrefix',
         },
         {
-            title: 'IP',
+            headerName: 'IP',
             width: 120,
             align: 'center',
-            dataIndex: 'ip',
+            field: 'ip',
         },
         {
-            title: '优先级',
+            headerName: '优先级',
             width: 70,
             align: 'center',
-            dataIndex: 'priority',
+            field: 'priority',
         },
         {
-            title: '操作',
+            headerName: '操作',
             width: 60,
             align: 'center',
             search: false,
-            dataIndex: 'operator',
-            cellRenderer: 'urlOperateRenderer'
+            field: 'operator',
+            cellRenderer: UrlOperateRenderer
             // render: (text, record) => {
             //     return <><DeleteOutlined title='删除过滤' onClick={(e) => {
             //         e.stopPropagation();
@@ -361,27 +368,36 @@ export default (props) => {
                 }
             }, exceptUserDataSource);
             setExceptUserDataSource(ds);
-            userGroupKeyMap[record.key].disabled = false;
+            if (userGroupKeyMap[record.key]) {
+                userGroupKeyMap[record.key].disabled = false;
+            }
         }} /></>
     } 
 
     const exceptUserColumns = [
         {
-            title: '#',
-            width: 60,
-            dataIndex: 'rowNo',
-            valueGetter: (params) => params.node.rowIndex + 1
+            headerName: '序号',
+            textAlign: 'center',
+            checkboxSelection: true,
+            headerCheckboxSelection: true,
+            lockPosition: 'left',
+            width: 80,
+            cellStyle: { userSelect: 'none' },
+            valueFormatter: (params) => {
+                return `${parseInt(params.node.id) + 1}`;
+            },
+            // rowDrag: true,
         },
         {
-            title: '名称',
+            headerName: '名称',
             align: 'left',
             width: 260,
-            dataIndex: 'title',
+            field: 'title',
         }, {
-            title: '操作',
+            headerName: '操作',
             width: 60,
-            dataIndex: 'operator',
-            cellRenderer: 'userOperateRenderer',
+            field: 'operator',
+            cellRenderer: UserOperateRenderer,
         // render: (text, record) => {
         //     return <><DeleteOutlined title='删除过滤' onClick={(e) => {
         //         e.stopPropagation();
@@ -568,7 +584,7 @@ export default (props) => {
                     required={true}
                     min={1} 
                     precision={0}
-                    addonAfter="每秒"
+                    addonAfter="秒"
                 />
                 </ILayout>
             </ILayout>
@@ -678,14 +694,14 @@ export default (props) => {
                                         bodyStyle={{ height: 200, overflow: 'auto', padding:"0px 0px 0px 5px",marginTop:1}}
                                         title={<div>过滤用户列表</div>}
                                         > 
-                                <IGrid
+                                <IAGrid
                                         key="key"
                                         height={188}
-                                        components={{
-                                            userOperateRenderer: UserOperateRenderer,
-                                        }}
+                                        // components={{
+                                        //     userOperateRenderer: UserOperateRenderer,
+                                        // }}
                                         optionsHide={{pagination:true, refresh:true, setting:true,noPadding:true}}
-                                        initColumns={exceptUserColumns}
+                                        columns={exceptUserColumns}
                                        
                                         dataSource={exceptUserDataSource}
                                         // total={columnTotal}
@@ -1045,21 +1061,21 @@ export default (props) => {
                                         bodyStyle={{ height: 180, overflow: 'auto', padding:"0px 0px 0px 5px",marginTop:1}}
                                         title={<Tooltip title="按照列表顺序进行匹配"><b>过滤请求列表</b></Tooltip>}
                                         > 
-                                <IGrid
-                                        key="key"
-                                        height={168}
-                                        components={{
-                                            urlOperateRenderer: UrlOperateRenderer,
-                                        }}
-                                        optionsHide={{pagination:true, refresh:true, setting:true,noPadding:true}}
-                                        initColumns={exceptUrlColumns}
-                                       
-                                        dataSource={exceptUrlDataSource}
-                                        onDoubleClick={(record) => onDoubleClick(record)}
-                                        // total={columnTotal}
-                                        // onSelectedChanged={onColumnChange}
-                                        // showQuickJumper={false}
-                                    />
+                                <IAGrid
+                                    key="key"
+                                    height={168}
+                                    // components={{
+                                    //     urlOperateRenderer: UrlOperateRenderer,
+                                    // }}
+                                    optionsHide={{pagination:true, refresh:true, setting:true,noPadding:true}}
+                                    columns={exceptUrlColumns}
+                                    
+                                    dataSource={exceptUrlDataSource}
+                                    onDoubleClick={(record) => onDoubleClick(record)}
+                                    // total={columnTotal}
+                                    // onSelectedChanged={onColumnChange}
+                                    // showQuickJumper={false}
+                                />
                                     </Card>
                                 {/* <Table
                                     style={{ marginTop: '5px' }}

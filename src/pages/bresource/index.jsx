@@ -437,7 +437,7 @@ export default (props) => {
     // 列表及弹窗
     return (
         <>
-            <Alert size="small" style={{ fontSize: 12, marginBottom: 5 }} message={"业务资源是对有多层级的资源，需要进行权限控制；比如文件夹、文件的层级控制，此时文件夹有功能按钮，文件也有功能按钮，文件夹又可嵌套。资源显示通过角色控制，数据显示通过资源授权控制！"} type="info" showIcon={true} />
+            <Alert size="small" style={{ fontSize: 12, marginBottom: 2,height:'35px' }} message={"业务资源是对有多层级的资源，需要进行权限控制；比如文件夹、文件的层级控制，此时文件夹有功能按钮，文件也有功能按钮，文件夹又可嵌套。资源显示通过角色控制，数据显示通过资源授权控制！"} type="info" showIcon={true} />
             <Splitter style={{ height: offsetHeight - 70,  }}>
                 <Splitter.Panel defaultSize="25%" min="20%" max="40%">
                     {/* <ISearchTree

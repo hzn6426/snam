@@ -293,6 +293,11 @@ export default [
         path: '/new/tposition/:id',
         component: '@/pages/tenant/position/save',
       },
+      {
+        name: '重命名图片',
+        path: '/new/file/picture/:id',
+        component: '@/pages/file/save',
+      },
     ],
   },
   {

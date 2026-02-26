@@ -5,6 +5,7 @@
     --split-bg: #ffffff;
     --text-color: rgba(0, 0, 0, 0.85);
 
+    --selected-text-color: #ffffff;
     /* primary (can be overridden dynamically by JS) */
     --ant-primary-color: #1677ff;
 
@@ -68,6 +69,7 @@
     --grid-bd: #151515;
     --split-bg: #000000;
     --text-color: rgba(255, 255, 255, 0.85);
+    --selected-text-color: #ffffff;
 
     /* primary (can be overridden dynamically by JS) */
     --ant-primary-color: #1677ff;

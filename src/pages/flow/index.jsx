@@ -231,9 +231,9 @@ const trackColumns = [
 export default (props) => {
     const [theme] = useApplicationState(s => [s.view.navTheme]);
 
-    useEffect(() => {
-        console.log('monitor theme...:', theme)
-    },[theme])
+    // useEffect(() => {
+    //     console.log('monitor theme...:', theme)
+    // },[theme])
     const OperateRenderer = (props) => {
     const record = props.data;
 
@@ -394,45 +394,64 @@ const parentColumns = [
         });
     };
 
-    const [onParentChange, selectedParentKeys, setSelectedParentKeys] = useObservableAutoCallback((event) =>
-        event.pipe(
-            // debounceTime(300),
-            distinctUntilChanged(),
-            // tap((v) => {
-            //     setDisabledActive(beHasRowsPropNotEqual('state', 'STOPPED', v));
-            //     setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', v));
-            // }),
-            map((v) => {
-                return pluck('id', v)
-            }),
-            tap((v) => refreshChild(v[v.length - 1])),
-            shareReplay(1),
-        )
-    );
+    const [selectedParentKeys, setSelectedParentKeys] = useState([]);
 
+    const onParentChange = (v) => {
+        // setDisabledActive(beHasRowsPropNotEqual('state', 'STOPPED', v));
+        // setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', v));
+        const ids = pluck('id', v);
+        setSelectedParentKeys(ids);
+        refreshChild(ids[ids.length - 1]);
+    };
+    // const [onParentChange, selectedParentKeys, setSelectedParentKeys] = useObservableAutoCallback((event) =>
+    //     event.pipe(
+    //         // debounceTime(300),
+    //         distinctUntilChanged(),
+    //         // tap((v) => {
+    //         //     setDisabledActive(beHasRowsPropNotEqual('state', 'STOPPED', v));
+    //         //     setDisabledStop(beHasRowsPropNotEqual('state', 'ACTIVE', v));
+    //         // }),
+    //         map((v) => {
+    //             return pluck('id', v)
+    //         }),
+    //         tap((v) => refreshChild(v[v.length - 1])),
+    //         shareReplay(1),
+    //     )
+    // );
+    const [selectedChildKeys, setSelectedChildKeys] = useState([]);
+    const onChildChange = (v) => {
+        setSelectedChildKeys(pluck('id', v));
+        setSelectedInstanceId(v[v.length - 1])
+    } 
 
-    const [onChildChange, selectedChildKeys, setSelectedChildKeys] = useObservableAutoCallback((event) =>
-        event.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap((v) => of(pluck('id', v))),
-            tap((v) => setSelectedInstanceId(v[v.length - 1])),
-            shareReplay(1),
-        ),
-    );
+    // const [onChildChange, selectedChildKeys, setSelectedChildKeys] = useObservableAutoCallback((event) =>
+    //     event.pipe(
+    //         debounceTime(300),
+    //         distinctUntilChanged(),
+    //         switchMap((v) => of(pluck('id', v))),
+    //         tap((v) => setSelectedInstanceId(v[v.length - 1])),
+    //         shareReplay(1),
+    //     ),
+    // );
 
-    const [onTaskChange, selectedTaskKeys, setSelectedTaskKeys] = useObservableAutoCallback((event) =>
-        event.pipe(
-            debounceTime(300),
-            distinctUntilChanged(),
-            switchMap((v) => of(pluck('id', v))),
-             shareReplay(1),
-        ),
-    );
+    const [selectedTaskKeys, setSelectedTaskKeys] = useState([]);
+
+    const onTaskChange = (v) => {
+        setSelectedTaskKeys(pluck('id', v));
+    }
+    // const [onTaskChange, selectedTaskKeys, setSelectedTaskKeys] = useObservableAutoCallback((event) =>
+    //     event.pipe(
+    //         debounceTime(300),
+    //         distinctUntilChanged(),
+    //         switchMap((v) => of(pluck('id', v))),
+    //          shareReplay(1),
+    //     ),
+    // );
 
     useEffect(() => {
-        form.resetFields();
+        
         if (current && !isEmpty(current)) {
+            form.resetFields();
             const v = {...current, type:current.type || 'Task'};
             
             if (v.variables) {
@@ -543,7 +562,7 @@ const parentColumns = [
         <Splitter layout="vertical"  onResizeEnd={sizes => {
             setTopHeight(sizes[0]);
             setBottomHeight(sizes[1]);
-            }} style={{ height: 'calc(100vh - 50px)', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', overflow: 'hidden',backgroundColor:'var(--split-bg)' }}>
+            }} style={{  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', overflow: 'hidden',backgroundColor:'var(--split-bg)' }}>
             <Splitter.Panel >
                 <UFlow data={chartData} theme={theme == 'realDark' ? 'dark' : theme } style={{ height: topHeight }} />
             </Splitter.Panel>

@@ -12,3 +12,7 @@ export function renamePicture(picture) {
 export function deletePicture(ids) {
     return ipost(constant.API_FILE_PICTURE_DELETE, ids);
 }
+
+export function getPicture(id) {
+    return iget(`${constant.API_FILE_PICTURE_GET}/${id}`);
+}

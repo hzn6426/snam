@@ -12,7 +12,9 @@ import {
 } from '@/common/components';
 import {
     api,
-    dateFormat
+    dateFormat,
+    pluck,
+    INewWindow
 } from '@/common/utils';
 
 import {
@@ -87,7 +89,12 @@ const initColumns = [
         width: 160,
         field: 'createTime',
         valueFormatter: (x) => dateFormat(x.value, 'yyyy-MM-dd hh:mm:ss'),
-    }
+    },
+    {
+    headerName: '备注',
+    width: 160,
+    field: 'note',
+  }
 ];
 
 export default (props) => {
@@ -130,11 +137,21 @@ export default (props) => {
 
 
     const rename = () => {
-
+        if (selectedKeys.length !== 1) {
+            message.error('请选择一个图片!');
+            return;
+        }
+         INewWindow({
+            url: '/new/file/picture/' + selectedKeys[0],
+            title: ' 重命名',
+            width: 600,
+            height: 300,
+            callback: () => refresh()
+        })
     }
 
     const onChange = (v) => {
-        setSelectedKeys(v.id);
+        setSelectedKeys(pluck('id', v));
     }
 
     const { offsetHeight } = window.document.getElementsByClassName("cala-body")[0];

@@ -1,0 +1,72 @@
+import React, { useRef, useState } from 'react';
+import { api, useAutoObservable, useAutoObservableEvent } from '@/common/utils';
+import { IFormItem, ILayout, IWindow } from '@/common/components';
+import { message } from 'antd';
+import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { useParams } from '@umijs/max';
+
+
+export default (props) => {
+    const ref = useRef();
+    const params = useParams();
+    const { clientWidth, clientHeight } = window?.document?.documentElement;
+    const [loading, setLoading] = useState(false);
+
+    const [current, setCurrent] = useAutoObservable((inputs$) =>
+        inputs$.pipe(
+            map(([id]) => id),
+            filter(id => id !== 'ADD'),
+            switchMap((id) => api.file.getPicture(id)),
+            map((picture) => {
+                return picture[0];
+            })
+        ),
+        [params.id],
+    )
+
+    const [onSaveClick] = useAutoObservableEvent([
+        tap(() => setLoading(true)),
+        switchMap((picture) => api.file.renamePicture(picture)),
+        tap(() => {
+            message.success('操作成功!');
+            window.close();
+            window.opener.onSuccess();
+        }),
+        shareReplay(1),
+    ], () => setLoading(false));
+
+    return (
+        <IWindow
+            ref={ref}
+            current={current}
+            className="snam-modal"
+            title={(current && current.id) ? '编辑图片' : '新建图片'}
+            width={clientWidth}
+            height={clientHeight}
+            onSubmit={(params) => onSaveClick(params)}
+            onCancel={() => {
+                window.close();
+                window.opener.onSuccess();
+            }}
+        >
+            <IFormItem xtype="id" />
+            <ILayout type="vbox">
+                <IFormItem
+                    name="name"
+                    label="图片名称"
+                    xtype="input"
+                    disable={true}
+                    max={50}
+                />
+                <IFormItem
+                    name="note"
+                    label="备注"
+                    xtype="textarea"
+                    rows={4}
+                    max={200}
+                //preserve={false}
+                />
+            </ILayout>
+        </IWindow>
+    )
+}

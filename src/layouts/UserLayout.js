@@ -19,7 +19,7 @@ const UserLayout = (props) => {
                             <img alt="logo" className={styles.logo} src={logo} />
                             <span className={styles.title}>{constant.SYSTEM_LOGIN_TITLE}</span>
                         </div>
-                        <div className={styles.desc}>{constant.SYSTEM_LOGIN_DESC}</div>
+                        <div className={styles.desc}>{constant.SYSTEM_LOGIN_DESC}<span className={styles.version}>{constant.SYSTEM_LOGIN_VERSION}</span></div>
                     </div>
                     <Outlet />
                 </div>

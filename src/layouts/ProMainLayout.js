@@ -214,7 +214,7 @@ export default (props) => {
 
     // 右键事件
     const refreshTab = (key) => {
-        refreshById(key).then(() => {console.log(getCachingNodes())});
+        refreshById(key).then(() => {});
     }
     const closeAllTabs = () => {
         // 先清除所有缓存
@@ -297,7 +297,8 @@ export default (props) => {
         <ProLayout
                 {...viewSetting}
                 logo={Logo}
-                title={constant.SYSTEM_TITLE}
+                title = {constant.SYSTEM_TITLE}
+                // title={<><span style={{fontSize:15}}>{constant.SYSTEM_TITLE}</span><span style={{fontSize:10,color:'#e83a51',marginLeft:2}}>{constant.SYSTEM_LOGIN_VERSION}</span></>}
                 location={{ pathname }}
                 menu={{
                     request: async () => {
@@ -324,12 +325,18 @@ export default (props) => {
                 actionsRender={(props) => {
                     if (props.isMobile) return [];
                     if (typeof window === 'undefined') return [];
+                    if (props.layout === 'side') {
+                        return [
+                        <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={20} icon={<HomeOutlined />} style={{backgroundColor: 'var(--ant-primary-color)', verticalAlign: 'middle', marginLeft: -8, marginRight: 0, }} />,
+                        <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={20} icon={<GithubFilled />} style={{backgroundColor: 'var(--ant-primary-color)', verticalAlign: 'middle', marginLeft: -13, marginRight: 0 }} />
+                        ]
+                    }
                     return [
                         // props.layout !== 'side' && document.body.clientWidth > 1400 ? (
                         //     <SearchInput />
                         // ) : undefined,
-                        <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={28} icon={<HomeOutlined />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: 4, }} />,
-                        <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor: '#c85a5b', verticalAlign: 'middle', marginLeft: 0, marginRight: -20 }} />
+                        <Avatar shape="square" onClick={() => window.open('https://baomibing.com')} size={28} icon={<HomeOutlined />} style={{backgroundColor: 'var(--ant-primary-color)', verticalAlign: 'middle', marginLeft: 0, marginRight: 4, }} />,
+                        <Avatar shape="square" onClick={() => window.open('https://gitee.com/ifrog/snapper-standalone')} size={28} icon={<GithubFilled />} style={{backgroundColor: 'var(--ant-primary-color)', verticalAlign: 'middle', marginLeft: 0, marginRight: -20 }} />
                     ];
                 }}
 
