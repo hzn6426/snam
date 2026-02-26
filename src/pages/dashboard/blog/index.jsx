@@ -18,38 +18,63 @@ export default () => {
   };
   const { clientHeight } = window?.document?.documentElement;
 
-  // useEffect(() => {
-  //   const lastFetchTime = localStorage.getItem('lastFetchTime');
-  //   const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
-  //   const now = new Date().getTime();
+  useEffect(() => {
+    const lastFetchTime = localStorage.getItem('lastFetchTime');
+    const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
+    const now = new Date().getTime();
  
-  //   if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
-  //     localStorage.setItem('lastFetchTime', now.toString());
-  //     info();
-  //   }
-  // },[]);
+    if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
+      localStorage.setItem('lastFetchTime', now.toString());
+      info();
+    }
+  },[]);
   return (
     <>
       
       <Card bodyStyle={{ overflow: 'auto', height: clientHeight - 70 + 'px', margin: '10px 0px' }}>
         <Timeline>
+
         <Timeline.Item>
-            <Title level={4}>[3.2.10] 2025.12.23</Title>
-            <Title level={5}>新增功能</Title>
-            <Paragraph type='danger'>
-              <ul className="snam-li">
-                <li>新增 组织管理中添加用户复制权限功能，可以将一个用户复制到另一个用户中</li>
-              </ul>
-            </Paragraph>
-          </Timeline.Item><Timeline.Item>
-            <Title level={4}>[3.3.0] 2025.12.23</Title>
+          <Title level={4}>[3.3.1] 2026.1.11</Title>
+          <Title level={5}>新增功能</Title>
+          <Paragraph type='danger'>
+            <ul className="snam-li">
+              <li>新增 职位授权功能，对职位也可以进行业务权限、功能权限、列权限授权（如果分配了权限则忽略职位数据权限范围）</li>
+              <li>新增 职位权限范围添加排除委托和追加委托，使之基于职位的授权功能更完善</li>
+              <li>新增 授权管理针对 职位、用户、用户组添加追加委托，能够更详细的处理数据权限，例如查看用户所有数据，或只看移动组织后的数据</li>
+              <li>新增 职位管理中添加分配角色数，能够快速查看该职位是否分配了角色</li>
+              <li>新增 用户组中添加关联用户数和角色数列，能够更方便查看该用户组的关联信息</li>
+            </ul>
+          </Paragraph>
+          <Title level={5} type="success">
+            功能优化
+          </Title>
+          <Paragraph type="success">
+            <ul className="snam-li">
+              <li>优化用户授权信息查看，能够更方便的查看总体信息</li>
+              
+            </ul>
+          </Paragraph>
+          <Title level={5} type="warning">
+            修复BUG
+          </Title>
+          <Paragraph type="warning">
+            <ul className="snam-li">
+              <li>修复用户锁定时可以登录，但是不可以新增数据，用户停用时禁止登录</li>
+            </ul>
+          </Paragraph>
+        </Timeline.Item>
+
+        <Timeline.Item>
+            <Title level={4}>[3.3.0] 2025.12.30</Title>
             <Title level={5}>新增功能</Title>
             <Paragraph type='danger'>
               <ul className="snam-li">
                 <li>新增 复制用户权限 用于在组织中将一个用户的所有权限复制到另一个用户中</li>
                 <li>新增 前端增加 <b>玻璃主题</b> 可在主题中选择玻璃主题</li>
                 <li>新增 组织优先级排序，编辑组织可设置优先级</li>
-                <li>新增 规则适配，可适配规则设计器中的规则(全新 GROOVY规则,即将开源</li>
+                <li>新增 规则适配，可适配规则设计器中的规则(全新 GROOVY规则,即将开源)</li>
+                <li>新增 租户权限演示，在订单演示中选择接入用户，选择对应的租户</li>
               </ul>
             </Paragraph>
             <Title level={5} type="success">
