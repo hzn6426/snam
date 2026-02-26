@@ -3,6 +3,7 @@ import {
     Card,
     Tabs,
     message,
+    Button,
 } from 'antd';
 import {
     BPermit,
@@ -92,7 +93,7 @@ const initColumns = [
     },
     {
     headerName: '备注',
-    width: 160,
+    width: 200,
     field: 'note',
   }
 ];
@@ -194,7 +195,7 @@ export default (props) => {
                                 ]}
                                 pageToolBarRender={[
                                     <BPermit authority="picture:rename">
-                                        <IButton
+                                        <Button
                                             type="primary"
                                             size='small'
                                             key="active"
@@ -203,20 +204,20 @@ export default (props) => {
                                             icon={<FormOutlined />}
                                         >
                                             重命名
-                                        </IButton>
+                                        </Button>
                                     </BPermit>,
-                                    <BPermit authority="picture:delete">
-                                    <IButton
-                                        danger
-                                        type="primary"
-                                        icon={<RestOutlined />}
-                                        size="small"
-                                        key="delete"
-                                        onClick={() => showDeleteConfirm('确定删除选中的图片吗?', () => onDelete(selectedKeys))}
-                                    >
-                                        删除
-                                    </IButton>
-                                    </BPermit>,
+                                    // <BPermit authority="picture:delete">
+                                    // <IButton
+                                    //     danger
+                                    //     type="primary"
+                                    //     icon={<RestOutlined />}
+                                    //     size="small"
+                                    //     key="delete"
+                                    //     onClick={() => showDeleteConfirm('确定删除选中的图片吗?', () => onDelete(selectedKeys))}
+                                    // >
+                                    //     删除
+                                    // </IButton>
+                                    // </BPermit>,
                                 ]}
                                 // onClick={(data) => onClicked(data)}
                                 clearSelect={searchLoading}

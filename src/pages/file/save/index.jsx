@@ -55,7 +55,7 @@ export default (props) => {
                     name="name"
                     label="图片名称"
                     xtype="input"
-                    disable={true}
+                    disabled={true}
                     max={50}
                 />
                 <IFormItem
