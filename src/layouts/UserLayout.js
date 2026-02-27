@@ -1,8 +1,8 @@
 import { constant } from '@/common/utils';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Outlet } from '@umijs/max';
-// import logo from '../assets/logo.png';
-import logo from '../assets/antd.svg';
+import logo from '../assets/logo.png';
+// import logo from '../assets/antd.svg';
 import styles from './UserLayout.less';
 
 const UserLayout = (props) => {

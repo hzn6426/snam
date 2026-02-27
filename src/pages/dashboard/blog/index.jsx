@@ -19,16 +19,16 @@ export default () => {
   };
   const { clientHeight } = window?.document?.documentElement;
 
-  // useEffect(() => {
-  //   const lastFetchTime = localStorage.getItem('lastFetchTime');
-  //   const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
-  //   const now = new Date().getTime();
+  useEffect(() => {
+    const lastFetchTime = localStorage.getItem('lastFetchTime');
+    const oneDay = 24 * 60 * 60 * 1000; // 1天的毫秒数
+    const now = new Date().getTime();
  
-  //   if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
-  //     localStorage.setItem('lastFetchTime', now.toString());
-  //     info();
-  //   }
-  // },[]);
+    if (!lastFetchTime || (now - lastFetchTime) > oneDay) {
+      localStorage.setItem('lastFetchTime', now.toString());
+      info();
+    }
+  },[]);
   return (
     <>
       <Alert title="3.3.0 版本开源啦！Snapper 系统从 2020 年开始迭代，不断的收集权限相关需求，不断的完善积累，已经经历 6 个年头了，我一直在迭代，一直在前进... 喜欢的点下 Star 吧，支持下默默前进的我！！！" type="success" showIcon  action={

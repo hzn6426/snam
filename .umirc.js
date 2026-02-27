@@ -33,5 +33,6 @@ export default defineConfig({
   plugins: [
     'umi-plugin-keep-alive',
   ],
+  esbuildMinifyIIFE: true
 });
 
